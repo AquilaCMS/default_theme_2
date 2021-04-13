@@ -14,7 +14,7 @@ export default function CookiesBanner() {
     }, []);
 
     const acceptCookie = () => {
-        document.cookie = 'cookie_notice=true;';
+        document.cookie = 'cookie_notice=true; path=/;';
         setShow(false);
     };
 

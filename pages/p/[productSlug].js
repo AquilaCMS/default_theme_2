@@ -26,7 +26,7 @@ const getStoreData = () => {
     return { product/* , _redux_prov_DATA */ };
 };
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, req, res }) {
     const actions = [
         {
             type: 'SET_PRODUCT',
@@ -38,7 +38,7 @@ export async function getServerSideProps({ params }) {
         }
     ];
 
-    return dispatcher(actions);
+    return dispatcher(req, res, actions);
 }
 
 export default function CategoryList() {

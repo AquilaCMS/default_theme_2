@@ -16,7 +16,7 @@ const getStoreData = () => {
 
 
 // voir pour le SSG
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, req, res }) {
     const actions = [
         {
             type: 'PUSH_CMSBLOCKS',
@@ -28,7 +28,7 @@ export async function getServerSideProps({ params }) {
         }
     ];
 
-    return dispatcher(actions);
+    return dispatcher(req, res, actions);
 }
 
 

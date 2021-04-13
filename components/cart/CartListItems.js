@@ -1,21 +1,25 @@
-import Link     from 'next/link';
-import CartItem from '@components/cart/CartItem';
+import Link            from 'next/link';
+import CartItem        from '@components/cart/CartItem';
+import { useSelector } from 'react-redux';
+
+const getDatas = () => {
+    const cart = useSelector((state) => state.cart);
+    return { cart };
+};
 
 
 export default function CartListItems() {
 
-    const tmpTotal       = 10;
-    const tmpProductList = [{}];
-
-    if (tmpProductList.length > 0) {
+    const { cart } = getDatas();
+    if (cart.items?.length > 0) {
         return (
 
             <form className="w-commerce-commercecartform">
 
                 {/* TMP : partie rajouté "à la main" à partir du html en ligne */}
                 <div className="w-commerce-commercecartlist" >
-                    {tmpProductList.map((item, index) => (
-                        <CartItem key={index} />
+                    {cart.items?.map((item, index) => (
+                        <CartItem item={item} key={index} />
                     ))}
                 </div>
 
@@ -23,7 +27,7 @@ export default function CartListItems() {
                     <div className="w-commerce-commercecartlineitem cart-line-item">
                         <div>Total</div>
                         <div className="w-commerce-commercecartordervalue text-block">
-                            {tmpTotal.toFixed(2)} €
+                            {cart.priceTotal.ati.toFixed(2)} €
                         </div>
                     </div>
                     <div>

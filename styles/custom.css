@@ -66,7 +66,31 @@
     border-bottom-width: 4px;
     border-left-width: 4px;
     border-right-width: 4px;
-  }
+}
+
+.w-dropdown {
+    z-index: auto;
+}
+
+.w-commerce-commerceoutcartcontainer {
+    width: 100%;
+}
+
+@media screen and (max-width: 991px) {
+    .w-commerce-commerceoutcartcontainer {
+        width: 0px;
+    }
+}
+
+.div-block-lang button {
+    background-color: unset;
+}
+
+.div-block-lang button:hover,
+.div-block-lang button.selected {
+    background-color: #ff8946;
+    color: white;
+}
 
 .w-commerce-commerceerror {
     margin-top: 10px;

@@ -19,7 +19,7 @@ const getBlocksCMS = async () => {
     return blockCMSProvider.getBlocksCMS(blockCMSCode);
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req, res }) {
     const actions = [
         {
             type: 'SET_PRODUCTS',
@@ -30,7 +30,7 @@ export async function getServerSideProps() {
             func: getBlocksCMS.bind(this)
         }
     ];
-    return dispatcher(actions);
+    return dispatcher(req, res, actions);
 }
 
 export default function Home() {

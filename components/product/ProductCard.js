@@ -1,9 +1,14 @@
+import { useState }     from 'react';
 import Link             from 'next/link';
 import { useRouter }    from 'next/router';
 import { generateSlug } from '@lib/aquila-connector/product/helpersProduct';
+import { addToCart }    from '@lib/aquila-connector/cart';
+import { useCart }      from '@lib/utils';
 
 export default function ProductCard({ product }) {
-    const { query } = useRouter();
+    const { query }         = useRouter();
+    const [qty, setQty]     = useState(1);
+    const { cart, setCart } = useCart();
     
     const { slug, name, description, ati, img, canonical } = product;
 
@@ -12,6 +17,17 @@ export default function ProductCard({ product }) {
         slug,
         canonical
     });
+
+    const changeQty = (e) => {
+        setQty(Number(e.target.value));
+    };
+
+    const onAddToCart = async (e) => {
+        e.preventDefault();
+        const newCart   = await addToCart(cart._id, product, qty);
+        document.cookie = 'cart_id=' + newCart._id + '; path=/;';
+        setCart(newCart);
+    };
 
     return (
 
@@ -35,8 +51,8 @@ export default function ProductCard({ product }) {
                     <p className="paragraph">{description}</p>
                     <div className="add-to-cart">
                         <form className="w-commerce-commerceaddtocartform default-state">
-                            <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" defaultValue={1} />
-                            <input type="submit" value="Ajouter au panier" className="w-commerce-commerceaddtocartbutton order-button" />
+                            <input type="number" className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={changeQty} />
+                            <button type="button" className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>Ajouter au panier</button>
                         </form>
                         {/* <div style={{ display: 'none' }} className="w-commerce-commerceaddtocartoutofstock out-of-stock-state">
                             <div>This product is out of stock.</div>

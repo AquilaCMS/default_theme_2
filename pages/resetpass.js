@@ -1,33 +1,24 @@
-import { useState }      from 'react';
-import Head              from 'next/head';
-import Router            from 'next/router';
-import Layout            from '@components/layouts/Layout';
-import { resetPassword } from '@lib/aquila-connector/user';
-import { dispatcher }    from '@lib/redux/dispatcher';
+import { useState }       from 'react';
+import Head               from 'next/head';
+import Router             from 'next/router';
+import Layout             from '@components/layouts/Layout';
+import { resetPassword }  from '@lib/aquila-connector/user';
+import { serverRedirect } from '@lib/utils';
+import { dispatcher }     from '@lib/redux/dispatcher';
 
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, req, res }) {
     try {
         const data = await resetPassword(query.token);
         if (data.message === 'Token invalide') {
-            return {
-                redirect: {
-                    permanent  : false,
-                    destination: '/'
-                }
-            };
+            return serverRedirect('/');
         }
-    } catch {
-        return {
-            redirect: {
-                permanent  : false,
-                destination: '/'
-            }
-        };
+    } catch (err) {
+        return serverRedirect('/');
     }
     
 
-    const pageProps       = await dispatcher();
+    const pageProps       = await dispatcher(req, res);
     pageProps.props.token = query.token;
     return pageProps;
 }

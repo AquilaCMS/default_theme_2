@@ -1,11 +1,17 @@
-import Head           from 'next/head';
-import Layout         from '@components/layouts/Layout';
-import LoginBlock     from '@components/login/LoginBlock';
-import RegisterBlock  from '@components/login/RegisterBlock';
-import { dispatcher } from '@lib/redux/dispatcher';
+import Head                                  from 'next/head';
+import Layout                                from '@components/layouts/Layout';
+import LoginBlock                            from '@components/login/LoginBlock';
+import RegisterBlock                         from '@components/login/RegisterBlock';
+import { authProtectedPage, serverRedirect } from '@lib/utils';
+import { dispatcher }                        from '@lib/redux/dispatcher';
 
-export async function getServerSideProps() {
-    return dispatcher();
+export async function getServerSideProps({ req, res }) {
+    // If the user is already logged in, we will automatically redirect to the page /account/informations
+    const user = await authProtectedPage(req.headers.cookie);
+    if (user) {
+        return serverRedirect('/checkout/clickandcollect');
+    }
+    return dispatcher(req, res);
 }
 
 export default function CheckoutLogin() {

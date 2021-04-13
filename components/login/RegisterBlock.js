@@ -23,8 +23,9 @@ export default function RegisterBlock() {
         try {
             await setUser(user);
             const res       = await auth(user.email, user.password);
-            document.cookie = 'jwt=' + res.data;
+            document.cookie = 'jwt=' + res.data + '; path=/;';
             router.push(redirect);
+            setIsLoading(false);
         } catch (err) {
             setMessageRegister({ type: 'error', message: err.message });
             setIsLoading(false);

@@ -4396,8 +4396,8 @@ li {
 
 .slide-3 {
   min-width: 100vw;
-  /* background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0, 0, 0, 0.51)), to(transparent)), url('/images/mohamad-babayan-l8sjctHOqOo-unsplash.jpg');
-  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/mohamad-babayan-l8sjctHOqOo-unsplash.jpg'); */
+  background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0, 0, 0, 0.51)), to(transparent)), url('/images/mohamad-babayan-l8sjctHOqOo-unsplash.jpg');
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/mohamad-babayan-l8sjctHOqOo-unsplash.jpg');
   background-position: 0px 0px, 50% 50%;
   background-size: auto, cover;
   background-repeat: repeat, no-repeat;

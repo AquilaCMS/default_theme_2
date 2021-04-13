@@ -3,7 +3,7 @@ import { useSelector }  from 'react-redux';
 import Layout           from '@components/layouts/Layout';
 import NextSeoCustom    from '@components/tools/NextSeoCustom';
 import ProductList      from '@components/product/ProductList';
-import Slider           from '@components/common/Slider';
+import BlockSlider      from '@components/common/BlockSlider';
 import BlockCMS         from '@components/common/BlockCMS';
 import { dispatcher }   from '@lib/redux/dispatcher';
 import productProvider  from '@lib/aquila-connector/product/providerProduct';
@@ -15,7 +15,7 @@ const getStoreData = () => {
 };
 
 const getBlocksCMS = async () => {
-    const blockCMSCode = ['home-bottom-faq', 'home-bottom-call', 'info-bottom-1', 'home-promote-product-1', 'home-promote-product-2'];
+    const blockCMSCode = ['home-bottom-faq', 'home-bottom-call', 'info-bottom-1', 'home-promote-product-1', 'home-promote-product-2', 'Slide-Home-1', 'Slide-Home-2', 'Slide-Home-3'];
     return blockCMSProvider.getBlocksCMS(blockCMSCode);
 };
 
@@ -44,7 +44,7 @@ export default function Home() {
     return (
         <Layout>
             
-            <Slider nsCode="home-intro" />
+            <BlockSlider nsCodeList={['Slide-Home-1', 'Slide-Home-2', 'Slide-Home-3']} />
 
             <BlockCMS nsCode="home-promote-product-1" />
             <BlockCMS nsCode="home-promote-product-2" />

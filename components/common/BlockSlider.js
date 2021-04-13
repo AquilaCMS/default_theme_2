@@ -1,11 +1,16 @@
 
-
+import { Carousel }    from 'react-responsive-carousel';
+import { useSelector } from 'react-redux';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
+const getStoreData = () => {
+    const cmsBlocks = useSelector((state) => state.cmsBlocks);
+    return { cmsBlocks };
+};
 
-export default function Slider() {
+export default function BlockSlider({ nsCodeList }) {
 
-    /* const { cmsBlocks } = getStoreData();
+    const { cmsBlocks } = getStoreData();
     const listBlocks    = cmsBlocks.filter((e) => nsCodeList.indexOf(e.code) !== -1);
 
     if (listBlocks && listBlocks.length > 0) {
@@ -34,5 +39,5 @@ export default function Slider() {
             </Carousel>
         );
     }
-    else  */return null;
+    else return null;
 }

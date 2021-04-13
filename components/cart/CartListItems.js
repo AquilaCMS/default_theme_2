@@ -1,6 +1,6 @@
 import Link        from 'next/link';
 import CartItem    from '@components/cart/CartItem';
-import { useCart } from '@lib/utils';
+import { useCart } from '@lib/hooks';
 
 export default function CartListItems() {
     const { cart } = useCart();

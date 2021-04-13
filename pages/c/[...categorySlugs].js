@@ -1,21 +1,15 @@
-import useTranslation   from 'next-translate/useTranslation';
-import { useSelector }  from 'react-redux';
-import Error            from '@pages/_error';
-import Layout           from '@components/layouts/Layout';
-import NextSeoCustom    from '@components/tools/NextSeoCustom';
-import Breadcrumb       from '@components/navigation/Breadcrumb';
-import ProductList      from '@components/product/ProductList';
-import MenuCategories   from '@components/navigation/MenuCategories';
-import ClickAndCollect  from '@components/modules/ClickAndCollect';
-import Allergen         from '@components/modules/Allergen';
-import { dispatcher }   from '@lib/redux/dispatcher';
-import categoryProvider from '@lib/aquila-connector/category';
-
-const getStoreData = () => {
-    const categoryProducts = useSelector((state) => state.categoryProducts);
-    const category         = useSelector((state) => state.category);
-    return { categoryProducts, category };
-};
+import useTranslation                       from 'next-translate/useTranslation';
+import Error                                from '@pages/_error';
+import Layout                               from '@components/layouts/Layout';
+import NextSeoCustom                        from '@components/tools/NextSeoCustom';
+import Breadcrumb                           from '@components/navigation/Breadcrumb';
+import ProductList                          from '@components/product/ProductList';
+import MenuCategories                       from '@components/navigation/MenuCategories';
+import ClickAndCollect                      from '@components/modules/ClickAndCollect';
+import Allergen                             from '@components/modules/Allergen';
+import { dispatcher }                       from '@lib/redux/dispatcher';
+import categoryProvider                     from '@lib/aquila-connector/category';
+import { useCategory, useCategoryProducts } from '@lib/hooks';
 
 export async function getServerSideProps({ params, req, res }) {
     const categorySlugs = Array.isArray(params.categorySlugs) ? params.categorySlugs : [params.categorySlugs];
@@ -35,8 +29,9 @@ export async function getServerSideProps({ params, req, res }) {
 }
 
 export default function CategoryList({ error }) {
-    const { lang }                       = useTranslation();
-    const { categoryProducts, category } = getStoreData();
+    const { lang }             = useTranslation();
+    const { category }         = useCategory();
+    const { categoryProducts } = useCategoryProducts();
 
     if(error) {
         return <Error statusCode={error.code} />;

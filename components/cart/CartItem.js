@@ -1,7 +1,7 @@
 import { useState }                  from 'react';
 import { deleteItem, updateQtyItem } from '@lib/aquila-connector/cart';
 import { getImage }                  from '@lib/aquila-connector/product/helpersProduct';
-import { useCart }                   from '@lib/utils';
+import { useCart }                   from '@lib/hooks';
 
 export default function CartItem({ item }) {
     const [qty, setQty]     = useState(item.quantity);

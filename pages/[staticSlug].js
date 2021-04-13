@@ -1,19 +1,14 @@
-import useTranslation   from 'next-translate/useTranslation';
-import { useSelector }  from 'react-redux';
-import ErrorPage        from '@pages/_error';
-import Layout           from '@components/layouts/Layout';
-import NextSeoCustom    from '@components/tools/NextSeoCustom';
-import BlockCMS         from '@components/common/BlockCMS';
-import { dispatcher }   from '@lib/redux/dispatcher';
-import staticProvider   from '@lib/aquila-connector/static';
-import blockCMSProvider from '@lib/aquila-connector/blockcms';
+import useTranslation    from 'next-translate/useTranslation';
+import { useSelector }   from 'react-redux';
+import ErrorPage         from '@pages/_error';
+import Layout            from '@components/layouts/Layout';
+import NextSeoCustom     from '@components/tools/NextSeoCustom';
+import BlockCMS          from '@components/common/BlockCMS';
+import { dispatcher }    from '@lib/redux/dispatcher';
+import staticProvider    from '@lib/aquila-connector/static';
+import blockCMSProvider  from '@lib/aquila-connector/blockcms';
+import { useStaticPage } from '@lib/hooks';
 // import Breadcrumb   from '@components/navigation/Breadcrumb';
-
-const getStoreData = () => {
-    const staticPage = useSelector((state) => state.staticPage);
-    return { staticPage };
-};
-
 
 // voir pour le SSG
 export async function getServerSideProps({ params, req, res }) {
@@ -31,10 +26,9 @@ export async function getServerSideProps({ params, req, res }) {
     return dispatcher(req, res, actions);
 }
 
-
 export default function StatisPage({ error }) {
     const { lang }       = useTranslation();
-    const { staticPage } = getStoreData();
+    const { staticPage } = useStaticPage();
 
     if (error || !staticPage._id) {
         return (<ErrorPage statusCode={404} />);

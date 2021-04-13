@@ -1,10 +1,9 @@
-import React, { useState }             from 'react';
-import { useSelector }                 from 'react-redux';
+import Link                            from 'next/link';
 import useTranslation                  from 'next-translate/useTranslation';
 import setLanguage                     from 'next-translate/setLanguage';
 import CartSidebarView                 from '@components/cart/CartSidebarView';
 import NavMenu                         from '@components/navigation/NavMenu';
-import { useCart, useShowCartSidebar } from '@lib/utils';
+import { useCart, useShowCartSidebar } from '@lib/hooks';
 
 export default function Header() {
     const siteName                                = 'TODO';
@@ -35,9 +34,12 @@ export default function Header() {
             </div>
             <div className="navigation-container">
                 <div className="navigation-left">
-                    <a href="/" aria-current="page" className="brand w-nav-brand w--current">
-                        <img src="/images/monrestaurant-logo.jpg" alt={siteName} />
-                    </a>
+                    <Link href='/'>
+                        <a aria-current="page" className="brand w-nav-brand w--current">
+                            <img src="/images/monrestaurant-logo.jpg" alt={siteName} />
+                        </a>
+                    </Link>
+                    
                 </div>
                 <div className="navigation-right">
                     

@@ -1,5 +1,4 @@
 import useTranslation   from 'next-translate/useTranslation';
-import { useSelector }  from 'react-redux';
 import Layout           from '@components/layouts/Layout';
 import NextSeoCustom    from '@components/tools/NextSeoCustom';
 import ProductList      from '@components/product/ProductList';
@@ -8,11 +7,7 @@ import BlockCMS         from '@components/common/BlockCMS';
 import { dispatcher }   from '@lib/redux/dispatcher';
 import productProvider  from '@lib/aquila-connector/product/providerProduct';
 import blockCMSProvider from '@lib/aquila-connector/blockcms/index';
-
-const getStoreData = () => {
-    const products = useSelector((state) => state.products);
-    return { products };
-};
+import { useProducts }  from '@lib/hooks';
 
 const getBlocksCMS = async () => {
     const blockCMSCode = ['home-bottom-faq', 'home-bottom-call', 'info-bottom-1', 'home-promote-product-1', 'home-promote-product-2', 'Slide-Home-1', 'Slide-Home-2', 'Slide-Home-3'];
@@ -36,7 +31,7 @@ export async function getServerSideProps({ req, res }) {
 export default function Home() {
 
     const { lang }      = useTranslation();
-    const { products }  = getStoreData();
+    const { products }  = useProducts();
     const TMP_title     = 'TODO';
     const TMP_desc      = 'TODO';
     const TMP_canonical = 'TODO';

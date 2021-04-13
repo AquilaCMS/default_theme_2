@@ -3,7 +3,7 @@ import Link                            from 'next/link';
 import { useRouter }                   from 'next/router';
 import { generateSlug }                from '@lib/aquila-connector/product/helpersProduct';
 import { addToCart }                   from '@lib/aquila-connector/cart';
-import { useCart, useShowCartSidebar } from '@lib/utils';
+import { useCart, useShowCartSidebar } from '@lib/hooks';
 
 export default function ProductCard({ product }) {
     const { query }              = useRouter();

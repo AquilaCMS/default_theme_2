@@ -1,29 +1,18 @@
-import { useState }                               from 'react';
-import { ProductJsonLd }                          from 'next-seo';
-import useTranslation                             from 'next-translate/useTranslation';
-import { useSelector/* , useDispatch */ }         from 'react-redux';
-import ErrorPage                                  from '@pages/_error';
-import Layout                                     from '@components/layouts/Layout';
-import NextSeoCustom                              from '@components/tools/NextSeoCustom';
-import Breadcrumb                                 from '@components/navigation/Breadcrumb';
-import ProductList                                from '@components/product/ProductList';
-import BlockCMS                                   from '@components/common/BlockCMS';
-import { dispatcher }                             from '@lib/redux/dispatcher';
-import blockCMSProvider                           from '@lib/aquila-connector/blockcms';
-import { addToCart }                              from '@lib/aquila-connector/cart';
-import productProvider                            from '@lib/aquila-connector/product/providerProduct';
-import { getImage, getMainImage, getTabImageURL } from '@lib/aquila-connector/product/helpersProduct';
-import { useCart, useShowCartSidebar }            from '@lib/utils';
-
-const getStoreData = () => {
-    const product = useSelector((state) => state.product);
-    // const dispatch = useDispatch()
-    // const _redux_prov_DATA = (data) =>
-    //     dispatch({
-    //         type: 'SET_PRODUCT', data
-    //     });
-    return { product/* , _redux_prov_DATA */ };
-};
+import { useState }                                from 'react';
+import { ProductJsonLd }                           from 'next-seo';
+import useTranslation                              from 'next-translate/useTranslation';
+import ErrorPage                                   from '@pages/_error';
+import Layout                                      from '@components/layouts/Layout';
+import NextSeoCustom                               from '@components/tools/NextSeoCustom';
+import Breadcrumb                                  from '@components/navigation/Breadcrumb';
+import ProductList                                 from '@components/product/ProductList';
+import BlockCMS                                    from '@components/common/BlockCMS';
+import { dispatcher }                              from '@lib/redux/dispatcher';
+import blockCMSProvider                            from '@lib/aquila-connector/blockcms';
+import { addToCart }                               from '@lib/aquila-connector/cart';
+import productProvider                             from '@lib/aquila-connector/product/providerProduct';
+import { getImage, getMainImage, getTabImageURL }  from '@lib/aquila-connector/product/helpersProduct';
+import { useCart, useProduct, useShowCartSidebar } from '@lib/hooks';
 
 export async function getServerSideProps({ params, req, res }) {
     const actions = [
@@ -41,11 +30,11 @@ export async function getServerSideProps({ params, req, res }) {
 }
 
 export default function CategoryList() {
-    const { lang }                            = useTranslation();
-    const [qty, setQty]                       = useState(1);
-    const { product/* , _redux_prov_DATA */ } = getStoreData();
-    const { cart, setCart }                   = useCart();
-    const { setShowCartSidebar }              = useShowCartSidebar();
+    const { lang }               = useTranslation();
+    const [qty, setQty]          = useState(1);
+    const { cart, setCart }      = useCart();
+    const { product }            = useProduct();
+    const { setShowCartSidebar } = useShowCartSidebar();
 
     if (!product) return <ErrorPage statusCode={404} />;
 

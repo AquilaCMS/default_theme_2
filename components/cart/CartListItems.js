@@ -1,16 +1,10 @@
-import Link            from 'next/link';
-import CartItem        from '@components/cart/CartItem';
-import { useSelector } from 'react-redux';
-
-const getDatas = () => {
-    const cart = useSelector((state) => state.cart);
-    return { cart };
-};
-
+import Link        from 'next/link';
+import CartItem    from '@components/cart/CartItem';
+import { useCart } from '@lib/utils';
 
 export default function CartListItems() {
+    const { cart } = useCart();
 
-    const { cart } = getDatas();
     if (cart.items?.length > 0) {
         return (
 

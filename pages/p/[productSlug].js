@@ -1,20 +1,19 @@
-import { ProductJsonLd }                  from 'next-seo';
-import useTranslation                     from 'next-translate/useTranslation';
-import { useSelector/* , useDispatch */ } from 'react-redux';
-import ErrorPage                          from '@pages/_error';
-import Layout                             from '@components/layouts/Layout';
-import NextSeoCustom                      from '@components/tools/NextSeoCustom';
-import Breadcrumb                         from '@components/navigation/Breadcrumb';
-import ProductList                        from '@components/product/ProductList';
-import BlockCMS                           from '@components/common/BlockCMS';
-import { dispatcher }                     from '@lib/redux/dispatcher';
-import blockCMSProvider                   from '@lib/aquila-connector/blockcms';
-import productProvider                    from '@lib/aquila-connector/product/providerProduct';
-import { 
-    getImage,
-    getMainImage,
-    getTabImageURL
-}                                         from '@lib/aquila-connector/product/helpersProduct';
+import { useState }                               from 'react';
+import { ProductJsonLd }                          from 'next-seo';
+import useTranslation                             from 'next-translate/useTranslation';
+import { useSelector/* , useDispatch */ }         from 'react-redux';
+import ErrorPage                                  from '@pages/_error';
+import Layout                                     from '@components/layouts/Layout';
+import NextSeoCustom                              from '@components/tools/NextSeoCustom';
+import Breadcrumb                                 from '@components/navigation/Breadcrumb';
+import ProductList                                from '@components/product/ProductList';
+import BlockCMS                                   from '@components/common/BlockCMS';
+import { dispatcher }                             from '@lib/redux/dispatcher';
+import blockCMSProvider                           from '@lib/aquila-connector/blockcms';
+import { addToCart }                              from '@lib/aquila-connector/cart';
+import productProvider                            from '@lib/aquila-connector/product/providerProduct';
+import { getImage, getMainImage, getTabImageURL } from '@lib/aquila-connector/product/helpersProduct';
+import { useCart, useShowCartSidebar }            from '@lib/utils';
 
 const getStoreData = () => {
     const product = useSelector((state) => state.product);
@@ -43,7 +42,10 @@ export async function getServerSideProps({ params, req, res }) {
 
 export default function CategoryList() {
     const { lang }                            = useTranslation();
+    const [qty, setQty]                       = useState(1);
     const { product/* , _redux_prov_DATA */ } = getStoreData();
+    const { cart, setCart }                   = useCart();
+    const { setShowCartSidebar }              = useShowCartSidebar();
 
     if (!product) return <ErrorPage statusCode={404} />;
 
@@ -59,6 +61,17 @@ export default function CategoryList() {
         item    : product.canonical
     }];
 
+    const onChangeQty = (e) => {
+        setQty(Number(e.target.value));
+    };
+
+    const onAddToCart = async (e) => {
+        e.preventDefault();
+        const newCart   = await addToCart(cart._id, product, qty);
+        document.cookie = 'cart_id=' + newCart._id + '; path=/;';
+        setCart(newCart);
+        setShowCartSidebar(true);
+    };
 
     return (
 
@@ -106,8 +119,9 @@ export default function CategoryList() {
                             <div className="plain-line" />
                             <div className="full-details w-richtext"><p dangerouslySetInnerHTML={{ __html: product.description2?.text }} /></div>
                             <div>
-                                <form className="w-commerce-commerceaddtocartform default-state"><input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" defaultValue={1} />
-                                    <input type="submit" value="Add To Cart" className="w-commerce-commerceaddtocartbutton order-button" />
+                                <form className="w-commerce-commerceaddtocartform default-state">
+                                    <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
+                                    <button type="button" className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>Ajouter au panier</button>
                                 </form>
                                 <div style={{ display: 'none' }} className="w-commerce-commerceaddtocartoutofstock out-of-stock-state">
                                     <div>This product is out of stock.</div>

@@ -1,7 +1,7 @@
 import useTranslation from 'next-translate/useTranslation';
 import CartListItems  from '@components/cart/CartListItems';
 
-export default function CartSidebarView({ closeCart }) {
+export default function CartSidebarView({ hideCartSidebar }) {
     // TODO : essayer de faire l'animation :
     // - opacité 0 => 1 sur le masque (1er div)
     // - tranlation de droite à gauche de la sidebar (2ème div)
@@ -11,11 +11,11 @@ export default function CartSidebarView({ closeCart }) {
     return (
 
         <div className="w-commerce-commercecartcontainerwrapper w-commerce-commercecartcontainerwrapper--cartType-rightSidebar">
-            <div className="w-commerce-commerceoutcartcontainer" onClick={closeCart} />
+            <div className="w-commerce-commerceoutcartcontainer" onClick={hideCartSidebar} />
             <div className="w-commerce-commercecartcontainer">
                 <div className="w-commerce-commercecartheader">
                     <div className="text-panier">{t('common:cart')}</div>
-                    <button className="w-commerce-commercecartcloselink w-inline-block" style={{ 'backgroundColor': 'transparent' }} onClick={closeCart}>
+                    <button className="w-commerce-commercecartcloselink w-inline-block" style={{ 'backgroundColor': 'transparent' }} onClick={hideCartSidebar}>
                         <svg width="16px" height="16px" viewBox="0 0 16 16">
                             <g stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
                                 <g fillRule="nonzero" fill="#333333">

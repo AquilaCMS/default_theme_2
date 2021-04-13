@@ -1,14 +1,15 @@
-import { useState }     from 'react';
-import Link             from 'next/link';
-import { useRouter }    from 'next/router';
-import { generateSlug } from '@lib/aquila-connector/product/helpersProduct';
-import { addToCart }    from '@lib/aquila-connector/cart';
-import { useCart }      from '@lib/utils';
+import { useState }                    from 'react';
+import Link                            from 'next/link';
+import { useRouter }                   from 'next/router';
+import { generateSlug }                from '@lib/aquila-connector/product/helpersProduct';
+import { addToCart }                   from '@lib/aquila-connector/cart';
+import { useCart, useShowCartSidebar } from '@lib/utils';
 
 export default function ProductCard({ product }) {
-    const { query }         = useRouter();
-    const [qty, setQty]     = useState(1);
-    const { cart, setCart } = useCart();
+    const { query }              = useRouter();
+    const [qty, setQty]          = useState(1);
+    const { cart, setCart }      = useCart();
+    const { setShowCartSidebar } = useShowCartSidebar();
     
     const { slug, name, description, ati, img, canonical } = product;
 
@@ -18,7 +19,7 @@ export default function ProductCard({ product }) {
         canonical
     });
 
-    const changeQty = (e) => {
+    const onChangeQty = (e) => {
         setQty(Number(e.target.value));
     };
 
@@ -27,6 +28,7 @@ export default function ProductCard({ product }) {
         const newCart   = await addToCart(cart._id, product, qty);
         document.cookie = 'cart_id=' + newCart._id + '; path=/;';
         setCart(newCart);
+        setShowCartSidebar(true);
     };
 
     return (
@@ -51,7 +53,7 @@ export default function ProductCard({ product }) {
                     <p className="paragraph">{description}</p>
                     <div className="add-to-cart">
                         <form className="w-commerce-commerceaddtocartform default-state">
-                            <input type="number" className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={changeQty} />
+                            <input type="number" className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
                             <button type="button" className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>Ajouter au panier</button>
                         </form>
                         {/* <div style={{ display: 'none' }} className="w-commerce-commerceaddtocartoutofstock out-of-stock-state">

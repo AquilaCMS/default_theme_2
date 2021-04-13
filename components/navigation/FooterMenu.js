@@ -1,0 +1,39 @@
+import useTranslation  from 'next-translate/useTranslation';
+import Link            from 'next/link';
+import { useSelector } from 'react-redux';
+
+const getDatas = () => {
+    const footerMenu = useSelector((state) => state.footerMenu);
+    return { footerMenu };
+};
+
+export default function FooterMenu() {
+    const { lang }       = useTranslation();
+    const { footerMenu } = getDatas();
+    const nbCol          = 5 - footerMenu?.children?.length;
+    const nbColClass     = `w-col w-col-${nbCol} w-col-medium-4`;
+
+    if(footerMenu && footerMenu.children) {
+        return (
+            <>
+                {footerMenu.children.map((item) => {
+                    return (
+                        <div className={nbColClass} key={item._id}>
+                            <div className="footer-heading">{item.name}</div>
+                            <p className="footer-paragraphe">
+                                {item?.children?.map((itemChild) => {
+                                    return (
+                                        <Link href={itemChild.action === 'catalog' ? `/c/${itemChild.slug[lang]}` : `/${itemChild.pageSlug}`} key={itemChild._id}>
+                                            <a className="link-footer" >{itemChild.name}</a>
+                                        </Link>
+                                    );
+                                })}
+                            </p>
+                        </div>
+                    );
+                })}
+            </>
+        );
+    }
+    else return null;
+}

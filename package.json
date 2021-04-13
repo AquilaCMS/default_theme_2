@@ -1,0 +1,40 @@
+{
+  "name": "default21",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p ${PORT:-3000}",
+    "lint:check": "eslint --ext js,jsx .",
+    "lint:fix": "eslint --fix --ext js,jsx ."
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cookie": "^0.4.1",
+    "jwt-decode": "^3.1.2",
+    "next": "10.0.8",
+    "next-seo": "latest",
+    "next-translate": "^1.0.4",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-redux": "^7.2.2",
+    "react-responsive-carousel": "^3.2.15",
+    "redux": "^4.0.5"
+  },
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "eslint-config-import": "^0.13.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-module-utils": "^2.6.0",
+    "eslint-plugin-align-assignments": "^1.1.2",
+    "eslint-plugin-align-import": "^1.0.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.21.2",
+    "eslint-plugin-react-hooks": "^4.1.2",
+    "redux-devtools-extension": "^2.13.9"
+  },
+  "lint-staged": {
+    "*.{ts,js,jsx,tsx}": "eslint --fix"
+  }
+}

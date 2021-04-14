@@ -26,7 +26,7 @@ export default function LoginBlock() {
             router.push(redirect);
             setIsLoading(false);
         } catch (err) {
-            setMessageLogin({ type: 'error', message: err.message });
+            setMessageLogin({ type: 'error', message: err.message || 'Erreur inconnue' });
             setIsLoading(false);
         }
     };
@@ -40,7 +40,7 @@ export default function LoginBlock() {
             await sendMailResetPassword(email);
             setMessageReset({ type: 'info', message: 'Vous allez recevoir un mail pour réinitialiser votre mot de passe !' });
         } catch (err) {
-            setMessageReset({ type: 'error', message: err.message });
+            setMessageReset({ type: 'error', message: err.message || 'Erreur inconnue' });
         }
         setIsLoading(false);
     };
@@ -82,7 +82,7 @@ export default function LoginBlock() {
                             <div>
                                 <div>
                                     <input type="email" className="w-input" maxLength={256} name="email" placeholder="Email" required />
-                                    <button className="log-button w-button" onClick={() => setStep(0)}>Retour</button>
+                                    <button type="submit" className="log-button w-button">ENVOYER</button>
                                 </div>
                             </div>
                         </div>
@@ -95,8 +95,7 @@ export default function LoginBlock() {
                                 </div>
                             )
                         }
-                
-                        <button type="submit" className="log-button w-button">ENVOYER</button>
+                        <button className="log-button w-button" onClick={() => setStep(0)}>RETOUR</button>
                     </form>
                 )
             }

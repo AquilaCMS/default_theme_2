@@ -27,7 +27,7 @@ export default function RegisterBlock() {
             router.push(redirect);
             setIsLoading(false);
         } catch (err) {
-            setMessageRegister({ type: 'error', message: err.message });
+            setMessageRegister({ type: 'error', message: err.message || 'Erreur inconnue' });
             setIsLoading(false);
         }
     };

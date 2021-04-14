@@ -94,6 +94,8 @@
 
 input:disabled, button:disabled { opacity: 0.5; }
 
+.submit-button-tunnel { width: 100%; }
+
 .w-commerce-commerceerror {
     margin-top: 10px;
     padding-top: 10px;

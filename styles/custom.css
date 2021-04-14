@@ -92,6 +92,8 @@
     color: white;
 }
 
+input:disabled, button:disabled { opacity: 0.5; }
+
 .w-commerce-commerceerror {
     margin-top: 10px;
     padding-top: 10px;

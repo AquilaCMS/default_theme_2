@@ -110,7 +110,7 @@ export default function CategoryList() {
                             <div>
                                 <form className="w-commerce-commerceaddtocartform default-state">
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
-                                    <button type="button" className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>Ajouter au panier</button>
+                                    <button type="button" disabled={product.type !== 'simple'} className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>{product.type === 'simple' ? 'Ajouter au panier' : 'Composer'}</button>
                                 </form>
                                 <div style={{ display: 'none' }} className="w-commerce-commerceaddtocartoutofstock out-of-stock-state">
                                     <div>This product is out of stock.</div>

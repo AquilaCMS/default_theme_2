@@ -80,21 +80,21 @@ export default function Account({ user }) {
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label htmlFor="email-3">Nom *</label>
-                                    <input type="text" className="input-field w-input" name="firstname" defaultValue={user.firstname} maxLength={256} placeholder="" required />
+                                    <input type="text" className="input-field w-input" name="firstname" defaultValue={user.firstname} maxLength={256} required />
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label htmlFor="email-4">Prénom *</label>
-                                    <input type="text" className="input-field w-input" name="lastname" defaultValue={user.lastname} maxLength={256} placeholder="" required />
+                                    <input type="text" className="input-field w-input" name="lastname" defaultValue={user.lastname} maxLength={256} required />
                                 </div>
                             </div>
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label htmlFor="email-4">Email *</label>
-                                    <input type="email" className="input-field w-input" name="email" maxLength={256} defaultValue={user.email} placeholder="" required disabled />
+                                    <input type="email" className="input-field w-input" name="email" defaultValue={user.email} maxLength={256} required disabled />
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label htmlFor="email-4">Tél *</label>
-                                    <input type="text" className="input-field w-input" name="phone" maxLength={256} defaultValue={user.phone} placeholder="" required />
+                                    <input type="text" className="input-field w-input" name="phone" defaultValue={user.phone} maxLength={256} required />
                                 </div>
                             </div>
                             {/* <div className="w-commerce-commercecheckoutrow">
@@ -109,17 +109,17 @@ export default function Account({ user }) {
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label htmlFor="email-4">Prénom *</label>
-                                    <input type="text" className="input-field w-input" maxLength={256} name="delivery_address_firstname" defaultValue={user.addresses[user.delivery_address]?.firstname} placeholder="" required />
+                                    <input type="text" className="input-field w-input" name="delivery_address_firstname" defaultValue={user.addresses[user.delivery_address]?.firstname} maxLength={256} required />
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label htmlFor="email-4">Nom *</label>
-                                    <input type="text" className="input-field w-input" maxLength={256} name="delivery_address_lastname" defaultValue={user.addresses[user.delivery_address]?.lastname} placeholder="" required />
+                                    <input type="text" className="input-field w-input" name="delivery_address_lastname" defaultValue={user.addresses[user.delivery_address]?.lastname} maxLength={256} required />
                                 </div>
                             </div>
                             <label htmlFor="email-4" className="field-label">Adresse *</label>
-                            <input type="text" className="input-field w-input" maxLength={256} name="delivery_address_line1" defaultValue={user.addresses[user.delivery_address]?.line1} placeholder="" required />
+                            <input type="text" className="input-field w-input" name="delivery_address_line1" defaultValue={user.addresses[user.delivery_address]?.line1} maxLength={256} required />
                             <label htmlFor="email-4" className="field-label">Adresse 2*</label>
-                            <input type="text" className="input-field w-input" maxLength={256} name="delivery_address_line2" defaultValue={user.addresses[user.delivery_address]?.line2} placeholder="" required />
+                            <input type="text" className="input-field w-input" name="delivery_address_line2" defaultValue={user.addresses[user.delivery_address]?.line2} maxLength={256} required />
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label className="w-commerce-commercecheckoutlabel field-label">Ville *</label>
@@ -143,17 +143,17 @@ export default function Account({ user }) {
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label htmlFor="email-4">Prénom *</label>
-                                    <input type="text" className="input-field w-input" maxLength={256} name="billing_address_firstname" defaultValue={user.addresses[user.billing_address]?.firstname} placeholder="" required />
+                                    <input type="text" className="input-field w-input" name="billing_address_firstname" defaultValue={user.addresses[user.billing_address]?.firstname} maxLength={256} required />
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label htmlFor="email-4">Nom *</label>
-                                    <input type="text" className="input-field w-input" maxLength={256} name="billing_address_lastname" defaultValue={user.addresses[user.billing_address]?.lastname} placeholder="" required />
+                                    <input type="text" className="input-field w-input" name="billing_address_lastname" defaultValue={user.addresses[user.billing_address]?.lastname} maxLength={256} required />
                                 </div>
                             </div>
                             <label htmlFor="email-4" className="field-label">Adresse *</label>
-                            <input type="text" className="input-field w-input" maxLength={256} name="billing_address_line1" defaultValue={user.addresses[user.billing_address]?.line1} placeholder="" required />
+                            <input type="text" className="input-field w-input" name="billing_address_line1" defaultValue={user.addresses[user.billing_address]?.line1} maxLength={256} required />
                             <label htmlFor="email-4" className="field-label">Adresse 2 *</label>
-                            <input type="text" className="input-field w-input" maxLength={256} name="billing_address_line2" defaultValue={user.addresses[user.billing_address]?.line2} placeholder="" required />
+                            <input type="text" className="input-field w-input" name="billing_address_line2" defaultValue={user.addresses[user.billing_address]?.line2} maxLength={256} required />
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label className="w-commerce-commercecheckoutlabel field-label">Ville *</label>

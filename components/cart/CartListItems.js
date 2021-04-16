@@ -12,8 +12,8 @@ export default function CartListItems() {
 
                 {/* TMP : partie rajouté "à la main" à partir du html en ligne */}
                 <div className="w-commerce-commercecartlist" >
-                    {cart.items?.map((item, index) => (
-                        <CartItem item={item} key={index} />
+                    {cart.items?.map((item) => (
+                        <CartItem item={item} key={item._id} />
                     ))}
                 </div>
 

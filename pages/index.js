@@ -1,28 +1,28 @@
-import useTranslation   from 'next-translate/useTranslation';
-import Layout           from '@components/layouts/Layout';
-import NextSeoCustom    from '@components/tools/NextSeoCustom';
-import ProductList      from '@components/product/ProductList';
-import BlockSlider      from '@components/common/BlockSlider';
-import BlockCMS         from '@components/common/BlockCMS';
-import { dispatcher }   from '@lib/redux/dispatcher';
-import productProvider  from '@lib/aquila-connector/product/providerProduct';
-import blockCMSProvider from '@lib/aquila-connector/blockcms/index';
-import { useProducts }  from '@lib/hooks';
+import useTranslation              from 'next-translate/useTranslation';
+import Layout                      from '@components/layouts/Layout';
+import NextSeoCustom               from '@components/tools/NextSeoCustom';
+import ProductList                 from '@components/product/ProductList';
+import BlockSlider                 from '@components/common/BlockSlider';
+import BlockCMS                    from '@components/common/BlockCMS';
+import { dispatcher }              from '@lib/redux/dispatcher';
+import { getProductsFromCategory } from '@lib/aquila-connector/product/providerProduct';
+import { getBlocksCMS }            from '@lib/aquila-connector/blockcms/index';
+import { useProducts }             from '@lib/hooks';
 
-const getBlocksCMS = async () => {
+const getDataBlocksCMS = async () => {
     const blockCMSCode = ['home-bottom-faq', 'home-bottom-call', 'info-bottom-1', 'home-promote-product-1', 'home-promote-product-2', 'Slide-Home-1', 'Slide-Home-2', 'Slide-Home-3'];
-    return blockCMSProvider.getBlocksCMS(blockCMSCode);
+    return getBlocksCMS(blockCMSCode);
 };
 
 export async function getServerSideProps({ req, res }) {
     const actions = [
         {
             type: 'SET_PRODUCTS',
-            func: productProvider.getProductsFromCategory.bind(this)
+            func: getProductsFromCategory.bind(this)
         },
         {
             type: 'PUSH_CMSBLOCKS',
-            func: getBlocksCMS.bind(this)
+            func: getDataBlocksCMS.bind(this)
         }
     ];
     return dispatcher(req, res, actions);

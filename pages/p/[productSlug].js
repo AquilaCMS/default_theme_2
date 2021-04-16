@@ -8,9 +8,9 @@ import Breadcrumb                                  from '@components/navigation/
 import ProductList                                 from '@components/product/ProductList';
 import BlockCMS                                    from '@components/common/BlockCMS';
 import { dispatcher }                              from '@lib/redux/dispatcher';
-import blockCMSProvider                            from '@lib/aquila-connector/blockcms';
+import { getBlocksCMS }                            from '@lib/aquila-connector/blockcms';
 import { addToCart }                               from '@lib/aquila-connector/cart';
-import productProvider                             from '@lib/aquila-connector/product/providerProduct';
+import { getProduct }                              from '@lib/aquila-connector/product/providerProduct';
 import { getImage, getMainImage, getTabImageURL }  from '@lib/aquila-connector/product/helpersProduct';
 import { useCart, useProduct, useShowCartSidebar } from '@lib/hooks';
 
@@ -18,11 +18,11 @@ export async function getServerSideProps({ params, req, res }) {
     const actions = [
         {
             type: 'SET_PRODUCT',
-            func: productProvider.getProduct.bind(this, params.productSlug)
+            func: getProduct.bind(this, params.productSlug)
         },
         {
             type: 'PUSH_CMSBLOCKS',
-            func: blockCMSProvider.getBlocksCMS.bind(this, ['info-bottom-1'])
+            func: getBlocksCMS.bind(this, ['info-bottom-1'])
         }
     ];
 

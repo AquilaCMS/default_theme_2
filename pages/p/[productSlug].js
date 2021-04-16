@@ -58,6 +58,7 @@ export default function CategoryList() {
         e.preventDefault();
         const newCart   = await addToCart(cart._id, product, qty);
         document.cookie = 'cart_id=' + newCart._id + '; path=/;';
+        document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
         setCart(newCart);
         setShowCartSidebar(true);
     };

@@ -8,8 +8,8 @@ import { useCart, useShowCartSidebar } from '@lib/hooks';
 export default function ProductCard({ product }) {
     const { query }              = useRouter();
     const [qty, setQty]          = useState(1);
-    const { cart, setCart }      = useCart();
     const { setShowCartSidebar } = useShowCartSidebar();
+    const { cart }               = useCart();
     
     const { slug, name, description, ati, img, canonical } = product;
 
@@ -27,7 +27,8 @@ export default function ProductCard({ product }) {
         e.preventDefault();
         const newCart   = await addToCart(cart._id, product, qty);
         document.cookie = 'cart_id=' + newCart._id + '; path=/;';
-        setCart(newCart);
+        document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
+        //setCart(newCart);
         setShowCartSidebar(true);
     };
 

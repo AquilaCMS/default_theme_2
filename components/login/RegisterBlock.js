@@ -1,13 +1,15 @@
-import { useState }  from 'react';
-import { useRouter } from 'next/router';
-import Button        from '@components/ui/Button';
-import { auth }      from '@lib/aquila-connector/login';
-import { setUser }   from '@lib/aquila-connector/user';
+import { useState }   from 'react';
+import { useRouter }  from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
+import Button         from '@components/ui/Button';
+import { auth }       from '@lib/aquila-connector/login';
+import { setUser }    from '@lib/aquila-connector/user';
 
 export default function RegisterBlock() {
     const [messageRegister, setMessageRegister] = useState();
     const [isLoading, setIsLoading]             = useState(false);
     const router                                = useRouter();
+    const { t }                                 = useTranslation();
     const redirect                              = router?.query?.redirect || '/account/informations';
 
     const handleRegisterSubmit = async (e) => {
@@ -27,7 +29,7 @@ export default function RegisterBlock() {
             router.push(redirect);
             setIsLoading(false);
         } catch (err) {
-            setMessageRegister({ type: 'error', message: err.message || 'Erreur inconnue' });
+            setMessageRegister({ type: 'error', message: err.message || t('common:message.unknownError') });
             setIsLoading(false);
         }
     };

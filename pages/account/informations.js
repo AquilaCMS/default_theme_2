@@ -4,6 +4,7 @@ import AccountLayout                         from '@components/account/AccountLa
 import { setUser, setAddressesUser }         from '@lib/aquila-connector/user';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
+import useTranslation                        from 'next-translate/useTranslation';
 
 export async function getServerSideProps({ req, res }) {
     const user = await authProtectedPage(req.headers.cookie);
@@ -17,6 +18,7 @@ export async function getServerSideProps({ req, res }) {
 
 export default function Account({ user }) {
     const [message, setMessage] = useState();
+    const { t }                 = useTranslation();
 
     const onSetUser = async (e) => {
         e.preventDefault();
@@ -55,9 +57,9 @@ export default function Account({ user }) {
         try {
             await setUser(updateUser);
             await setAddressesUser(updateUser._id, updateUser.billing_address, updateUser.delivery_address, addresses);
-            setMessage({ type: 'info', message: 'Informations enregistrées' });
+            setMessage({ type: 'info', message: t('common:message.saveData') });
         } catch (err) {
-            setMessage({ type: 'error', message: err.message || 'Erreur inconnue' });
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
     };
 

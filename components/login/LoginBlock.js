@@ -1,5 +1,6 @@
 import { useState }                    from 'react';
 import { useRouter }                   from 'next/router';
+import useTranslation                  from 'next-translate/useTranslation';
 import Button                          from '@components/ui/Button';
 import { auth, sendMailResetPassword } from '@lib/aquila-connector/login';
 import axios                           from '@lib/axios/AxiosInstance';
@@ -10,6 +11,7 @@ export default function LoginBlock() {
     const [messageReset, setMessageReset] = useState();
     const [isLoading, setIsLoading]       = useState(false);
     const router                          = useRouter();
+    const { t }                           = useTranslation();
     const redirect                        = router?.query?.redirect || '/account/informations';
 
 
@@ -26,7 +28,7 @@ export default function LoginBlock() {
             router.push(redirect);
             setIsLoading(false);
         } catch (err) {
-            setMessageLogin({ type: 'error', message: err.message || 'Erreur inconnue' });
+            setMessageLogin({ type: 'error', message: err.message || t('common:message.unknownError') });
             setIsLoading(false);
         }
     };
@@ -40,7 +42,7 @@ export default function LoginBlock() {
             await sendMailResetPassword(email);
             setMessageReset({ type: 'info', message: 'Vous allez recevoir un mail pour réinitialiser votre mot de passe !' });
         } catch (err) {
-            setMessageReset({ type: 'error', message: err.message || 'Erreur inconnue' });
+            setMessageReset({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
         setIsLoading(false);
     };

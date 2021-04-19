@@ -102,8 +102,8 @@ export default function CategoryList() {
                         <div className="product-content">
                             <h3>{product.description2?.title}</h3>
                             <div className="div-block-prix">
-                                <div className="price-text">{product.price?.ati?.normal?.toFixed(2)} €</div>
-                                <div className="price-text sale" />
+                                <div className="price-text">{ product.price.ati.special ? product.price.ati.special.toFixed(2) : product.price.ati.normal.toFixed(2) } €</div>
+                                { product.price.ati.special ? <div className="price-text sale">{product.price.ati.normal.toFixed(2)} €</div> : null }
                             </div>
                             <div className="plain-line" />
                             <div className="full-details w-richtext"><p dangerouslySetInnerHTML={{ __html: product.description2?.text }} /></div>

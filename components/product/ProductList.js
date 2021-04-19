@@ -31,7 +31,6 @@ export default function ProductList({ productsList }) {
                             slug       : item.slug[lang],
                             name       : item.name,
                             description: item.description2?.title,
-                            ati        : item.price?.ati?.normal,
                             img        : getImage(item.images[0], '250x250')
                         }}
                     />

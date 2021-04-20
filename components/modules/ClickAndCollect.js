@@ -8,14 +8,14 @@ export default function ClickAndCollect() {
             <div className="section-picker">
                 <div className="container w-container">
                     <div className="w-form">
-                        <form id="email-form-2" name="email-form-2" data-name="Email Form 2" className="form-grid-retrait">
-                            <img src="images/click-collect.svg" loading="lazy" height="50" id="w-node-_956301b6-5cd8-6ae0-4da8-bca62800047a-28000476" alt="" className="image-3" />
-                            <label id="w-node-_956301b6-5cd8-6ae0-4da8-bca62800047b-28000476" className="checkbox-click-collect w-radio">
+                        <form name="form-cnc" className="form-grid-retrait">
+                            <img src="/images/click-collect.svg" loading="lazy" height="50" alt="" className="image-3" />
+                            <label className="checkbox-click-collect w-radio">
                                 <input type="radio" data-name="Radio" id="retrait" name="Radio" value="Radio" required="" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
                                 <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
                                 <span className="checkbox-label w-form-label">Retrait</span>
                             </label>
-                            <label id="w-node-_956301b6-5cd8-6ae0-4da8-bca62800047f-28000476" className="checkbox-click-collect w-radio">
+                            <label className="checkbox-click-collect w-radio">
                                 <input type="radio" data-name="Radio" id="retrait" name="Radio" value="Radio" required="" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
                                 <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
                                 <span className="checkbox-label w-form-label">Livraison</span>
@@ -38,7 +38,7 @@ export default function ClickAndCollect() {
                                 <option value="12-45">12h45</option>
                                 <option value="13-00">13h00</option>
                             </select>
-                            <a id="w-node-d78b8f31-447d-ea0b-3e04-de52b0d1821c-28000476" href="#" className="adresse-button w-button">Vérifier mon retrait</a>
+                            <a href="#" className="adresse-button w-button">Vérifier mon retrait</a>
                         </form>
                         <div className="w-form-done">
                             <div>Thank you! Your submission has been received!</div>

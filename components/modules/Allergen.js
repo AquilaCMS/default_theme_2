@@ -21,7 +21,7 @@ export default function Allergen() {
                 <div className={`faq-content${open ? ' faq-question-open' : ''}`}>
                     <div className="text-span-center">Passez obligatoirement une commande unique en cas d&apos;allergie afin que les produits soient isolés</div>
                     <div className="form-block w-form">
-                        <form id="email-form" name="email-form" className="form alergies"><label className="w-checkbox checkbox-field-allergene">
+                        <form name="form-alergies" className="form alergies"><label className="w-checkbox checkbox-field-allergene">
                             <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene" /><input type="checkbox" id="Arachides" name="checkbox" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} /><span className="checkbox-label-allergene w-form-label">Arachides</span>
                         </label><label className="w-checkbox checkbox-field-allergene">
                             <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene" /><input type="checkbox" id="Gluten" name="checkbox-2" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} /><span className="checkbox-label-allergene w-form-label">Gluten</span>

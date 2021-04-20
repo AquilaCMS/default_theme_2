@@ -1,7 +1,7 @@
 
 import { useCmsBlocks } from '@lib/hooks';
 
-export default function BlockCMS({ nsCode, displayError = true }) {
+export default function BlockCMS({ nsCode, displayError = false }) {
     const { cmsBlocks } = useCmsBlocks();
     
     const cmsBlock = cmsBlocks.find(cms => cms.code === nsCode);

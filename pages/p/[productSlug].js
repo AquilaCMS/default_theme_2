@@ -13,6 +13,8 @@ import { addToCart }                               from '@lib/aquila-connector/c
 import { getProduct }                              from '@lib/aquila-connector/product/providerProduct';
 import { getImage, getMainImage, getTabImageURL }  from '@lib/aquila-connector/product/helpersProduct';
 import { useCart, useProduct, useShowCartSidebar } from '@lib/hooks';
+import Lightbox                                    from 'lightbox-react';
+import 'lightbox-react/style.css';
 
 export async function getServerSideProps({ params, req, res }) {
     const actions = [
@@ -30,11 +32,13 @@ export async function getServerSideProps({ params, req, res }) {
 }
 
 export default function CategoryList() {
-    const { lang }               = useTranslation();
-    const [qty, setQty]          = useState(1);
-    const { cart, setCart }      = useCart();
-    const { product }            = useProduct();
-    const { setShowCartSidebar } = useShowCartSidebar();
+    const { lang }                    = useTranslation();
+    const [qty, setQty]               = useState(1);
+    const [photoIndex, setPhotoIndex] = useState(0);
+    const [isOpen, setIsOpen]         = useState(false);
+    const { cart, setCart }           = useCart();
+    const { product }                 = useProduct();
+    const { setShowCartSidebar }      = useShowCartSidebar();
 
     if (!product) return <ErrorPage statusCode={404} />;
 
@@ -62,6 +66,11 @@ export default function CategoryList() {
         setShowCartSidebar(true);
     };
 
+    const openLightBox = (i) => {
+        setPhotoIndex(i);
+        setIsOpen(true);
+    };
+
     return (
 
         <Layout>
@@ -81,22 +90,32 @@ export default function CategoryList() {
                 <div className="container-product">
                     <div className="w-layout-grid product-grid">
                         <div className="product-image-wrapper">
+                            {
+                                isOpen && (
+                                    <Lightbox
+                                        mainSrc={`${process.env.NEXT_PUBLIC_IMG_URL}/images/products/max/${product.images[photoIndex]._id}/${product.images[photoIndex].name}`}
+                                        nextSrc={`${process.env.NEXT_PUBLIC_IMG_URL}/images/products/max/${product.images[(photoIndex + 1) % product.images.length]._id}/${product.images[(photoIndex + 1) % product.images.length].name}`}
+                                        prevSrc={`${process.env.NEXT_PUBLIC_IMG_URL}/images/products/max/${product.images[(photoIndex + product.images.length - 1) % product.images.length]._id}/${product.images[(photoIndex + product.images.length - 1) % product.images.length].name}`}
+                                        imageTitle={product.images[photoIndex].alt}
+                                        onCloseRequest={() => setIsOpen(false)}
+                                        onMovePrevRequest={() => setPhotoIndex((photoIndex + product.images.length - 1) % product.images.length)}
+                                        onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % product.images.length)}
+                                    />
+                                )
+                            }
                             <a href="#" className="lightbox-link w-inline-block w-lightbox">
-                                <img loading="lazy" src={coverImageUrl} alt={product.name || 'Image produit'} className="product-image" />
+                                <img loading="lazy" src={coverImageUrl} alt={product.name || 'Image produit'} className="product-image" onClick={() => (product.images.length ? openLightBox(product.images.findIndex((img) => img.default)) : false)} />
                             </a>
                             <div className="collection-list-wrapper w-dyn-list">
                                 <div role="list" className="collection-list w-clearfix w-dyn-items">
                                     {product.images?.filter(ou => !ou.default).map((item) => (
                                         <div key={item._id} role="listitem" className="collection-item w-dyn-item">
-                                            <a href="#" className="w-inline-block w-lightbox">
+                                            <a href="#" className="w-inline-block w-lightbox" onClick={() => openLightBox(product.images.findIndex((im) => im._id === item._id))}>
                                                 <img loading="lazy" src={getImage(item, '75x75')} alt={item.alt || 'Image produit'} className="more-image" />
                                             </a>
                                         </div>
                                     ))}
                                 </div>
-                                {/* <div className="w-dyn-empty">
-                                    <div>No items found.</div>
-                                </div> */}
                             </div>
                         </div>
                         <div className="product-content">

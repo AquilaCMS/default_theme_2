@@ -1,15 +1,16 @@
-import { useState }                    from 'react';
-import Link                            from 'next/link';
-import { useRouter }                   from 'next/router';
-import { generateSlug }                from '@lib/aquila-connector/product/helpersProduct';
-import { addToCart }                   from '@lib/aquila-connector/cart';
-import { useCart, useShowCartSidebar } from '@lib/hooks';
+import { useEffect, useState } from 'react';
+import cookie                  from 'cookie';
+import Link                    from 'next/link';
+import { useRouter }           from 'next/router';
+import { generateSlug }        from '@lib/aquila-connector/product/helpersProduct';
+import { addToCart }           from '@lib/aquila-connector/cart';
+import { useShowCartSidebar }  from '@lib/hooks';
 
 export default function ProductCard({ product }) {
-    const { query }              = useRouter();
     const [qty, setQty]          = useState(1);
+    const [cartId, setCartId]    = useState();
+    const { query }              = useRouter();
     const { setShowCartSidebar } = useShowCartSidebar();
-    const { cart }               = useCart();
     
     const { slug, name, description, ati, img, canonical } = product;
 
@@ -19,16 +20,19 @@ export default function ProductCard({ product }) {
         canonical
     });
 
+    useEffect(() => {
+        setCartId(cookie.parse(document.cookie).cart_id);
+    });
+
     const onChangeQty = (e) => {
         setQty(Number(e.target.value));
     };
 
     const onAddToCart = async (e) => {
         e.preventDefault();
-        const newCart   = await addToCart(cart._id, product, qty);
+        const newCart   = await addToCart(cartId, product, qty);
         document.cookie = 'cart_id=' + newCart._id + '; path=/;';
         document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
-        //setCart(newCart);
         setShowCartSidebar(true);
     };
 

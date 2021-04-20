@@ -4,12 +4,12 @@ import Layout                                from '@components/layouts/Layout';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));
     }
-    return dispatcher(req, res);
+    return dispatcher();
 }
 
 export default function CheckoutConfirmation() {

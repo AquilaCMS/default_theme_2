@@ -1,20 +1,21 @@
-import { useState }                                from 'react';
-import { ProductJsonLd }                           from 'next-seo';
-import useTranslation                              from 'next-translate/useTranslation';
-import ErrorPage                                   from '@pages/_error';
-import Layout                                      from '@components/layouts/Layout';
-import NextSeoCustom                               from '@components/tools/NextSeoCustom';
-import Breadcrumb                                  from '@components/navigation/Breadcrumb';
-import ProductList                                 from '@components/product/ProductList';
-import BlockCMS                                    from '@components/common/BlockCMS';
-import { dispatcher }                              from '@lib/redux/dispatcher';
-import blockCMSProvider                            from '@lib/aquila-connector/blockcms';
-import { addToCart }                               from '@lib/aquila-connector/cart';
-import productProvider                             from '@lib/aquila-connector/product/providerProduct';
-import { getImage, getMainImage, getTabImageURL }  from '@lib/aquila-connector/product/helpersProduct';
-import { useCart, useProduct, useShowCartSidebar } from '@lib/hooks';
+import { useEffect, useState }                    from 'react';
+import { ProductJsonLd }                          from 'next-seo';
+import cookie                                     from 'cookie';
+import useTranslation                             from 'next-translate/useTranslation';
+import ErrorPage                                  from '@pages/_error';
+import Layout                                     from '@components/layouts/Layout';
+import NextSeoCustom                              from '@components/tools/NextSeoCustom';
+import Breadcrumb                                 from '@components/navigation/Breadcrumb';
+import ProductList                                from '@components/product/ProductList';
+import BlockCMS                                   from '@components/common/BlockCMS';
+import { dispatcher }                             from '@lib/redux/dispatcher';
+import blockCMSProvider                           from '@lib/aquila-connector/blockcms';
+import { addToCart }                              from '@lib/aquila-connector/cart';
+import productProvider                            from '@lib/aquila-connector/product/providerProduct';
+import { getImage, getMainImage, getTabImageURL } from '@lib/aquila-connector/product/helpersProduct';
+import { useProduct, useShowCartSidebar }         from '@lib/hooks';
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params }) {
     const actions = [
         {
             type: 'SET_PRODUCT',
@@ -26,15 +27,15 @@ export async function getServerSideProps({ params, req, res }) {
         }
     ];
 
-    return dispatcher(req, res, actions);
+    return dispatcher(actions);
 }
 
 export default function CategoryList() {
-    const { lang }               = useTranslation();
     const [qty, setQty]          = useState(1);
-    const { cart, setCart }      = useCart();
+    const [cartid, setCartid]    = useState();
     const { product }            = useProduct();
     const { setShowCartSidebar } = useShowCartSidebar();
+    const { lang }               = useTranslation();
 
     if (!product) return <ErrorPage statusCode={404} />;
 
@@ -50,16 +51,19 @@ export default function CategoryList() {
         item    : product.canonical
     }];
 
+    useEffect(() => {
+        setCartid(cookie.parse(document.cookie).cart_id);
+    });
+
     const onChangeQty = (e) => {
         setQty(Number(e.target.value));
     };
 
     const onAddToCart = async (e) => {
         e.preventDefault();
-        const newCart   = await addToCart(cart._id, product, qty);
+        const newCart   = await addToCart(cartid, product, qty);
         document.cookie = 'cart_id=' + newCart._id + '; path=/;';
         document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
-        setCart(newCart);
         setShowCartSidebar(true);
     };
 

@@ -5,12 +5,12 @@ import { setUser, setAddressesUser }         from '@lib/aquila-connector/user';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/account/login?redirect=' + encodeURI('/account/informations'));
     }
-    const pageProps      = await dispatcher(req, res);
+    const pageProps      = await dispatcher();
     pageProps.props.user = user;
     return pageProps;
 }

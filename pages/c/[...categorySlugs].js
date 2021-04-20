@@ -11,7 +11,7 @@ import { dispatcher }                       from '@lib/redux/dispatcher';
 import categoryProvider                     from '@lib/aquila-connector/category';
 import { useCategory, useCategoryProducts } from '@lib/hooks';
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params }) {
     const categorySlugs = Array.isArray(params.categorySlugs) ? params.categorySlugs : [params.categorySlugs];
     const slug          = categorySlugs[categorySlugs.length - 1];
     // TODO : SET_CATEGORY & SET_CATEGORY_PRODUCTS sont appelé l'un apres l'autre, donc la route "SET_CATEGORY" est appelé 2 fois (puisqu'appelé via SET_CATEGORY_PRODUCTS)
@@ -25,7 +25,7 @@ export async function getServerSideProps({ params, req, res }) {
             func: categoryProvider.getCategoryProducts.bind(this, { slug })
         }
     ];
-    return dispatcher(req, res, actions);
+    return dispatcher(actions);
 }
 
 export default function CategoryList({ error }) {

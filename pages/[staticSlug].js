@@ -1,5 +1,4 @@
 import useTranslation    from 'next-translate/useTranslation';
-import { useSelector }   from 'react-redux';
 import ErrorPage         from '@pages/_error';
 import Layout            from '@components/layouts/Layout';
 import NextSeoCustom     from '@components/tools/NextSeoCustom';
@@ -11,7 +10,7 @@ import { useStaticPage } from '@lib/hooks';
 // import Breadcrumb   from '@components/navigation/Breadcrumb';
 
 // voir pour le SSG
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params }) {
     const actions = [
         {
             type: 'PUSH_CMSBLOCKS',
@@ -23,7 +22,7 @@ export async function getServerSideProps({ params, req, res }) {
         }
     ];
 
-    return dispatcher(req, res, actions);
+    return dispatcher(actions);
 }
 
 export default function StatisPage({ error }) {

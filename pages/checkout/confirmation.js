@@ -1,5 +1,4 @@
 import Head                                  from 'next/head';
-import Router                                from 'next/router';
 import Layout                                from '@components/layouts/Layout';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';

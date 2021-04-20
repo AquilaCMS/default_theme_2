@@ -46,10 +46,7 @@ export default function Home() {
 
             <div className="content-section-bg">
                 <div className="container-col">
-                    <div className="title-wrap-centre">
-                        <h2 className="heading-2-steps">Découvrez notre carte</h2>
-                        <p>Choisissez dans notre carte et offres du jour,<br />Et récupéré votre commande</p>
-                    </div>
+                    <BlockCMS nsCode="home-product-listing-title" />
 
                     {products && products.datas && products.datas.length > 0 && /* Ne reprend pas le design d'origine : liste de produit à mettre en avant */
                         <div className="tabs w-tabs">

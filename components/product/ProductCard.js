@@ -1,14 +1,13 @@
-import { useState }                      from 'react';
-import Link                              from 'next/link';
-import { useRouter }                     from 'next/router';
-import { generateSlug }                  from '@lib/aquila-connector/product/helpersProduct';
-import { addToCart }                     from '@lib/aquila-connector/cart';
-import { useCartId, useShowCartSidebar } from '@lib/hooks';
+import { useState }           from 'react';
+import Link                   from 'next/link';
+import { useRouter }          from 'next/router';
+import { generateSlug }       from '@lib/aquila-connector/product/helpersProduct';
+import { addToCart }          from '@lib/aquila-connector/cart';
+import { useShowCartSidebar } from '@lib/hooks';
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, cartId, setCartId }) {
     const [qty, setQty]          = useState(1);
     const { query }              = useRouter();
-    const { cartId, setCartId }  = useCartId();
     const { setShowCartSidebar } = useShowCartSidebar();
     
     const { slug, name, description, img, canonical } = product;

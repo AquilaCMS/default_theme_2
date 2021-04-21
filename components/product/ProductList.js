@@ -2,11 +2,13 @@ import useTranslation from 'next-translate/useTranslation';
 import ProductCard    from '@components/product/ProductCard';
 import Pagination     from '@components/product/Pagination';
 import { getImage }   from '@lib/aquila-connector/product/helpersProduct';
+import { useCartId }  from '@lib/hooks';
 
 
 export default function ProductList({ productsList }) {
 
-    const { lang } = useTranslation();
+    const { cartId, setCartId } = useCartId();
+    const { lang }              = useTranslation();
 
     let haveItems = productsList && productsList.length > 0 ? true : false;
 
@@ -25,6 +27,8 @@ export default function ProductList({ productsList }) {
                 {productsList.map((item) => (
                     <ProductCard
                         key={item._id}
+                        cartId={cartId}
+                        setCartId={setCartId}
                         product={{
                             ...item,
                             key        : item._id,

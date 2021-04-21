@@ -1,6 +1,8 @@
 {
   "login": {
     "title": "en-Ma commande - Connexion",
-    "description": "en-TODO"
+    "description": "en-TODO",
+    "titleH1" : "en-Ma commande",
+    "step1" : "en-Connexion / Inscription"
   }
 }

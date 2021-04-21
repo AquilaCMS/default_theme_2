@@ -1,11 +1,11 @@
 import { useState }                  from 'react';
+import cookie                        from 'cookie';
 import { deleteItem, updateQtyItem } from '@lib/aquila-connector/cart';
 import { getImage }                  from '@lib/aquila-connector/product/helpersProduct';
-import { useCart }                   from '@lib/hooks';
 
-export default function CartItem({ item }) {
-    const [qty, setQty]     = useState(item.quantity);
-    const { cart, setCart } = useCart();
+export default function CartItem({ item, setCart }) {
+    const [qty, setQty] = useState(item.quantity);
+    const cartId        = cookie.parse(document.cookie).cart_id;
 
     const onChangeQtyItem = async (e) => {
         const quantity = Number(e.target.value);
@@ -13,13 +13,15 @@ export default function CartItem({ item }) {
             onDeleteItem();
         } else {
             setQty(quantity);
-            const newCart = await updateQtyItem(cart._id, item._id, quantity);
+            const newCart   = await updateQtyItem(cartId, item._id, quantity);
+            document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
             setCart(newCart);
         }
     };
     
     const onDeleteItem = async () => {
-        const newCart = await deleteItem(cart._id, item._id);
+        const newCart   = await deleteItem(cartId, item._id);
+        document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
         setCart(newCart);
     };
 

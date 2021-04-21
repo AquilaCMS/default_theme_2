@@ -6,13 +6,13 @@ import RegisterBlock                         from '@components/login/RegisterBlo
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req }) {
     // If the user is already logged in, we will automatically redirect to the page /account/informations
     const user = await authProtectedPage(req.headers.cookie);
     if (user) {
         return serverRedirect('/account/informations');
     }
-    return dispatcher(req, res);
+    return dispatcher();
 }
 
 export default function Login() {

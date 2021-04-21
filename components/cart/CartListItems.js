@@ -3,8 +3,7 @@ import CartItem    from '@components/cart/CartItem';
 import { useCart } from '@lib/hooks';
 
 export default function CartListItems() {
-    const { cart } = useCart();
-
+    const { cart, setCart } = useCart();
     if (cart.items?.length > 0) {
         return (
 
@@ -13,7 +12,7 @@ export default function CartListItems() {
                 {/* TMP : partie rajouté "à la main" à partir du html en ligne */}
                 <div className="w-commerce-commercecartlist" >
                     {cart.items?.map((item) => (
-                        <CartItem item={item} key={item._id} />
+                        <CartItem item={item} setCart={setCart} key={item._id} />
                     ))}
                 </div>
 

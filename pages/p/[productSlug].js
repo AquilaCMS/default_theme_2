@@ -1,22 +1,22 @@
-import { useState }                                from 'react';
-import { ProductJsonLd }                           from 'next-seo';
-import useTranslation                              from 'next-translate/useTranslation';
-import ErrorPage                                   from '@pages/_error';
-import Layout                                      from '@components/layouts/Layout';
-import NextSeoCustom                               from '@components/tools/NextSeoCustom';
-import Breadcrumb                                  from '@components/navigation/Breadcrumb';
-import ProductList                                 from '@components/product/ProductList';
-import BlockCMS                                    from '@components/common/BlockCMS';
-import { dispatcher }                              from '@lib/redux/dispatcher';
-import { getBlocksCMS }                            from '@lib/aquila-connector/blockcms';
-import { addToCart }                               from '@lib/aquila-connector/cart';
-import { getProduct }                              from '@lib/aquila-connector/product/providerProduct';
-import { getImage, getMainImage, getTabImageURL }  from '@lib/aquila-connector/product/helpersProduct';
-import { useCart, useProduct, useShowCartSidebar } from '@lib/hooks';
-import Lightbox                                    from 'lightbox-react';
+import { useState }                                  from 'react';
+import { ProductJsonLd }                             from 'next-seo';
+import useTranslation                                from 'next-translate/useTranslation';
+import ErrorPage                                     from '@pages/_error';
+import Layout                                        from '@components/layouts/Layout';
+import NextSeoCustom                                 from '@components/tools/NextSeoCustom';
+import Breadcrumb                                    from '@components/navigation/Breadcrumb';
+import ProductList                                   from '@components/product/ProductList';
+import BlockCMS                                      from '@components/common/BlockCMS';
+import { dispatcher }                                from '@lib/redux/dispatcher';
+import { getBlocksCMS }                              from '@lib/aquila-connector/blockcms';
+import { addToCart }                                 from '@lib/aquila-connector/cart';
+import { getProduct }                                from '@lib/aquila-connector/product/providerProduct';
+import { getImage, getMainImage, getTabImageURL }    from '@lib/aquila-connector/product/helpersProduct';
+import { useCartId, useProduct, useShowCartSidebar } from '@lib/hooks';
+import Lightbox                                      from 'lightbox-react';
 import 'lightbox-react/style.css';
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params }) {
     const actions = [
         {
             type: 'SET_PRODUCT',
@@ -28,16 +28,16 @@ export async function getServerSideProps({ params, req, res }) {
         }
     ];
 
-    return dispatcher(req, res, actions);
+    return dispatcher(actions);
 }
 
 export default function CategoryList() {
-    const { lang }                    = useTranslation();
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
-    const { cart, setCart }           = useCart();
+    const { cartId, setCartId }       = useCartId();
     const { product }                 = useProduct();
+    const { lang }                    = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
 
     if (!product) return <ErrorPage statusCode={404} />;
@@ -60,10 +60,11 @@ export default function CategoryList() {
 
     const onAddToCart = async (e) => {
         e.preventDefault();
-        const newCart   = await addToCart(cart._id, product, qty);
+        const newCart   = await addToCart(cartId, product, qty);
         document.cookie = 'cart_id=' + newCart._id + '; path=/;';
-        setCart(newCart);
+        document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
         setShowCartSidebar(true);
+        setCartId(newCart._id);
     };
 
     const openLightBox = (i) => {

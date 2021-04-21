@@ -10,7 +10,7 @@ import { useStaticPage } from '@lib/hooks';
 // import Breadcrumb   from '@components/navigation/Breadcrumb';
 
 // voir pour le SSG
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params }) {
     const actions = [
         {
             type: 'PUSH_CMSBLOCKS',
@@ -22,7 +22,7 @@ export async function getServerSideProps({ params, req, res }) {
         }
     ];
 
-    return dispatcher(req, res, actions);
+    return dispatcher(actions);
 }
 
 export default function StatisPage({ error }) {

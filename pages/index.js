@@ -14,7 +14,7 @@ const getDataBlocksCMS = async () => {
     return getBlocksCMS(blockCMSCode);
 };
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps() {
     const actions = [
         {
             type: 'SET_PRODUCTS',
@@ -25,7 +25,7 @@ export async function getServerSideProps({ req, res }) {
             func: getDataBlocksCMS.bind(this)
         }
     ];
-    return dispatcher(req, res, actions);
+    return dispatcher(actions);
 }
 
 export default function Home() {

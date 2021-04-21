@@ -1,11 +1,11 @@
-import newsletterProvider from '@lib/aquila-connector/newsletter';
+import { setNewsletter } from '@lib/aquila-connector/newsletter';
 
 export default function Newsletter() {
 
     const handleNLSubmit = async (e) => {
         e.preventDefault();
         const email = e.currentTarget.email.value;
-        await newsletterProvider.setNewsletter(email);
+        await setNewsletter(email);
     };
 
     return (

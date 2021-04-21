@@ -4,8 +4,8 @@ import Layout            from '@components/layouts/Layout';
 import NextSeoCustom     from '@components/tools/NextSeoCustom';
 import BlockCMS          from '@components/common/BlockCMS';
 import { dispatcher }    from '@lib/redux/dispatcher';
-import staticProvider    from '@lib/aquila-connector/static';
-import blockCMSProvider  from '@lib/aquila-connector/blockcms';
+import { getPageStatic } from '@lib/aquila-connector/static';
+import { getBlocksCMS }  from '@lib/aquila-connector/blockcms';
 import { useStaticPage } from '@lib/hooks';
 // import Breadcrumb   from '@components/navigation/Breadcrumb';
 
@@ -14,11 +14,11 @@ export async function getServerSideProps({ params }) {
     const actions = [
         {
             type: 'PUSH_CMSBLOCKS',
-            func: blockCMSProvider.getBlocksCMS.bind(this, ['bottom-parallax'])
+            func: getBlocksCMS.bind(this, ['bottom-parallax'])
         },
         {
             type: 'SET_STATICPAGE',
-            func: staticProvider.getPageStatic.bind(this, params.staticSlug)
+            func: getPageStatic.bind(this, params.staticSlug)
         }
     ];
 

@@ -1,15 +1,15 @@
-import useTranslation                       from 'next-translate/useTranslation';
-import Error                                from '@pages/_error';
-import Layout                               from '@components/layouts/Layout';
-import NextSeoCustom                        from '@components/tools/NextSeoCustom';
-import Breadcrumb                           from '@components/navigation/Breadcrumb';
-import ProductList                          from '@components/product/ProductList';
-import MenuCategories                       from '@components/navigation/MenuCategories';
-import ClickAndCollect                      from '@components/modules/ClickAndCollect';
-import Allergen                             from '@components/modules/Allergen';
-import { dispatcher }                       from '@lib/redux/dispatcher';
-import categoryProvider                     from '@lib/aquila-connector/category';
-import { useCategory, useCategoryProducts } from '@lib/hooks';
+import useTranslation                         from 'next-translate/useTranslation';
+import Error                                  from '@pages/_error';
+import Layout                                 from '@components/layouts/Layout';
+import NextSeoCustom                          from '@components/tools/NextSeoCustom';
+import Breadcrumb                             from '@components/navigation/Breadcrumb';
+import ProductList                            from '@components/product/ProductList';
+import MenuCategories                         from '@components/navigation/MenuCategories';
+import ClickAndCollect                        from '@components/modules/ClickAndCollect';
+import Allergen                               from '@components/modules/Allergen';
+import { dispatcher }                         from '@lib/redux/dispatcher';
+import { getCategories, getCategoryProducts } from '@lib/aquila-connector/category';
+import { useCategory, useCategoryProducts }   from '@lib/hooks';
 
 export async function getServerSideProps({ params }) {
     const categorySlugs = Array.isArray(params.categorySlugs) ? params.categorySlugs : [params.categorySlugs];
@@ -18,11 +18,11 @@ export async function getServerSideProps({ params }) {
     const actions = [
         {
             type: 'SET_CATEGORY',
-            func: categoryProvider.getCategories.bind(this, { PostBody: { filter: { 'translation.fr.slug': slug } } })
+            func: getCategories.bind(this, { PostBody: { filter: { 'translation.fr.slug': slug } } })
         },
         {
             type: 'SET_CATEGORY_PRODUCTS',
-            func: categoryProvider.getCategoryProducts.bind(this, { slug })
+            func: getCategoryProducts.bind(this, { slug })
         }
     ];
     return dispatcher(actions);

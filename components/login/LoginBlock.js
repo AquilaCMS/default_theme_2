@@ -1,5 +1,6 @@
 import { useState }                    from 'react';
 import { useRouter }                   from 'next/router';
+import useTranslation                  from 'next-translate/useTranslation';
 import Button                          from '@components/ui/Button';
 import { auth, sendMailResetPassword } from '@lib/aquila-connector/login';
 import axios                           from '@lib/axios/AxiosInstance';
@@ -10,6 +11,7 @@ export default function LoginBlock() {
     const [messageReset, setMessageReset] = useState();
     const [isLoading, setIsLoading]       = useState(false);
     const router                          = useRouter();
+    const { t }                           = useTranslation();
     const redirect                        = router?.query?.redirect || '/account/informations';
 
 
@@ -26,7 +28,7 @@ export default function LoginBlock() {
             router.push(redirect);
             setIsLoading(false);
         } catch (err) {
-            setMessageLogin({ type: 'error', message: err.message || 'Erreur inconnue' });
+            setMessageLogin({ type: 'error', message: err.message || t('common:message.unknownError') });
             setIsLoading(false);
         }
     };
@@ -38,9 +40,9 @@ export default function LoginBlock() {
         const email = e.currentTarget.email.value;
         try {
             await sendMailResetPassword(email);
-            setMessageReset({ type: 'info', message: 'Vous allez recevoir un mail pour réinitialiser votre mot de passe !' });
+            setMessageReset({ type: 'info', message: t('components/login/loginBlock:forgot.infoGetMail') });
         } catch (err) {
-            setMessageReset({ type: 'error', message: err.message || 'Erreur inconnue' });
+            setMessageReset({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
         setIsLoading(false);
     };
@@ -50,13 +52,19 @@ export default function LoginBlock() {
             {
                 step === 0 && (
                     <form className="col-log-int w-col w-col-5" onSubmit={handleLoginSubmit}>
-                        <div className="log-label">Me connecter,<br />Je possède déjà un compte</div>
+                        <div className="log-label">
+                            {t('components/login/loginBlock:title1')}
+                            <br/>
+                            {t('components/login/loginBlock:title2')}
+                        </div>
                         <div className="w-form">
                             <div>
                                 <div><input type="email" className="w-input" maxLength={256} name="email" placeholder="Email" required autoComplete="username" /></div>
                                 <div>
-                                    <input type="password" className="w-input" maxLength={256} name="password" placeholder="Mot de passe" required autoComplete="current-password" />
-                                    <div className="small-text marg-b-20" style={{ cursor: 'pointer' }} onClick={() => setStep(1)}><em>Mot de passe oublié ?</em></div>
+                                    <input type="password" className="w-input" maxLength={256} name="password" placeholder={t('components/login/loginBlock:password')} required autoComplete="current-password" />
+                                    <div className="small-text marg-b-20" style={{ cursor: 'pointer' }} onClick={() => setStep(1)}>
+                                        <em>{t('components/login/loginBlock:forgotPass')}</em>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -70,19 +78,19 @@ export default function LoginBlock() {
                             )
                         }
                 
-                        <Button text="JE M&apos;IDENTIFIE" loadingText='IDENTIFICATION...' isLoading={isLoading} className="log-button w-button" />
+                        <Button text={t('components/login/loginBlock:signin')} loadingText={t('components/login/loginBlock:signinLoading')} isLoading={isLoading} className="log-button w-button" />
                     </form>
                 )
             }
             {
                 step === 1 && (
                     <form className="col-log-int w-col w-col-5" onSubmit={handleResetSubmit}>
-                        <div className="log-label">Saisissez votre email</div>
+                        <div className="log-label">{t('components/login/loginBlock:forgot.email')}</div>
                         <div className="w-form">
                             <div>
                                 <div>
                                     <input type="email" className="w-input" maxLength={256} name="email" placeholder="Email" required />
-                                    <button type="submit" className="log-button w-button">ENVOYER</button>
+                                    <button type="submit" className="log-button w-button">{t('components/login/loginBlock:forgot.send')}</button>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +103,7 @@ export default function LoginBlock() {
                                 </div>
                             )
                         }
-                        <button className="log-button w-button" onClick={() => setStep(0)}>RETOUR</button>
+                        <button className="log-button w-button" onClick={() => setStep(0)}>{t('components/login/loginBlock:forgot.back')}</button>
                     </form>
                 )
             }

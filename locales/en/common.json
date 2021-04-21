@@ -1,3 +1,7 @@
 {
-  "cart": "Cart"
+  "cart": "Cart",
+  "message": {
+    "unknownError" : "Unknown Error",
+    "saveData" : "Saved data !"
+  }
 }

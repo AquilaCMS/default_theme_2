@@ -12,7 +12,7 @@ export default function ProductCard({ product }) {
     const { query }              = useRouter();
     const { setShowCartSidebar } = useShowCartSidebar();
     
-    const { slug, name, description, ati, img, canonical } = product;
+    const { slug, name, description, price, img, canonical } = product;
 
     const currentSlug = generateSlug({
         categorySlugs: query.categorySlugs,
@@ -50,8 +50,8 @@ export default function ProductCard({ product }) {
                         <a className="food-title-wrap w-inline-block">
                             <h6 className="heading-9" >{name}</h6>
                             <div className="div-block-prix">
-                                <div className="price">{ati.toFixed(2)} €</div>
-                                <div className="price sale" />
+                                <div className="price">{ product.price.ati.special ? product.price.ati.special.toFixed(2) : product.price.ati.normal.toFixed(2) } €</div>
+                                { product.price.ati.special ? <div className="price sale">{product.price.ati.normal.toFixed(2)} €</div> : null }
                             </div>
                         </a>
                     </Link>

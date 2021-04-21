@@ -1,5 +1,6 @@
 import { useState }    from 'react';
 import { useSelector } from 'react-redux';
+import useTranslation  from 'next-translate/useTranslation';
 
 const getDatas = () => {
     const navMenu = useSelector((state) => state.navMenu);
@@ -9,6 +10,7 @@ const getDatas = () => {
 
 export default function MenuCategories() {
 
+    const { t }           = useTranslation();
     const [open, setOpen] = useState(false);
     const openBlock       = () => {
         setOpen(!open);
@@ -20,7 +22,7 @@ export default function MenuCategories() {
         return (
             <>
                 <div className="lien_carte w-inline-block" onClick={openBlock}>
-                    <h6 className="heading-bouton-carte">Voir la suite de la carte</h6>
+                    <h6 className="heading-bouton-carte">{t('components/navigation:viewMore')}</h6>
                     <img src="/images/Plus.svg" alt="" className="plus-2" />
                 </div>
 

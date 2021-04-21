@@ -1,9 +1,12 @@
-import Link        from 'next/link';
-import CartItem    from '@components/cart/CartItem';
-import { useCart } from '@lib/hooks';
+import Link           from 'next/link';
+import useTranslation from 'next-translate/useTranslation';
+import CartItem       from '@components/cart/CartItem';
+import { useCart }    from '@lib/hooks';
 
 export default function CartListItems() {
     const { cart, setCart } = useCart();
+    const { t }             = useTranslation();
+
     if (cart.items?.length > 0) {
         return (
 
@@ -18,7 +21,7 @@ export default function CartListItems() {
 
                 <div className="w-commerce-commercecartfooter">
                     <div className="w-commerce-commercecartlineitem cart-line-item">
-                        <div>Total</div>
+                        <div>{t('components/cart:cartListItem.total')}</div>
                         <div className="w-commerce-commercecartordervalue text-block">
                             {cart.priceTotal.ati.toFixed(2)} €
                         </div>
@@ -26,7 +29,7 @@ export default function CartListItems() {
                     <div>
                         {/* TODO : si form, alors il faut un bouton de validation */}
                         <Link href="/checkout/clickandcollect">
-                            <a className="checkout-button-2 w-button">COMMANDER !</a>
+                            <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
                         </Link>
                         {/* <a href="checkout.html" value="Continue to Checkout" className="w-commerce-commercecartcheckoutbutton checkout-button">Continue to Checkout</a> */}
                     </div>
@@ -38,9 +41,9 @@ export default function CartListItems() {
 
     return (
         <div className="w-commerce-commercecartemptystate empty-state">
-            <div>Votre Panier est vide</div>
+            <div>{t('components/cart:cartListItem.empty')}</div>
             <div className="button-arrow-wrap">
-                <a href="/" className="button w-button">Découvrir notre Carte</a>
+                <a href="/" className="button w-button">{t('components/cart:goToHome')}</a>
             </div>
         </div>
     );

@@ -2,6 +2,6 @@
   "locales": ["fr", "en"],
   "defaultLocale": "fr",
   "pages": {
-    "*": ["common", "components/account/accountLayout", "components/login/loginBlock", "components/login/registerBlock", "pages/account/login", "pages/account/informations", "pages/account/index", "pages/account/bills"]
+    "*": ["common", "components/account/accountLayout", "components/login/loginBlock", "components/login/registerBlock", "components/cart", "components/cookiesBanner", "components/newsletter", "components/navigation", "components/product", "pages/account/login", "pages/account/informations", "pages/account/index", "pages/account/bills", "pages/checkout"]
   }
 }

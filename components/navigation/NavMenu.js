@@ -12,7 +12,7 @@ const getDatas = () => {
 
 
 export default function NavMenu() {
-    const { lang }                              = useTranslation();
+    const { lang, t }                           = useTranslation();
     const { navMenu }                           = getDatas();
     const [burger, setBurger]                   = useState(false);
     const [view, setView]                       = useState([]);
@@ -113,7 +113,7 @@ export default function NavMenu() {
                 }) : null}
 
                 <Link href="/account/login">
-                    <a className="nav-link-2 w-nav-link">Mon compte</a>
+                    <a className="nav-link-2 w-nav-link">{t('components/navigation:myAccount')}</a>
                 </Link>
             </nav>
         </>

@@ -1,6 +1,7 @@
 import { useState }           from 'react';
 import Link                   from 'next/link';
 import { useRouter }          from 'next/router';
+import useTranslation         from 'next-translate/useTranslation';
 import { generateSlug }       from '@lib/aquila-connector/product/helpersProduct';
 import { addToCart }          from '@lib/aquila-connector/cart';
 import { useShowCartSidebar } from '@lib/hooks';
@@ -9,6 +10,7 @@ export default function ProductCard({ product, cartId, setCartId }) {
     const [qty, setQty]          = useState(1);
     const { query }              = useRouter();
     const { setShowCartSidebar } = useShowCartSidebar();
+    const { t }                  = useTranslation();
     
     const { slug, name, description, img, canonical } = product;
 
@@ -54,7 +56,7 @@ export default function ProductCard({ product, cartId, setCartId }) {
                     <div className="add-to-cart">
                         <form className="w-commerce-commerceaddtocartform default-state">
                             <input type="number" disabled={product.type !== 'simple'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
-                            <button type="button" disabled={product.type !== 'simple'} className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>{product.type === 'simple' ? 'Ajouter au panier' : 'Composer'}</button>
+                            <button type="button" disabled={product.type !== 'simple'} className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>{product.type === 'simple' ? t('components/product:productCard.addToBasket') : t('components/product:productCard.compose')}</button>
                         </form>
                         {/* <div style={{ display: 'none' }} className="w-commerce-commerceaddtocartoutofstock out-of-stock-state">
                             <div>This product is out of stock.</div>

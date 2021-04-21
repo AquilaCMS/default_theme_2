@@ -2,22 +2,28 @@
 Dans la page catégory, delete le "getServerSideProps". Aller sur / puis naviguer sur une cat => Le menu est toujours là alors qu'il n'a pas été appelé.
 => Mais si F5, il disparait. ==> Il faut donc appelé getServerSideProps uniquement coté serveur !
 
+
 le canonical sur toutes les pages
 
-Proposer ca : case 'getProductsByCategory':
-
-
-
--= NicoG =-
-hover sur le menu quand on est dans la bonne page du menu
-transformer a href en link
-
-
--= Goku =-
 
 - tester gestion erreur redux + throw 'CATEGORY NOT FOUND';
 
 
+
+-= code =-
+    const trad = (word) => {
+        let key = '';
+        switch (word) {
+        case 'Retour':
+            key = 'components/product:product.return'; 
+            break;
+        default:
+            break;
+        }
+
+        return t(key);
+    };
+    
 
 -= Plus tard =-
 

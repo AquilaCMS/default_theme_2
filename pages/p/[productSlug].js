@@ -37,7 +37,7 @@ export default function CategoryList() {
     const [isOpen, setIsOpen]         = useState(false);
     const { cartId, setCartId }       = useCartId();
     const { product }                 = useProduct();
-    const { lang }                    = useTranslation();
+    const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
 
     if (!product) return <ErrorPage statusCode={404} />;
@@ -87,7 +87,7 @@ export default function CategoryList() {
             <Breadcrumb items={breadcrumb} />
 
             <div className="content-section-short-product">
-                <a href="order.html" className="button bottomspace w-button">Retour</a>
+                <a href="order.html" className="button bottomspace w-button">{t('components/product:product.return')}</a>
                 <div className="container-product">
                     <div className="w-layout-grid product-grid">
                         <div className="product-image-wrapper">
@@ -130,7 +130,7 @@ export default function CategoryList() {
                             <div>
                                 <form className="w-commerce-commerceaddtocartform default-state">
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
-                                    <button type="button" disabled={product.type !== 'simple'} className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>{product.type === 'simple' ? 'Ajouter au panier' : 'Composer'}</button>
+                                    <button type="button" disabled={product.type !== 'simple'} className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>{product.type === 'simple' ? t('components/product:productCard.addToBasket') : t('components/product:productCard.compose')}</button>
                                 </form>
                                 <div style={{ display: 'none' }} className="w-commerce-commerceaddtocartoutofstock out-of-stock-state">
                                     <div>This product is out of stock.</div>
@@ -150,10 +150,10 @@ export default function CategoryList() {
                     <div className="w-tabs">
                         <div className="tab-menu w-tab-menu">
                             <a className="tab-link-round w-inline-block w-tab-link  w--current">
-                                <div>Description</div>
+                                <div>{t('components/product:product.tab1')}</div>
                             </a>
                             <a className="tab-link-round w-inline-block w-tab-link">
-                                <div>Informations sur les allergènes</div>
+                                <div>{t('components/product:product.tab2')}</div>
                             </a>
                             {/* <a className="tab-link-round w-inline-block w-tab-link w--current">
                                 <div>Reviews (0)</div>
@@ -179,7 +179,7 @@ export default function CategoryList() {
                 <div className="content-section-short">
                     <div className="container">
                         <div className="title-wrap-centre">
-                            <h3 className="header-h4">Produits complémentaires</h3>
+                            <h3 className="header-h4">{t('components/product:product.otherProducts')}</h3>
                         </div>
 
                         <div className="w-dyn-list">

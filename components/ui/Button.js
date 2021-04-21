@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 
-export default function Button({ text = 'Bouton', loadingText = 'Chargement...', isLoading = false, className='log-button w-button' }) {
+export default function Button({ text = 'Bouton', loadingText = 'Loading...', isLoading = false, className='log-button w-button' }) {
 
     const [localLoader, setLocalLoader] = useState(false);
 

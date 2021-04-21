@@ -8,14 +8,14 @@ import { useCartId }  from '@lib/hooks';
 export default function ProductList({ productsList }) {
 
     const { cartId, setCartId } = useCartId();
-    const { lang }              = useTranslation();
+    const { lang, t }           = useTranslation();
 
     let haveItems = productsList && productsList.length > 0 ? true : false;
 
     if (!haveItems) {
         return (
             <div className="w-dyn-empty">
-                <div>Aucun produit trouvé.</div>
+                <div>{t('components/product:productList.noProduct')}</div>
             </div>
         );
     }

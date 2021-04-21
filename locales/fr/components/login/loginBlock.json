@@ -1,14 +1,14 @@
 {
-  "forgotPass": "en-Mot de passe oublié ?",
-  "title1": "en-Me connecter",
-  "title2": "en-Je possède déjà un compte",
-  "signin": "en-JE M'IDENTIFIE",
-  "signinLoading": "en-IDENTIFICATION...",
-  "password": "en-Mot de passe",
+  "forgotPass": "Mot de passe oublié ?",
+  "title1": "Me connecter",
+  "title2": "Je possède déjà un compte",
+  "signin": "JE M'IDENTIFIE",
+  "signinLoading": "IDENTIFICATION...",
+  "password": "Mot de passe",
   "forgot" : {
-    "email" : "en-Saisissez votre email",
-    "send" : "en-ENVOYER",
-    "back": "en-RETOUR",
-    "infoGetMail" : "en-Vous allez recevoir un mail pour réinitialiser votre mot de passe !"
+    "email" : "Saisissez votre email",
+    "send" : "ENVOYER",
+    "back": "RETOUR",
+    "infoGetMail" : "Vous allez recevoir un mail pour réinitialiser votre mot de passe !"
   }
 }

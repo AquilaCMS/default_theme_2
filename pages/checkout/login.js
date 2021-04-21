@@ -1,4 +1,5 @@
 import Head                                  from 'next/head';
+import useTranslation                        from 'next-translate/useTranslation';
 import Layout                                from '@components/layouts/Layout';
 import LoginBlock                            from '@components/login/LoginBlock';
 import RegisterBlock                         from '@components/login/RegisterBlock';
@@ -15,17 +16,20 @@ export async function getServerSideProps({ req }) {
 }
 
 export default function CheckoutLogin() {
+    
+    const { t } = useTranslation();
+
     return (
         <Layout>
             <Head>
-                <title>Ma commande - Connexion</title>
-                <meta name="description" content="TODO" />
+                <title>{t('pages/checkout:login.title')}</title>
+                <meta name="description" content={t('pages/checkout:login.description')} />
             </Head>
 
             <div className="header-section-panier">
                 <div className="container-flex-2">
                     <div className="title-wrap-centre">
-                        <h1 className="header-h1">Ma commande</h1>
+                        <h1 className="header-h1">{t('pages/checkout:login.titleH1')}</h1>
                     </div>
                 </div>
             </div>
@@ -34,7 +38,7 @@ export default function CheckoutLogin() {
                 <div className="container-tunnel">
                     <div className="container-step w-container">
                         <h2 className="heading-steps">1</h2>
-                        <h2 className="heading-2-steps">Connexion / Inscription</h2>
+                        <h2 className="heading-2-steps">{t('pages/checkout:login.step1')}</h2>
                     </div>
                     <div className="col-log w-row">
                         <LoginBlock />

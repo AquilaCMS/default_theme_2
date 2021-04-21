@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import useTranslation          from 'next-translate/useTranslation';
 import cookie                  from 'cookie';
 import { getBlockCMS }         from '@lib/aquila-connector/blockcms';
 
 export default function CookiesBanner() {
+    const { t }                   = useTranslation();
     const [show, setShow]         = useState(false);
-    const [txtLegal, setTxtLegal] = useState('Nous utilisons des cookies. Vous pouvez configurer ou refuser les cookies dans votre navigateur. Vous pouvez aussi accepter tous les cookies en cliquant sur le bouton « Accepter tous les cookies ». Pour plus d’informations, vous pouvez consulter notre Politique de confidentialité et des cookies.');
+    const [txtLegal, setTxtLegal] = useState(t('components/cookiesBanner:defaultTxt'));
 
     useEffect(() => {
         const cookieNotice = cookie.parse(document.cookie).cookie_notice;
@@ -31,7 +33,7 @@ export default function CookiesBanner() {
             <div className="div-block-cookies">
                 <blockquote className="block-quote-rgpd">Cookies<br />&amp;<br />RGPD</blockquote>
                 <p className="paragraph-rgpd" dangerouslySetInnerHTML={{ __html: txtLegal }}></p>
-                <a href="#" onClick={acceptCookie} className="button-white w-button">J&apos;accepte</a>
+                <a href="#" onClick={acceptCookie} className="button-white w-button">{t('components/cookiesBanner:agree')}</a>
             </div>
 
         );

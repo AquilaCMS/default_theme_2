@@ -1,8 +1,8 @@
 {
-    "titleH1" : "en-Mon compte",
+    "titleH1" : "Mon compte",
     "navigation": {
-        "myInformations": "en-Mes Informations",
-        "myOrders": "en-Mes commandes",
-        "myBills": "en-Mes factures"
+        "myInformations": "Mes Informations",
+        "myOrders": "Mes commandes",
+        "myBills": "Mes factures"
     }
 }

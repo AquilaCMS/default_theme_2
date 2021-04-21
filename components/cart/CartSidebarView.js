@@ -14,7 +14,7 @@ export default function CartSidebarView({ hideCartSidebar }) {
             <div className="w-commerce-commerceoutcartcontainer" onClick={hideCartSidebar} />
             <div className="w-commerce-commercecartcontainer">
                 <div className="w-commerce-commercecartheader">
-                    <div className="text-panier">{t('common:cart')}</div>
+                    <div className="text-panier">{t('components/cart:cartSideBarView.title')}</div>
                     <button className="w-commerce-commercecartcloselink w-inline-block" style={{ 'backgroundColor': 'transparent' }} onClick={hideCartSidebar}>
                         <svg width="16px" height="16px" viewBox="0 0 16 16">
                             <g stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">

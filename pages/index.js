@@ -10,7 +10,7 @@ import { getBlocksCMS }            from '@lib/aquila-connector/blockcms/index';
 import { useProducts }             from '@lib/hooks';
 
 const getDataBlocksCMS = async () => {
-    const blockCMSCode = ['home-bottom-faq', 'home-bottom-call', 'info-bottom-1', 'home-promote-product-1', 'home-promote-product-2', 'Slide-Home-1', 'Slide-Home-2', 'Slide-Home-3'];
+    const blockCMSCode = ['home-bottom-faq', 'home-bottom-call', 'info-bottom-1', 'home-promote-product-1', 'home-promote-product-2', 'Slide-Home-1', 'Slide-Home-2', 'Slide-Home-3', 'home-product-listing-title'];
     return getBlocksCMS(blockCMSCode);
 };
 

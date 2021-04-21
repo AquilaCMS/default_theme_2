@@ -1,0 +1,12 @@
+{
+    "cartListItem": {
+        "ordering": "COMMANDER !",
+        "orderingLoading": "COMMANDE...",
+        "total": "Total",
+        "empty": "Votre Panier est vide",
+        "goToHome": "Découvrir notre Carte"
+    },
+    "cartSideBarView": {
+        "title": "Panier"
+    }
+}

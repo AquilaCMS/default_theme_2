@@ -1,0 +1,15 @@
+{
+    "productCard": {
+        "addToBasket": "Ajouter au panier",
+        "compose": "Composer"
+    },
+    "product": {
+        "tab1": "Description",
+        "tab2": "Informations sur les allergènes",
+        "otherProducts": "Produits complémentaires",
+        "return": "Retour"
+    },
+    "productList": {
+        "noProduct": "Aucun produit trouvé."
+    }
+}

@@ -1,0 +1,19 @@
+{
+  "title": "en-Mes informations",
+  "titleNav" : "en-Informations client",
+  "mandatory" : "en-* Obligatoire",
+  "titleInformation":"en-Vos informations",
+  "titleDelivery":"en-Adresse de livraison",
+  "titleBilling":"en-Adresse de facturation",
+  "email" : "en-Email *",
+  "phone" : "en-Tél *",
+  "firstname":"en-Prénom *",
+  "name":"en-Nom *",
+  "address":"en-Adresse *",
+  "address2":"en-Adresse 2 *",
+  "city":"en-Ville *",
+  "postal":"en-Code postal *",
+  "country":"en-Pays *",
+  "save" : "en-ENREGISTRER",
+  "saveLoading" : "en-ENREGISTREMENT..."
+}

@@ -1,7 +1,10 @@
-import Layout from '@components/layouts/Layout';
-import Link   from 'next/link';
+import useTranslation from 'next-translate/useTranslation';
+import Layout         from '@components/layouts/Layout';
+import Link           from 'next/link';
 
 export default function AccountLayout({ children }) {
+
+    const { t } = useTranslation();
 
     let TMPHighlight = 2;
     switch(children[1].props.className) {
@@ -19,7 +22,7 @@ export default function AccountLayout({ children }) {
             <div className="header-section-panier">
                 <div className="container-flex-2">
                     <div className="title-wrap-centre">
-                        <h1 className="header-h1">Mon compte</h1>
+                        <h1 className="header-h1">{t('components/account/accountLayout:titleH1')}</h1>
                     </div>
                 </div>
             </div>
@@ -29,17 +32,17 @@ export default function AccountLayout({ children }) {
                     <div className="tab-menu-round-account w-tab-menu">
                         <Link href="/account/informations">
                             <a className={(TMPHighlight === 1 ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
-                                <div>Mes Informations</div>
+                                <div>{t('components/account/accountLayout:navigation.myInformations')}</div>
                             </a>
                         </Link>
                         <Link href="/account">
                             <a className={(TMPHighlight === 2 ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
-                                <div>Mes commandes</div>
+                                <div>{t('components/account/accountLayout:navigation.myOrders')}</div>
                             </a>
                         </Link>
                         <Link href="/account/bills">
                             <a className={(TMPHighlight === 3 ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
-                                <div>Mes factures</div>
+                                <div>{t('components/account/accountLayout:navigation.myBills')}</div>
                             </a>
                         </Link>
                     </div>

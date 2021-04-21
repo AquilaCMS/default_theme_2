@@ -1,4 +1,5 @@
 import Head                                  from 'next/head';
+import useTranslation                        from 'next-translate/useTranslation';
 import Layout                                from '@components/layouts/Layout';
 import LoginBlock                            from '@components/login/LoginBlock';
 import RegisterBlock                         from '@components/login/RegisterBlock';
@@ -15,17 +16,19 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function Login() {
+    const { t } = useTranslation();
+    
     return (
         <Layout>
             <Head>
-                <title>Identification</title>
-                <meta name="description" content="TODO" />
+                <title>{t('pages/account/login:title')}</title>
+                <meta name="description" content={t('pages/account/login:description')} />
             </Head>
 
             <div className="header-section-panier">
                 <div className="container-flex-2">
                     <div className="title-wrap-centre">
-                        <h1 className="header-h1">Mon compte</h1>
+                        <h1 className="header-h1">{t('pages/account/login:titleH1')}</h1>
                     </div>
                 </div>
             </div>

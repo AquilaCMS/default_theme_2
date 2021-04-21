@@ -36,13 +36,13 @@ export default function RegisterBlock() {
 
     return (
         <form className="col-log-int w-col w-col-5" onSubmit={handleRegisterSubmit}>
-            <div className="log-label">Je suis un nouveau client</div>
+            <div className="log-label">{t('components/login/registerBlock:title')}</div>
             <div className="w-form">
                 <div>
-                    <div><input type="text" className="w-input" maxLength={256} name="firstname" placeholder="Prénom" required /></div>
-                    <div><input type="text" className="w-input" maxLength={256} name="lastname" placeholder="Nom" required /></div>
-                    <div><input type="email" className="w-input" maxLength={256} name="email" placeholder="Email" required autoComplete="username" /></div>
-                    <div><input type="password" className="w-input" maxLength={256} name="password" placeholder="Mot de passe" required autoComplete="current-password" /></div>
+                    <div><input type="text" className="w-input" maxLength={256} name="firstname" placeholder={t('components/login/registerBlock:firstname')} required /></div>
+                    <div><input type="text" className="w-input" maxLength={256} name="lastname" placeholder={t('components/login/registerBlock:name')} required /></div>
+                    <div><input type="email" className="w-input" maxLength={256} name="email" placeholder={t('components/login/registerBlock:email')} required autoComplete="username" /></div>
+                    <div><input type="password" className="w-input" maxLength={256} name="password" placeholder={t('components/login/registerBlock:password')} required autoComplete="current-password" /></div>
                 </div>
             </div>
             {
@@ -54,7 +54,7 @@ export default function RegisterBlock() {
                     </div>
                 )
             }
-            <Button text="JE M&apos;ENREGISTRE" loadingText='INSCRIPTION...' isLoading={isLoading} className="log-button w-button" />
+            <Button text={t('components/login/registerBlock:register')} loadingText={t('components/login/registerBlock:registerLoading')} isLoading={isLoading} className="log-button w-button" />
         </form>
     );
 }

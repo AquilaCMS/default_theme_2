@@ -1,4 +1,5 @@
 import Head                                  from 'next/head';
+import useTranslation                        from 'next-translate/useTranslation';
 import AccountLayout                         from '@components/account/AccountLayout';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
@@ -14,14 +15,16 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function Account() {
+    const { t } = useTranslation();
+
     return (
         <AccountLayout>
             <Head>
-                <title>Mes informations</title>
+                <title>{t('pages/account/bills:title')}</title>
             </Head>
 
             <div className="container-tunnel-03">
-                <h2 className="heading-2-steps">Mes factures</h2>
+                <h2 className="heading-2-steps">{t('pages/account/bills:titleNav')}</h2>
             </div>
             <div className="container-order-list">
                 <div className="div-block-order-liste">

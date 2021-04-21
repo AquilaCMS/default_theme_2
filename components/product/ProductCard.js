@@ -1,27 +1,22 @@
-import { useEffect, useState } from 'react';
-import cookie                  from 'cookie';
-import Link                    from 'next/link';
-import { useRouter }           from 'next/router';
-import { generateSlug }        from '@lib/aquila-connector/product/helpersProduct';
-import { addToCart }           from '@lib/aquila-connector/cart';
-import { useShowCartSidebar }  from '@lib/hooks';
+import { useState }                      from 'react';
+import Link                              from 'next/link';
+import { useRouter }                     from 'next/router';
+import { generateSlug }                  from '@lib/aquila-connector/product/helpersProduct';
+import { addToCart }                     from '@lib/aquila-connector/cart';
+import { useCartId, useShowCartSidebar } from '@lib/hooks';
 
 export default function ProductCard({ product }) {
     const [qty, setQty]          = useState(1);
-    const [cartId, setCartId]    = useState();
     const { query }              = useRouter();
+    const { cartId, setCartId }  = useCartId();
     const { setShowCartSidebar } = useShowCartSidebar();
     
-    const { slug, name, description, price, img, canonical } = product;
+    const { slug, name, description, img, canonical } = product;
 
     const currentSlug = generateSlug({
         categorySlugs: query.categorySlugs,
         slug,
         canonical
-    });
-
-    useEffect(() => {
-        setCartId(cookie.parse(document.cookie).cart_id);
     });
 
     const onChangeQty = (e) => {
@@ -34,6 +29,7 @@ export default function ProductCard({ product }) {
         document.cookie = 'cart_id=' + newCart._id + '; path=/;';
         document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
         setShowCartSidebar(true);
+        setCartId(newCart._id);
     };
 
     return (

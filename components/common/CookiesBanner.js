@@ -12,7 +12,9 @@ export default function CookiesBanner() {
         const cookieNotice = cookie.parse(document.cookie).cookie_notice;
         const fetchData    = async () => {
             const response = await getBlockCMS('CookiesBan');
-            setTxtLegal(response.content);
+            if(response.content) {
+                setTxtLegal(response.content);
+            }
         };
         if (cookieNotice === 'true') {
             setShow(false);

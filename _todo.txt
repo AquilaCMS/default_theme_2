@@ -9,6 +9,8 @@ le canonical sur toutes les pages
 - tester gestion erreur redux + throw 'CATEGORY NOT FOUND';
 
 
+TODOTRAD
+
 
 -= code =-
     const trad = (word) => {

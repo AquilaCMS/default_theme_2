@@ -4,5 +4,20 @@
     "description": "en-TODO",
     "titleH1" : "en-Ma commande",
     "step1" : "en-Connexion / Inscription"
+  },
+  "payment" : {
+    "title" : "en-Ma commande - Moyen de paiement",
+    "description" : "en-TODO",
+    "titleH1" : "en-Ma commande"
+  },
+  "confirmation" : {
+    "title" : "en-Ma commande - Confirmation",
+    "description" : "en-TODO",
+    "titleH1" : "en-Merci pour votre commande !"
+  },
+  "clickandcollect" :{
+    "title" : "en-Ma commande - Click & Collect",
+    "description" : "en-TODO",
+    "titleH1" : "en-Ma commande"
   }
 }

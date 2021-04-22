@@ -1,0 +1,11 @@
+{
+    "title" : "en-Récupération du mot de passe",
+    "description" : "en-TODO",
+    "titleH1" : "en-Récupération du mot de passe",
+    "information" : "en-ENTREZ VOTRE NOUVEAU MOT DE PASSE",
+    "password" : "en-Mot de passe",
+    "password2" : "en-Mot de passe (confirmation)",
+    "validate" : "en-Confirmer",
+    "validateLoading" : "en-Enregistrement...",
+    "passNotMatching" : "en-Les mots de passe ne correspondent pas !"
+}

@@ -1,4 +1,5 @@
 import Head                                  from 'next/head';
+import useTranslation                        from 'next-translate/useTranslation';
 import Layout                                from '@components/layouts/Layout';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
@@ -12,24 +13,25 @@ export async function getServerSideProps({ req }) {
 }
 
 export default function CheckoutConfirmation() {
+    const { t } = useTranslation();
     return (
         <Layout>
             <Head>
-                <title>Ma commande - Moyen de paiement</title>
-                <meta name="description" content="TODO" />
+                <title>{t('pages/checkout:confirmation.title')}</title>
+                <meta name="description" content={t('pages/checkout:confirmation.description')} />
             </Head>
 
             <div className="header-section-panier">
                 <div className="container-flex-2">
                     <div className="title-wrap-centre">
-                        <h1 className="header-h1">Merci pour votre commande !</h1>
+                        <h1 className="header-h1">{t('pages/checkout:confirmation.titleH1')}</h1>
                     </div>
                 </div>
             </div>
 
             <div id="03" className="section-tunnel">
                 <div id="03" className="container-tunnel-02">
-                    <h2 className="heading-2-steps">Récapitulatif de ma commande: # 123456789</h2>
+                    <h2 className="heading-2-steps">TODOTRAD Récapitulatif de ma commande: # 123456789</h2>
                 </div>
                 <div className="container-order">
                     <div className="columns-tunnel w-row">
@@ -108,7 +110,7 @@ export default function CheckoutConfirmation() {
                         </div>
                         <div className="column-tunnel-prix w-col w-col-4">
                             <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                <h5>Détail de la commande</h5>
+                                <h5>TODOTRAD Détail de la commande</h5>
                             </div>
                             <div className="block-content-tunnel">
                                 <div>

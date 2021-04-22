@@ -1,10 +1,13 @@
-import Head   from 'next/head';
-import Layout from '@components/layouts/Layout';
+import Head           from 'next/head';
+import useTranslation from 'next-translate/useTranslation';
+import Layout         from '@components/layouts/Layout';
 
 function Error({ statusCode }) {
 
-    const title = statusCode === 404 ? '404 - Page introuvable' : 'Oups...';
-    const text  = statusCode === 404 ? 'La page que vous cherchez est introuvable' : (statusCode
+    const { t } = useTranslation();
+    
+    const title = statusCode === 404 ? t('pages/error:title404') : t('pages/error:title500');
+    const text  = statusCode === 404 ? t('pages/error:text404') : (statusCode
         ? `An error ${statusCode} occurred on server`
         : 'An error occurred on client');
 
@@ -19,7 +22,7 @@ function Error({ statusCode }) {
                     <h2>{title}</h2>
                     <div>
                         <p className="utility-paragraph">{text}<br />
-                            <a href="/" className="link-2">Retourner sur le site !</a>
+                            <a href="/" className="link-2">{t('pages/error:back')}</a>
                         </p>
                     </div>
                 </div>

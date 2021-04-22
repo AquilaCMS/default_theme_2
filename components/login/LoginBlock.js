@@ -26,9 +26,10 @@ export default function LoginBlock() {
             document.cookie                                = 'jwt=' + res.data + '; path=/;';
             axios.defaults.headers.common['Authorization'] = res.data;
             router.push(redirect);
-            setIsLoading(false);
         } catch (err) {
             setMessageLogin({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
+        finally {
             setIsLoading(false);
         }
     };
@@ -44,7 +45,9 @@ export default function LoginBlock() {
         } catch (err) {
             setMessageReset({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
-        setIsLoading(false);
+        finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -90,7 +93,7 @@ export default function LoginBlock() {
                             <div>
                                 <div>
                                     <input type="email" className="w-input" maxLength={256} name="email" placeholder="Email" required />
-                                    <button type="submit" className="log-button w-button">{t('components/login/loginBlock:forgot.send')}</button>
+                                    <Button text={t('components/login/loginBlock:forgot.send')} loadingText={t('components/login/loginBlock:forgot.sendLoading')} isLoading={isLoading} className="log-button w-button" />
                                 </div>
                             </div>
                         </div>

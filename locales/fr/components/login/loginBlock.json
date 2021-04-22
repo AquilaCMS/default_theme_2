@@ -8,6 +8,7 @@
   "forgot" : {
     "email" : "Saisissez votre email",
     "send" : "ENVOYER",
+    "sendLoading" : "ENVOI...",
     "back": "RETOUR",
     "infoGetMail" : "Vous allez recevoir un mail pour réinitialiser votre mot de passe !"
   }

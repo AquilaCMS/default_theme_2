@@ -90,7 +90,7 @@ export default function LoginBlock() {
                             <div>
                                 <div>
                                     <input type="email" className="w-input" maxLength={256} name="email" placeholder="Email" required />
-                                    <button type="submit" className="log-button w-button">{t('components/login/loginBlock:forgot.send')}</button>
+                                    <Button text={t('components/login/loginBlock:forgot.send')} loadingText={t('components/login/loginBlock:forgot.sendLoading')} isLoading={isLoading} className="log-button w-button" />
                                 </div>
                             </div>
                         </div>

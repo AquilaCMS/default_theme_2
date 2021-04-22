@@ -35,7 +35,7 @@ export default function CookiesBanner() {
             <div className="div-block-cookies">
                 <blockquote className="block-quote-rgpd">Cookies<br />&amp;<br />RGPD</blockquote>
                 <p className="paragraph-rgpd" dangerouslySetInnerHTML={{ __html: txtLegal }}></p>
-                <a href="#" onClick={acceptCookie} className="button-white w-button">{t('components/cookiesBanner:agree')}</a>
+                <button type="button" onClick={acceptCookie} className="button-white w-button">{t('components/cookiesBanner:agree')}</button>
             </div>
 
         );

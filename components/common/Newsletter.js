@@ -1,15 +1,25 @@
+import { useState }      from 'react';
 import useTranslation    from 'next-translate/useTranslation';
+import Button            from '@components/ui/Button';
 import { setNewsletter } from '@lib/aquila-connector/newsletter';
 
 export default function Newsletter() {
+    const [message, setMessage]     = useState();
+    const [isLoading, setIsLoading] = useState(false);
+    const { t }                     = useTranslation();
 
     const handleNLSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         const email = e.currentTarget.email.value;
-        await setNewsletter(email);
+        try {
+            await setNewsletter(email);
+            setMessage({ type: 'info', message: t('components/newsletter:messageSuccess') });
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
+        setIsLoading(false);
     };
-
-    const { t } = useTranslation();
 
     return (
 
@@ -22,9 +32,18 @@ export default function Newsletter() {
             <div className="w-form">
                 <form className="form-3" onSubmit={handleNLSubmit}>
                     <input type="email" className="text-field-2 w-input" maxLength={256} name="email" placeholder="Email" required />
-                    <input type="submit" defaultValue={t('components/newsletter:submit')} className="submit-button-newsletter w-button" />
+                    <Button text={t('components/newsletter:submit')} loadingText={t('components/newsletter:submitLoading')} isLoading={isLoading} className="submit-button-newsletter w-button" />
                 </form>
             </div>
+            {
+                message && (
+                    <div className={`w-commerce-commerce${message.type}`}>
+                        <div>
+                            {message.message}
+                        </div>
+                    </div>
+                )
+            }
         </div>
     );
 }

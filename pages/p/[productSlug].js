@@ -1,5 +1,6 @@
 import { useState }                                  from 'react';
 import { ProductJsonLd }                             from 'next-seo';
+import Router                                        from 'next/router';
 import useTranslation                                from 'next-translate/useTranslation';
 import ErrorPage                                     from '@pages/_error';
 import Layout                                        from '@components/layouts/Layout';
@@ -72,6 +73,10 @@ export default function CategoryList() {
         setIsOpen(true);
     };
 
+    const previousStep = () => {
+        Router.back();
+    };
+
     return (
 
         <Layout>
@@ -87,7 +92,7 @@ export default function CategoryList() {
             <Breadcrumb items={breadcrumb} />
 
             <div className="content-section-short-product">
-                <a href="order.html" className="button bottomspace w-button">{t('components/product:product.return')}</a>
+                <button type="button" className="button bottomspace w-button" onClick={previousStep}>{t('components/product:product.return')}</button>
                 <div className="container-product">
                     <div className="w-layout-grid product-grid">
                         <div className="product-image-wrapper">

@@ -196,8 +196,7 @@ export default function CategoryList() {
                 </div>
             }
 
-            <BlockCMS nsCode="info-bottom-1" />
-
+            <BlockCMS nsCode="info-bottom-1" /> {/* TODO : il faudrait afficher le contenu d'une description de la catégorie rattachée ! */}
 
             <NextSeoCustom
                 title={product.name}

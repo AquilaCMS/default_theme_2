@@ -43,7 +43,7 @@ export default function CartListItems() {
         <div className="w-commerce-commercecartemptystate empty-state">
             <div>{t('components/cart:cartListItem.empty')}</div>
             <div className="button-arrow-wrap">
-                <a href="/" className="button w-button">{t('components/cart:goToHome')}</a>
+                <a href="/" className="button w-button">{t('components/cart:cartListItem.goToHome')}</a>
             </div>
         </div>
     );

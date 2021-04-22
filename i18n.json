@@ -4,20 +4,45 @@
   "pages": {
     "*": [
       "common",
-      "components/account/accountLayout",
-      "components/login/loginBlock",
-      "components/login/registerBlock",
       "components/cart",
       "components/cookiesBanner",
       "components/newsletter",
       "components/navigation",
       "components/product",
-      "pages/account/login",
-      "pages/account/informations",
-      "pages/account/index",
-      "pages/account/bills",
-      "pages/checkout",
-      "pages/error",
+      "pages/error"
+    ],
+    "/account": [
+      "components/account/accountLayout",
+      "pages/account/index"
+    ],
+    "/account/bills": [
+      "components/account/accountLayout",
+      "pages/account/bills"
+    ],
+    "/account/informations": [
+      "components/account/accountLayout",
+      "pages/account/informations"
+    ],
+    "/account/login": [
+      "components/login/loginBlock",
+      "components/login/registerBlock",
+      "pages/account/login"
+    ],
+    "/checkout/clickandcollect": [
+      "pages/checkout"
+    ],
+    "/checkout/confirmation": [
+      "pages/checkout"
+    ],
+    "/checkout/login": [
+      "components/login/loginBlock",
+      "components/login/registerBlock",
+      "pages/checkout"
+    ],
+    "/checkout/payment": [
+      "pages/checkout"
+    ],
+    "/resetpass": [
       "pages/resetpass"
     ]
   }

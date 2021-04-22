@@ -1,13 +1,13 @@
-import useTranslation              from 'next-translate/useTranslation';
-import Layout                      from '@components/layouts/Layout';
-import NextSeoCustom               from '@components/tools/NextSeoCustom';
-import ProductList                 from '@components/product/ProductList';
-import BlockSlider                 from '@components/common/BlockSlider';
-import BlockCMS                    from '@components/common/BlockCMS';
-import { dispatcher }              from '@lib/redux/dispatcher';
-import { getProductsFromCategory } from '@lib/aquila-connector/product/providerProduct';
-import { getBlocksCMS }            from '@lib/aquila-connector/blockcms/index';
-import { useProducts }             from '@lib/hooks';
+import useTranslation          from 'next-translate/useTranslation';
+import Layout                  from '@components/layouts/Layout';
+import NextSeoCustom           from '@components/tools/NextSeoCustom';
+import ProductList             from '@components/product/ProductList';
+import BlockSlider             from '@components/common/BlockSlider';
+import BlockCMS                from '@components/common/BlockCMS';
+import { dispatcher }          from '@lib/redux/dispatcher';
+import { getCategoryProducts } from '@lib/aquila-connector/category';
+import { getBlocksCMS }        from '@lib/aquila-connector/blockcms/index';
+import { useCategoryProducts } from '@lib/hooks';
 
 const getDataBlocksCMS = async () => {
     const blockCMSCode = ['home-bottom-faq', 'home-bottom-call', 'info-bottom-1', 'home-promote-product-1', 'home-promote-product-2', 'Slide-Home-1', 'Slide-Home-2', 'Slide-Home-3', 'home-product-listing-title'];
@@ -17,8 +17,8 @@ const getDataBlocksCMS = async () => {
 export async function getServerSideProps() {
     const actions = [
         {
-            type: 'SET_PRODUCTS',
-            func: getProductsFromCategory.bind(this)
+            type: 'SET_CATEGORY_PRODUCTS',
+            func: getCategoryProducts.bind(this, { slug: 'promote' })
         },
         {
             type: 'PUSH_CMSBLOCKS',
@@ -30,11 +30,11 @@ export async function getServerSideProps() {
 
 export default function Home() {
 
-    const { lang }      = useTranslation();
-    const { products }  = useProducts();
-    const TMP_title     = 'TODO';
-    const TMP_desc      = 'TODO';
-    const TMP_canonical = 'TODO';
+    const { lang }             = useTranslation();
+    const { categoryProducts } = useCategoryProducts();
+    const TMP_title            = 'TODO';
+    const TMP_desc             = 'TODO';
+    const TMP_canonical        = 'TODO';
 
     return (
         <Layout>
@@ -48,13 +48,13 @@ export default function Home() {
                 <div className="container-col">
                     <BlockCMS nsCode="home-product-listing-title" />
 
-                    {products && products.datas && products.datas.length > 0 && /* Ne reprend pas le design d'origine : liste de produit à mettre en avant */
+                    {categoryProducts && categoryProducts.datas && categoryProducts.datas.length > 0 && /* Ne reprend pas le design d'origine : liste de produit à mettre en avant */
                         <div className="tabs w-tabs">
                             <div id="tabs_content" className="tabs-content w-tab-content">
                                 <div className="tab-pane-wrap w-tab-pane w--tab-active">
                                     <div className="w-dyn-list">
                                         <ProductList
-                                            productsList={products.datas}
+                                            productsList={categoryProducts.datas}
                                         />
                                     </div>
                                 </div>

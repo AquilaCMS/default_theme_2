@@ -10,9 +10,11 @@ import ProductList                                   from '@components/product/P
 import BlockCMS                                      from '@components/common/BlockCMS';
 import { dispatcher }                                from '@lib/redux/dispatcher';
 import { getBlocksCMS }                              from '@lib/aquila-connector/blockcms';
+import { getBreadcrumb }                             from '@lib/aquila-connector/breadcrumb';
 import { addToCart }                                 from '@lib/aquila-connector/cart';
 import { getProduct }                                from '@lib/aquila-connector/product/providerProduct';
 import { getImage, getMainImage, getTabImageURL }    from '@lib/aquila-connector/product/helpersProduct';
+import { formatBreadcrumb }                          from '@lib/utils';
 import { useCartId, useProduct, useShowCartSidebar } from '@lib/hooks';
 import Lightbox                                      from 'lightbox-react';
 import 'lightbox-react/style.css';
@@ -29,10 +31,12 @@ export async function getServerSideProps({ params }) {
         }
     ];
 
-    return dispatcher(actions);
+    const pageProps            = await dispatcher(actions);
+    pageProps.props.breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product.canonical);
+    return pageProps;
 }
 
-export default function CategoryList() {
+export default function CategoryList({ breadcrumb }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
@@ -44,16 +48,6 @@ export default function CategoryList() {
     if (!product) return <ErrorPage statusCode={404} />;
 
     const coverImageUrl = getMainImage(product.images, '578x578') || '/images/no-image.svg';
-
-    const breadcrumb = [{
-        position: 1,
-        name    : 'TODO',
-        item    : '/TODO'
-    }, {
-        position: 2,
-        name    : product.name,
-        item    : product.canonical
-    }];
 
     const onChangeQty = (e) => {
         setQty(Number(e.target.value));
@@ -89,7 +83,7 @@ export default function CategoryList() {
                 </div>
             </div>
 
-            <Breadcrumb items={breadcrumb} />
+            <Breadcrumb items={formatBreadcrumb(breadcrumb)} />
 
             <div className="content-section-short-product">
                 <button type="button" className="button bottomspace w-button" onClick={previousStep}>{t('components/product:product.return')}</button>

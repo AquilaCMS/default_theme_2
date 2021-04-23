@@ -8,14 +8,16 @@ import MenuCategories                         from '@components/navigation/MenuC
 import ClickAndCollect                        from '@components/modules/ClickAndCollect';
 import Allergen                               from '@components/modules/Allergen';
 import { dispatcher }                         from '@lib/redux/dispatcher';
+import { getBreadcrumb }                      from '@lib/aquila-connector/breadcrumb';
 import { getCategories, getCategoryProducts } from '@lib/aquila-connector/category';
+import { formatBreadcrumb }                   from '@lib/utils';
 import { useCategory, useCategoryProducts }   from '@lib/hooks';
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, resolvedUrl }) {
     const categorySlugs = Array.isArray(params.categorySlugs) ? params.categorySlugs : [params.categorySlugs];
     const slug          = categorySlugs[categorySlugs.length - 1];
     // TODO : SET_CATEGORY & SET_CATEGORY_PRODUCTS sont appelé l'un apres l'autre, donc la route "SET_CATEGORY" est appelé 2 fois (puisqu'appelé via SET_CATEGORY_PRODUCTS)
-    const actions = [
+    const actions              = [
         {
             type: 'SET_CATEGORY',
             func: getCategories.bind(this, { PostBody: { filter: { 'translation.fr.slug': slug } } })
@@ -25,15 +27,17 @@ export async function getServerSideProps({ params }) {
             func: getCategoryProducts.bind(this, { slug })
         }
     ];
-    return dispatcher(actions);
+    const pageProps            = await dispatcher(actions);
+    pageProps.props.breadcrumb = await getBreadcrumb(resolvedUrl);
+    return pageProps;
 }
 
-export default function CategoryList({ error }) {
+export default function CategoryList({ breadcrumb, error }) {
     const { lang }             = useTranslation();
     const { category }         = useCategory();
     const { categoryProducts } = useCategoryProducts();
 
-    if(error) {
+    if (error) {
         return <Error statusCode={error.code} />;
     }
 
@@ -46,7 +50,7 @@ export default function CategoryList({ error }) {
 
             <ClickAndCollect />
 
-            <Breadcrumb />
+            <Breadcrumb items={formatBreadcrumb(breadcrumb)} />
 
             <div className="content-section-carte">
                 <div className="container w-container">

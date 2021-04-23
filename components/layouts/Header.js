@@ -42,7 +42,7 @@ export default function Header() {
                 <div className="navigation-left">
                     <Link href='/'>
                         <a aria-current="page" className="brand w-nav-brand w--current">
-                            <img src="/images/monrestaurant-logo.jpg" alt={siteName} />
+                            <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`} alt={siteName} />
                         </a>
                     </Link>
                     

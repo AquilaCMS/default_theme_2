@@ -78,7 +78,7 @@ export default function Home() {
                 description={TMP_desc}
                 canonical={TMP_canonical}
                 lang={lang}
-                image='/images/monrestaurant-logo.jpg'
+                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
             />
 
         </Layout>

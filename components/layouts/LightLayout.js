@@ -6,7 +6,7 @@ export default function LightLayout({ children }) {
                 <div className="navigation-container">
                     <div className="navigation-left">
                         <a href="/" aria-current="page" className="brand w-nav-brand w--current">
-                            <img src="/images/monrestaurant-logo.jpg" alt="" />
+                            <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`} alt="TODO" />
                         </a>
                     </div>
                 </div>
@@ -18,7 +18,7 @@ export default function LightLayout({ children }) {
                 <div className="section-footer">
                     <div className="columns-3 w-row">
                         <div className="w-col w-col-2 w-col-medium-4">
-                            <img src="/images/monrestaurant-logo.jpg" loading="lazy" alt="" />
+                            <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`} loading="lazy" alt="TODO" />
                         </div>
                         <div className="w-col w-col-2 w-col-medium-8" />
                     </div>

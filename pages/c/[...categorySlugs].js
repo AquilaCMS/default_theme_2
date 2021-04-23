@@ -40,15 +40,9 @@ export default function CategoryList({ error }) {
     return (
         <Layout>
 
-            <div className="header-section-carte">
-                <div className="container-flex-2">
-                    <div className="title-wrap-centre">
-                        <h1 className="header-h1" dangerouslySetInnerHTML={{
-                            __html: category.extraText,
-                        }} />
-                    </div>
-                </div>
-            </div>
+            <div dangerouslySetInnerHTML={{
+                __html: category.extraText,
+            }} />
 
             <ClickAndCollect />
 
@@ -91,7 +85,7 @@ export default function CategoryList({ error }) {
                 description={category.metaDescription}
                 canonical="TODO"
                 lang={lang}
-                image='/images/monrestaurant-logo.jpg'
+                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
             />
 
         </Layout>

@@ -1,7 +1,8 @@
 {
     "productCard": {
         "addToBasket": "en-Ajouter au panier",
-        "compose": "en-Composer"
+        "compose": "en-Composer",
+        "addToCartLoading": "en-Ajout..."
     },
     "product": {
         "tab1": "en-Description",

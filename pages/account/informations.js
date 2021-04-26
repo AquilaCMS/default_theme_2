@@ -2,6 +2,7 @@ import { useState }                          from 'react';
 import Head                                  from 'next/head';
 import useTranslation                        from 'next-translate/useTranslation';
 import AccountLayout                         from '@components/account/AccountLayout';
+import Button                                from '@components/ui/Button';
 import { setUser, setAddressesUser }         from '@lib/aquila-connector/user';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
@@ -17,12 +18,13 @@ export async function getServerSideProps({ req }) {
 }
 
 export default function Account({ user }) {
-    const [message, setMessage] = useState();
-    const { t }                 = useTranslation();
+    const [message, setMessage]     = useState();
+    const [isLoading, setIsLoading] = useState(false);
+    const { t }                     = useTranslation();
 
     const onSetUser = async (e) => {
         e.preventDefault();
-
+        setIsLoading(true);
         const updateUser = {
             _id             : user._id,
             firstname       : e.currentTarget.firstname.value,
@@ -60,6 +62,8 @@ export default function Account({ user }) {
             setMessage({ type: 'info', message: t('common:message.saveData') });
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -175,7 +179,12 @@ export default function Account({ user }) {
                             </select>
                         </div>
                         
-                        <button type="submit" className="submit-button-tunnel w-button">{t('pages/account/informations:save')}</button>
+                        <Button 
+                            text={t('pages/account/informations:save')}
+                            loadingText={t('pages/account/informations:saveLoading')}
+                            isLoading={isLoading}
+                            className="submit-button-tunnel w-button"
+                        />
                     </form>
                     {
                         message && (

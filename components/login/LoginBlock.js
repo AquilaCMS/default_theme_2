@@ -28,8 +28,7 @@ export default function LoginBlock() {
             router.push(redirect);
         } catch (err) {
             setMessageLogin({ type: 'error', message: err.message || t('common:message.unknownError') });
-        }
-        finally {
+        } finally {
             setIsLoading(false);
         }
     };
@@ -44,8 +43,7 @@ export default function LoginBlock() {
             setMessageReset({ type: 'info', message: t('components/login/loginBlock:forgot.infoGetMail') });
         } catch (err) {
             setMessageReset({ type: 'error', message: err.message || t('common:message.unknownError') });
-        }
-        finally {
+        } finally {
             setIsLoading(false);
         }
     };

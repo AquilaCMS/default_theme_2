@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 
-export default function Button({ text = 'Bouton', loadingText = 'Loading...', isLoading = false, className='log-button w-button' }) {
+export default function Button({ text = 'Bouton', loadingText = 'Loading...', isLoading = false, className='log-button w-button', disabled = false }) {
 
     const [localLoader, setLocalLoader] = useState(false);
 
@@ -17,5 +17,5 @@ export default function Button({ text = 'Bouton', loadingText = 'Loading...', is
         setLocalLoader(true);
     };
 
-    return <button type="submit" className={className} disabled={isLoading ? 'disabled' : ''} onClick={onClickHandler}>{localLoader && isLoading ? loadingText : text}</button>;
+    return <button type="submit" className={className} disabled={isLoading || disabled ? 'disabled' : ''} onClick={onClickHandler}>{localLoader && isLoading ? loadingText : text}</button>;
 }

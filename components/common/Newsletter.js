@@ -30,13 +30,23 @@ export default function Newsletter() {
                 </span>
             </h4>
             <div className="w-form">
-                <form className="form-3" onSubmit={handleNLSubmit}>
-                    <input type="email" className="text-field-2 w-input" maxLength={256} name="email" placeholder="Email" required />
-                    <Button text={t('components/newsletter:submit')} loadingText={t('components/newsletter:submitLoading')} isLoading={isLoading} className="submit-button-newsletter w-button" />
-                </form>
+                {
+                    message && message.type === 'info' ? (
+                        <div className="w-commerce-commerceinfo">
+                            <div>
+                                {message.message}
+                            </div>
+                        </div>
+                    ) : (
+                        <form className="form-3" onSubmit={handleNLSubmit}>
+                            <input type="email" className="text-field-2 w-input" maxLength={256} name="email" placeholder="Email" required />
+                            <Button text={t('components/newsletter:submit')} loadingText={t('components/newsletter:submitLoading')} isLoading={isLoading} className="submit-button-newsletter w-button" />
+                        </form>
+                    )
+                }
             </div>
             {
-                message && (
+                message && message.type !== 'info' && (
                     <div className={`w-commerce-commerce${message.type}`}>
                         <div>
                             {message.message}

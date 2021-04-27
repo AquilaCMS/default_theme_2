@@ -44,7 +44,7 @@ export default function CheckoutPayment() {
                 
             }
         } catch (err) {
-            console.log(err.message || t('common:message.unknownError'));
+            console.error(err.message || t('common:message.unknownError'));
         }
     };
 

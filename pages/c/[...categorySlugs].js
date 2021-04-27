@@ -1,3 +1,4 @@
+import getT                                   from 'next-translate/getT';
 import useTranslation                         from 'next-translate/useTranslation';
 import Error                                  from '@pages/_error';
 import Layout                                 from '@components/layouts/Layout';
@@ -13,11 +14,11 @@ import { getCategories, getCategoryProducts } from '@lib/aquila-connector/catego
 import { formatBreadcrumb }                   from '@lib/utils';
 import { useCategory, useCategoryProducts }   from '@lib/hooks';
 
-export async function getServerSideProps({ params, resolvedUrl }) {
+export async function getServerSideProps({ locale, params, resolvedUrl }) {
     const categorySlugs = Array.isArray(params.categorySlugs) ? params.categorySlugs : [params.categorySlugs];
     const slug          = categorySlugs[categorySlugs.length - 1];
     // TODO : SET_CATEGORY & SET_CATEGORY_PRODUCTS sont appelé l'un apres l'autre, donc la route "SET_CATEGORY" est appelé 2 fois (puisqu'appelé via SET_CATEGORY_PRODUCTS)
-    const actions              = [
+    const actions = [
         {
             type: 'SET_CATEGORY',
             func: getCategories.bind(this, { PostBody: { filter: { 'translation.fr.slug': slug } } })
@@ -27,8 +28,16 @@ export async function getServerSideProps({ params, resolvedUrl }) {
             func: getCategoryProducts.bind(this, { slug })
         }
     ];
-    const pageProps            = await dispatcher(actions);
-    pageProps.props.breadcrumb = await getBreadcrumb(resolvedUrl);
+
+    const pageProps = await dispatcher(actions);
+    let breadcrumb  = [];
+    try {
+        breadcrumb = await getBreadcrumb(resolvedUrl);
+    } catch (err) {
+        const t = await getT(locale, 'common');
+        console.error(err.message || t('common:message.unknownError'));
+    }
+    pageProps.props.breadcrumb = breadcrumb;
     return pageProps;
 }
 

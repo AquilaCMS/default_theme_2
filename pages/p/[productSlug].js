@@ -1,6 +1,7 @@
 import { useState }                                  from 'react';
 import { ProductJsonLd }                             from 'next-seo';
 import Router                                        from 'next/router';
+import getT                                          from 'next-translate/getT';
 import useTranslation                                from 'next-translate/useTranslation';
 import ErrorPage                                     from '@pages/_error';
 import Layout                                        from '@components/layouts/Layout';
@@ -19,7 +20,7 @@ import { useCartId, useProduct, useShowCartSidebar } from '@lib/hooks';
 import Lightbox                                      from 'lightbox-react';
 import 'lightbox-react/style.css';
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ locale, params }) {
     const actions = [
         {
             type: 'SET_PRODUCT',
@@ -31,8 +32,15 @@ export async function getServerSideProps({ params }) {
         }
     ];
 
-    const pageProps            = await dispatcher(actions);
-    pageProps.props.breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product.canonical);
+    const pageProps = await dispatcher(actions);
+    let breadcrumb  = [];
+    try {
+        breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product.canonical);
+    } catch (err) {
+        const t = await getT(locale, 'common');
+        console.error(err.message || t('common:message.unknownError'));
+    }
+    pageProps.props.breadcrumb = breadcrumb;
     return pageProps;
 }
 

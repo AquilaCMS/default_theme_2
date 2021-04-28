@@ -111,16 +111,16 @@ export default function CategoryList({ breadcrumb }) {
                                     />
                                 )
                             }
-                            <a href="#" className="lightbox-link w-inline-block w-lightbox">
+                            <div className="lightbox-link w-inline-block w-lightbox" style={{ cursor: 'pointer' }}>
                                 <img loading="lazy" src={coverImageUrl} alt={product.name || 'Image produit'} className="product-image" onClick={() => (product.images.length ? openLightBox(product.images.findIndex((img) => img.default)) : false)} />
-                            </a>
+                            </div>
                             <div className="collection-list-wrapper w-dyn-list">
                                 <div role="list" className="collection-list w-clearfix w-dyn-items">
                                     {product.images?.filter(ou => !ou.default).map((item) => (
                                         <div key={item._id} role="listitem" className="collection-item w-dyn-item">
-                                            <a href="#" className="w-inline-block w-lightbox" onClick={() => openLightBox(product.images.findIndex((im) => im._id === item._id))}>
+                                            <div className="w-inline-block w-lightbox" style={{ cursor: 'pointer' }} onClick={() => openLightBox(product.images.findIndex((im) => im._id === item._id))}>
                                                 <img loading="lazy" src={getImage(item, '75x75')} alt={item.alt || 'Image produit'} className="more-image" />
-                                            </a>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>

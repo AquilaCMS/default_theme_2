@@ -96,6 +96,8 @@ input:disabled, button:disabled { opacity: 0.5; }
 
 .submit-button-tunnel { width: 100%; }
 
+.submit-button-newsletter { align-items: center; }
+
 .w-commerce-commerceerror {
     margin-top: 10px;
     padding-top: 10px;

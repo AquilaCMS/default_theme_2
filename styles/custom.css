@@ -3,11 +3,13 @@
 }
 
 .tab-menu-round {
+    opacity: 0;
     max-height: 0px;
-    transition: max-height 0.5s
+    transition: all 0.5s
 }
 
 .tab-menu-round-open {
+    opacity: 1;
     max-height: 500px;
 }
 

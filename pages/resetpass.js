@@ -1,6 +1,6 @@
 import { useState }       from 'react';
 import Head               from 'next/head';
-import Router             from 'next/router';
+import { useRouter }      from 'next/router';
 import useTranslation     from 'next-translate/useTranslation';
 import Layout             from '@components/layouts/Layout';
 import Button             from '@components/ui/Button';
@@ -27,9 +27,10 @@ export async function getServerSideProps({ query }) {
 
 
 export default function ResetPassword({ token }) {
-    const { t }                           = useTranslation();
     const [isLoading, setIsLoading]       = useState(false);
     const [messageReset, setMessageReset] = useState();
+    const router                          = useRouter();
+    const { t }                           = useTranslation();
 
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
@@ -47,7 +48,7 @@ export default function ResetPassword({ token }) {
         // Reset du mot de passe
         try {
             await resetPassword(token, password);
-            Router.push('/account/login');
+            router.push('/account/login');
         } catch (err) {
             setMessageReset({ type: 'error', message: err.message });
         } finally {

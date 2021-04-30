@@ -4,8 +4,8 @@ import cookie                  from 'cookie';
 import { getBlockCMS }         from '@lib/aquila-connector/blockcms';
 
 export default function CookiesBanner() {
-    const { t }                   = useTranslation();
     const [show, setShow]         = useState(false);
+    const { t }                   = useTranslation();
     const [txtLegal, setTxtLegal] = useState(t('components/cookiesBanner:defaultTxt'));
 
     useEffect(() => {

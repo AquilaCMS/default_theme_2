@@ -26,8 +26,8 @@ export async function getServerSideProps({ params }) {
 }
 
 export default function StatisPage({ error }) {
-    const { lang }       = useTranslation();
-    const { staticPage } = useStaticPage();
+    const { lang }   = useTranslation();
+    const staticPage = useStaticPage();
 
     if (error || !staticPage._id) {
         return (<ErrorPage statusCode={404} />);

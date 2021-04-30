@@ -1,6 +1,6 @@
 import { useState }                                  from 'react';
 import { ProductJsonLd }                             from 'next-seo';
-import Router                                        from 'next/router';
+import { useRouter }                                 from 'next/router';
 import getT                                          from 'next-translate/getT';
 import useTranslation                                from 'next-translate/useTranslation';
 import ErrorPage                                     from '@pages/_error';
@@ -48,10 +48,11 @@ export default function CategoryList({ breadcrumb }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
-    const { cartId, setCartId }       = useCartId();
-    const { product }                 = useProduct();
+    const cartId                      = useCartId();
+    const product                     = useProduct();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
+    const router                      = useRouter();
 
     if (!product) return <ErrorPage statusCode={404} />;
 
@@ -67,7 +68,6 @@ export default function CategoryList({ breadcrumb }) {
         document.cookie = 'cart_id=' + newCart._id + '; path=/;';
         document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
         setShowCartSidebar(true);
-        setCartId(newCart._id);
     };
 
     const openLightBox = (i) => {
@@ -76,7 +76,7 @@ export default function CategoryList({ breadcrumb }) {
     };
 
     const previousStep = () => {
-        Router.back();
+        router.back();
     };
 
     return (

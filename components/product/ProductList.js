@@ -7,8 +7,8 @@ import { useCartId }  from '@lib/hooks';
 
 export default function ProductList({ productsList }) {
 
-    const { cartId, setCartId } = useCartId();
-    const { lang, t }           = useTranslation();
+    const cartId      = useCartId();
+    const { lang, t } = useTranslation();
 
     let haveItems = productsList && productsList.length > 0 ? true : false;
 
@@ -28,7 +28,6 @@ export default function ProductList({ productsList }) {
                     <ProductCard
                         key={item._id}
                         cartId={cartId}
-                        setCartId={setCartId}
                         product={{
                             ...item,
                             key        : item._id,

@@ -1,10 +1,13 @@
 import useTranslation from 'next-translate/useTranslation';
+import moment         from 'moment';
+import { getImage }   from '@lib/aquila-connector/product/helpersProduct';
 
-export default function OrderDetails() {
-    const { t } = useTranslation();
+export default function OrderDetails({ order }) {
+    const { lang, t } = useTranslation();
+
+    moment.locale(lang);
 
     return (
-
         <div className="container-order">
             <div className="columns-tunnel w-row">
                 <div className="w-col w-col-8">
@@ -15,66 +18,85 @@ export default function OrderDetails() {
                             </div>
                             <div className="block-content-tunnel">
                                 <div className="w-row">
-                                    <div className="w-col w-col-6"><label htmlFor="email-3">Email</label>
-                                        <p className="label-tunnel">mail@mail.com</p>
+                                    <div className="w-col w-col-6">
+                                        <label htmlFor="email-3">Email</label>
+                                        <p className="label-tunnel">{order.customer.email}</p>
                                     </div>
-                                    <div className="w-col w-col-6"><label htmlFor="email-2">Adresse de livraison</label>
-                                        <p className="label-tunnel">Mon adresse<br />Mon appartement<br />Mon code postal<br />Ma ville</p>
+                                    <div className="w-col w-col-6">
+                                        <label htmlFor="email-2">Adresse de livraison</label>
+                                        <p className="label-tunnel">
+                                            {order.addresses.delivery.line1}<br />
+                                            {order.addresses.delivery.line2 ? <>{order.addresses.delivery.line2}<br /></> : null}
+                                            {order.addresses.delivery.zipcode}<br />
+                                            {order.addresses.delivery.city}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                             <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
                                 <h5>Mode de livraison</h5>
                             </div>
-                            <div className="block-content-tunnel-space-flex"><label htmlFor="email-2">Livraison</label></div>
+                            <div className="block-content-tunnel-space-flex">
+                                <div className="w-col w-col-6">
+                                    <label htmlFor="email-2">
+                                        {order.orderReceipt.method === 'withdrawal' ? 'Retrait' : 'Livraison'}
+                                    </label>
+                                    <p className="label-tunnel">{moment(order.orderReceipt.date).format('L')} - {moment(order.orderReceipt.date).format('HH[h]mm')}</p>
+                                </div>
+                            </div>
                             <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
                                 <h5>Informations de paiement</h5>
                             </div>
                             <div className="block-content-tunnel">
                                 <div className="w-row">
                                     <div className="w-col w-col-6"><label htmlFor="email-2">Mode de paiement</label>
-                                        <p className="label-tunnel">VISA 4242<br />01/2025</p>
+                                        <p className="label-tunnel">{order.payment[0].mode}</p>
                                     </div>
                                     <div className="w-col w-col-6"><label htmlFor="email-2">Adresse de facturation</label>
-                                        <p className="label-tunnel">Mon adresse<br />Mon appartement<br />Mon code postal<br />Ma ville</p>
+                                        <p className="label-tunnel">
+                                            {order.addresses.billing.line1}<br />
+                                            {order.addresses.billing.line2 ? <>{order.addresses.billing.line2}<br /></> : null}
+                                            {order.addresses.billing.zipcode}<br />
+                                            {order.addresses.billing.city}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </form>
-                        <div className="w-form-done">
-                            <div>Thank you! Your submission has been received!</div>
-                        </div>
-                        <div className="w-form-fail">
-                            <div>Oops! Something went wrong while submitting the form.</div>
-                        </div>
                     </div>
                     <div className="div-block-tunnel">
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                            <h5>Détail de la commande : # 123456789</h5>
+                            <h5>Détail de la commande : # {order.number}</h5>
                         </div>
                         <div className="block-content-tunnel">
                             <div className="collection-list-wrapper-2 w-dyn-list">
                                 <div role="list" className="w-dyn-items">
                                     <div role="listitem" className="w-dyn-item">
-                                        <div className="item-tunnel w-row">
-                                            <div className="w-col w-col-3">
-                                                <a href="#" className="food-image-square-tunnel w-inline-block"><img src="" alt="" className="food-image" /></a>
-                                            </div>
-                                            <div className="w-col w-col-9">
-                                                <a href="#" className="food-title-wrap w-inline-block">
-                                                    <h6 className="heading-9"></h6>
-                                                    <div className="div-block-prix">
-                                                        <div className="price-2"></div>
-                                                        <div className="price-2 sale"></div>
+                                        {
+                                            order.items.map((item) => {
+                                                const foundImg = item.id.images.find((img) => img.default);
+                                                return (
+                                                    <div className="item-tunnel w-row" key={item._id}>
+                                                        <div className="w-col w-col-3">
+                                                            <a href="#" className="food-image-square-tunnel w-inline-block">
+                                                                <img src={getImage(foundImg, '60x60') || '/images/no-image.svg'} alt="" className="food-image" />
+                                                            </a>
+                                                        </div>
+                                                        <div className="w-col w-col-9">
+                                                            <a href="#" className="food-title-wrap w-inline-block">
+                                                                <h6 className="heading-9">{item.name}</h6>
+                                                                <div className="div-block-prix">
+                                                                    <div className="price">{ item.price?.special ? item.price.special.ati.toFixed(2) : item.price.unit.ati.toFixed(2) } €</div>
+                                                                    { item.price?.special ? <div className="price sale">{item.price.unit.ati.toFixed(2)} €</div> : null }
+                                                                </div>
+                                                            </a>
+                                                            <p className="paragraph">Quantité : {item.quantity}</p>
+                                                        </div>
                                                     </div>
-                                                </a>
-                                                <p className="paragraph">Quantité : 1</p>
-                                            </div>
-                                        </div>
+                                                );
+                                            })
+                                        }
                                     </div>
-                                </div>
-                                <div className="w-dyn-empty">
-                                    <div>No items found.</div>
                                 </div>
                             </div>
                         </div>
@@ -91,7 +113,7 @@ export default function OrderDetails() {
                                     <p className="label-tunnel">Sous Total</p>
                                 </div>
                                 <div className="w-col w-col-6 w-col-medium-6 w-col-small-6 w-col-tiny-6">
-                                    <p className="prix-tunnel">15,00 €</p>
+                                    <p className="prix-tunnel">{order.priceSubTotal.ati.toFixed(2)} €</p>
                                 </div>
                             </div>
                             <div className="w-row">
@@ -99,7 +121,7 @@ export default function OrderDetails() {
                                     <p className="label-tunnel">Livraison</p>
                                 </div>
                                 <div className="w-col w-col-6 w-col-small-6 w-col-tiny-6">
-                                    <p className="prix-tunnel">0,00 €</p>
+                                    <p className="prix-tunnel">{order.delivery.price.ati.toFixed(2)} €</p>
                                 </div>
                             </div>
                             <div className="w-row">
@@ -107,7 +129,7 @@ export default function OrderDetails() {
                                     <p className="label-tunnel">Total</p>
                                 </div>
                                 <div className="w-col w-col-6 w-col-small-6 w-col-tiny-6">
-                                    <p className="prix-tunnel">15,00 €</p>
+                                    <p className="prix-tunnel">{order.priceTotal.ati.toFixed(2)} €</p>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +137,5 @@ export default function OrderDetails() {
                 </div>
             </div>
         </div>
-
-
     );
 }

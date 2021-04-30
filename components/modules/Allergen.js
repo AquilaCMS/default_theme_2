@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 export default function Allergen() {
-
     const [open, setOpen] = useState(false);
     const openBlock       = () => {
         setOpen(!open);

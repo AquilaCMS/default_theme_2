@@ -1,51 +1,164 @@
+import { useEffect, useState }                 from 'react';
+import useTranslation                          from 'next-translate/useTranslation';
+import moment                                  from 'moment';
+import DatePicker, { registerLocale }          from 'react-datepicker';
+import fr                                      from 'date-fns/locale/fr';
+import { setCartAddresses }                    from '@lib/aquila-connector/cart';
+import { setPointOfSale }                      from '@lib/aquila-connector/pointsOfSale';
+import { useCartId, usePointsOfSale, useUser } from '@lib/hooks';
+import { getArraySchedules }                   from '@lib/utils';
 
+import 'react-datepicker/dist/react-datepicker.css';
 
-
+registerLocale('fr', fr);
 
 export default function ClickAndCollect() {
+    const [deliveryHome, setDeliveryHome] = useState(0);
+    const [currentPOS, setCurrentPOS]     = useState({});
+    const [deliveryDate, setDeliveryDate] = useState(new Date());
+    const [deliveryTime, setDeliveryTime] = useState('');
+    const [schedules, setSchedules]       = useState([]);
+    const [message, setMessage]           = useState();
+    const { lang, t }                     = useTranslation();
+    let pointsOfSale                      = usePointsOfSale();
+    pointsOfSale                          = pointsOfSale.filter(pos => pos.isWithdrawal || pos.isDelivery);
+    const user                            = useUser();
+    const cartId                          = useCartId();
+    
+    moment.locale(lang);
+    
+    useEffect(() => {
+        
+    }, []);
+
+    const onChangePos = (e) => {
+        let pos = {};
+        if (e.target.value) {
+            pos = pointsOfSale.find(pos => pos._id === e.target.value);
+            getSchedules(pos);
+        }
+        setCurrentPOS(pos);
+    };
+
+    const onChangeDeliveryDate = (date) => {
+        setDeliveryDate(date);
+        getSchedules(currentPOS, date);
+    };
+
+    const onChangeDeliveryTime = (e) => {
+        setDeliveryTime(e.target.value);
+    };
+
+    const getSchedules = (pos, date = deliveryDate) => {
+        const array = getArraySchedules(pos, date);
+        setSchedules(array);
+        if (array.length) {
+            setDeliveryTime(array[0]);
+        }
+    };
+
+    const submitPointOfSale = async (e) => {
+        e.preventDefault();
+        if (!deliveryTime) {
+            return setMessage({ type: 'info', message: t('components/clickAndCollect:submitError') });
+        }
+        const dateToSend = deliveryTime.replace('h', ':');
+        const body       = {
+            pointOfSale  : currentPOS,
+            cartId,
+            receiptDate  : new Date(`${moment(deliveryDate).format('MM/DD/YYYY')} ${dateToSend}`),
+            receiptMethod: 'withdrawal',
+            dateToSend
+        };
+        try {
+            const response = await setPointOfSale(body);
+            if (response.data._id) {
+                if (user) {
+                    const delivery  = {
+                        city          : currentPOS.address.city,
+                        isoCountryCode: 'fr',
+                        line1         : currentPOS.address.line1,
+                        zipcode       : currentPOS.address.zipcode
+                    };
+                    const addresses = { billing: user.addresses[user.billing_address], delivery };
+                    await setCartAddresses(response.data._id, addresses);
+                    setMessage({ type: 'info', message: t('components/clickAndCollect:submitSuccess') });
+                }
+            }
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
+    };
+
     return (
         <>
             <div className="section-picker">
                 <div className="container w-container">
                     <div className="w-form">
-                        <form name="form-cnc" className="form-grid-retrait">
+                        <form className="form-grid-retrait" onSubmit={submitPointOfSale}>
                             <img src="/images/click-collect.svg" loading="lazy" height="50" alt="" className="image-3" />
                             <label className="checkbox-click-collect w-radio">
-                                <input type="radio" data-name="Radio" id="retrait" name="Radio" value="Radio" required="" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
+                                <input 
+                                    type="radio"
+                                    name="deliveryHome"
+                                    value={0}
+                                    required
+                                    checked={deliveryHome ? false : true}
+                                    onChange={(e) => setDeliveryHome(Number(e.target.value))}
+                                    style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
+                                />
                                 <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
-                                <span className="checkbox-label w-form-label">Retrait</span>
+                                <span className="checkbox-label w-form-label">{t('components/clickAndCollect:withDrawal')}</span>
                             </label>
                             <label className="checkbox-click-collect w-radio">
-                                <input type="radio" data-name="Radio" id="retrait" name="Radio" value="Radio" required="" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
+                                <input
+                                    type="radio"
+                                    name="deliveryHome"
+                                    value={1}
+                                    required
+                                    checked={deliveryHome ? true : false}
+                                    onChange={(e) => setDeliveryHome(Number(e.target.value))}
+                                    style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
+                                />
                                 <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
-                                <span className="checkbox-label w-form-label">Livraison</span>
+                                <span className="checkbox-label w-form-label">{t('components/clickAndCollect:delivery')}</span>
                             </label>
-                            <select id="field-3" name="field-3" className="text-ville w-node-_956301b6-5cd8-6ae0-4da8-bca628000483-28000476 w-select">
-                                <option value="">Ville</option>
-                                <option value="First">First Choice</option>
-                                <option value="Second">Second Choice</option>
-                                <option value="Third">Third Choice</option>
+                            <select className="text-ville w-select" value={currentPOS._id} onChange={onChangePos}>
+                                <option value="">{t('components/clickAndCollect:selectPOS')}</option>
+                                {
+                                    pointsOfSale?.filter(pos => pos.isWithdrawal)?.map(pos => {
+                                        return (
+                                            <option key={pos._id} value={pos._id}>{pos.name}</option>
+                                        );
+                                    })
+                                }
                             </select>
-                            <input type="text" className="text-date w-input" maxLength="256" name="field" data-name="Field" placeholder="Date. -- / -- / --" id="DatepickerBox2" required="" />
-                            <select id="field-2" name="field-2" required="" className="select-heure w-select">
-                                <option value="11-00">11h00</option>
-                                <option value="11-15">11h15</option>
-                                <option value="11-30">11h30</option>
-                                <option value="11-45">11h45</option>
-                                <option value="12-00">12h00</option>
-                                <option value="12-15">12h15</option>
-                                <option value="12-30">12h30</option>
-                                <option value="12-45">12h45</option>
-                                <option value="13-00">13h00</option>
+                            <DatePicker
+                                minDate={new Date()}
+                                value={moment(deliveryDate).format('L')}
+                                selected={deliveryDate}
+                                locale={lang}
+                                required
+                                onChange={onChangeDeliveryDate}
+                                className="text-date w-input"
+                                disabled={!currentPOS._id}
+                            />
+                            <select required className="select-heure w-select" onChange={onChangeDeliveryTime} disabled={!currentPOS._id || schedules.length === 0}>
+                                {
+                                    schedules.map((s) => <option key={s} value={s}>{s}</option>)    
+                                }
                             </select>
-                            <a href="#" className="adresse-button w-button">Vérifier mon retrait</a>
+                            <button type="submit" className="adresse-button w-button">{t('components/clickAndCollect:submit')}</button>
                         </form>
-                        <div className="w-form-done">
-                            <div>Thank you! Your submission has been received!</div>
-                        </div>
-                        <div className="w-form-fail">
-                            <div>Oops! Something went wrong while submitting the form.</div>
-                        </div>
+                        {
+                            message && (
+                                <div className={`w-commerce-commerce${message.type}`}>
+                                    <div>
+                                        {message.message}
+                                    </div>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </div>

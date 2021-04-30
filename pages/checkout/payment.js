@@ -1,5 +1,5 @@
 import Head                                  from 'next/head';
-import Router                                from 'next/router';
+import { useRouter }                         from 'next/router';
 import useTranslation                        from 'next-translate/useTranslation';
 import LightLayout                           from '@components/layouts/LightLayout';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
@@ -7,6 +7,7 @@ import { dispatcher }                        from '@lib/redux/dispatcher';
 import { cartToOrder }                       from '@lib/aquila-connector/cart';
 import { deferredPayment }                   from '@lib/aquila-connector/payment';
 import { usePayments, useCartId }            from '@lib/hooks';
+import { unsetCookie }                       from '@lib/utils';
 
 export async function getServerSideProps({ req }) {
     const user = await authProtectedPage(req.headers.cookie);
@@ -17,9 +18,10 @@ export async function getServerSideProps({ req }) {
 }
 
 export default function CheckoutPayment() {
-    const { cartId } = useCartId();
-    const payments   = usePayments();
-    const { t }      = useTranslation();
+    const cartId   = useCartId();
+    const payments = usePayments();
+    const router   = useRouter();
+    const { t }    = useTranslation();
 
     const onSubmitPayment = async (e) => {
         e.preventDefault();
@@ -36,20 +38,20 @@ export default function CheckoutPayment() {
             if (payment.isDeferred === true) {
                 // Paiement différé (chèque, espèces...)
                 await deferredPayment(order.number, payment_code);
-
-                // window.localStorage.removeItem('cart_id');
-                Router.push('/checkout/confirmation');
             } else {
                 // Paiement immédiat (CB...)
                 
             }
+            document.cookie = 'order_id=' + order._id + '; path=/;';
+            unsetCookie(['cart_id', 'count_cart']);
+            router.push('/checkout/confirmation');
         } catch (err) {
             console.error(err.message || t('common:message.unknownError'));
         }
     };
 
     const previousStep = () => {
-        Router.back();
+        router.back();
     };
 
     return (

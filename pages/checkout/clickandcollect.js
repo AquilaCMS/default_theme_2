@@ -1,5 +1,5 @@
 import Head                                  from 'next/head';
-import Router                                from 'next/router';
+import { useRouter }                         from 'next/router';
 import useTranslation                        from 'next-translate/useTranslation';
 import ClickAndCollect                       from '@components/modules/ClickAndCollect';
 import LightLayout                           from '@components/layouts/LightLayout';
@@ -17,10 +17,11 @@ export async function getServerSideProps({ req }) {
 }
 
 export default function CheckoutClickAndCollect() {
-    const { t } = useTranslation();
+    const router = useRouter();
+    const { t }  = useTranslation();
     
     const nextStep = () => {
-        Router.push('/checkout/payment');
+        router.push('/checkout/payment');
     };
     
     return (

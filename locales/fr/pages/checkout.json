@@ -13,7 +13,8 @@
   "confirmation" : {
     "title" : "Ma commande - Confirmation",
     "description" : "TODO",
-    "titleH1" : "Merci pour votre commande !"
+    "titleH1" : "Merci pour votre commande !",
+    "summary" : "Récapitulatif de ma commande"
   },
   "clickandcollect" :{
     "title" : "Ma commande - Click & Collect",

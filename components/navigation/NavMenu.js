@@ -12,11 +12,11 @@ const getDatas = () => {
 
 
 export default function NavMenu() {
-    const { lang, t }                           = useTranslation();
-    const { navMenu }                           = getDatas();
     const [burger, setBurger]                   = useState(false);
     const [view, setView]                       = useState([]);
     const [boolOpenSubMenu, setBoolOpenSubMenu] = useState(false);
+    const { navMenu }                           = getDatas();
+    const { lang, t }                           = useTranslation();
 
     const toggleBurger = () => {
         setBurger(!burger);

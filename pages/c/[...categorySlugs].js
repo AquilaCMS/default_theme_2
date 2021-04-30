@@ -42,9 +42,9 @@ export async function getServerSideProps({ locale, params, resolvedUrl }) {
 }
 
 export default function CategoryList({ breadcrumb, error }) {
-    const { lang }             = useTranslation();
-    const { category }         = useCategory();
-    const { categoryProducts } = useCategoryProducts();
+    const { lang }         = useTranslation();
+    const category         = useCategory();
+    const categoryProducts = useCategoryProducts();
 
     if (error) {
         return <Error statusCode={error.code} />;

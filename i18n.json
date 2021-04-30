@@ -5,6 +5,7 @@
     "*": [
       "common",
       "components/cart",
+      "components/clickAndCollect",
       "components/cookiesBanner",
       "components/newsletter",
       "components/navigation",

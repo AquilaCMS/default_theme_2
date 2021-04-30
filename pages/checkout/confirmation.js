@@ -2,6 +2,7 @@ import Head                                  from 'next/head';
 import useTranslation                        from 'next-translate/useTranslation';
 import Layout                                from '@components/layouts/Layout';
 import OrderDetails                          from '@components/order/OrderDetails';
+import { useOrder }                          from '@lib/hooks';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 
@@ -14,7 +15,9 @@ export async function getServerSideProps({ req }) {
 }
 
 export default function CheckoutConfirmation() {
+    const order = useOrder();
     const { t } = useTranslation();
+
     return (
         <Layout>
             <Head>
@@ -30,12 +33,17 @@ export default function CheckoutConfirmation() {
                 </div>
             </div>
 
-            <div id="03" className="section-tunnel">
-                <div id="03" className="container-tunnel-02">
-                    <h2 className="heading-2-steps">TODOTRAD Récapitulatif de ma commande: # 123456789</h2>
-                </div>
-                <OrderDetails />
-            </div>
+            {
+                order && (
+                    <div id="03" className="section-tunnel">
+                        <div id="03" className="container-tunnel-02">
+                            <h2 className="heading-2-steps">{t('pages/checkout:confirmation.summary')} : #{order.number}</h2>
+                        </div>
+                        <OrderDetails order={order} />
+                    </div>
+                )
+                
+            }
         </Layout>
     );
 }

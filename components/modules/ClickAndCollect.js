@@ -23,7 +23,7 @@ export default function ClickAndCollect() {
     let pointsOfSale                      = usePointsOfSale();
     pointsOfSale                          = pointsOfSale.filter(pos => pos.isWithdrawal || pos.isDelivery);
     const user                            = useUser();
-    const cartId                          = useCartId();
+    const { cartId }                      = useCartId();
     
     moment.locale(lang);
     
@@ -78,6 +78,7 @@ export default function ClickAndCollect() {
                         city          : currentPOS.address.city,
                         isoCountryCode: 'fr',
                         line1         : currentPOS.address.line1,
+                        line2         : currentPOS.address.line2,
                         zipcode       : currentPOS.address.zipcode
                     };
                     const addresses = { billing: user.addresses[user.billing_address], delivery };

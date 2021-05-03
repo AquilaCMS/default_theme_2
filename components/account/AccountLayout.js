@@ -1,10 +1,19 @@
-import useTranslation from 'next-translate/useTranslation';
-import Layout         from '@components/layouts/Layout';
-import Link           from 'next/link';
+import Link                            from 'next/link';
+import { useRouter }                   from 'next/router';
+import useTranslation                  from 'next-translate/useTranslation';
+import Layout                          from '@components/layouts/Layout';
+import { useSiteConfig }               from '@lib/hooks';
+import { getUrlWithLang, unsetCookie } from '@lib/utils';
 
 export default function AccountLayout({ children }) {
+    const router      = useRouter();
+    const { langs }   = useSiteConfig();
+    const { lang, t } = useTranslation();
 
-    const { t } = useTranslation();
+    const onLogout = () => {
+        unsetCookie('jwt');
+        router.push(getUrlWithLang('/', lang, langs));
+    };
 
     let TMPHighlight = 2;
     switch(children[1].props.className) {
@@ -45,6 +54,7 @@ export default function AccountLayout({ children }) {
                                 <div>{t('components/account/accountLayout:navigation.myBills')}</div>
                             </a>
                         </Link>
+                        <button type="button" className="tab-link-round w-inline-block w-tab-link" onClick={onLogout}>{t('components/account/accountLayout:navigation.logout')}</button>
                     </div>
                     <div className="w-tab-content">
 

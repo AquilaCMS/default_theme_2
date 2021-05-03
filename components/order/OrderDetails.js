@@ -66,7 +66,7 @@ export default function OrderDetails({ order }) {
                     </div>
                     <div className="div-block-tunnel">
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                            <h5>Détail de la commande : # {order.number}</h5>
+                            <h5>Détail de la commande : #{order.number}</h5>
                         </div>
                         <div className="block-content-tunnel">
                             <div className="collection-list-wrapper-2 w-dyn-list">

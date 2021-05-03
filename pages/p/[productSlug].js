@@ -48,7 +48,7 @@ export default function CategoryList({ breadcrumb }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
-    const cartId                      = useCartId();
+    const { cartId, setCartId }       = useCartId();
     const product                     = useProduct();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
@@ -68,6 +68,7 @@ export default function CategoryList({ breadcrumb }) {
         document.cookie = 'cart_id=' + newCart._id + '; path=/;';
         document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
         setShowCartSidebar(true);
+        setCartId(newCart._id);
     };
 
     const openLightBox = (i) => {

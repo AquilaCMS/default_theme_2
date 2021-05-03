@@ -3,6 +3,7 @@
     "navigation": {
         "myInformations": "Mes Informations",
         "myOrders": "Mes commandes",
-        "myBills": "Mes factures"
+        "myBills": "Mes factures",
+        "logout": "Se déconnecter"
     }
 }

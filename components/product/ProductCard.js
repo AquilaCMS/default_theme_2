@@ -7,7 +7,7 @@ import { generateSlug }        from '@lib/aquila-connector/product/helpersProduc
 import { addToCart }           from '@lib/aquila-connector/cart';
 import { useShowCartSidebar }  from '@lib/hooks';
 
-export default function ProductCard({ product, cartId }) {
+export default function ProductCard({ product, cartId, setCartId }) {
     const [qty, setQty]             = useState(1);
     const [message, setMessage]     = useState();
     const [timer, setTimer]         = useState();
@@ -40,6 +40,7 @@ export default function ProductCard({ product, cartId }) {
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
             document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
             setShowCartSidebar(true);
+            setCartId(newCart._id);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
             const t = setTimeout(() => { setMessage(); }, 3000);

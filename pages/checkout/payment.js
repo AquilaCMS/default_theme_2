@@ -18,10 +18,10 @@ export async function getServerSideProps({ req }) {
 }
 
 export default function CheckoutPayment() {
-    const cartId   = useCartId();
-    const payments = usePayments();
-    const router   = useRouter();
-    const { t }    = useTranslation();
+    const router     = useRouter();
+    const { cartId } = useCartId();
+    const payments   = usePayments();
+    const { t }      = useTranslation();
 
     const onSubmitPayment = async (e) => {
         e.preventDefault();

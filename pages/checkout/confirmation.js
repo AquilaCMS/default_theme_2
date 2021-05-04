@@ -35,8 +35,8 @@ export default function CheckoutConfirmation() {
 
             {
                 order && (
-                    <div id="03" className="section-tunnel">
-                        <div id="03" className="container-tunnel-02">
+                    <div className="section-tunnel">
+                        <div className="container-tunnel-02">
                             <h2 className="heading-2-steps">{t('pages/checkout:confirmation.summary')} : #{order.number}</h2>
                         </div>
                         <OrderDetails order={order} />

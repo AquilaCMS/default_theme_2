@@ -1,12 +1,12 @@
-import { useEffect, useState }                 from 'react';
-import useTranslation                          from 'next-translate/useTranslation';
-import moment                                  from 'moment';
-import DatePicker, { registerLocale }          from 'react-datepicker';
-import fr                                      from 'date-fns/locale/fr';
-import { setCartAddresses }                    from '@lib/aquila-connector/cart';
-import { setPointOfSale }                      from '@lib/aquila-connector/pointsOfSale';
-import { useCartId, usePointsOfSale, useUser } from '@lib/hooks';
-import { getArraySchedules }                   from '@lib/utils';
+import { useEffect, useState }             from 'react';
+import useTranslation                      from 'next-translate/useTranslation';
+import moment                              from 'moment';
+import DatePicker, { registerLocale }      from 'react-datepicker';
+import fr                                  from 'date-fns/locale/fr';
+import { setCartAddresses }                from '@lib/aquila-connector/cart';
+import { getPointsOfSale, setPointOfSale } from '@lib/aquila-connector/pointsOfSale';
+import { useCart, useUser }                from '@lib/hooks';
+import { getArraySchedules }               from '@lib/utils';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -14,78 +14,96 @@ registerLocale('fr', fr);
 
 export default function ClickAndCollect() {
     const [deliveryHome, setDeliveryHome] = useState(0);
+    const [pointsOfSale, setPointsOfSale] = useState([]);
     const [currentPOS, setCurrentPOS]     = useState({});
     const [deliveryDate, setDeliveryDate] = useState(new Date());
     const [deliveryTime, setDeliveryTime] = useState('');
     const [schedules, setSchedules]       = useState([]);
     const [message, setMessage]           = useState();
     const { lang, t }                     = useTranslation();
-    let pointsOfSale                      = usePointsOfSale();
-    pointsOfSale                          = pointsOfSale.filter(pos => pos.isWithdrawal || pos.isDelivery);
     const user                            = useUser();
-    const { cartId }                      = useCartId();
+    const { cart, setCart }               = useCart();
     
     moment.locale(lang);
     
     useEffect(() => {
-        
+        const fetchData = async () => {
+            try {
+                const data     = await getPointsOfSale();
+                const arrayPOS = data.filter(pos => pos.isWithdrawal || pos.isDelivery);
+                setPointsOfSale(arrayPOS);
+                if (arrayPOS.find((pos) => pos._id === cart.point_of_sale)) {
+                    const pos = arrayPOS.find((pos) => pos._id === cart.point_of_sale);
+                    setCurrentPOS(pos);
+                    const date = cart.orderReceipt.date ? new Date(cart.orderReceipt.date) : new Date();
+                    const time = cart.orderReceipt.date ? moment(new Date(cart.orderReceipt.date)).format('HH[h]mm') : '';
+                    setDeliveryDate(date);
+                    setDeliveryTime(time);
+                    getSchedules(pos, date, time);
+                }
+            } catch (err) {
+                setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            }
+        };
+        fetchData();
     }, []);
 
     const onChangePos = (e) => {
         let pos = {};
         if (e.target.value) {
             pos = pointsOfSale.find(pos => pos._id === e.target.value);
-            getSchedules(pos);
+            getSchedules(pos, );
         }
         setCurrentPOS(pos);
     };
 
     const onChangeDeliveryDate = (date) => {
         setDeliveryDate(date);
-        getSchedules(currentPOS, date);
+        getSchedules(currentPOS, date, '');
     };
 
     const onChangeDeliveryTime = (e) => {
         setDeliveryTime(e.target.value);
     };
 
-    const getSchedules = (pos, date = deliveryDate) => {
+    const getSchedules = (pos, date = deliveryDate, time = deliveryTime) => {
         const array = getArraySchedules(pos, date);
         setSchedules(array);
         if (array.length) {
-            setDeliveryTime(array[0]);
+            if (!time) {
+                setDeliveryTime(array[0]);
+            }
+        } else {
+            setDeliveryTime('');
         }
     };
 
     const submitPointOfSale = async (e) => {
         e.preventDefault();
-        if (!deliveryTime) {
-            return setMessage({ type: 'info', message: t('components/clickAndCollect:submitError') });
-        }
         const dateToSend = deliveryTime.replace('h', ':');
         const body       = {
             pointOfSale  : currentPOS,
-            cartId,
+            cartId       : cart._id,
             receiptDate  : new Date(`${moment(deliveryDate).format('MM/DD/YYYY')} ${dateToSend}`),
             receiptMethod: 'withdrawal',
             dateToSend
         };
         try {
             const response = await setPointOfSale(body);
-            if (response.data._id) {
-                if (user) {
-                    const delivery  = {
-                        city          : currentPOS.address.city,
-                        isoCountryCode: 'fr',
-                        line1         : currentPOS.address.line1,
-                        line2         : currentPOS.address.line2,
-                        zipcode       : currentPOS.address.zipcode
-                    };
-                    const addresses = { billing: user.addresses[user.billing_address], delivery };
-                    await setCartAddresses(response.data._id, addresses);
-                    setMessage({ type: 'info', message: t('components/clickAndCollect:submitSuccess') });
-                }
+            setCart(response.data);
+            if (user) {
+                const delivery  = {
+                    city          : currentPOS.address.city,
+                    isoCountryCode: 'fr',
+                    line1         : currentPOS.address.line1,
+                    line2         : currentPOS.address.line2,
+                    zipcode       : currentPOS.address.zipcode
+                };
+                const addresses = { billing: user.addresses[user.billing_address], delivery };
+                const newCart   = await setCartAddresses(response.data._id, addresses);
+                setCart(newCart);
             }
+            setMessage({ type: 'info', message: t('components/clickAndCollect:submitSuccess') });
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
@@ -144,7 +162,7 @@ export default function ClickAndCollect() {
                                 className="text-date w-input"
                                 disabled={!currentPOS._id}
                             />
-                            <select required className="select-heure w-select" onChange={onChangeDeliveryTime} disabled={!currentPOS._id || schedules.length === 0}>
+                            <select required className="select-heure w-select" value={deliveryTime} onChange={onChangeDeliveryTime} disabled={!currentPOS._id || schedules.length === 0}>
                                 {
                                     schedules.map((s) => <option key={s} value={s}>{s}</option>)    
                                 }

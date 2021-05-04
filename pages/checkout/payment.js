@@ -6,22 +6,22 @@ import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 import { cartToOrder }                       from '@lib/aquila-connector/cart';
 import { deferredPayment }                   from '@lib/aquila-connector/payment';
-import { usePayments, useCartId }            from '@lib/hooks';
+import { useCart, usePayments }              from '@lib/hooks';
 import { unsetCookie }                       from '@lib/utils';
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));
     }
-    return dispatcher();
+    return dispatcher(req, res);
 }
 
 export default function CheckoutPayment() {
-    const router     = useRouter();
-    const { cartId } = useCartId();
-    const payments   = usePayments();
-    const { t }      = useTranslation();
+    const router   = useRouter();
+    const { cart } = useCart();
+    const payments = usePayments();
+    const { t }    = useTranslation();
 
     const onSubmitPayment = async (e) => {
         e.preventDefault();
@@ -30,16 +30,16 @@ export default function CheckoutPayment() {
             const payment_code = e.currentTarget.payment.value;
             if (!payment_code) return;
 
-            // Transformation du panier en commande
-            const order = await cartToOrder(cartId);
+            // Cart to order
+            const order = await cartToOrder(cart._id);
 
-            // Paiement
+            // Payment
             const payment = payments.find((p) => p.code === payment_code);
             if (payment.isDeferred === true) {
-                // Paiement différé (chèque, espèces...)
+                // Deferred payment (check, cash...)
                 await deferredPayment(order.number, payment_code);
             } else {
-                // Paiement immédiat (CB...)
+                // Immediat payment (CB...)
                 
             }
             document.cookie = 'order_id=' + order._id + '; path=/;';

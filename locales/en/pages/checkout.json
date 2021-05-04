@@ -19,6 +19,7 @@
   "clickandcollect" :{
     "title" : "en-Ma commande - Click & Collect",
     "description" : "en-TODO",
-    "titleH1" : "en-Ma commande"
+    "titleH1" : "en-Ma commande",
+    "submitError": "en-Veuillez valider un retrait ou une livraison !"
   }
 }

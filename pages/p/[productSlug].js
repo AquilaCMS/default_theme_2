@@ -1,26 +1,26 @@
-import { useState }                                  from 'react';
-import { ProductJsonLd }                             from 'next-seo';
-import { useRouter }                                 from 'next/router';
-import getT                                          from 'next-translate/getT';
-import useTranslation                                from 'next-translate/useTranslation';
-import ErrorPage                                     from '@pages/_error';
-import Layout                                        from '@components/layouts/Layout';
-import NextSeoCustom                                 from '@components/tools/NextSeoCustom';
-import Breadcrumb                                    from '@components/navigation/Breadcrumb';
-import ProductList                                   from '@components/product/ProductList';
-import BlockCMS                                      from '@components/common/BlockCMS';
-import { dispatcher }                                from '@lib/redux/dispatcher';
-import { getBlocksCMS }                              from '@lib/aquila-connector/blockcms';
-import { getBreadcrumb }                             from '@lib/aquila-connector/breadcrumb';
-import { addToCart }                                 from '@lib/aquila-connector/cart';
-import { getProduct }                                from '@lib/aquila-connector/product/providerProduct';
-import { getImage, getMainImage, getTabImageURL }    from '@lib/aquila-connector/product/helpersProduct';
-import { formatBreadcrumb }                          from '@lib/utils';
-import { useCartId, useProduct, useShowCartSidebar } from '@lib/hooks';
-import Lightbox                                      from 'lightbox-react';
+import { useState }                                from 'react';
+import { ProductJsonLd }                           from 'next-seo';
+import { useRouter }                               from 'next/router';
+import getT                                        from 'next-translate/getT';
+import useTranslation                              from 'next-translate/useTranslation';
+import ErrorPage                                   from '@pages/_error';
+import Layout                                      from '@components/layouts/Layout';
+import NextSeoCustom                               from '@components/tools/NextSeoCustom';
+import Breadcrumb                                  from '@components/navigation/Breadcrumb';
+import ProductList                                 from '@components/product/ProductList';
+import BlockCMS                                    from '@components/common/BlockCMS';
+import { dispatcher }                              from '@lib/redux/dispatcher';
+import { getBlocksCMS }                            from '@lib/aquila-connector/blockcms';
+import { getBreadcrumb }                           from '@lib/aquila-connector/breadcrumb';
+import { addToCart }                               from '@lib/aquila-connector/cart';
+import { getProduct }                              from '@lib/aquila-connector/product/providerProduct';
+import { getImage, getMainImage, getTabImageURL }  from '@lib/aquila-connector/product/helpersProduct';
+import { formatBreadcrumb }                        from '@lib/utils';
+import { useCart, useProduct, useShowCartSidebar } from '@lib/hooks';
+import Lightbox                                    from 'lightbox-react';
 import 'lightbox-react/style.css';
 
-export async function getServerSideProps({ locale, params }) {
+export async function getServerSideProps({ locale, params, req, res }) {
     const actions = [
         {
             type: 'SET_PRODUCT',
@@ -32,7 +32,7 @@ export async function getServerSideProps({ locale, params }) {
         }
     ];
 
-    const pageProps = await dispatcher(actions);
+    const pageProps = await dispatcher(req, res, actions);
     let breadcrumb  = [];
     try {
         breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product.canonical);
@@ -48,7 +48,7 @@ export default function CategoryList({ breadcrumb }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
-    const { cartId, setCartId }       = useCartId();
+    const { cart, setCart }           = useCart();
     const product                     = useProduct();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
@@ -64,11 +64,10 @@ export default function CategoryList({ breadcrumb }) {
 
     const onAddToCart = async (e) => {
         e.preventDefault();
-        const newCart   = await addToCart(cartId, product, qty);
+        const newCart   = await addToCart(cart._id, product, qty);
         document.cookie = 'cart_id=' + newCart._id + '; path=/;';
-        document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
         setShowCartSidebar(true);
-        setCartId(newCart._id);
+        setCart(newCart);
     };
 
     const openLightBox = (i) => {

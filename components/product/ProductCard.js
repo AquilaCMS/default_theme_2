@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
-import Link                    from 'next/link';
-import { useRouter }           from 'next/router';
-import useTranslation          from 'next-translate/useTranslation';
-import Button                  from '@components/ui/Button';
-import { generateSlug }        from '@lib/aquila-connector/product/helpersProduct';
-import { addToCart }           from '@lib/aquila-connector/cart';
-import { useShowCartSidebar }  from '@lib/hooks';
+import { useEffect, useState }         from 'react';
+import Link                            from 'next/link';
+import { useRouter }                   from 'next/router';
+import useTranslation                  from 'next-translate/useTranslation';
+import Button                          from '@components/ui/Button';
+import { generateSlug }                from '@lib/aquila-connector/product/helpersProduct';
+import { addToCart }                   from '@lib/aquila-connector/cart';
+import { useCart, useShowCartSidebar } from '@lib/hooks';
 
-export default function ProductCard({ product, cartId, setCartId }) {
+export default function ProductCard({ product }) {
     const [qty, setQty]             = useState(1);
     const [message, setMessage]     = useState();
     const [timer, setTimer]         = useState();
     const [isLoading, setIsLoading] = useState(false);
     const { query }                 = useRouter();
+    const { cart, setCart }         = useCart();
     const { setShowCartSidebar }    = useShowCartSidebar();
     const { t }                     = useTranslation();
     
@@ -36,11 +37,10 @@ export default function ProductCard({ product, cartId, setCartId }) {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const newCart   = await addToCart(cartId, product, qty);
+            const newCart   = await addToCart(cart._id, product, qty);
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
-            document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
             setShowCartSidebar(true);
-            setCartId(newCart._id);
+            setCart(newCart);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
             const t = setTimeout(() => { setMessage(); }, 3000);

@@ -1,26 +1,33 @@
+import { useState }                          from 'react';
 import Head                                  from 'next/head';
 import { useRouter }                         from 'next/router';
 import useTranslation                        from 'next-translate/useTranslation';
 import ClickAndCollect                       from '@components/modules/ClickAndCollect';
 import LightLayout                           from '@components/layouts/LightLayout';
+import { useCart }                           from '@lib/hooks';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));
     }
-    const pageProps      = await dispatcher();
+    const pageProps      = await dispatcher(req, res);
     pageProps.props.user = user;
     return pageProps;
 }
 
 export default function CheckoutClickAndCollect() {
-    const router = useRouter();
-    const { t }  = useTranslation();
+    const [message, setMessage] = useState();
+    const router                = useRouter();
+    const { cart }              = useCart();
+    const { t }                 = useTranslation();
     
     const nextStep = () => {
+        if (!cart.addresses || !cart.addresses.billing) {
+            return setMessage({ type: 'error', message: t('pages/checkout:clickandcollect.submitError') });
+        }
         router.push('/checkout/payment');
     };
     
@@ -51,6 +58,15 @@ export default function CheckoutClickAndCollect() {
                     <div className="form-mode-paiement-tunnel">
                         <button type="button" className="log-button-03 w-button" onClick={nextStep}>TODOTRAD SUIVANT</button>
                     </div>
+                    {
+                        message && (
+                            <div className={`w-commerce-commerce${message.type}`}>
+                                <div>
+                                    {message.message}
+                                </div>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
 

@@ -8,12 +8,12 @@ import { useOrders }                         from '@lib/hooks';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 import React                                 from 'react';
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/account/login?redirect=' + encodeURI('/account'));
     }
-    const pageProps      = await dispatcher();
+    const pageProps      = await dispatcher(req, res);
     pageProps.props.user = user;
     return pageProps;
 }
@@ -24,9 +24,7 @@ export default function Account() {
     const { t }                       = useTranslation();
 
     const onChangeViewOrders = (index) => {
-        console.log(index);
         viewOrders[index] = !viewOrders[index];
-        console.log(viewOrders);
         setViewOrders([...viewOrders]);
     };
     

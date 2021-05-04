@@ -9,7 +9,7 @@ import { serverRedirect } from '@lib/utils';
 import { dispatcher }     from '@lib/redux/dispatcher';
 
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, req, res }) {
     try {
         const data = await resetPassword(query.token);
         if (data.message === 'Token invalide') {
@@ -20,7 +20,7 @@ export async function getServerSideProps({ query }) {
     }
     
 
-    const pageProps       = await dispatcher();
+    const pageProps       = await dispatcher(req, res);
     pageProps.props.token = query.token;
     return pageProps;
 }

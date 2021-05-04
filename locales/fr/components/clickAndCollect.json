@@ -2,7 +2,7 @@
     "withDrawal": "Retrait",
     "delivery": "Livraison",
     "selectPOS": "Choisir un magasin",
-    "submit": "Vérifier mon retrait",
+    "submit": "Valider",
     "submitError": "Retrait non disponible ce jour !",
     "submitSuccess": "Informations enregistrées !"
 }

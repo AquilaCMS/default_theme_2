@@ -18,6 +18,8 @@ export default class MyDocument extends Document {
                     <link rel="preload" href="/fonts/Inter-Regular.woff" as="font" crossOrigin='anonymous'></link>
                     <link rel="preload" href="/fonts/Inter-Bold.woff" as="font" crossOrigin='anonymous'></link>
 
+                    <meta name="powered-by" content="AquilaCMS" />
+
                     <Favicon />
                 </Head>
                 <body>

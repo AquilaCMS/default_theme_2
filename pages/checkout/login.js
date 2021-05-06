@@ -1,3 +1,4 @@
+import { useEffect }                         from 'react';
 import Head                                  from 'next/head';
 import useTranslation                        from 'next-translate/useTranslation';
 import Layout                                from '@components/layouts/Layout';
@@ -16,8 +17,11 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function CheckoutLogin() {
-    
     const { t } = useTranslation();
+
+    useEffect(() => {
+        document.body.style.overflow = null;
+    });
 
     return (
         <Layout>

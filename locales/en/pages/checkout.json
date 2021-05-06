@@ -20,6 +20,7 @@
     "title" : "en-Ma commande - Click & Collect",
     "description" : "en-TODO",
     "titleH1" : "en-Ma commande",
-    "submitError": "en-Veuillez valider un retrait ou une livraison !"
+    "submitError": "en-Veuillez valider un retrait ou une livraison !",
+    "submitError2": "en-La date de retrait/livraison est dépassée !"
   }
 }

@@ -1,4 +1,4 @@
-import { useState }                          from 'react';
+import { useEffect, useState }               from 'react';
 import Head                                  from 'next/head';
 import { useRouter }                         from 'next/router';
 import useTranslation                        from 'next-translate/useTranslation';
@@ -24,6 +24,10 @@ export default function CheckoutClickAndCollect() {
     const { cart }              = useCart();
     const { t }                 = useTranslation();
     
+    useEffect(() => {
+        document.body.style.overflow = null;
+    });
+    
     const nextStep = () => {
         if (!cart.addresses || !cart.addresses.billing) {
             return setMessage({ type: 'error', message: t('pages/checkout:clickandcollect.submitError') });
@@ -32,7 +36,7 @@ export default function CheckoutClickAndCollect() {
             const now         = Date.now() / 1000;
             const receiptDate = new Date(cart.orderReceipt.date).getTime() / 1000;
             if (receiptDate - now <= 0) {
-                return setMessage({ type: 'error', message: t('pages/checkout:clickandcollect.submitError') });
+                return setMessage({ type: 'error', message: t('pages/checkout:clickandcollect.submitError2') });
             }
         }
         router.push('/checkout/payment');

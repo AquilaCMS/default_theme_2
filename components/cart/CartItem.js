@@ -16,13 +16,15 @@ export default function CartItem({ item }) {
     }, []);
 
     const onChangeQtyItem = async (e) => {
+        if (!e.target.value) {
+            return setQty('');
+        }
         const quantity = Number(e.target.value);
         if (quantity < 1) {
             onDeleteItem();
         } else {
             try {
-                const newCart   = await updateQtyItem(cart._id, item._id, quantity);
-                document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
+                const newCart = await updateQtyItem(cart._id, item._id, quantity);
                 setQty(quantity);
                 setCart(newCart);
             } catch (err) {
@@ -35,8 +37,7 @@ export default function CartItem({ item }) {
     
     const onDeleteItem = async () => {
         try {
-            const newCart   = await deleteItem(cart._id, item._id);
-            document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
+            const newCart = await deleteItem(cart._id, item._id);
             setCart(newCart);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });

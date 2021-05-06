@@ -8,7 +8,10 @@
         "tab1": "Description",
         "tab2": "Informations sur les allergènes",
         "otherProducts": "Produits complémentaires",
-        "return": "Retour"
+        "return": "Retour",
+        "addToBasket": "Ajouter au panier",
+        "compose": "Composer",
+        "addToCartLoading": "Ajout..."
     },
     "productList": {
         "noProduct": "Aucun produit trouvé."

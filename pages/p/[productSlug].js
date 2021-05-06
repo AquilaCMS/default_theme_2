@@ -9,6 +9,7 @@ import NextSeoCustom                               from '@components/tools/NextS
 import Breadcrumb                                  from '@components/navigation/Breadcrumb';
 import ProductList                                 from '@components/product/ProductList';
 import BlockCMS                                    from '@components/common/BlockCMS';
+import Button                                      from '@components/ui/Button';
 import { dispatcher }                              from '@lib/redux/dispatcher';
 import { getBlocksCMS }                            from '@lib/aquila-connector/blockcms';
 import { getBreadcrumb }                           from '@lib/aquila-connector/breadcrumb';
@@ -48,6 +49,8 @@ export default function CategoryList({ breadcrumb }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
+    const [message, setMessage]       = useState();
+    const [isLoading, setIsLoading]   = useState(false);
     const { cart, setCart }           = useCart();
     const product                     = useProduct();
     const { lang, t }                 = useTranslation();
@@ -59,15 +62,31 @@ export default function CategoryList({ breadcrumb }) {
     const coverImageUrl = getMainImage(product.images, '578x578') || '/images/no-image.svg';
 
     const onChangeQty = (e) => {
-        setQty(Number(e.target.value));
+        if (!e.target.value) {
+            return setQty('');
+        } else {
+            const quantity = Number(e.target.value);
+            if (quantity < 1) {
+                return setQty(1);
+            }
+            setQty(quantity);
+        }
     };
 
     const onAddToCart = async (e) => {
         e.preventDefault();
-        const newCart   = await addToCart(cart._id, product, qty);
-        document.cookie = 'cart_id=' + newCart._id + '; path=/;';
-        setShowCartSidebar(true);
-        setCart(newCart);
+        setIsLoading(true);
+        try {
+            setMessage();
+            const newCart   = await addToCart(cart._id, product, qty);
+            document.cookie = 'cart_id=' + newCart._id + '; path=/;';
+            setCart(newCart);
+            setShowCartSidebar(true);
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const openLightBox = (i) => {
@@ -135,16 +154,25 @@ export default function CategoryList({ breadcrumb }) {
                             <div className="plain-line" />
                             <div className="full-details w-richtext"><p dangerouslySetInnerHTML={{ __html: product.description2?.text }} /></div>
                             <div>
-                                <form className="w-commerce-commerceaddtocartform default-state">
+                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={onAddToCart}>
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
-                                    <button type="button" disabled={product.type !== 'simple'} className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>{product.type === 'simple' ? t('components/product:productCard.addToBasket') : t('components/product:productCard.compose')}</button>
+                                    <Button 
+                                        text={product.type === 'simple' ? t('components/product:product.addToBasket') : t('components/product:product.compose')}
+                                        loadingText={t('components/product:product.addToCartLoading')}
+                                        isLoading={isLoading}
+                                        disabled={product.type !== 'simple'} 
+                                        className="w-commerce-commerceaddtocartbutton order-button"
+                                    />
                                 </form>
-                                <div style={{ display: 'none' }} className="w-commerce-commerceaddtocartoutofstock out-of-stock-state">
-                                    <div>This product is out of stock.</div>
-                                </div>
-                                <div style={{ display: 'none' }} className="w-commerce-commerceaddtocarterror">
-                                    <div >Product is not available in this quantity.</div>
-                                </div>
+                                {
+                                    message && (
+                                        <div className={`w-commerce-commerce${message.type}`}>
+                                            <div>
+                                                {message.message}
+                                            </div>
+                                        </div>
+                                    )
+                                }
                             </div>
                             <div className="plain-line" />
                         </div>

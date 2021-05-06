@@ -28,6 +28,13 @@ export default function CheckoutClickAndCollect() {
         if (!cart.addresses || !cart.addresses.billing) {
             return setMessage({ type: 'error', message: t('pages/checkout:clickandcollect.submitError') });
         }
+        if (cart.orderReceipt?.date) {
+            const now         = Date.now() / 1000;
+            const receiptDate = new Date(cart.orderReceipt.date).getTime() / 1000;
+            if (receiptDate - now <= 0) {
+                return setMessage({ type: 'error', message: t('pages/checkout:clickandcollect.submitError') });
+            }
+        }
         router.push('/checkout/payment');
     };
     

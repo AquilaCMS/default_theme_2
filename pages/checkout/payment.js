@@ -43,7 +43,7 @@ export default function CheckoutPayment() {
                 
             }
             document.cookie = 'order_id=' + order._id + '; path=/;';
-            unsetCookie(['cart_id', 'count_cart']);
+            unsetCookie('cart_id');
             router.push('/checkout/confirmation');
         } catch (err) {
             console.error(err.message || t('common:message.unknownError'));

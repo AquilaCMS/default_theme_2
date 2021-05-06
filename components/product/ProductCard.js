@@ -30,7 +30,15 @@ export default function ProductCard({ product }) {
     }, []);
 
     const onChangeQty = (e) => {
-        setQty(Number(e.target.value));
+        if (!e.target.value) {
+            return setQty('');
+        } else {
+            const quantity = Number(e.target.value);
+            if (quantity < 1) {
+                return setQty(1);
+            }
+            setQty(quantity);
+        }
     };
 
     const onAddToCart = async (e) => {
@@ -39,8 +47,8 @@ export default function ProductCard({ product }) {
         try {
             const newCart   = await addToCart(cart._id, product, qty);
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
-            setShowCartSidebar(true);
             setCart(newCart);
+            setShowCartSidebar(true);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
             const t = setTimeout(() => { setMessage(); }, 3000);

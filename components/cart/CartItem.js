@@ -29,8 +29,8 @@ export default function CartItem({ item }) {
                 setCart(newCart);
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-                const t = setTimeout(() => { setMessage(); }, 3000);
-                setTimer(t);
+                const st = setTimeout(() => { setMessage(); }, 3000);
+                setTimer(st);
             }
         }
     };
@@ -41,8 +41,8 @@ export default function CartItem({ item }) {
             setCart(newCart);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-            const t = setTimeout(() => { setMessage(); }, 3000);
-            setTimer(t);
+            const st = setTimeout(() => { setMessage(); }, 3000);
+            setTimer(st);
         }
     };
 

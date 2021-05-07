@@ -19,6 +19,8 @@ export default function OrderDetails({ order }) {
                             <div className="block-content-tunnel">
                                 <div className="w-row">
                                     <div className="w-col w-col-6">
+                                        <label htmlFor="email-3">Nom</label>
+                                        <p className="label-tunnel">{order.customer.fullname}</p>
                                         <label htmlFor="email-3">Email</label>
                                         <p className="label-tunnel">{order.customer.email}</p>
                                     </div>

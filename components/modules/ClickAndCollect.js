@@ -301,6 +301,16 @@ export default function ClickAndCollect() {
                 setCart(newCart);
             } else {
                 if (user) {
+                    let billing = user.addresses[user.billing_address];
+                    if (!billing) {
+                        billing = {
+                            city          : '',
+                            line1         : '',
+                            line2         : '',
+                            zipcode       : '',
+                            isoCountryCode: ''
+                        };
+                    }
                     const delivery  = {
                         city          : localCurrentPOS.address.city,
                         line1         : localCurrentPOS.address.line1,
@@ -308,7 +318,7 @@ export default function ClickAndCollect() {
                         zipcode       : localCurrentPOS.address.zipcode,
                         isoCountryCode: 'fr'
                     };
-                    const addresses = { billing: user.addresses[user.billing_address], delivery };
+                    const addresses = { billing, delivery };
                     const newCart   = await setCartAddresses(response.data._id, addresses);
                     setCart(newCart);
                 }

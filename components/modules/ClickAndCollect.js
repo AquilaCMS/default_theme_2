@@ -6,7 +6,9 @@ import DatePicker, { registerLocale }                                 from 'reac
 import fr                                                             from 'date-fns/locale/fr';
 import { setCartAddresses }                                           from '@lib/aquila-connector/cart';
 import { getPointsOfSale, getPointOfSaleForDelivery, setPointOfSale } from '@lib/aquila-connector/pointsOfSale';
-import { useCart, useUser }                                           from '@lib/hooks';
+import { getUser }                                                    from '@lib/aquila-connector/user';
+import { useCart }                                                    from '@lib/hooks';
+import { getUserIdFromJwt }                                           from '@lib/utils';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -136,7 +138,6 @@ export default function ClickAndCollect() {
     const [schedules, setSchedules]           = useState([]);
     const [message, setMessage]               = useState();
     const { lang, t }                         = useTranslation();
-    const user                                = useUser();
     const { cart, setCart }                   = useCart();
     
     moment.locale(lang);
@@ -300,27 +301,31 @@ export default function ClickAndCollect() {
                 const newCart   = await setCartAddresses(response.data._id, addresses);
                 setCart(newCart);
             } else {
-                if (user) {
-                    let billing = user.addresses[user.billing_address];
-                    if (!billing) {
-                        billing = {
-                            city          : '',
-                            line1         : '',
-                            line2         : '',
-                            zipcode       : '',
-                            isoCountryCode: ''
+                const idUser = getUserIdFromJwt(document.cookie);
+                if (idUser) {
+                    const user = await getUser(idUser);
+                    if (user) {
+                        let billing = user.addresses[user.billing_address];
+                        if (!billing) {
+                            billing = {
+                                city          : '',
+                                line1         : '',
+                                line2         : '',
+                                zipcode       : '',
+                                isoCountryCode: ''
+                            };
+                        }
+                        const delivery  = {
+                            city          : localCurrentPOS.address.city,
+                            line1         : localCurrentPOS.address.line1,
+                            line2         : localCurrentPOS.address.line2,
+                            zipcode       : localCurrentPOS.address.zipcode,
+                            isoCountryCode: 'fr'
                         };
+                        const addresses = { billing, delivery };
+                        const newCart   = await setCartAddresses(response.data._id, addresses);
+                        setCart(newCart);
                     }
-                    const delivery  = {
-                        city          : localCurrentPOS.address.city,
-                        line1         : localCurrentPOS.address.line1,
-                        line2         : localCurrentPOS.address.line2,
-                        zipcode       : localCurrentPOS.address.zipcode,
-                        isoCountryCode: 'fr'
-                    };
-                    const addresses = { billing, delivery };
-                    const newCart   = await setCartAddresses(response.data._id, addresses);
-                    setCart(newCart);
                 }
             }
             setMessage({ type: 'info', message: t('components/clickAndCollect:submitSuccess') });

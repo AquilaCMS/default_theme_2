@@ -162,12 +162,18 @@ export default function ClickAndCollect() {
                 setHasWithdrawal(withdrawal);
                 setHasDelivery(delivery);
 
-                // If there is only delivery
+                // If there is only delivery, we select it
                 if (!withdrawal && delivery) {
                     setDeliveryHome(1);
                 }
 
-                // Checks if a point of sale has already been selected
+                // If there is only one point of sale, we select it
+                if (withdrawal && arrayPOS.filter(pos => pos.isWithdrawal).length === 1) {
+                    setCurrentPOS(arrayPOS[0]);
+                    getSchedules(arrayPOS[0]);
+                }
+
+                // If a point of sale has already been selected, we preselect fields
                 if (arrayPOS.find((pos) => pos._id === cart.point_of_sale)) {
                     // Preselect type
                     const localDeliveryHome = cart.orderReceipt.method === 'delivery';
@@ -208,9 +214,17 @@ export default function ClickAndCollect() {
 
     const onChangeDelivery = (e) => {
         setDeliveryHome(Number(e.target.value));
-        setCurrentPOS({});
+        let pos = {};
+        // If there is only one point of sale, we select it
+        if (Number(e.target.value) === 0 && pointsOfSale.filter(pos => pos.isWithdrawal).length === 1) {
+            pos = pointsOfSale[0];
+        }
+        setCurrentPOS(pos);
         setInitialAddress('');
         setIsValidAddress(false);
+        if (pos._id) {
+            getSchedules(pos);
+        }
     };
 
     const onAddressSelect = async (suggest) => {
@@ -266,6 +280,7 @@ export default function ClickAndCollect() {
         if (array.length) {
             if (!localDeliveryTime || !array.includes(localDeliveryTime)) {
                 setDeliveryTime(array[0]);
+                // If we preselect fields and delivery time is outdated, we return the 1st value of the schedules array
                 if (preselect && !array.includes(localDeliveryTime)) {
                     return array[0];
                 }
@@ -300,6 +315,8 @@ export default function ClickAndCollect() {
             setCart(response.data);
             document.cookie = 'cart_id=' + response.data._id + '; path=/;';
             if (localDeliveryHome) {
+                // Delivery mode :
+                // Address entered by user for cart billing & delivery address
                 if (address.gmaps === undefined) {
                     return setMessage({ type: 'info', message: t('components/clickAndCollect:submitSuccess') });
                 }
@@ -310,6 +327,9 @@ export default function ClickAndCollect() {
                 const newCart   = await setCartAddresses(response.data._id, addresses);
                 setCart(newCart);
             } else {
+                // Withdrawal mode :
+                // User billing address for cart billing address
+                // Point of sale address for cart delivery address
                 const idUser = getUserIdFromJwt(document.cookie);
                 if (idUser) {
                     const user = await getUser(idUser);
@@ -383,7 +403,7 @@ export default function ClickAndCollect() {
                                                 value={1}
                                                 required
                                                 checked={deliveryHome ? true : false}
-                                                onChange={(e) => setDeliveryHome(Number(e.target.value))}
+                                                onChange={onChangeDelivery}
                                                 style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
                                             />
                                             <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>

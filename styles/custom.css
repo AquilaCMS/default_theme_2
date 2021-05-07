@@ -98,19 +98,20 @@
 /* Input or button disabled style */
 input:disabled, button:disabled { opacity: 0.5; }
 
-/* Submit button in informations account page */
+/* Submit button in account/informations page */
 .submit-button-tunnel { width: 100%; }
 
-/* Newsletter button */
+/* Newsletter button [CHECK WITH DESIGNER] */
 .submit-button-newsletter { align-items: center; }
 
-/* Account page */
+/* Account page [CHECK WITH DESIGNER] */
 .tab-pane-wrap-account { width: 900px; }
 .tab-menu-round-account {
     -ms-grid-columns: 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
+/* Button expand (+) in account/orders page */
 .tab-pane-wrap-account .plus-2 {
     opacity: 0.5;
     transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
@@ -121,6 +122,13 @@ input:disabled, button:disabled { opacity: 0.5; }
 .tab-pane-wrap-account .plus-2-active {
     opacity: 1;
     transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(45deg) skew(0deg, 0deg);
+}
+
+/* Top banner hide in mobile... [CHECK WITH DESIGNER] */
+@media screen and (max-width: 479px) {
+  .banner {
+    display: block;
+  }
 }
 
 /* Toasts */

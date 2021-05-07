@@ -4,6 +4,7 @@ import useTranslation                                                 from 'next
 import moment                                                         from 'moment';
 import DatePicker, { registerLocale }                                 from 'react-datepicker';
 import fr                                                             from 'date-fns/locale/fr';
+import Button                                                         from '@components/ui/Button';
 import { setCartAddresses }                                           from '@lib/aquila-connector/cart';
 import { getPointsOfSale, getPointOfSaleForDelivery, setPointOfSale } from '@lib/aquila-connector/pointsOfSale';
 import { getUser }                                                    from '@lib/aquila-connector/user';
@@ -137,6 +138,7 @@ export default function ClickAndCollect() {
     const [deliveryTime, setDeliveryTime]     = useState('');
     const [schedules, setSchedules]           = useState([]);
     const [message, setMessage]               = useState();
+    const [isLoading, setIsLoading]           = useState(false);
     const { lang, t }                         = useTranslation();
     const { cart, setCart }                   = useCart();
     
@@ -192,7 +194,10 @@ export default function ClickAndCollect() {
                     setDeliveryDate(localDeliveryDate);
                     setDeliveryTime(localDeliveryTime);
 
-                    getSchedules(localCurrentPOS, localDeliveryDate, localDeliveryTime, localDeliveryHome, localIsValidAddress, true);
+                    const newDeliveryTime = getSchedules(localCurrentPOS, localDeliveryDate, localDeliveryTime, true);
+                    if (newDeliveryTime) {
+                        submitPointOfSale('', localCurrentPOS, localDeliveryDate, newDeliveryTime, localDeliveryHome, localIsValidAddress);
+                    }
                 }
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
@@ -215,7 +220,7 @@ export default function ClickAndCollect() {
         }
         if (!deliveryAddress.zipcode || !deliveryAddress.line1 || !deliveryAddress.city) {
             setIsValidAddress(false);
-            return setMessage({ type: 'error', message: 'Merci de renseigner une adresse plus précise' });
+            return setMessage({ type: 'error', message: t('components/clickAndCollect:submitAddressError') });
         }
         try {
             const response = await getPointOfSaleForDelivery(deliveryAddress);
@@ -255,27 +260,31 @@ export default function ClickAndCollect() {
         setDeliveryTime(e.target.value);
     };
 
-    const getSchedules = (localCurrentPOS, localDeliveryDate = deliveryDate, localDeliveryTime = deliveryTime, localDeliveryHome = deliveryHome, localIsValidAddress = isValidAddress, submit = false) => {
+    const getSchedules = (localCurrentPOS, localDeliveryDate = deliveryDate, localDeliveryTime = deliveryTime, preselect = false) => {
         const array = getArraySchedules(localCurrentPOS, localDeliveryDate);
         setSchedules(array);
         if (array.length) {
             if (!localDeliveryTime || !array.includes(localDeliveryTime)) {
                 setDeliveryTime(array[0]);
-                if (submit && !array.includes(localDeliveryTime)) {
-                    submitPointOfSale(localCurrentPOS, localDeliveryDate, array[0], localDeliveryHome, localIsValidAddress);
+                if (preselect && !array.includes(localDeliveryTime)) {
+                    return array[0];
                 }
             }
         } else {
             setDeliveryTime('');
         }
+        return false;
     };
 
-    const submitPointOfSale = async (localCurrentPOS = currentPOS, localDeliveryDate = deliveryDate, localDeliveryTime = deliveryTime, localDeliveryHome = deliveryHome, localIsValidAddress = isValidAddress) => {
+    const submitPointOfSale = async (e, localCurrentPOS = currentPOS, localDeliveryDate = deliveryDate, localDeliveryTime = deliveryTime, localDeliveryHome = deliveryHome, localIsValidAddress = isValidAddress) => {
+        if (e) e.preventDefault();
+
+        setIsLoading(true);
         if (!localDeliveryHome && !localCurrentPOS._id) {
-            return setMessage({ type: 'error', message: 'Veuillez sélectionner un point de retrait !' });
+            return setMessage({ type: 'error', message: t('components/clickAndCollect:submitError') });
         }
         if (localDeliveryHome && !localIsValidAddress) {
-            return setMessage({ type: 'error', message: 'L\'adresse saisie ne peut être livrée !' });
+            return setMessage({ type: 'error', message: t('components/clickAndCollect:submitError2') });
         }
         const dateToSend = localDeliveryTime.replace('h', ':');
         const body       = {
@@ -331,6 +340,8 @@ export default function ClickAndCollect() {
             setMessage({ type: 'info', message: t('components/clickAndCollect:submitSuccess') });
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -339,7 +350,7 @@ export default function ClickAndCollect() {
             <div className="section-picker">
                 <div className="container w-container">
                     <div className="w-form">
-                        <form className="form-grid-retrait">
+                        <form className="form-grid-retrait" onSubmit={submitPointOfSale}>
                             <img src="/images/click-collect.svg" loading="lazy" height="50" alt="" className="image-3" />
                             <label className="checkbox-click-collect w-radio">
                                 {
@@ -427,7 +438,12 @@ export default function ClickAndCollect() {
                                     schedules.map((s) => <option key={s} value={s}>{s}</option>)    
                                 }
                             </select>
-                            <button type="button" className="adresse-button w-button" onClick={(e) => submitPointOfSale()}>{t('components/clickAndCollect:submit')}</button>
+                            <Button 
+                                text={t('components/clickAndCollect:submit')}
+                                loadingText={t('components/clickAndCollect:submitLoading')}
+                                isLoading={isLoading}
+                                className="adresse-button w-button"
+                            />
                         </form>
                         {
                             message && (

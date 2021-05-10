@@ -443,16 +443,19 @@ export default function ClickAndCollect() {
                                 )
                             }
                             
-                            <DatePicker
-                                minDate={new Date()}
-                                value={moment(deliveryDate).format('L')}
-                                selected={deliveryDate}
-                                locale={lang}
-                                required
-                                onChange={onChangeDeliveryDate}
-                                className="text-date w-input"
-                                disabled={!currentPOS._id}
-                            />
+                            <div>
+                                <DatePicker
+                                    minDate={new Date()}
+                                    value={moment(deliveryDate).format('L')}
+                                    selected={deliveryDate}
+                                    locale={lang}
+                                    required
+                                    onChange={onChangeDeliveryDate}
+                                    className="text-date w-input"
+                                    disabled={!currentPOS._id}
+                                />
+                            </div>
+                            
                             <select required className="select-heure w-select" value={deliveryTime} onChange={onChangeDeliveryTime} disabled={!currentPOS._id || schedules.length === 0}>
                                 {
                                     schedules.map((s) => <option key={s} value={s}>{s}</option>)    

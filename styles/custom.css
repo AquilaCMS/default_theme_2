@@ -27,11 +27,6 @@
     cursor: pointer;
 }
 
-.div-block-cookies {
-    position: fixed;
-    z-index: 9999;
-}
-
 .page-2 {
     height: 0px;
 }
@@ -74,6 +69,12 @@
     z-index: auto;
 }
 
+/* Cookies block [CHECK WITH DESIGNER] */
+.div-block-cookies {
+    z-index: 9999;
+}
+
+/* Clickable area outside the cart to close it */
 .w-commerce-commerceoutcartcontainer {
     width: 100%;
 }
@@ -84,21 +85,10 @@
     }
 }
 
-/* Style languages block */
-.div-block-lang button {
-    background-color: unset;
-}
-
-.div-block-lang button:hover,
-.div-block-lang button.selected {
-    background-color: #ff8946;
-    color: white;
-}
-
-/* Input or button disabled style */
+/* Input or button disabled style [CHECK WITH DESIGNER] */
 input:disabled, button:disabled { opacity: 0.5; }
 
-/* Submit button in account/informations page */
+/* Submit button in account/informations page [CHECK WITH DESIGNER] */
 .submit-button-tunnel { width: 100%; }
 
 /* Newsletter button [CHECK WITH DESIGNER] */
@@ -129,6 +119,23 @@ input:disabled, button:disabled { opacity: 0.5; }
   .banner {
     display: block;
   }
+}
+
+/* Languages block [CHECK WITH DESIGNER] */
+.div-block-lang {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
+
+.div-block-lang button {
+    background-color: unset;
+}
+
+.div-block-lang button:hover,
+.div-block-lang button.selected {
+    background-color: #ff8946;
+    color: white;
 }
 
 /* Toasts */

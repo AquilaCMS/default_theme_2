@@ -1,6 +1,4 @@
 import Link                                           from 'next/link';
-import useTranslation                                 from 'next-translate/useTranslation';
-import setLanguage                                    from 'next-translate/setLanguage';
 import CartSidebarView                                from '@components/cart/CartSidebarView';
 import NavMenu                                        from '@components/navigation/NavMenu';
 import { useCart, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
@@ -9,7 +7,6 @@ export default function Header() {
     const { cart }                                = useCart();
     const { showCartSidebar, setShowCartSidebar } = useShowCartSidebar();
     const { environment }                         = useSiteConfig();
-    const { lang }                                = useTranslation();
     
     const onToggleShowCartSidebar = () => {
         setShowCartSidebar(!showCartSidebar);
@@ -27,11 +24,6 @@ export default function Header() {
 
     return (
         <div id="Navigation" data-collapse="medium" role="banner" className="navbar w-nav">
-            <div className="div-block-lang">
-                <button type="button" className={`link-lang${lang === 'fr' ? ' selected' : ''}`} onClick={async () => await setLanguage('fr')}>FR</button>
-                &nbsp;|&nbsp;
-                <button type="button" className={`link-lang${lang === 'en' ? ' selected' : ''}`} onClick={async () => await setLanguage('en')}>EN</button>
-            </div>
             <div className="navigation-container">
                 <div className="navigation-left">
                     <Link href='/'>
@@ -62,6 +54,5 @@ export default function Header() {
                 </div>
             </div>
         </div>
-
     );
 }

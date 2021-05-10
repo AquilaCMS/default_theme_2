@@ -531,6 +531,10 @@ export default function ClickAndCollect() {
                     .geosuggest__item__matched-text {
                         font-weight: bold;
                     }
+                    .w-commerce-commerceerror {
+                        margin:20px auto;
+                        width:90%;
+                    }
                 `}
             </style>
         </>

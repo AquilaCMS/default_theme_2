@@ -431,7 +431,7 @@ export default function ClickAndCollect() {
                                     />
                                 ) : (
                                     <select required className="text-ville w-select" value={currentPOS._id} onChange={onChangePos}>
-                                        <option value="">{t('components/clickAndCollect:selectPOS')}</option>
+                                        { pointsOfSale.filter(pos => pos.isWithdrawal).length > 1 && <option value="">{t('components/clickAndCollect:selectPOS')}</option> }
                                         {
                                             pointsOfSale?.filter(pos => pos.isWithdrawal)?.map(pos => {
                                                 return (

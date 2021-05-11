@@ -14,18 +14,18 @@ export default function OrderDetails({ order }) {
                     <div className="div-block-tunnel w-form">
                         <form id="email-form-3" name="email-form-3" data-name="Email Form 3">
                             <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                <h5>Vos informations</h5><label htmlFor="email-4" className="required">* Obligatoire</label>
+                                <h5>{t('components/orderDetails:yourInformations')}</h5>
                             </div>
                             <div className="block-content-tunnel">
                                 <div className="w-row">
                                     <div className="w-col w-col-6">
-                                        <label htmlFor="email-3">Nom</label>
+                                        <label htmlFor="email-3">{t('components/orderDetails:name')}</label>
                                         <p className="label-tunnel">{order.customer.fullname}</p>
-                                        <label htmlFor="email-3">Email</label>
+                                        <label htmlFor="email-3">{t('components/orderDetails:email')}</label>
                                         <p className="label-tunnel">{order.customer.email}</p>
                                     </div>
                                     <div className="w-col w-col-6">
-                                        <label htmlFor="email-2">Adresse de livraison</label>
+                                        <label htmlFor="email-2">{t('components/orderDetails:deliveryAddress')}</label>
                                         <p className="label-tunnel">
                                             {order.addresses.delivery.line1}<br />
                                             {order.addresses.delivery.line2 ? <>{order.addresses.delivery.line2}<br /></> : null}
@@ -36,25 +36,25 @@ export default function OrderDetails({ order }) {
                                 </div>
                             </div>
                             <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                <h5>Mode de livraison</h5>
+                                <h5>{t('components/orderDetails:deliveryMethod')}</h5>
                             </div>
                             <div className="block-content-tunnel-space-flex">
                                 <div className="w-col w-col-6">
                                     <label htmlFor="email-2">
-                                        {order.orderReceipt.method === 'withdrawal' ? 'Retrait' : 'Livraison'}
+                                        {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
                                     </label>
                                     <p className="label-tunnel">{moment(order.orderReceipt.date).format('L')} - {moment(order.orderReceipt.date).format('HH[h]mm')}</p>
                                 </div>
                             </div>
                             <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                <h5>Informations de paiement</h5>
+                                <h5>{t('components/orderDetails:paymentInformations')}</h5>
                             </div>
                             <div className="block-content-tunnel">
                                 <div className="w-row">
-                                    <div className="w-col w-col-6"><label htmlFor="email-2">Mode de paiement</label>
+                                    <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:paymentMethod')}</label>
                                         <p className="label-tunnel">{order.payment[0].mode}</p>
                                     </div>
-                                    <div className="w-col w-col-6"><label htmlFor="email-2">Adresse de facturation</label>
+                                    <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:billingAddress')}</label>
                                         <p className="label-tunnel">
                                             {order.addresses.billing.line1}<br />
                                             {order.addresses.billing.line2 ? <>{order.addresses.billing.line2}<br /></> : null}
@@ -68,7 +68,7 @@ export default function OrderDetails({ order }) {
                     </div>
                     <div className="div-block-tunnel">
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                            <h5>Détail de la commande : #{order.number}</h5>
+                            <h5>{t('components/orderDetails:orderDetail')}</h5>
                         </div>
                         <div className="block-content-tunnel">
                             <div className="collection-list-wrapper-2 w-dyn-list">
@@ -92,7 +92,7 @@ export default function OrderDetails({ order }) {
                                                                     { item.price?.special ? <div className="price sale">{item.price.unit.ati.toFixed(2)} €</div> : null }
                                                                 </div>
                                                             </a>
-                                                            <p className="paragraph">Quantité : {item.quantity}</p>
+                                                            <p className="paragraph">{t('components/orderDetails:quantity')} : {item.quantity}</p>
                                                         </div>
                                                     </div>
                                                 );
@@ -106,31 +106,31 @@ export default function OrderDetails({ order }) {
                 </div>
                 <div className="column-tunnel-prix w-col w-col-4">
                     <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                        <h5>TODOTRAD Détail de la commande</h5>
+                        <h5>{t('components/orderDetails:priceDetail')}</h5>
                     </div>
                     <div className="block-content-tunnel">
                         <div>
                             <div className="w-row">
-                                <div className="w-col w-col-6 w-col-medium-6 w-col-small-6 w-col-tiny-6">
-                                    <p className="label-tunnel">Sous Total</p>
+                                <div className="w-col w-col-7 w-col-medium-7 w-col-small-7 w-col-tiny-7">
+                                    <p className="label-tunnel">{t('components/orderDetails:subTotal')}</p>
                                 </div>
-                                <div className="w-col w-col-6 w-col-medium-6 w-col-small-6 w-col-tiny-6">
+                                <div className="w-col w-col-5 w-col-medium-5 w-col-small-5 w-col-tiny-5">
                                     <p className="prix-tunnel">{order.priceSubTotal.ati.toFixed(2)} €</p>
                                 </div>
                             </div>
                             <div className="w-row">
-                                <div className="w-col w-col-6 w-col-small-6 w-col-tiny-6">
-                                    <p className="label-tunnel">Livraison</p>
+                                <div className="w-col w-col-7 w-col-small-7 w-col-tiny-7">
+                                    <p className="label-tunnel">{t('components/orderDetails:delivery')}</p>
                                 </div>
-                                <div className="w-col w-col-6 w-col-small-6 w-col-tiny-6">
+                                <div className="w-col w-col-5 w-col-small-5 w-col-tiny-5">
                                     <p className="prix-tunnel">{order.delivery.price.ati.toFixed(2)} €</p>
                                 </div>
                             </div>
                             <div className="w-row">
-                                <div className="w-col w-col-6 w-col-small-6 w-col-tiny-6">
-                                    <p className="label-tunnel">Total</p>
+                                <div className="w-col w-col-7 w-col-small-7 w-col-tiny-7">
+                                    <p className="label-tunnel">{t('components/orderDetails:total')}</p>
                                 </div>
-                                <div className="w-col w-col-6 w-col-small-6 w-col-tiny-6">
+                                <div className="w-col w-col-5 w-col-small-5 w-col-tiny-5">
                                     <p className="prix-tunnel">{order.priceTotal.ati.toFixed(2)} €</p>
                                 </div>
                             </div>

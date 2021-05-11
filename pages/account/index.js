@@ -44,16 +44,16 @@ export default function Account() {
                             return (
                                 <React.Fragment key={order._id}>
                                     <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                        <h5 className="heading-6">TODOTRAD Commande : #{order.number}</h5>
+                                        <h5 className="heading-6">{t('pages/account/index:order')} : #{order.number}</h5>
                                         <p className="paragraph">{order.priceTotal.ati.toFixed(2)} €</p>
                                         <div className="lien_voir w-inline-block" style={{ cursor: 'pointer' }} onClick={() => onChangeViewOrders(index)}>
-                                            <h6 className="heading-bouton-voir">Voir</h6>
+                                            <h6 className="heading-bouton-voir">{t('pages/account/index:view')}</h6>
                                             <img src="/images/Plus.svg" alt="" className={`plus-2${viewOrders[index] ? ' plus-2-active' : ''}`} />
                                         </div>
                                     </div>
                                     <div className="section-detail-order" hidden={!viewOrders[index]}>
                                         <div className="container-tunnel-02">
-                                            <h2 className="heading-5 center">TODOTRAD Récapitulatif de ma commande: #{order.number}</h2>
+                                            <h2 className="heading-5 center">{t('pages/account/index:orderSummary')} : #{order.number}</h2>
                                         </div>
                                         <OrderDetails order={order} />
                                     </div>

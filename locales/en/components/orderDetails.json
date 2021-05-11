@@ -1,0 +1,17 @@
+{
+    "yourInformations": "en-Vos informations",
+    "name": "en-Nom",
+    "email": "en-Email",
+    "deliveryAddress": "en-Adresse de livraison",
+    "deliveryMethod": "en-Mode de livraison",
+    "withdrawal": "en-Retrait",
+    "delivery": "en-Livraison",
+    "paymentInformations": "en-Informations de paiement",
+    "paymentMethod": "en-Mode de paiement",
+    "billingAddress": "en-Adresse de facturation",
+    "orderDetail": "en-Détail de la commande",
+    "quantity": "en-Quantité",
+    "priceDetail": "en-Montant de la commande",
+    "subTotal": "en-Sous Total TTC",
+    "total": "en-Sous Total TTC"
+}

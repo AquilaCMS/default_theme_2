@@ -1,4 +1,7 @@
 {
   "title": "Mes commandes",
-  "titleNav" : "Mes commandes"
+  "titleNav" : "Mes commandes",
+  "order" : "Commande",
+  "view" : "Voir",
+  "orderSummary" : "Récapitulatif de ma commande"
 }

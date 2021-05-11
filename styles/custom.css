@@ -89,7 +89,7 @@
 input:disabled, button:disabled { opacity: 0.5; }
 
 /* Submit button in account/informations page [CHECK WITH DESIGNER] */
-.submit-button-tunnel { width: 100%; }
+.submit-button-tunnel { width: 100%; margin-left: auto; margin-right: auto; }
 
 /* Newsletter button [CHECK WITH DESIGNER] */
 .submit-button-newsletter { align-items: center; }
@@ -99,6 +99,13 @@ input:disabled, button:disabled { opacity: 0.5; }
 .tab-menu-round-account {
     -ms-grid-columns: 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+@media screen and (max-width: 479px) {
+    .tab-menu-round-account {
+        -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Button expand (+) in account/orders page */

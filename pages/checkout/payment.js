@@ -28,7 +28,7 @@ export default function CheckoutPayment() {
         if (!cart?.items?.length) {
             router.push('/');
         }
-    });
+    }, []);
 
     const onSubmitPayment = async (e) => {
         e.preventDefault();
@@ -102,9 +102,9 @@ export default function CheckoutPayment() {
                                                 })
                                             }
                                         </div>
-                                        <button type="button" className="log-button-03 w-button" onClick={previousStep}>TODOTRAD RETOUR</button>
+                                        <button type="button" className="log-button-03 w-button" onClick={previousStep}>{t('pages/checkout:payment.previous')}</button>
                             &nbsp;
-                                        <button type="submit" className="log-button-03 w-button">TODOTRAD PAYER</button>
+                                        <button type="submit" className="log-button-03 w-button">{t('pages/checkout:payment.pay')}</button>
                                     </form>
                                 </div>
                             </div>

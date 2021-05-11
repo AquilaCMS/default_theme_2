@@ -5,22 +5,26 @@
     "titleH1" : "Ma commande",
     "step1" : "Connexion / Inscription"
   },
+  "clickandcollect" :{
+    "title" : "Ma commande - Click & Collect",
+    "description" : "TODO",
+    "titleH1" : "Ma commande",
+    "next" : "SUIVANT",
+    "submitError": "Veuillez valider un retrait ou une livraison !",
+    "submitError2": "La date de retrait/livraison est dépassée !"
+  },
   "payment" : {
     "title" : "Ma commande - Moyen de paiement",
     "description" : "TODO",
-    "titleH1" : "Ma commande"
+    "titleH1" : "Ma commande",
+    "previous" : "RETOUR",
+    "pay" : "PAYER"
   },
   "confirmation" : {
     "title" : "Ma commande - Confirmation",
     "description" : "TODO",
     "titleH1" : "Merci pour votre commande !",
-    "summary" : "Récapitulatif de ma commande"
-  },
-  "clickandcollect" :{
-    "title" : "Ma commande - Click & Collect",
-    "description" : "TODO",
-    "titleH1" : "Ma commande",
-    "submitError": "Veuillez valider un retrait ou une livraison !",
-    "submitError2": "La date de retrait/livraison est dépassée !"
+    "summary" : "Récapitulatif de ma commande",
+    "viewOrders" : "Voir mes commandes"
   }
 }

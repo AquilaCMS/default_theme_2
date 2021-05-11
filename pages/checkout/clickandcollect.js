@@ -29,7 +29,7 @@ export default function CheckoutClickAndCollect() {
         if (!cart?.items?.length) {
             router.push('/');
         }
-    });
+    }, []);
     
     const nextStep = () => {
         if (!cart.addresses || !cart.addresses.billing) {
@@ -72,7 +72,7 @@ export default function CheckoutClickAndCollect() {
                                 <ClickAndCollect />
 
                                 <div className="form-mode-paiement-tunnel">
-                                    <button type="button" className="log-button-03 w-button" onClick={nextStep}>TODOTRAD SUIVANT</button>
+                                    <button type="button" className="log-button-03 w-button" onClick={nextStep}>{t('pages/checkout:clickandcollect.next')}</button>
                                 </div>
                                 {
                                     message && (

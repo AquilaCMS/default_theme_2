@@ -21,7 +21,7 @@ export default function CheckoutLogin() {
 
     useEffect(() => {
         document.body.style.overflow = null;
-    });
+    }, []);
 
     return (
         <Layout>

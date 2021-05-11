@@ -9,6 +9,7 @@
     "title" : "Ma commande - Click & Collect",
     "description" : "TODO",
     "titleH1" : "Ma commande",
+    "clickandcollect" : "Click & Collect",
     "next" : "SUIVANT",
     "submitError": "Veuillez valider un retrait ou une livraison !",
     "submitError2": "La date de retrait/livraison est dépassée !"
@@ -17,6 +18,7 @@
     "title" : "Ma commande - Moyen de paiement",
     "description" : "TODO",
     "titleH1" : "Ma commande",
+    "paymentMethod" : "Moyen de paiement",
     "previous" : "RETOUR",
     "pay" : "PAYER"
   },

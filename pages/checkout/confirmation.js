@@ -1,4 +1,6 @@
+import { useEffect }                         from 'react';
 import Head                                  from 'next/head';
+import { useRouter }                         from 'next/router';
 import useTranslation                        from 'next-translate/useTranslation';
 import Layout                                from '@components/layouts/Layout';
 import OrderDetails                          from '@components/order/OrderDetails';
@@ -15,8 +17,15 @@ export async function getServerSideProps({ req }) {
 }
 
 export default function CheckoutConfirmation() {
-    const order = useOrder();
-    const { t } = useTranslation();
+    const router = useRouter();
+    const order  = useOrder();
+    const { t }  = useTranslation();
+
+    useEffect(() => {
+        if (!order) {
+            router.push('/');
+        }
+    });
 
     return (
         <Layout>

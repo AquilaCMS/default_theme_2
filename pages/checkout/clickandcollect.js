@@ -26,6 +26,9 @@ export default function CheckoutClickAndCollect() {
     
     useEffect(() => {
         document.body.style.overflow = null;
+        if (!cart?.items?.length) {
+            router.push('/');
+        }
     });
     
     const nextStep = () => {
@@ -48,39 +51,43 @@ export default function CheckoutClickAndCollect() {
                 <title>{t('pages/checkout:clickandcollect.title')}</title>
                 <meta name="description" content={t('pages/checkout:clickandcollect.description')} />
             </Head>
-
-            <div className="header-section-panier">
-                <div className="container-flex-2">
-                    <div className="title-wrap-centre">
-                        <h1 className="header-h1">{t('pages/checkout:clickandcollect.titleH1')}</h1>
-                    </div>
-                </div>
-            </div>
-
-            <div className="section-tunnel">
-                <div className="container-tunnel">
-                    <div className="container-step w-container">
-                        <h2 className="heading-steps">2</h2>
-                        <h2 className="heading-2-steps">TODOTRAD Click &amp; Collect</h2>
-                    </div>
-                    
-                    <ClickAndCollect />
-
-                    <div className="form-mode-paiement-tunnel">
-                        <button type="button" className="log-button-03 w-button" onClick={nextStep}>TODOTRAD SUIVANT</button>
-                    </div>
-                    {
-                        message && (
-                            <div className={`w-commerce-commerce${message.type}`}>
-                                <div>
-                                    {message.message}
+            {
+                cart?.items?.length > 0 && (
+                    <>
+                        <div className="header-section-panier">
+                            <div className="container-flex-2">
+                                <div className="title-wrap-centre">
+                                    <h1 className="header-h1">{t('pages/checkout:clickandcollect.titleH1')}</h1>
                                 </div>
                             </div>
-                        )
-                    }
-                </div>
-            </div>
+                        </div>
 
+                        <div className="section-tunnel">
+                            <div className="container-tunnel">
+                                <div className="container-step w-container">
+                                    <h2 className="heading-steps">2</h2>
+                                    <h2 className="heading-2-steps">TODOTRAD Click &amp; Collect</h2>
+                                </div>
+                                
+                                <ClickAndCollect />
+
+                                <div className="form-mode-paiement-tunnel">
+                                    <button type="button" className="log-button-03 w-button" onClick={nextStep}>TODOTRAD SUIVANT</button>
+                                </div>
+                                {
+                                    message && (
+                                        <div className={`w-commerce-commerce${message.type}`}>
+                                            <div>
+                                                {message.message}
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        </div>
+                    </>
+                )
+            }
         </LightLayout>
     );
 }

@@ -1,3 +1,4 @@
+import { useEffect }                         from 'react';
 import Head                                  from 'next/head';
 import { useRouter }                         from 'next/router';
 import useTranslation                        from 'next-translate/useTranslation';
@@ -22,6 +23,12 @@ export default function CheckoutPayment() {
     const { cart } = useCart();
     const payments = usePayments();
     const { t }    = useTranslation();
+
+    useEffect(() => {
+        if (!cart?.items?.length) {
+            router.push('/');
+        }
+    });
 
     const onSubmitPayment = async (e) => {
         e.preventDefault();
@@ -61,44 +68,50 @@ export default function CheckoutPayment() {
                 <meta name="description" content={t('pages/checkout:payment.description')} />
             </Head>
 
-            <div className="header-section-panier">
-                <div className="container-flex-2">
-                    <div className="title-wrap-centre">
-                        <h1 className="header-h1">{t('pages/checkout:payment.titleH1')}</h1>
-                    </div>
-                </div>
-            </div>
-
-            <div className="section-tunnel">
-                <div className="container-tunnel">
-                    <div className="container-step w-container">
-                        <h2 className="heading-steps">3</h2>
-                        <h2 className="heading-2-steps">TODOTRAD Moyen de paiement</h2>
-                    </div>
-                    <div className="col-log w-row">
-                        <form className="form-mode-paiement-tunnel" onSubmit={onSubmitPayment}>
-                            <div className="columns-picker-paiement-tunnel w-row">
-                                {
-                                    payments && payments.map((payment) => {
-                                        return (
-                                            <div key={payment._id} className="column-center w-col w-col-6">
-                                                <label className="checkbox-click-collect w-radio">
-                                                    <input type="radio" name="payment" value={payment.code} required="" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
-                                                    <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
-                                                    <span className="checkbox-label w-form-label">{payment.name}</span>
-                                                </label>
-                                            </div>
-                                        );
-                                    })
-                                }
+            {
+                cart?.items?.length > 0 && (
+                    <>
+                        <div className="header-section-panier">
+                            <div className="container-flex-2">
+                                <div className="title-wrap-centre">
+                                    <h1 className="header-h1">{t('pages/checkout:payment.titleH1')}</h1>
+                                </div>
                             </div>
-                            <button type="button" className="log-button-03 w-button" onClick={previousStep}>TODOTRAD RETOUR</button>
+                        </div>
+
+                        <div className="section-tunnel">
+                            <div className="container-tunnel">
+                                <div className="container-step w-container">
+                                    <h2 className="heading-steps">3</h2>
+                                    <h2 className="heading-2-steps">TODOTRAD Moyen de paiement</h2>
+                                </div>
+                                <div className="col-log w-row">
+                                    <form className="form-mode-paiement-tunnel" onSubmit={onSubmitPayment}>
+                                        <div className="columns-picker-paiement-tunnel w-row">
+                                            {
+                                                payments && payments.map((payment) => {
+                                                    return (
+                                                        <div key={payment._id} className="column-center w-col w-col-6">
+                                                            <label className="checkbox-click-collect w-radio">
+                                                                <input type="radio" name="payment" value={payment.code} required="" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
+                                                                <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
+                                                                <span className="checkbox-label w-form-label">{payment.name}</span>
+                                                            </label>
+                                                        </div>
+                                                    );
+                                                })
+                                            }
+                                        </div>
+                                        <button type="button" className="log-button-03 w-button" onClick={previousStep}>TODOTRAD RETOUR</button>
                             &nbsp;
-                            <button type="submit" className="log-button-03 w-button">TODOTRAD PAYER</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                                        <button type="submit" className="log-button-03 w-button">TODOTRAD PAYER</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
+            }
         </LightLayout>
     );
 }

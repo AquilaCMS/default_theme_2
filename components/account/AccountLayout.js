@@ -1,18 +1,16 @@
-import Link                            from 'next/link';
-import { useRouter }                   from 'next/router';
-import useTranslation                  from 'next-translate/useTranslation';
-import Layout                          from '@components/layouts/Layout';
-import { useSiteConfig }               from '@lib/hooks';
-import { getUrlWithLang, unsetCookie } from '@lib/utils';
+import Link            from 'next/link';
+import { useRouter }   from 'next/router';
+import useTranslation  from 'next-translate/useTranslation';
+import Layout          from '@components/layouts/Layout';
+import { unsetCookie } from '@lib/utils';
 
 export default function AccountLayout({ children }) {
-    const router      = useRouter();
-    const { langs }   = useSiteConfig();
-    const { lang, t } = useTranslation();
+    const router = useRouter();
+    const { t }  = useTranslation();
 
     const onLogout = () => {
         unsetCookie('jwt');
-        router.push(getUrlWithLang('/', lang, langs));
+        router.push('/');
     };
 
     let TMPHighlight = 2;

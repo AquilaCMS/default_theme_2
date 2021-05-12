@@ -30,11 +30,11 @@ export async function getServerSideProps({ req, res }) {
 
 export default function Home() {
 
-    const { lang }         = useTranslation();
-    const categoryProducts = useCategoryProducts();
-    const TMP_title        = 'TODO';
-    const TMP_desc         = 'TODO';
-    const TMP_canonical    = 'TODO';
+    const { lang }             = useTranslation();
+    const { categoryProducts } = useCategoryProducts();
+    const TMP_title            = 'TODO';
+    const TMP_desc             = 'TODO';
+    const TMP_canonical        = 'TODO';
 
     return (
         <Layout>

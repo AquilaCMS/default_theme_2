@@ -4,6 +4,7 @@
   "pages": {
     "*": [
       "common",
+      "components/allergen",
       "components/cart",
       "components/clickAndCollect",
       "components/cookiesBanner",

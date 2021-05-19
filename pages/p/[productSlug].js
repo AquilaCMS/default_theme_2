@@ -4,6 +4,7 @@ import { useRouter }                               from 'next/router';
 import getT                                        from 'next-translate/getT';
 import useTranslation                              from 'next-translate/useTranslation';
 import { Modal }                                   from 'react-responsive-modal';
+import Lightbox                                    from 'lightbox-react';
 import ErrorPage                                   from '@pages/_error';
 import BundleProduct                               from '@components/product/BundleProduct';
 import Layout                                      from '@components/layouts/Layout';
@@ -18,10 +19,11 @@ import { getBreadcrumb }                           from '@lib/aquila-connector/b
 import { addToCart }                               from '@lib/aquila-connector/cart';
 import { getProduct }                              from '@lib/aquila-connector/product/providerProduct';
 import { getImage, getMainImage, getTabImageURL }  from '@lib/aquila-connector/product/helpersProduct';
-import { formatBreadcrumb }                        from '@lib/utils';
 import { useCart, useProduct, useShowCartSidebar } from '@lib/hooks';
-import Lightbox                                    from 'lightbox-react';
+import { formatBreadcrumb, formatPrice }           from '@lib/utils';
+
 import 'lightbox-react/style.css';
+import 'react-responsive-modal/styles.css';
 
 export async function getServerSideProps({ locale, params, req, res }) {
     const actions = [
@@ -159,8 +161,8 @@ export default function CategoryList({ breadcrumb }) {
                         <div className="product-content">
                             <h3>{product.description2?.title}</h3>
                             <div className="div-block-prix">
-                                <div className="price-text">{ product.price.ati.special ? product.price.ati.special.toFixed(2) : product.price.ati.normal.toFixed(2) } €</div>
-                                { product.price.ati.special ? <div className="price-text sale">{product.price.ati.normal.toFixed(2)} €</div> : null }
+                                <div className="price-text">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
+                                { product.price.ati.special ? <div className="price-text sale">{formatPrice(product.price.ati.normal)}</div> : null }
                             </div>
                             <div className="plain-line" />
                             <div className="full-details w-richtext"><p dangerouslySetInnerHTML={{ __html: product.description2?.text }} /></div>

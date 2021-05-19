@@ -3,6 +3,7 @@ import useTranslation                from 'next-translate/useTranslation';
 import { deleteItem, updateQtyItem } from '@lib/aquila-connector/cart';
 import { getImage }                  from '@lib/aquila-connector/product/helpersProduct';
 import { useCart }                   from '@lib/hooks';
+import { formatPrice }               from '@lib/utils';
 
 export default function CartItem({ item }) {
     const [qty, setQty]         = useState(item.quantity);
@@ -56,11 +57,10 @@ export default function CartItem({ item }) {
                     <div>
                         <div className="w-commerce-commercecartproductname">{item.name}</div>
                         <div>
-                            { item.price?.special ? <><del>{item.price.unit.ati.toFixed(2)} €</del>&nbsp;</> : null }
-                            { item.price?.special ? item.price.special.ati.toFixed(2) : item.price.unit.ati.toFixed(2) } €
+                            { item.price?.special ? <><del>{formatPrice(item.price.unit.ati)}</del>&nbsp;</> : null }
+                            { item.price?.special ? formatPrice(item.price.special.ati) : formatPrice(item.price.unit.ati) }
                         </div>
                     </div>
-                    
                     {
                         item.selections && item.selections.length > 0 && (
                             <ul className="w-commerce-commercecartoptionlist">
@@ -69,7 +69,7 @@ export default function CartItem({ item }) {
                                         section.products.map((itemSection) => {
                                             const diffPrice = item.id.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection.id)?.modifier_price?.ati;
                                             return (
-                                                <li key={itemSection._id}>{itemSection.name}{diffPrice && diffPrice !== 0 ? <> ({diffPrice > 0 ? '+' : '-'}{diffPrice.toFixed(2)} €)</> : null}</li>
+                                                <li key={itemSection._id}>{itemSection.name}{diffPrice && diffPrice !== 0 ? <> ({diffPrice > 0 ? '+' : '-'}{formatPrice(diffPrice)})</> : null}</li>
                                             );
                                         })
                                     ))

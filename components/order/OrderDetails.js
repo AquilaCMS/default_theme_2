@@ -1,6 +1,7 @@
-import useTranslation from 'next-translate/useTranslation';
-import moment         from 'moment';
-import { getImage }   from '@lib/aquila-connector/product/helpersProduct';
+import useTranslation  from 'next-translate/useTranslation';
+import moment          from 'moment';
+import { getImage }    from '@lib/aquila-connector/product/helpersProduct';
+import { formatPrice } from '@lib/utils';
 
 export default function OrderDetails({ order }) {
     const { lang, t } = useTranslation();
@@ -88,8 +89,8 @@ export default function OrderDetails({ order }) {
                                                             <div className="food-title-wrap w-inline-block">
                                                                 <h6 className="heading-9">{item.name}</h6>
                                                                 <div className="div-block-prix">
-                                                                    <div className="price">{ item.price?.special ? item.price.special.ati.toFixed(2) : item.price.unit.ati.toFixed(2) } €</div>
-                                                                    { item.price?.special ? <div className="price sale">{item.price.unit.ati.toFixed(2)} €</div> : null }
+                                                                    <div className="price">{ item.price?.special ? formatPrice(item.price.special.ati) : formatPrice(item.price.unit.ati) }</div>
+                                                                    { item.price?.special ? <div className="price sale">{formatPrice(item.price.unit.ati)}</div> : null }
                                                                 </div>
                                                             </div>
                                                             {
@@ -100,7 +101,7 @@ export default function OrderDetails({ order }) {
                                                                                 section.products.map((itemSection) => {
                                                                                     const diffPrice = item.id.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection.id)?.modifier_price?.ati;
                                                                                     return (
-                                                                                        <li key={itemSection._id}>{itemSection.name}{diffPrice && diffPrice !== 0 ? <> ({diffPrice > 0 ? '+' : '-'}{diffPrice.toFixed(2)} €)</> : null}</li>
+                                                                                        <li key={itemSection._id}>{itemSection.name}{diffPrice && diffPrice !== 0 ? <> ({diffPrice > 0 ? '+' : '-'}{formatPrice(diffPrice)})</> : null}</li>
                                                                                     );
                                                                                 })
                                                                             ))
@@ -131,7 +132,7 @@ export default function OrderDetails({ order }) {
                                     <p className="label-tunnel">{t('components/orderDetails:subTotal')}</p>
                                 </div>
                                 <div className="w-col w-col-5 w-col-medium-5 w-col-small-5 w-col-tiny-5">
-                                    <p className="prix-tunnel">{order.priceSubTotal.ati.toFixed(2)} €</p>
+                                    <p className="prix-tunnel">{formatPrice(order.priceSubTotal.ati)}</p>
                                 </div>
                             </div>
                             <div className="w-row">
@@ -139,7 +140,7 @@ export default function OrderDetails({ order }) {
                                     <p className="label-tunnel">{t('components/orderDetails:delivery')}</p>
                                 </div>
                                 <div className="w-col w-col-5 w-col-small-5 w-col-tiny-5">
-                                    <p className="prix-tunnel">{order.delivery.price.ati.toFixed(2)} €</p>
+                                    <p className="prix-tunnel">{formatPrice(order.delivery.price.ati)}</p>
                                 </div>
                             </div>
                             <div className="w-row">
@@ -147,7 +148,7 @@ export default function OrderDetails({ order }) {
                                     <p className="label-tunnel">{t('components/orderDetails:total')}</p>
                                 </div>
                                 <div className="w-col w-col-5 w-col-small-5 w-col-tiny-5">
-                                    <p className="prix-tunnel">{order.priceTotal.ati.toFixed(2)} €</p>
+                                    <p className="prix-tunnel">{formatPrice(order.priceTotal.ati)}</p>
                                 </div>
                             </div>
                         </div>

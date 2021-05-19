@@ -8,6 +8,9 @@ import Button                          from '@components/ui/Button';
 import { generateSlug }                from '@lib/aquila-connector/product/helpersProduct';
 import { addToCart }                   from '@lib/aquila-connector/cart';
 import { useCart, useShowCartSidebar } from '@lib/hooks';
+import { formatPrice }                 from '@lib/utils';
+
+import 'react-responsive-modal/styles.css';
 
 export default function ProductCard({ product }) {
     const [qty, setQty]             = useState(1);
@@ -83,8 +86,8 @@ export default function ProductCard({ product }) {
                         <a className="food-title-wrap w-inline-block">
                             <h6 className="heading-9" >{name}</h6>
                             <div className="div-block-prix">
-                                <div className="price">{ product.price.ati.special ? product.price.ati.special.toFixed(2) : product.price.ati.normal.toFixed(2) } €</div>
-                                { product.price.ati.special ? <div className="price sale">{product.price.ati.normal.toFixed(2)} €</div> : null }
+                                <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
+                                { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
                             </div>
                         </a>
                     </Link>

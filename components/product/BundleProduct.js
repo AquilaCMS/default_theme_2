@@ -4,8 +4,7 @@ import Button                                    from '@components/ui/Button';
 import { addToCart }                             from '@lib/aquila-connector/cart';
 import { getImage }                              from '@lib/aquila-connector/product/helpersProduct';
 import { useCart, useShowCartSidebar }           from '@lib/hooks';
-
-import 'react-responsive-modal/styles.css';
+import { formatPrice }                           from '@lib/utils';
 
 export default function BundleProduct({ product, qty, onCloseModal }) {
     const form                                    = useRef();
@@ -166,7 +165,7 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
                 })
             }
             <div className="seprateur-carte">
-                {priceBundle.toFixed(2)} €
+                {formatPrice(priceBundle)}
             </div>
             <Button 
                 text={t('components/bundleProduct:submit')}

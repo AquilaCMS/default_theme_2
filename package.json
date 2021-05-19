@@ -25,6 +25,7 @@
     "react-geosuggest": "^2.14.1",
     "react-redux": "^7.2.2",
     "react-responsive-carousel": "^3.2.15",
+    "react-responsive-modal": "^6.0.1",
     "redux": "^4.0.5"
   },
   "devDependencies": {

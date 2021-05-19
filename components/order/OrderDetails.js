@@ -85,13 +85,29 @@ export default function OrderDetails({ order }) {
                                                             </a>
                                                         </div>
                                                         <div className="w-col w-col-9">
-                                                            <a href="#" className="food-title-wrap w-inline-block">
+                                                            <div className="food-title-wrap w-inline-block">
                                                                 <h6 className="heading-9">{item.name}</h6>
                                                                 <div className="div-block-prix">
                                                                     <div className="price">{ item.price?.special ? item.price.special.ati.toFixed(2) : item.price.unit.ati.toFixed(2) } €</div>
                                                                     { item.price?.special ? <div className="price sale">{item.price.unit.ati.toFixed(2)} €</div> : null }
                                                                 </div>
-                                                            </a>
+                                                            </div>
+                                                            {
+                                                                item.selections && item.selections.length > 0 && (
+                                                                    <ul className="w-commerce-commercecartoptionlist">
+                                                                        {
+                                                                            item.selections.map((section) => (
+                                                                                section.products.map((itemSection) => {
+                                                                                    const diffPrice = item.id.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection.id)?.modifier_price?.ati;
+                                                                                    return (
+                                                                                        <li key={itemSection._id}>{itemSection.name}{diffPrice && diffPrice !== 0 ? <> ({diffPrice > 0 ? '+' : '-'}{diffPrice.toFixed(2)} €)</> : null}</li>
+                                                                                    );
+                                                                                })
+                                                                            ))
+                                                                        }
+                                                                    </ul>
+                                                                )
+                                                            }
                                                             <p className="paragraph">{t('components/orderDetails:quantity')} : {item.quantity}</p>
                                                         </div>
                                                     </div>

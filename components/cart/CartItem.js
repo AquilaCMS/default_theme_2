@@ -60,8 +60,23 @@ export default function CartItem({ item }) {
                             { item.price?.special ? item.price.special.ati.toFixed(2) : item.price.unit.ati.toFixed(2) } €
                         </div>
                     </div>
-
-                    <ul className="w-commerce-commercecartoptionlist"></ul>
+                    
+                    {
+                        item.selections && item.selections.length > 0 && (
+                            <ul className="w-commerce-commercecartoptionlist">
+                                {
+                                    item.selections.map((section) => (
+                                        section.products.map((itemSection) => {
+                                            const diffPrice = item.id.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection.id)?.modifier_price?.ati;
+                                            return (
+                                                <li key={itemSection._id}>{itemSection.name}{diffPrice && diffPrice !== 0 ? <> ({diffPrice > 0 ? '+' : '-'}{diffPrice.toFixed(2)} €)</> : null}</li>
+                                            );
+                                        })
+                                    ))
+                                }
+                            </ul>
+                        )
+                    }
                     <button type="button" className="remove-button-cart w-inline-block" onClick={onDeleteItem}>
                         <div className="text-block-2">X</div>
                     </button>

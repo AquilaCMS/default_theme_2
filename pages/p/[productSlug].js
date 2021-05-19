@@ -3,7 +3,9 @@ import { ProductJsonLd }                           from 'next-seo';
 import { useRouter }                               from 'next/router';
 import getT                                        from 'next-translate/getT';
 import useTranslation                              from 'next-translate/useTranslation';
+import { Modal }                                   from 'react-responsive-modal';
 import ErrorPage                                   from '@pages/_error';
+import BundleProduct                               from '@components/product/BundleProduct';
 import Layout                                      from '@components/layouts/Layout';
 import NextSeoCustom                               from '@components/tools/NextSeoCustom';
 import Breadcrumb                                  from '@components/navigation/Breadcrumb';
@@ -51,6 +53,7 @@ export default function CategoryList({ breadcrumb }) {
     const [isOpen, setIsOpen]         = useState(false);
     const [message, setMessage]       = useState();
     const [isLoading, setIsLoading]   = useState(false);
+    const [openModal, setOpenModal]   = useState(false);
     const { cart, setCart }           = useCart();
     const product                     = useProduct();
     const { lang, t }                 = useTranslation();
@@ -98,6 +101,13 @@ export default function CategoryList({ breadcrumb }) {
     const previousStep = () => {
         router.back();
     };
+
+    const onOpenModal = (e) => {
+        e.preventDefault();
+        setOpenModal(true);
+    };
+
+    const onCloseModal = () => setOpenModal(false);
 
     return (
 
@@ -155,13 +165,13 @@ export default function CategoryList({ breadcrumb }) {
                             <div className="plain-line" />
                             <div className="full-details w-richtext"><p dangerouslySetInnerHTML={{ __html: product.description2?.text }} /></div>
                             <div>
-                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={onAddToCart}>
+                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
                                     <Button 
                                         text={product.type === 'simple' ? t('components/product:product.addToBasket') : t('components/product:product.compose')}
                                         loadingText={t('components/product:product.addToCartLoading')}
                                         isLoading={isLoading}
-                                        disabled={product.type !== 'simple'} 
+                                        disabled={product.type === 'virtual'} 
                                         className="w-commerce-commerceaddtocartbutton order-button"
                                     />
                                 </form>
@@ -277,6 +287,10 @@ export default function CategoryList({ breadcrumb }) {
                     }
                 ]}
             />
+
+            <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'faq-content' }} styles={{ modal: { maxWidth: '1130px', maxHeight: 'none' } }}>
+                <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
+            </Modal>
 
         </Layout>
 

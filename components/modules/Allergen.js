@@ -109,13 +109,13 @@ export default function Allergen() {
                                 allergens.map((allergen) => {
                                     return (
                                         <label key={allergen._id} className="w-checkbox checkbox-field-allergene">
-                                            <div className={`w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene${checkedAllergens[allergen._id] ? ' w--redirected-checked' : ''}`} />
                                             <input 
                                                 type="checkbox"
                                                 style={{ opacity: 0, position: 'absolute', zIndex: -1 }} 
                                                 checked={checkedAllergens[allergen._id] ? true : false}
                                                 onChange={(e) => filterAllergens(e, allergen._id)}
                                             />
+                                            <div className={'w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene'} />
                                             <span className="checkbox-label-allergene w-form-label">{allergen.name}</span>
                                         </label>
                                     );

@@ -1,0 +1,9 @@
+{
+    "compose": "en-Composer",
+    "select": "en-Sélectionner",
+    "submit": "en-Choisir ce menu",
+    "submitLoading": "en-Ajout...",
+    "error1": "en-Veuillez sélectionner au moins 1 produit dans la section \"{{title}}\"",
+    "error2": "en-Veuillez sélectionner au minimum {{min}} produit(s) dans la section \"{{title}}\"",
+    "error3": "en-Veuillez sélectionner au maximum {{max}} produit(s) dans la section \"{{title}}\""
+}

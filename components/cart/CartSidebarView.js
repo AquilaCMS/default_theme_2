@@ -13,7 +13,7 @@ export default function CartSidebarView({ hideCartSidebar }) {
         // Patch when there is a double scroll bar
         document.body.style.overflow = 'hidden';
         return () => document.body.style.overflow = null; // Redisplays scrollbar when unmount component
-    });
+    }, []);
 
     return (
 

@@ -7,7 +7,7 @@ import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 import { cartToOrder }                       from '@lib/aquila-connector/cart';
 import { deferredPayment }                   from '@lib/aquila-connector/payment';
-import { useCart, usePayments }              from '@lib/hooks';
+import { useCart, usePaymentMethods }        from '@lib/hooks';
 import { unsetCookie }                       from '@lib/utils';
 
 export async function getServerSideProps({ req, res }) {
@@ -19,10 +19,10 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function CheckoutPayment() {
-    const router   = useRouter();
-    const { cart } = useCart();
-    const payments = usePayments();
-    const { t }    = useTranslation();
+    const router         = useRouter();
+    const { cart }       = useCart();
+    const paymentMethods = usePaymentMethods();
+    const { t }          = useTranslation();
 
     useEffect(() => {
         if (!cart?.items?.length) {
@@ -41,7 +41,7 @@ export default function CheckoutPayment() {
             const order = await cartToOrder(cart._id);
 
             // Payment
-            const payment = payments.find((p) => p.code === payment_code);
+            const payment = paymentMethods.find((p) => p.code === payment_code);
             if (payment.isDeferred === true) {
                 // Deferred payment (check, cash...)
                 await deferredPayment(order.number, payment_code);
@@ -89,7 +89,7 @@ export default function CheckoutPayment() {
                                     <form className="form-mode-paiement-tunnel" onSubmit={onSubmitPayment}>
                                         <div className="columns-picker-paiement-tunnel w-row">
                                             {
-                                                payments && payments.map((payment) => (
+                                                paymentMethods && paymentMethods.map((payment) => (
                                                     <div key={payment._id} className="column-center w-col w-col-6">
                                                         <label className="checkbox-click-collect w-radio">
                                                             <input type="radio" name="payment" value={payment.code} required="" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />

@@ -89,21 +89,25 @@ export default function CheckoutPayment() {
                                     <form className="form-mode-paiement-tunnel" onSubmit={onSubmitPayment}>
                                         <div className="columns-picker-paiement-tunnel w-row">
                                             {
-                                                payments && payments.map((payment) => {
-                                                    return (
-                                                        <div key={payment._id} className="column-center w-col w-col-6">
-                                                            <label className="checkbox-click-collect w-radio">
-                                                                <input type="radio" name="payment" value={payment.code} required="" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
-                                                                <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
-                                                                <span className="checkbox-label w-form-label">{payment.name}</span>
-                                                            </label>
-                                                        </div>
-                                                    );
-                                                })
+                                                payments && payments.map((payment) => (
+                                                    <div key={payment._id} className="column-center w-col w-col-6">
+                                                        <label className="checkbox-click-collect w-radio">
+                                                            <input type="radio" name="payment" value={payment.code} required="" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
+                                                            <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
+                                                            {
+                                                                payment.urlLogo ? (
+                                                                    <img src={`${process.env.NEXT_PUBLIC_IMG_URL}${payment.urlLogo}`} alt={payment.code} style={{ width: '100px' }} />
+                                                                ) : (
+                                                                    <span className="checkbox-label w-form-label">{payment.name}</span>
+                                                                )
+                                                            }
+                                                        </label>
+                                                    </div>
+                                                ))
                                             }
                                         </div>
                                         <button type="button" className="log-button-03 w-button" onClick={previousStep}>{t('pages/checkout:payment.previous')}</button>
-                            &nbsp;
+                                        &nbsp;
                                         <button type="submit" className="log-button-03 w-button">{t('pages/checkout:payment.pay')}</button>
                                     </form>
                                 </div>

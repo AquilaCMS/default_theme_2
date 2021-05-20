@@ -55,7 +55,6 @@ export default function ProductCard({ product }) {
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
             setCart(newCart);
             setShowCartSidebar(true);
-            document.body.style.overflow = 'hidden';
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
             const st = setTimeout(() => { setMessage(); }, 3000);

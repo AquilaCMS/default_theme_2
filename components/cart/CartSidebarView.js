@@ -10,7 +10,9 @@ export default function CartSidebarView({ hideCartSidebar }) {
     const { t } = useTranslation();
 
     useEffect(() => {
-        return () => document.body.style.overflow = null; // Show scrollbar when unmount component
+        // Patch when there is a double scroll bar
+        document.body.style.overflow = 'hidden';
+        return () => document.body.style.overflow = null; // Redisplays scrollbar when unmount component
     });
 
     return (

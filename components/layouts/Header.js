@@ -10,9 +10,6 @@ export default function Header() {
     
     const onToggleShowCartSidebar = () => {
         setShowCartSidebar(!showCartSidebar);
-        if (!showCartSidebar) {
-            document.body.style.overflow = 'hidden';
-        }
     };
 
     const hideCartSidebar = () => {

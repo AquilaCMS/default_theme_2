@@ -83,7 +83,6 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
             onCloseModal();
             setCart(newCart);
             setShowCartSidebar(true);
-            document.body.style.overflow = 'hidden';
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         } finally {

@@ -12,14 +12,11 @@ export default function Header() {
         setShowCartSidebar(!showCartSidebar);
         if (!showCartSidebar) {
             document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = null;
         }
     };
 
     const hideCartSidebar = () => {
         setShowCartSidebar(false);
-        document.body.style.overflow = null;
     };
 
     return (

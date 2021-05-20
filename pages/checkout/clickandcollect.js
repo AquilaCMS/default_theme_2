@@ -25,7 +25,6 @@ export default function CheckoutClickAndCollect() {
     const { t }                 = useTranslation();
     
     useEffect(() => {
-        document.body.style.overflow = null;
         if (!cart?.items?.length) {
             router.push('/');
         }

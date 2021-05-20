@@ -7,7 +7,7 @@ import { useCart, useShowCartSidebar }           from '@lib/hooks';
 import { formatPrice }                           from '@lib/utils';
 
 export default function BundleProduct({ product, qty, onCloseModal }) {
-    const form                                    = useRef();
+    const formRef                                 = useRef();
     const [priceBundle, setPriceBundle]           = useState(0);
     const [selectionsBundle, setSelectionsBundle] = useState({});
     const [message, setMessage]                   = useState();
@@ -30,7 +30,7 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
     const updateBundle = (e, sectionId, sectionType, itemId) => {
         // Updating price bundle
         let price    = product.price.ati.special ? product.price.ati.special : product.price.ati.normal;
-        const inputs = [...form.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
+        const inputs = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
         for (const input of inputs) {
             if (input.checked) {
                 price += parseFloat(input.value);
@@ -92,7 +92,7 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
     };
 
     return (
-        <form ref={form} onSubmit={onAddToCart}>
+        <form ref={formRef} onSubmit={onAddToCart}>
             <div className="title-wrap-centre">{t('components/bundleProduct:compose')}</div>
             {
                 product.bundle_sections.map((section) => {
@@ -164,13 +164,6 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
             <div className="seprateur-carte">
                 {formatPrice(priceBundle)}
             </div>
-            <Button 
-                text={t('components/bundleProduct:submit')}
-                loadingText={t('components/bundleProduct:submitLoading')}
-                isLoading={isLoading}
-                className="button full w-button"
-                style={{ width: '100%', marginTop: '10px' }}
-            />
             {
                 message && (
                     <div className={`w-commerce-commerce${message.type}`}>
@@ -180,6 +173,13 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
                     </div>
                 )
             }
+            <Button 
+                text={t('components/bundleProduct:submit')}
+                loadingText={t('components/bundleProduct:submitLoading')}
+                isLoading={isLoading}
+                className="button full w-button"
+                style={{ width: '100%', marginTop: '10px' }}
+            />
         </form>
     );
 }

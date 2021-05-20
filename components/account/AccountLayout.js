@@ -47,11 +47,6 @@ export default function AccountLayout({ children }) {
                                 <div>{t('components/account/accountLayout:navigation.myOrders')}</div>
                             </a>
                         </Link>
-                        <Link href="/account/bills">
-                            <a className={(TMPHighlight === 3 ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
-                                <div>{t('components/account/accountLayout:navigation.myBills')}</div>
-                            </a>
-                        </Link>
                         <button type="button" className="tab-link-round w-inline-block w-tab-link" onClick={onLogout}>{t('components/account/accountLayout:navigation.logout')}</button>
                     </div>
                     <div className="w-tab-content">

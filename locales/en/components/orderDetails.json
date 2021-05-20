@@ -2,6 +2,7 @@
     "yourInformations": "en-Vos informations",
     "name": "en-Nom",
     "email": "en-Email",
+    "withdrawalAddress": "en-Adresse de retrait",
     "deliveryAddress": "en-Adresse de livraison",
     "deliveryMethod": "en-Mode de livraison",
     "withdrawal": "en-Retrait",
@@ -13,5 +14,7 @@
     "quantity": "en-Quantité",
     "priceDetail": "en-Montant de la commande",
     "subTotal": "en-Sous Total TTC",
-    "total": "en-Sous Total TTC"
+    "total": "en-Sous Total TTC",
+    "downloadBill": "en-Télécharger la facture",
+    "downloadAsset": "en-Télécharger l'avoir"
 }

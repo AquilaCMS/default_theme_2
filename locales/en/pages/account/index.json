@@ -3,5 +3,22 @@
   "titleNav" : "en-Mes commandes",
   "order" : "en-Commande",
   "view" : "en-Voir",
-  "orderSummary" : "en-Récapitulatif de ma commande"
+  "orderSummary" : "en-Récapitulatif de ma commande",
+  "status": {
+    "ASK_CANCEL": "en-Annulation demandée par le client",
+    "BILLED": "en-Facturée",
+    "CANCELED": "en-Annulé",
+    "DEFAULT": "en-Aucun status",
+    "DELIVERY_PARTIAL_PROGRESS": "en-Expédié",
+    "DELIVERY_PROGRESS": "en-Expédié",
+    "FINISHED": "en-Terminée",
+    "PAID": "en-Payée",
+    "PAYMENT_CONFIRMATION_PENDING": "en-Paiement en attente de confirmation",
+    "PAYMENT_FAILED": "en-Paiement échoué",
+    "PAYMENT_PENDING": "en-Paiement en attente",
+    "PAYMENT_RECEIPT_PENDING": "en-Paiement en attente de réception",
+    "PROCESSED": "en-Préparée",
+    "PROCESSING": "en-Traitement en cours",
+    "RETURNED": "en-Retour"
+  }
 }

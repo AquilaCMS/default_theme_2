@@ -1,22 +1,28 @@
-import useTranslation        from 'next-translate/useTranslation';
-import moment                from 'moment';
-import { getImage }          from '@lib/aquila-connector/product/helpersProduct';
-import { downloadbillOrder } from '@lib/aquila-connector/order';
-import { formatPrice }       from '@lib/utils';
+import { useEffect, useState } from 'react';
+import useTranslation          from 'next-translate/useTranslation';
+import moment                  from 'moment';
+import { getImage }            from '@lib/aquila-connector/product/helpersProduct';
+import { downloadbillOrder }   from '@lib/aquila-connector/order';
+import { formatPrice }         from '@lib/utils';
 
 export default function OrderDetails({ order }) {
-    const { lang, t } = useTranslation();
+    const [message, setMessage] = useState();
+    const [timer, setTimer]     = useState();
+    const { lang, t }           = useTranslation();
 
     moment.locale(lang);
 
-    const downloadBill = async (bill) => {
-        try {
-            const res = await downloadbillOrder(bill.billId); // Renvoi un blob
+    useEffect(() => {
+        return () => clearTimeout(timer);
+    }, []);
 
+    const downloadBill = async (bill, index) => {
+        try {
+            const res  = await downloadbillOrder(bill.billId); // get a blob
             const url  = window.URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
             const link = document.createElement('a');
             link.href  = url;
-            link.setAttribute('download', `${bill.avoir === false ? 'bill' : 'asset'}_${order.number}.pdf`);
+            link.setAttribute('download', `${bill.avoir === false ? 'bill' : 'asset'}_${index}_${order.number}.pdf`);
             document.body.appendChild(link);
             link.click();
         } catch (err) {
@@ -24,7 +30,10 @@ export default function OrderDetails({ order }) {
             const fr  = new FileReader();
             fr.onload = function () {
                 const result = JSON.parse(this.result);
-                return NSToast.error(result.message);
+                setMessage({ type: 'error', message: result.message || t('common:message.unknownError') });
+                const st = setTimeout(() => { setMessage(); }, 3000);
+                setTimer(st);
+                return;
             };
             fr.readAsText(b);
         }
@@ -181,13 +190,22 @@ export default function OrderDetails({ order }) {
                         </div>
                     </div>
                     {
-                        order.bills.length > 0 && order.bills.map((bill) => (
+                        order.bills.length > 0 && order.bills.map((bill, index) => (
                             <div key={bill._id} style={{ marginBottom: '20px' }}>
-                                <button type="button" className="w-button" onClick={() => downloadBill(bill)}>
+                                <button type="button" className="w-button" onClick={() => downloadBill(bill, index)}>
                                     {t(`components/orderDetails:download${bill.avoir === false ? 'Bill' : 'Asset'}`)}
                                 </button>
                             </div>
                         ))
+                    }
+                    {
+                        message && (
+                            <div className={`w-commerce-commerce${message.type}`}>
+                                <div>
+                                    {message.message}
+                                </div>
+                            </div>
+                        )
                     }
                 </div>
             </div>

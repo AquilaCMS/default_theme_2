@@ -296,9 +296,11 @@ export default function ClickAndCollect() {
 
         setIsLoading(true);
         if (!localDeliveryHome && !localCurrentPOS._id) {
+            setIsLoading(false);
             return setMessage({ type: 'error', message: t('components/clickAndCollect:submitError') });
         }
         if (localDeliveryHome && !localIsValidAddress) {
+            setIsLoading(false);
             return setMessage({ type: 'error', message: t('components/clickAndCollect:submitError2') });
         }
         const dateToSend = localDeliveryTime.replace('h', ':');
@@ -318,6 +320,7 @@ export default function ClickAndCollect() {
                 // Delivery mode :
                 // Address entered by user for cart billing & delivery address
                 if (address.gmaps === undefined) {
+                    setIsLoading(false);
                     return setMessage({ type: 'info', message: t('components/clickAndCollect:submitSuccess') });
                 }
                 const addresses = {

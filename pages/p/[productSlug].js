@@ -289,7 +289,7 @@ export default function CategoryList({ breadcrumb }) {
                 ]}
             />
 
-            <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'faq-content' }} styles={{ modal: { maxWidth: '1130px', maxHeight: 'none' } }}>
+            <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
                 <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
             </Modal>
 

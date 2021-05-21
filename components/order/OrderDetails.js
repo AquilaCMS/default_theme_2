@@ -75,7 +75,7 @@ export default function OrderDetails({ order }) {
                                                                         {
                                                                             item.selections.map((section) => (
                                                                                 section.products.map((itemSection) => {
-                                                                                    const diffPrice = item.id.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection.id)?.modifier_price?.ati;
+                                                                                    const diffPrice = item.id.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection._id)?.modifier_price?.ati;
                                                                                     return (
                                                                                         <li key={itemSection._id}>{itemSection.name}{diffPrice && diffPrice !== 0 ? <> ({diffPrice > 0 ? '+' : '-'}{formatPrice(diffPrice)})</> : null}</li>
                                                                                     );

@@ -27,13 +27,16 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
         setSelectionsBundle(selections);
     }, []);
 
-    const updateBundle = (e, sectionId, sectionType, itemId) => {
+    const updateBundle = (e, sectionId, sectionDisplayMode, sectionType) => {
+        const itemId = e.target.value.split('|')[0];
+
         // Updating price bundle
         let price    = product.price.ati.special ? product.price.ati.special : product.price.ati.normal;
         const inputs = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
         for (const input of inputs) {
-            if (input.checked) {
-                price += parseFloat(input.value);
+            const value = parseFloat(input.value.split('|')[1]);
+            if (input.checked || input.checked === undefined) { // If select box, input.checked is undefined
+                price += parseFloat(value);
             }
         }
         setPriceBundle(price);
@@ -41,10 +44,12 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
         // Updating selections bundle
         const selections = { ...selectionsBundle };
         if (sectionType === 'SINGLE') selections[sectionId] = []; // Resetting selected products each time if type of section is SINGLE
-        if (e.target.checked) {
-            selections[sectionId] = selections[sectionId].includes(itemId) ? [...selections[sectionId]] : [...selections[sectionId], itemId];
-        } else {
-            selections[sectionId].splice(selections[sectionId].indexOf(itemId), 1);
+        if (itemId) {
+            if (e.target.checked || sectionDisplayMode === 'SELECT') {
+                selections[sectionId] = selections[sectionId].includes(itemId) ? [...selections[sectionId]] : [...selections[sectionId], itemId];
+            } else {
+                selections[sectionId].splice(selections[sectionId].indexOf(itemId), 1);
+            }
         }
         setSelectionsBundle(selections);
     };
@@ -99,62 +104,80 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
                         <Fragment key={section._id}>
                             <h5 className="seprateur-carte">{section.title}</h5>
                             <div className="w-dyn-list">
-                                <div role="list" className="collection-list-3 w-dyn-items w-row">
-                                    {
-                                        section.products.map((item) => (
-                                            <div role="listitem" className="menu-item w-dyn-item w-col w-col-4" key={item._id}>
-                                                <div className="food-card-3col">
-                                                    <div className="columns-4 w-row">
-                                                        <div className="w-col w-col-6">
-                                                            <div className="food-image-square-3col">
-                                                                <img src={getImage(item.id.images[0], '130x130') || '/images/no-image.svg'} alt="" className="food-image" style={{ 'width': '130px' }} />
-                                                            </div>
-                                                        </div>
-                                                        <div className="w-col w-col-6">
-                                                            <div className="food-title-wrap-3col">
-                                                                <h6 className="heading-14">{item.id.name}</h6>
-                                                                <div className="div-block-prix">
-                                                                    { item.modifier_price?.ati ? <div className="price">{item.modifier_price.ati > 0 ? '+' : ''}{item.modifier_price.ati.toFixed(2)} €</div> : null }
+                                {
+                                    section.displayMode === 'SELECT' ? (
+                                        <select className="text-ville w-select" name={`select_${section._id}`} onChange={(e) => updateBundle(e, section.ref, section.displayMode, section.type)}>
+                                            <option value={'|0'}>--</option>
+                                            {
+                                                section.products && section.products.map((item) => (
+                                                    <option 
+                                                        key={item._id}
+                                                        value={`${item.id._id}|${item.modifier_price?.ati || 0}`}
+                                                    >
+                                                        {item.id.name} {item.modifier_price?.ati ? `(${item.modifier_price.ati > 0 ? '+' : ''}${formatPrice(item.modifier_price.ati)})` : ''}
+                                                    </option>
+                                                ))
+                                            }
+                                        </select>
+                                    ) : (
+                                        <div role="list" className="collection-list-3 w-dyn-items w-row">
+                                            {
+                                                section.products.map((item) => (
+                                                    <div role="listitem" className="menu-item w-dyn-item w-col w-col-4" key={item._id}>
+                                                        <div className="food-card-3col">
+                                                            <div className="columns-4 w-row">
+                                                                <div className="w-col w-col-6">
+                                                                    <div className="food-image-square-3col">
+                                                                        <img src={getImage(item.id.images[0], '130x130') || '/images/no-image.svg'} alt="" className="food-image" style={{ 'width': '130px' }} />
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="form-block-4 w-form">
-                                                                <div name="email-form-3" data-name="Email Form 3">
-                                                                    {
-                                                                        section.type === 'MULTIPLE' ? (
-                                                                            <label className="w-checkbox checkbox-field-allergene">
-                                                                                <input 
-                                                                                    type="checkbox"
-                                                                                    name={`checkbox_${section._id}`}
-                                                                                    value={item.modifier_price?.ati || 0}
-                                                                                    style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
-                                                                                    onChange={(e) => updateBundle(e, section.ref, section.type, item.id._id)}
-                                                                                />
-                                                                                <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene"></div>
-                                                                                <span className="checkbox-label-allergene w-form-label">{t('components/bundleProduct:select')}</span>
-                                                                            </label>
-                                                                        ) : (
-                                                                            <label className="checkbox-field-allergene w-radio">
-                                                                                <input 
-                                                                                    type="radio"
-                                                                                    name={`radio_${section._id}`}
-                                                                                    value={item.modifier_price?.ati || 0}
-                                                                                    style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
-                                                                                    onChange={(e) => updateBundle(e, section.ref, section.type, item.id._id)}
-                                                                                />
-                                                                                <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
-                                                                                <span className="w-form-label">{t('components/bundleProduct:select')}</span>
-                                                                            </label>
-                                                                        )
-                                                                    }
+                                                                <div className="w-col w-col-6">
+                                                                    <div className="food-title-wrap-3col">
+                                                                        <h6 className="heading-14">{item.id.name}</h6>
+                                                                        <div className="div-block-prix">
+                                                                            { item.modifier_price?.ati ? <div className="price">{item.modifier_price.ati > 0 ? '+' : ''}{item.modifier_price.ati.toFixed(2)} €</div> : null }
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="form-block-4 w-form">
+                                                                        <div name="email-form-3" data-name="Email Form 3">
+                                                                            {
+                                                                                section.type === 'MULTIPLE' ? (
+                                                                                    <label className="w-checkbox checkbox-field-allergene">
+                                                                                        <input 
+                                                                                            type="checkbox"
+                                                                                            name={`checkbox_${section._id}`}
+                                                                                            value={`${item.id._id}|${item.modifier_price?.ati || 0}`}
+                                                                                            style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
+                                                                                            onChange={(e) => updateBundle(e, section.ref, section.displayMode, section.type)}
+                                                                                        />
+                                                                                        <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene"></div>
+                                                                                        <span className="checkbox-label-allergene w-form-label">{t('components/bundleProduct:select')}</span>
+                                                                                    </label>
+                                                                                ) : (
+                                                                                    <label className="checkbox-field-allergene w-radio">
+                                                                                        <input 
+                                                                                            type="radio"
+                                                                                            name={`radio_${section._id}`}
+                                                                                            value={`${item.id._id}|${item.modifier_price?.ati || 0}`}
+                                                                                            style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
+                                                                                            onChange={(e) => updateBundle(e, section.ref, section.displayMode, section.type)}
+                                                                                        />
+                                                                                        <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
+                                                                                        <span className="w-form-label">{t('components/bundleProduct:select')}</span>
+                                                                                    </label>
+                                                                                )
+                                                                            }
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
+                                                ))
+                                            }
+                                        </div>
+                                    )
+                                }
                             </div>
                         </Fragment>
                     );

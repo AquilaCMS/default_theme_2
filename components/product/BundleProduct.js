@@ -134,9 +134,6 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
                                                                 <div className="w-col w-col-6">
                                                                     <div className="food-title-wrap-3col">
                                                                         <h6 className="heading-14">{item.id.name}</h6>
-                                                                        <div className="div-block-prix">
-                                                                            { item.modifier_price?.ati ? <div className="price">{item.modifier_price.ati > 0 ? '+' : ''}{item.modifier_price.ati.toFixed(2)} €</div> : null }
-                                                                        </div>
                                                                     </div>
                                                                     <div className="form-block-4 w-form">
                                                                         <div name="email-form-3" data-name="Email Form 3">
@@ -167,6 +164,9 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
                                                                                     </label>
                                                                                 )
                                                                             }
+                                                                        </div>
+                                                                        <div className="div-block-prix">
+                                                                            { item.modifier_price?.ati ? <div className="price">{item.modifier_price.ati > 0 ? '+' : ''}{item.modifier_price.ati.toFixed(2)} €</div> : null }
                                                                         </div>
                                                                     </div>
                                                                 </div>

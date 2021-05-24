@@ -25,8 +25,14 @@ export default function CheckoutPayment() {
     const { t }          = useTranslation();
 
     useEffect(() => {
+        // Check if the cart is empty
         if (!cart?.items?.length) {
-            router.push('/');
+            return router.push('/');
+        }
+
+        // Check if the billing address exists
+        if (!cart.addresses || !cart.addresses.billing) {
+            return router.push('/checkout/clickandcollect');
         }
     }, []);
 

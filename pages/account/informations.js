@@ -30,7 +30,7 @@ export default function Account({ user }) {
             firstname       : e.currentTarget.firstname.value,
             lastname        : e.currentTarget.lastname.value,
             email           : e.currentTarget.email.value,
-            phone           : e.currentTarget.phone.value,
+            phone_mobile    : e.currentTarget.phone_mobile.value,
             billing_address : 0,
             delivery_address: 1
         };
@@ -101,7 +101,7 @@ export default function Account({ user }) {
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label>{t('pages/account/informations:phone')}</label>
-                                    <input type="text" className="input-field w-input" name="phone" defaultValue={user.phone} maxLength={256} required />
+                                    <input type="text" className="input-field w-input" name="phone_mobile" defaultValue={user.phone_mobile} maxLength={256} required />
                                 </div>
                             </div>
                             {/* <div className="w-commerce-commercecheckoutrow">

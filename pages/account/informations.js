@@ -68,7 +68,7 @@ export default function Account({ user }) {
     };
 
     return (
-        <AccountLayout>
+        <AccountLayout active="1">
             <Head>
                 <title>{t('pages/account/informations:title')}</title>
             </Head>

@@ -21,7 +21,7 @@ export default function RegisterBlock() {
             lastname    : e.currentTarget.lastname.value,
             email       : e.currentTarget.email.value,
             password    : e.currentTarget.password.value,
-            phone_mobile: e.currentTarget.phone.value
+            phone_mobile: e.currentTarget.phone_mobile.value
         };
         try {
             await setUser(user);

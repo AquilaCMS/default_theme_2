@@ -95,6 +95,10 @@ input:disabled, button:disabled { opacity: 0.5; }
 
 /* Account page [CHECK WITH DESIGNER] */
 .tab-pane-wrap-account { width: 900px; }
+.tab-menu-round-account {
+    -ms-grid-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
 
 @media screen and (max-width: 479px) {
     .tab-menu-round-account {

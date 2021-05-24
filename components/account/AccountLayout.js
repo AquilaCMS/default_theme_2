@@ -4,7 +4,7 @@ import useTranslation  from 'next-translate/useTranslation';
 import Layout          from '@components/layouts/Layout';
 import { unsetCookie } from '@lib/utils';
 
-export default function AccountLayout({ children }) {
+export default function AccountLayout({ children, active }) {
     const router = useRouter();
     const { t }  = useTranslation();
 
@@ -12,16 +12,6 @@ export default function AccountLayout({ children }) {
         unsetCookie('jwt');
         router.push('/');
     };
-
-    let TMPHighlight = 2;
-    switch(children[1].props.className) {
-    case 'container-tunnel-01' :
-        TMPHighlight = 1;
-        break;
-    case 'container-tunnel-03' :
-        TMPHighlight = 3;
-        break;
-    }
 
     return (
         <Layout>
@@ -38,13 +28,18 @@ export default function AccountLayout({ children }) {
                 <div className="tab-pane-wrap-account w-tabs">
                     <div className="tab-menu-round-account w-tab-menu">
                         <Link href="/account/informations">
-                            <a className={(TMPHighlight === 1 ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
+                            <a className={(active === '1' ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
                                 <div>{t('components/account/accountLayout:navigation.myInformations')}</div>
                             </a>
                         </Link>
                         <Link href="/account">
-                            <a className={(TMPHighlight === 2 ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
+                            <a className={(active === '2' ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
                                 <div>{t('components/account/accountLayout:navigation.myOrders')}</div>
+                            </a>
+                        </Link>
+                        <Link href="/account/rgpd">
+                            <a className={(active === '3' ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
+                                <div>{t('components/account/accountLayout:navigation.rgpd')}</div>
                             </a>
                         </Link>
                         <button type="button" className="tab-link-round w-inline-block w-tab-link" onClick={onLogout}>{t('components/account/accountLayout:navigation.logout')}</button>

@@ -26,16 +26,9 @@ export default function OrderDetails({ order }) {
             document.body.appendChild(link);
             link.click();
         } catch (err) {
-            const b   = new Blob([err.response.data]);
-            const fr  = new FileReader();
-            fr.onload = function () {
-                const result = JSON.parse(this.result);
-                setMessage({ type: 'error', message: result.message || t('common:message.unknownError') });
-                const st = setTimeout(() => { setMessage(); }, 3000);
-                setTimer(st);
-                return;
-            };
-            fr.readAsText(b);
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            const st = setTimeout(() => { setMessage(); }, 3000);
+            setTimer(st);
         }
     };
 

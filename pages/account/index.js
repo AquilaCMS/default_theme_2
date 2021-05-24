@@ -28,7 +28,7 @@ export default function Account() {
     };
     
     return (
-        <AccountLayout>
+        <AccountLayout active="2">
             <Head>
                 <title>{t('pages/account/index:title')}</title>
             </Head>

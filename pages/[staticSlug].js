@@ -1,3 +1,5 @@
+
+import absoluteUrl       from 'next-absolute-url';
 import useTranslation    from 'next-translate/useTranslation';
 import ErrorPage         from '@pages/_error';
 import Layout            from '@components/layouts/Layout';
@@ -22,10 +24,16 @@ export async function getServerSideProps({ params, req, res }) {
         }
     ];
 
-    return dispatcher(req, res, actions);
+    const pageProps = await dispatcher(req, res, actions);
+
+    // URL origin
+    const { origin }       = absoluteUrl(req);
+    pageProps.props.origin = origin;
+
+    return pageProps;
 }
 
-export default function StatisPage({ error }) {
+export default function StaticPage({ error, origin }) {
     const { lang }   = useTranslation();
     const staticPage = useStaticPage();
 
@@ -47,7 +55,7 @@ export default function StatisPage({ error }) {
             <NextSeoCustom
                 title={staticPage.title}
                 description={staticPage.metaDesc}
-                canonical={`/${staticPage.slug[lang]}`}
+                canonical={`${origin}/${staticPage.slug[lang]}`}
                 lang={lang}
                 image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
             />

@@ -1,5 +1,6 @@
 import { useState }                                from 'react';
 import { ProductJsonLd }                           from 'next-seo';
+import absoluteUrl                                 from 'next-absolute-url';
 import { useRouter }                               from 'next/router';
 import getT                                        from 'next-translate/getT';
 import useTranslation                              from 'next-translate/useTranslation';
@@ -38,7 +39,9 @@ export async function getServerSideProps({ locale, params, req, res }) {
     ];
 
     const pageProps = await dispatcher(req, res, actions);
-    let breadcrumb  = [];
+
+    // Breadcrumb
+    let breadcrumb = [];
     try {
         breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product.canonical);
     } catch (err) {
@@ -46,10 +49,15 @@ export async function getServerSideProps({ locale, params, req, res }) {
         console.error(err.message || t('common:message.unknownError'));
     }
     pageProps.props.breadcrumb = breadcrumb;
+
+    // URL origin
+    const { origin }       = absoluteUrl(req);
+    pageProps.props.origin = origin;
+
     return pageProps;
 }
 
-export default function CategoryList({ breadcrumb }) {
+export default function CategoryList({ breadcrumb, origin }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
@@ -243,7 +251,7 @@ export default function CategoryList({ breadcrumb }) {
             <NextSeoCustom
                 title={product.name}
                 description={product?.description2?.text}
-                canonical={product.canonical}
+                canonical={origin + product.canonical}
                 lang={lang}
                 image={coverImageUrl}
             />

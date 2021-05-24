@@ -107,7 +107,7 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
                                 {
                                     section.displayMode === 'SELECT' ? (
                                         <select className="text-ville w-select" name={`select_${section._id}`} onChange={(e) => updateBundle(e, section.ref, section.displayMode, section.type)}>
-                                            <option value={'|0'}>--</option>
+                                            <option value="|0">--</option>
                                             {
                                                 section.products && section.products.map((item) => (
                                                     <option 

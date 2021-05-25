@@ -8,6 +8,7 @@ This e-commerce store front use ReactJS 17 & nextJS 10.
 
 ## Getting Started
 
+- ```npm install```
 - Copy and rename .env.sample to .env
 - Replace the values
 - Run the development server:

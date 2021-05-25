@@ -9,6 +9,7 @@
   "phone" : "Tél *",
   "firstname":"Prénom *",
   "name":"Nom *",
+  "newsletter":"Je m'abonne à la newsletter",
   "address":"Adresse *",
   "address2":"Adresse 2 *",
   "city":"Ville *",

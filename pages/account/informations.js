@@ -1,8 +1,9 @@
-import { useState }                          from 'react';
+import { useEffect, useState }               from 'react';
 import Head                                  from 'next/head';
 import useTranslation                        from 'next-translate/useTranslation';
 import AccountLayout                         from '@components/account/AccountLayout';
 import Button                                from '@components/ui/Button';
+import { getNewsletter, setNewsletter }      from '@lib/aquila-connector/newsletter';
 import { setUser, setAddressesUser }         from '@lib/aquila-connector/user';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
@@ -18,9 +19,24 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function Account({ user }) {
-    const [message, setMessage]     = useState();
-    const [isLoading, setIsLoading] = useState(false);
-    const { t }                     = useTranslation();
+    const [optinNewsletter, setOptinNewsletter] = useState(false);
+    const [message, setMessage]                 = useState();
+    const [isLoading, setIsLoading]             = useState(false);
+    const { t }                                 = useTranslation();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await getNewsletter(user.email);
+                if (res?.segment?.length) {
+                    setOptinNewsletter(res.segment.find((n) => n.name === 'DefaultNewsletter')?.optin || false);
+                }
+            } catch (err) {
+                setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            }
+        };
+        fetchData();
+    }, []);
 
     const onSetUser = async (e) => {
         e.preventDefault();
@@ -29,11 +45,12 @@ export default function Account({ user }) {
             _id             : user._id,
             firstname       : e.currentTarget.firstname.value,
             lastname        : e.currentTarget.lastname.value,
-            email           : e.currentTarget.email.value,
             phone_mobile    : e.currentTarget.phone_mobile.value,
             billing_address : 0,
             delivery_address: 1
         };
+
+        const optinNewsletter = e.currentTarget.newsletter.checked;
 
         const addresses = [
             {
@@ -57,7 +74,13 @@ export default function Account({ user }) {
         ];
 
         try {
+            // Set user
             await setUser(updateUser);
+
+            // Update newsletter
+            await setNewsletter(user.email, 'DefaultNewsletter', optinNewsletter);
+
+            // Set user addresses
             await setAddressesUser(updateUser._id, updateUser.billing_address, updateUser.delivery_address, addresses);
             setMessage({ type: 'info', message: t('common:message.saveData') });
         } catch (err) {
@@ -102,6 +125,20 @@ export default function Account({ user }) {
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label>{t('pages/account/informations:phone')}</label>
                                     <input type="text" className="input-field w-input" name="phone_mobile" defaultValue={user.phone_mobile} maxLength={256} required />
+                                </div>
+                            </div>
+                            <div className="w-commerce-commercecheckoutrow">
+                                <div className="w-commerce-commercecheckoutcolumn">
+                                    <label className="w-checkbox checkbox-field-allergene">
+                                        <input 
+                                            type="checkbox"
+                                            name="newsletter"
+                                            defaultChecked={optinNewsletter}
+                                            style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
+                                        />
+                                        <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene"></div>
+                                        <span className="checkbox-label-allergene w-form-label">{t('pages/account/informations:newsletter')}</span>
+                                    </label>
                                 </div>
                             </div>
                             {/* <div className="w-commerce-commercecheckoutrow">

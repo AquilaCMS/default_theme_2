@@ -1,3 +1,4 @@
+import { useEffect }  from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import CartListItems  from '@components/cart/CartListItems';
 
@@ -7,6 +8,12 @@ export default function CartSidebarView({ hideCartSidebar }) {
     // - tranlation de droite à gauche de la sidebar (2ème div)
 
     const { t } = useTranslation();
+
+    useEffect(() => {
+        // Patch when there is a double scroll bar
+        document.body.style.overflow = 'hidden';
+        return () => document.body.style.overflow = null; // Redisplays scrollbar when unmount component
+    }, []);
 
     return (
 

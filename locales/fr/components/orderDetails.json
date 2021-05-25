@@ -1,0 +1,20 @@
+{
+    "yourInformations": "Vos informations",
+    "name": "Nom",
+    "email": "Email",
+    "withdrawalAddress": "Adresse de retrait",
+    "deliveryAddress": "Adresse de livraison",
+    "deliveryMethod": "Mode de livraison",
+    "withdrawal": "Retrait",
+    "delivery": "Livraison",
+    "paymentInformations": "Informations de paiement",
+    "paymentMethod": "Mode de paiement",
+    "billingAddress": "Adresse de facturation",
+    "orderDetail": "Détail de la commande",
+    "quantity": "Quantité",
+    "priceDetail": "Montant de la commande",
+    "subTotal": "Sous Total TTC",
+    "total": "Sous Total TTC",
+    "downloadBill": "Télécharger la facture",
+    "downloadAsset": "Télécharger l'avoir"
+}

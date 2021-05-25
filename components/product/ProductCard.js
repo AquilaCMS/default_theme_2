@@ -1,18 +1,25 @@
-import { useEffect, useState } from 'react';
-import Link                    from 'next/link';
-import { useRouter }           from 'next/router';
-import useTranslation          from 'next-translate/useTranslation';
-import Button                  from '@components/ui/Button';
-import { generateSlug }        from '@lib/aquila-connector/product/helpersProduct';
-import { addToCart }           from '@lib/aquila-connector/cart';
-import { useShowCartSidebar }  from '@lib/hooks';
+import { useEffect, useState }         from 'react';
+import Link                            from 'next/link';
+import { useRouter }                   from 'next/router';
+import useTranslation                  from 'next-translate/useTranslation';
+import { Modal }                       from 'react-responsive-modal';
+import BundleProduct                   from '@components/product/BundleProduct';
+import Button                          from '@components/ui/Button';
+import { generateSlug }                from '@lib/aquila-connector/product/helpersProduct';
+import { addToCart }                   from '@lib/aquila-connector/cart';
+import { useCart, useShowCartSidebar } from '@lib/hooks';
+import { formatPrice }                 from '@lib/utils';
 
-export default function ProductCard({ product, cartId, setCartId }) {
+import 'react-responsive-modal/styles.css';
+
+export default function ProductCard({ product }) {
     const [qty, setQty]             = useState(1);
     const [message, setMessage]     = useState();
     const [timer, setTimer]         = useState();
     const [isLoading, setIsLoading] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
     const { query }                 = useRouter();
+    const { cart, setCart }         = useCart();
     const { setShowCartSidebar }    = useShowCartSidebar();
     const { t }                     = useTranslation();
     
@@ -29,26 +36,40 @@ export default function ProductCard({ product, cartId, setCartId }) {
     }, []);
 
     const onChangeQty = (e) => {
-        setQty(Number(e.target.value));
+        if (!e.target.value) {
+            return setQty('');
+        } else {
+            const quantity = Number(e.target.value);
+            if (quantity < 1) {
+                return setQty(1);
+            }
+            setQty(quantity);
+        }
     };
 
     const onAddToCart = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const newCart   = await addToCart(cartId, product, qty);
+            const newCart   = await addToCart(cart._id, product, qty);
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
-            document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
+            setCart(newCart);
             setShowCartSidebar(true);
-            setCartId(newCart._id);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-            const t = setTimeout(() => { setMessage(); }, 3000);
-            setTimer(t);
+            const st = setTimeout(() => { setMessage(); }, 3000);
+            setTimer(st);
         } finally {
             setIsLoading(false);
         }
     };
+
+    const onOpenModal = (e) => {
+        e.preventDefault();
+        setOpenModal(true);
+    };
+
+    const onCloseModal = () => setOpenModal(false);
 
     return (
 
@@ -64,8 +85,8 @@ export default function ProductCard({ product, cartId, setCartId }) {
                         <a className="food-title-wrap w-inline-block">
                             <h6 className="heading-9" >{name}</h6>
                             <div className="div-block-prix">
-                                <div className="price">{ product.price.ati.special ? product.price.ati.special.toFixed(2) : product.price.ati.normal.toFixed(2) } €</div>
-                                { product.price.ati.special ? <div className="price sale">{product.price.ati.normal.toFixed(2)} €</div> : null }
+                                <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
+                                { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
                             </div>
                         </a>
                     </Link>
@@ -79,13 +100,13 @@ export default function ProductCard({ product, cartId, setCartId }) {
                                     </div>
                                 </div>
                             ) : (
-                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={onAddToCart}>
-                                    <input type="number" disabled={product.type !== 'simple'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
+                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
+                                    <input type="number" disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
                                     <Button 
                                         text={product.type === 'simple' ? t('components/product:productCard.addToBasket') : t('components/product:productCard.compose')}
                                         loadingText={t('components/product:productCard.addToCartLoading')}
                                         isLoading={isLoading}
-                                        disabled={product.type !== 'simple'} 
+                                        disabled={product.type === 'virtual'}
                                         className="w-commerce-commerceaddtocartbutton order-button"
                                     />
                                 </form>
@@ -94,6 +115,9 @@ export default function ProductCard({ product, cartId, setCartId }) {
                     </div>
                 </div>
             </div>
+            <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
+                <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
+            </Modal>
         </div>
 
 

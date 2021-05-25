@@ -1,26 +1,32 @@
-import { useState }                                  from 'react';
-import { ProductJsonLd }                             from 'next-seo';
-import Router                                        from 'next/router';
-import getT                                          from 'next-translate/getT';
-import useTranslation                                from 'next-translate/useTranslation';
-import ErrorPage                                     from '@pages/_error';
-import Layout                                        from '@components/layouts/Layout';
-import NextSeoCustom                                 from '@components/tools/NextSeoCustom';
-import Breadcrumb                                    from '@components/navigation/Breadcrumb';
-import ProductList                                   from '@components/product/ProductList';
-import BlockCMS                                      from '@components/common/BlockCMS';
-import { dispatcher }                                from '@lib/redux/dispatcher';
-import { getBlocksCMS }                              from '@lib/aquila-connector/blockcms';
-import { getBreadcrumb }                             from '@lib/aquila-connector/breadcrumb';
-import { addToCart }                                 from '@lib/aquila-connector/cart';
-import { getProduct }                                from '@lib/aquila-connector/product/providerProduct';
-import { getImage, getMainImage, getTabImageURL }    from '@lib/aquila-connector/product/helpersProduct';
-import { formatBreadcrumb }                          from '@lib/utils';
-import { useCartId, useProduct, useShowCartSidebar } from '@lib/hooks';
-import Lightbox                                      from 'lightbox-react';
-import 'lightbox-react/style.css';
+import { useState }                                from 'react';
+import { ProductJsonLd }                           from 'next-seo';
+import absoluteUrl                                 from 'next-absolute-url';
+import { useRouter }                               from 'next/router';
+import getT                                        from 'next-translate/getT';
+import useTranslation                              from 'next-translate/useTranslation';
+import { Modal }                                   from 'react-responsive-modal';
+import Lightbox                                    from 'lightbox-react';
+import ErrorPage                                   from '@pages/_error';
+import BundleProduct                               from '@components/product/BundleProduct';
+import Layout                                      from '@components/layouts/Layout';
+import NextSeoCustom                               from '@components/tools/NextSeoCustom';
+import Breadcrumb                                  from '@components/navigation/Breadcrumb';
+import ProductList                                 from '@components/product/ProductList';
+import BlockCMS                                    from '@components/common/BlockCMS';
+import Button                                      from '@components/ui/Button';
+import { dispatcher }                              from '@lib/redux/dispatcher';
+import { getBlocksCMS }                            from '@lib/aquila-connector/blockcms';
+import { getBreadcrumb }                           from '@lib/aquila-connector/breadcrumb';
+import { addToCart }                               from '@lib/aquila-connector/cart';
+import { getProduct }                              from '@lib/aquila-connector/product/providerProduct';
+import { getImage, getMainImage, getTabImageURL }  from '@lib/aquila-connector/product/helpersProduct';
+import { useCart, useProduct, useShowCartSidebar } from '@lib/hooks';
+import { formatBreadcrumb, formatPrice }           from '@lib/utils';
 
-export async function getServerSideProps({ locale, params }) {
+import 'lightbox-react/style.css';
+import 'react-responsive-modal/styles.css';
+
+export async function getServerSideProps({ locale, params, req, res }) {
     const actions = [
         {
             type: 'SET_PRODUCT',
@@ -32,8 +38,10 @@ export async function getServerSideProps({ locale, params }) {
         }
     ];
 
-    const pageProps = await dispatcher(actions);
-    let breadcrumb  = [];
+    const pageProps = await dispatcher(req, res, actions);
+
+    // Breadcrumb
+    let breadcrumb = [];
     try {
         breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product.canonical);
     } catch (err) {
@@ -41,33 +49,57 @@ export async function getServerSideProps({ locale, params }) {
         console.error(err.message || t('common:message.unknownError'));
     }
     pageProps.props.breadcrumb = breadcrumb;
+
+    // URL origin
+    const { origin }       = absoluteUrl(req);
+    pageProps.props.origin = origin;
+
     return pageProps;
 }
 
-export default function CategoryList({ breadcrumb }) {
+export default function CategoryList({ breadcrumb, origin }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
-    const { cartId, setCartId }       = useCartId();
-    const { product }                 = useProduct();
+    const [message, setMessage]       = useState();
+    const [isLoading, setIsLoading]   = useState(false);
+    const [openModal, setOpenModal]   = useState(false);
+    const { cart, setCart }           = useCart();
+    const product                     = useProduct();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
+    const router                      = useRouter();
 
     if (!product) return <ErrorPage statusCode={404} />;
 
     const coverImageUrl = getMainImage(product.images, '578x578') || '/images/no-image.svg';
 
     const onChangeQty = (e) => {
-        setQty(Number(e.target.value));
+        if (!e.target.value) {
+            return setQty('');
+        } else {
+            const quantity = Number(e.target.value);
+            if (quantity < 1) {
+                return setQty(1);
+            }
+            setQty(quantity);
+        }
     };
 
     const onAddToCart = async (e) => {
         e.preventDefault();
-        const newCart   = await addToCart(cartId, product, qty);
-        document.cookie = 'cart_id=' + newCart._id + '; path=/;';
-        document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
-        setShowCartSidebar(true);
-        setCartId(newCart._id);
+        setIsLoading(true);
+        try {
+            setMessage();
+            const newCart   = await addToCart(cart._id, product, qty);
+            document.cookie = 'cart_id=' + newCart._id + '; path=/;';
+            setCart(newCart);
+            setShowCartSidebar(true);
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const openLightBox = (i) => {
@@ -76,8 +108,15 @@ export default function CategoryList({ breadcrumb }) {
     };
 
     const previousStep = () => {
-        Router.back();
+        router.back();
     };
+
+    const onOpenModal = (e) => {
+        e.preventDefault();
+        setOpenModal(true);
+    };
+
+    const onCloseModal = () => setOpenModal(false);
 
     return (
 
@@ -129,22 +168,31 @@ export default function CategoryList({ breadcrumb }) {
                         <div className="product-content">
                             <h3>{product.description2?.title}</h3>
                             <div className="div-block-prix">
-                                <div className="price-text">{ product.price.ati.special ? product.price.ati.special.toFixed(2) : product.price.ati.normal.toFixed(2) } €</div>
-                                { product.price.ati.special ? <div className="price-text sale">{product.price.ati.normal.toFixed(2)} €</div> : null }
+                                <div className="price-text">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
+                                { product.price.ati.special ? <div className="price-text sale">{formatPrice(product.price.ati.normal)}</div> : null }
                             </div>
                             <div className="plain-line" />
                             <div className="full-details w-richtext"><p dangerouslySetInnerHTML={{ __html: product.description2?.text }} /></div>
                             <div>
-                                <form className="w-commerce-commerceaddtocartform default-state">
+                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
-                                    <button type="button" disabled={product.type !== 'simple'} className="w-commerce-commerceaddtocartbutton order-button" onClick={onAddToCart}>{product.type === 'simple' ? t('components/product:productCard.addToBasket') : t('components/product:productCard.compose')}</button>
+                                    <Button 
+                                        text={product.type === 'simple' ? t('components/product:product.addToBasket') : t('components/product:product.compose')}
+                                        loadingText={t('components/product:product.addToCartLoading')}
+                                        isLoading={isLoading}
+                                        disabled={product.type === 'virtual'} 
+                                        className="w-commerce-commerceaddtocartbutton order-button"
+                                    />
                                 </form>
-                                <div style={{ display: 'none' }} className="w-commerce-commerceaddtocartoutofstock out-of-stock-state">
-                                    <div>This product is out of stock.</div>
-                                </div>
-                                <div style={{ display: 'none' }} className="w-commerce-commerceaddtocarterror">
-                                    <div >Product is not available in this quantity.</div>
-                                </div>
+                                {
+                                    message && (
+                                        <div className={`w-commerce-commerce${message.type}`}>
+                                            <div>
+                                                {message.message}
+                                            </div>
+                                        </div>
+                                    )
+                                }
                             </div>
                             <div className="plain-line" />
                         </div>
@@ -203,7 +251,7 @@ export default function CategoryList({ breadcrumb }) {
             <NextSeoCustom
                 title={product.name}
                 description={product?.description2?.text}
-                canonical={product.canonical}
+                canonical={origin + product.canonical}
                 lang={lang}
                 image={coverImageUrl}
             />
@@ -248,6 +296,10 @@ export default function CategoryList({ breadcrumb }) {
                     }
                 ]}
             />
+
+            <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
+                <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
+            </Modal>
 
         </Layout>
 

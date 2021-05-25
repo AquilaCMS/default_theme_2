@@ -1,3 +1,4 @@
+import Link from 'next/link';
 
 export default function LightLayout({ children }) {
     return (
@@ -5,9 +6,11 @@ export default function LightLayout({ children }) {
             <div id="Navigation" data-collapse="medium" role="banner" className="navbar w-nav">
                 <div className="navigation-container">
                     <div className="navigation-left">
-                        <a href="/" aria-current="page" className="brand w-nav-brand w--current">
-                            <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`} alt="TODO" />
-                        </a>
+                        <Link href='/'>
+                            <a aria-current="page" className="brand w-nav-brand w--current">
+                                <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`} alt="TODO" />
+                            </a>
+                        </Link>
                     </div>
                 </div>
             </div>

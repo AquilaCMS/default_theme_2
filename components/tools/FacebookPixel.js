@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import Router        from 'next/router';
+import { useRouter } from 'next/router';
 import * as fbq      from '@lib/common/fb-pixel/fpixel';
 
 const handleRouteChange = () => {
@@ -7,13 +7,15 @@ const handleRouteChange = () => {
 };
 
 const FacebookPixel = ({ children }) => {
+    const router = useRouter();
+
     useEffect(() => {
         // This pageview only trigger first time (it is important for Pixel to have real information)
         fbq.pageview();
             
-        Router.events.on('routeChangeComplete', handleRouteChange);
+        router.events.on('routeChangeComplete', handleRouteChange);
         return () => {
-            Router.events.off('routeChangeComplete', handleRouteChange);
+            router.events.off('routeChangeComplete', handleRouteChange);
         };
     }, []);
 

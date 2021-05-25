@@ -2,9 +2,8 @@
 import { useCmsBlocks } from '@lib/hooks';
 
 export default function BlockCMS({ nsCode, displayError = false }) {
-    const { cmsBlocks } = useCmsBlocks();
-    
-    const cmsBlock = cmsBlocks.find(cms => cms.code === nsCode);
+    const cmsBlocks = useCmsBlocks();
+    const cmsBlock  = cmsBlocks.find(cms => cms.code === nsCode);
 
     if (cmsBlock && cmsBlock.content) {
         return <div className={nsCode} dangerouslySetInnerHTML={{ __html: cmsBlock.content }}></div>;

@@ -27,11 +27,6 @@
     cursor: pointer;
 }
 
-.div-block-cookies {
-    position: fixed;
-    z-index: 9999;
-}
-
 .page-2 {
     height: 0px;
 }
@@ -74,32 +69,146 @@
     z-index: auto;
 }
 
+/* Cookies block [CHECK WITH DESIGNER] */
+.div-block-cookies {
+    z-index: 9999;
+}
+
+/* Clickable area outside the cart to close it */
 .w-commerce-commerceoutcartcontainer {
     width: 100%;
 }
-
 @media screen and (max-width: 991px) {
     .w-commerce-commerceoutcartcontainer {
         width: 0px;
     }
 }
 
+/* Input or button disabled style [CHECK WITH DESIGNER] */
+input:disabled, button:disabled { opacity: 0.5; }
+
+/* Submit button in account/informations page [CHECK WITH DESIGNER] */
+.submit-button-tunnel { width: 100%; margin-left: auto; margin-right: auto; }
+
+/* Newsletter button [CHECK WITH DESIGNER] */
+.submit-button-newsletter { align-items: center; }
+
+/* Account page [CHECK WITH DESIGNER] */
+.tab-pane-wrap-account { width: 900px; }
+.tab-menu-round-account {
+    -ms-grid-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+@media screen and (max-width: 479px) {
+    .tab-menu-round-account {
+        -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Button expand (+) in account/orders page */
+.tab-pane-wrap-account .plus-2 {
+    opacity: 0.5;
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    transform-style: preserve-3d;
+    transition: all 0.5s;
+}
+.tab-pane-wrap-account .plus-2-active {
+    opacity: 1;
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(45deg) skew(0deg, 0deg);
+}
+
+/* Top banner hide in mobile... [CHECK WITH DESIGNER] */
+@media screen and (max-width: 479px) {
+  .banner {
+    display: block;
+  }
+}
+
+/* Languages block [CHECK WITH DESIGNER] */
+.div-block-lang {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
 .div-block-lang button {
     background-color: unset;
 }
-
 .div-block-lang button:hover,
 .div-block-lang button.selected {
     background-color: #ff8946;
     color: white;
 }
 
-input:disabled, button:disabled { opacity: 0.5; }
+/* Checkbox checked + focused [CHECK WITH DESIGNER] */
+input[type='checkbox']:checked + .w-checkbox-input--inputType-custom {
+    background-color: #3898ec;
+    border-top-color: #3898ec;
+    border-bottom-color: #3898ec;
+    border-left-color: #3898ec;
+    border-right-color: #3898ec;
+    background-image: url('https://d3e54v103j8qbb.cloudfront.net/static/custom-checkbox-checkmark.589d534424.svg');
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-color: #ff5c00;
+    background-color: #ff5c00;
+}
+input[type='checkbox']:focus + .w-checkbox-input--inputType-custom {
+    box-shadow: 0px 0px 3px 1px #3898ec;
+}
+input[type='radio']:checked + .w-form-formradioinput--inputType-custom {
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-color: #ff5c00;
+    background-color: #ff5c00;
+}
+input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
+    box-shadow: 0px 0px 3px 1px #3898ec;
+}
 
-.submit-button-tunnel { width: 100%; }
+/* Product name & price/Delete button block in cart [CHECK WITH DESIGNER] */
+.div-block-4 {
+    align-items: center;
+}
 
-.submit-button-newsletter { align-items: center; }
+/* List of product selected in cart [CHECK WITH DESIGNER]*/
+.w-commerce-commercecartoptionlist li {
+    font-size: 12px;
+}
 
+/* Input quantity in cart [CHECK WITH DESIGNER] */
+.w-commerce-commercecartquantity {
+    margin-bottom: 0px;
+}
+
+/* Bundle content [CHECK WITH DESIGNER] */
+.bundle-content {
+    display: flex;
+    overflow: hidden;
+    width: 1130px;
+    margin-top: -2px;
+    flex-direction: column;
+    align-items: center;
+    max-width: unset !important;
+}
+@media screen and (max-width: 1024px) {
+    .bundle-content {
+        width: unset;
+    }
+}
+
+/* margin-left problem in product card (mobile only) [CHECK WITH DESIGNER] */
+@media screen and (max-width: 991px) {
+    .food-card-content {
+        margin-left: unset;
+    }
+}
+
+/* Toasts */
 .w-commerce-commerceerror {
     margin-top: 10px;
     padding-top: 10px;
@@ -107,6 +216,7 @@ input:disabled, button:disabled { opacity: 0.5; }
     padding-left: 10px;
     padding-right: 10px;
     background-color: #ffdede;
+    border-radius:5px;
 }
 .w-commerce-commercewarn {
     margin-top: 10px;
@@ -115,6 +225,7 @@ input:disabled, button:disabled { opacity: 0.5; }
     padding-left: 10px;
     padding-right: 10px;
     background-color: #fff3de;
+    border-radius:5px;
 }
 .w-commerce-commerceinfo {
     margin-top: 10px;
@@ -123,4 +234,5 @@ input:disabled, button:disabled { opacity: 0.5; }
     padding-left: 10px;
     padding-right: 10px;
     background-color: #deffe8;
+    border-radius:5px;
 }

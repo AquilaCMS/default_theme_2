@@ -9,10 +9,10 @@ const getDatas = () => {
 };
 
 export default function MenuCategories() {
-
-    const { t }           = useTranslation();
     const [open, setOpen] = useState(false);
-    const openBlock       = () => {
+    const { t }           = useTranslation();
+
+    const openBlock = () => {
         setOpen(!open);
     };
 

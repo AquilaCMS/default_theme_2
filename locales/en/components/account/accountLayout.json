@@ -3,6 +3,7 @@
     "navigation": {
         "myInformations": "en-Mes Informations",
         "myOrders": "en-Mes commandes",
-        "myBills": "en-Mes factures"
+        "rgpd": "en-RGPD",
+        "logout": "en-Se déconnecter"
     }
 }

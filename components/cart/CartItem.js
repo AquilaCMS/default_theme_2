@@ -1,47 +1,49 @@
 import { useEffect, useState }       from 'react';
-import cookie                        from 'cookie';
 import useTranslation                from 'next-translate/useTranslation';
 import { deleteItem, updateQtyItem } from '@lib/aquila-connector/cart';
 import { getImage }                  from '@lib/aquila-connector/product/helpersProduct';
+import { useCart }                   from '@lib/hooks';
+import { formatPrice }               from '@lib/utils';
 
-export default function CartItem({ item, setCart }) {
+export default function CartItem({ item }) {
     const [qty, setQty]         = useState(item.quantity);
     const [message, setMessage] = useState();
     const [timer, setTimer]     = useState();
+    const { cart, setCart }     = useCart();
     const { t }                 = useTranslation();
-    const cartId                = cookie.parse(document.cookie).cart_id;
 
     useEffect(() => {
         return () => clearTimeout(timer);
     }, []);
 
     const onChangeQtyItem = async (e) => {
+        if (!e.target.value) {
+            return setQty('');
+        }
         const quantity = Number(e.target.value);
         if (quantity < 1) {
             onDeleteItem();
         } else {
             try {
-                const newCart   = await updateQtyItem(cartId, item._id, quantity);
-                document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
+                const newCart = await updateQtyItem(cart._id, item._id, quantity);
                 setQty(quantity);
                 setCart(newCart);
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-                const t = setTimeout(() => { setMessage(); }, 3000);
-                setTimer(t);
+                const st = setTimeout(() => { setMessage(); }, 3000);
+                setTimer(st);
             }
         }
     };
     
     const onDeleteItem = async () => {
         try {
-            const newCart   = await deleteItem(cartId, item._id);
-            document.cookie = 'count_cart=' + newCart.items.length + '; path=/;';
+            const newCart = await deleteItem(cart._id, item._id);
             setCart(newCart);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-            const t = setTimeout(() => { setMessage(); }, 3000);
-            setTimer(t);
+            const st = setTimeout(() => { setMessage(); }, 3000);
+            setTimer(st);
         }
     };
 
@@ -55,12 +57,26 @@ export default function CartItem({ item, setCart }) {
                     <div>
                         <div className="w-commerce-commercecartproductname">{item.name}</div>
                         <div>
-                            { item.price?.special ? <><del>{item.price.unit.ati.toFixed(2)} €</del>&nbsp;</> : null }
-                            { item.price?.special ? item.price.special.ati.toFixed(2) : item.price.unit.ati.toFixed(2) } €
+                            { item.price?.special ? <><del>{formatPrice(item.price.unit.ati)}</del>&nbsp;</> : null }
+                            { item.price?.special ? formatPrice(item.price.special.ati) : formatPrice(item.price.unit.ati) }
                         </div>
                     </div>
-
-                    <ul className="w-commerce-commercecartoptionlist"></ul>
+                    {
+                        item.selections && item.selections.length > 0 && (
+                            <ul className="w-commerce-commercecartoptionlist">
+                                {
+                                    item.selections.map((section) => (
+                                        section.products.map((itemSection) => {
+                                            const diffPrice = item.id.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection._id)?.modifier_price?.ati;
+                                            return (
+                                                <li key={itemSection._id}>{itemSection.name}{diffPrice && diffPrice !== 0 ? <> ({diffPrice > 0 ? '+' : ''}{formatPrice(diffPrice)})</> : null}</li>
+                                            );
+                                        })
+                                    ))
+                                }
+                            </ul>
+                        )
+                    }
                     <button type="button" className="remove-button-cart w-inline-block" onClick={onDeleteItem}>
                         <div className="text-block-2">X</div>
                     </button>

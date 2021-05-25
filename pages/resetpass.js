@@ -1,6 +1,6 @@
 import { useState }       from 'react';
 import Head               from 'next/head';
-import Router             from 'next/router';
+import { useRouter }      from 'next/router';
 import useTranslation     from 'next-translate/useTranslation';
 import Layout             from '@components/layouts/Layout';
 import Button             from '@components/ui/Button';
@@ -9,7 +9,7 @@ import { serverRedirect } from '@lib/utils';
 import { dispatcher }     from '@lib/redux/dispatcher';
 
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, req, res }) {
     try {
         const data = await resetPassword(query.token);
         if (data.message === 'Token invalide') {
@@ -20,16 +20,17 @@ export async function getServerSideProps({ query }) {
     }
     
 
-    const pageProps       = await dispatcher();
+    const pageProps       = await dispatcher(req, res);
     pageProps.props.token = query.token;
     return pageProps;
 }
 
 
 export default function ResetPassword({ token }) {
-    const { t }                           = useTranslation();
     const [isLoading, setIsLoading]       = useState(false);
     const [messageReset, setMessageReset] = useState();
+    const router                          = useRouter();
+    const { t }                           = useTranslation();
 
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
@@ -47,7 +48,7 @@ export default function ResetPassword({ token }) {
         // Reset du mot de passe
         try {
             await resetPassword(token, password);
-            Router.push('/account/login');
+            router.push('/account/login');
         } catch (err) {
             setMessageReset({ type: 'error', message: err.message });
         } finally {

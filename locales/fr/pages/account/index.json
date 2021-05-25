@@ -1,4 +1,24 @@
 {
   "title": "Mes commandes",
-  "titleNav" : "Mes commandes"
+  "titleNav" : "Mes commandes",
+  "order" : "Commande",
+  "view" : "Voir",
+  "orderSummary" : "Récapitulatif de ma commande",
+  "status": {
+    "ASK_CANCEL": "Annulation demandée par le client",
+    "BILLED": "Facturée",
+    "CANCELED": "Annulé",
+    "DEFAULT": "Aucun status",
+    "DELIVERY_PARTIAL_PROGRESS": "Expédié",
+    "DELIVERY_PROGRESS": "Expédié",
+    "FINISHED": "Terminée",
+    "PAID": "Payée",
+    "PAYMENT_CONFIRMATION_PENDING": "Paiement en attente de confirmation",
+    "PAYMENT_FAILED": "Paiement échoué",
+    "PAYMENT_PENDING": "Paiement en attente",
+    "PAYMENT_RECEIPT_PENDING": "Paiement en attente de réception",
+    "PROCESSED": "Préparée",
+    "PROCESSING": "Traitement en cours",
+    "RETURNED": "Retour"
+  }
 }

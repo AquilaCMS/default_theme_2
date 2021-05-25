@@ -5,19 +5,28 @@
     "titleH1" : "en-Ma commande",
     "step1" : "en-Connexion / Inscription"
   },
+  "clickandcollect" :{
+    "title" : "en-Ma commande - Click & Collect",
+    "description" : "en-TODO",
+    "titleH1" : "en-Ma commande",
+    "clickandcollect" : "Click & Collect",
+    "next" : "en-SUIVANT",
+    "submitError": "en-Veuillez valider un retrait ou une livraison !",
+    "submitError2": "en-La date de retrait/livraison est dépassée !"
+  },
   "payment" : {
     "title" : "en-Ma commande - Moyen de paiement",
     "description" : "en-TODO",
-    "titleH1" : "en-Ma commande"
+    "titleH1" : "en-Ma commande",
+    "paymentMethod" : "en-Moyen de paiement",
+    "previous" : "en-RETOUR",
+    "pay" : "en-PAYER"
   },
   "confirmation" : {
     "title" : "en-Ma commande - Confirmation",
     "description" : "en-TODO",
-    "titleH1" : "en-Merci pour votre commande !"
-  },
-  "clickandcollect" :{
-    "title" : "en-Ma commande - Click & Collect",
-    "description" : "en-TODO",
-    "titleH1" : "en-Ma commande"
+    "titleH1" : "en-Merci pour votre commande !",
+    "summary" : "en-Récapitulatif de ma commande",
+    "viewOrders" : "en-Voir mes commandes"
   }
 }

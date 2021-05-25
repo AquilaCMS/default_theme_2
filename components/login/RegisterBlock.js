@@ -17,10 +17,11 @@ export default function RegisterBlock() {
         setIsLoading(true);
 
         const user = {
-            firstname: e.currentTarget.firstname.value,
-            lastname : e.currentTarget.lastname.value,
-            email    : e.currentTarget.email.value,
-            password : e.currentTarget.password.value,
+            firstname   : e.currentTarget.firstname.value,
+            lastname    : e.currentTarget.lastname.value,
+            email       : e.currentTarget.email.value,
+            password    : e.currentTarget.password.value,
+            phone_mobile: e.currentTarget.phone_mobile.value
         };
         try {
             await setUser(user);
@@ -41,8 +42,9 @@ export default function RegisterBlock() {
                 <div>
                     <div><input type="text" className="w-input" maxLength={256} name="firstname" placeholder={t('components/login/registerBlock:firstname')} required /></div>
                     <div><input type="text" className="w-input" maxLength={256} name="lastname" placeholder={t('components/login/registerBlock:name')} required /></div>
-                    <div><input type="email" className="w-input" maxLength={256} name="email" placeholder={t('components/login/registerBlock:email')} required autoComplete="username" /></div>
-                    <div><input type="password" className="w-input" maxLength={256} name="password" placeholder={t('components/login/registerBlock:password')} required autoComplete="current-password" /></div>
+                    <div><input type="email" className="w-input" maxLength={256} name="email" placeholder={t('components/login/registerBlock:email')} required /></div>
+                    <div><input type="password" className="w-input" maxLength={256} name="password" placeholder={t('components/login/registerBlock:password')} required /></div>
+                    <div><input type="text" className="w-input" maxLength={256} name="phone_mobile" placeholder={t('components/login/registerBlock:phone')} required /></div>
                 </div>
             </div>
             {

@@ -1,0 +1,11 @@
+{
+    "withDrawal": "en-Retrait",
+    "delivery": "en-Livraison",
+    "selectPOS": "en-Choisir un magasin",
+    "submit": "en-Valider",
+    "submitLoading": "en-Validation...",
+    "submitAddressError": "en-Merci de renseigner une adresse plus précise !",
+    "submitError": "en-Veuillez sélectionner un point de retrait !",
+    "submitError2": "en-L'adresse saisie ne peut être livrée !",
+    "submitSuccess": "en-Informations enregistrées !"
+}

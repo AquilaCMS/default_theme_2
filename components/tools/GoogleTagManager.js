@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import Router        from 'next/router';
+import { useRouter } from 'next/router';
 import * as gtm      from '@lib/common/google-tag-manager/gtm';
 
 const handleRouteChange = (url) => {
@@ -7,10 +7,12 @@ const handleRouteChange = (url) => {
 };
 
 const GoogleTagManager = ({ children }) => {
+    const router = useRouter();
+    
     useEffect(() => {
-        Router.events.on('routeChangeComplete', handleRouteChange);
+        router.events.on('routeChangeComplete', handleRouteChange);
         return () => {
-            Router.events.off('routeChangeComplete', handleRouteChange);
+            router.events.off('routeChangeComplete', handleRouteChange);
         };
     }, []);
 

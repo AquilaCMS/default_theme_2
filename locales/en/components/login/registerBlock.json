@@ -4,6 +4,7 @@
   "name": "en-Nom",
   "email": "en-Email",
   "password": "en-Mot de passe",
+  "phone": "en-Téléphone",
   "register": "en-JE M'ENREGISTRE",
   "registerLoading": "en-INSCRIPTION..."
 }

@@ -4,7 +4,10 @@
   "pages": {
     "*": [
       "common",
+      "components/allergen",
+      "components/bundleProduct",
       "components/cart",
+      "components/clickAndCollect",
       "components/cookiesBanner",
       "components/newsletter",
       "components/navigation",
@@ -13,15 +16,16 @@
     ],
     "/account": [
       "components/account/accountLayout",
+      "components/orderDetails",
       "pages/account/index"
-    ],
-    "/account/bills": [
-      "components/account/accountLayout",
-      "pages/account/bills"
     ],
     "/account/informations": [
       "components/account/accountLayout",
       "pages/account/informations"
+    ],
+    "/account/rgpd": [
+      "components/account/accountLayout",
+      "pages/account/rgpd"
     ],
     "/account/login": [
       "components/login/loginBlock",
@@ -32,6 +36,7 @@
       "pages/checkout"
     ],
     "/checkout/confirmation": [
+      "components/orderDetails",
       "pages/checkout"
     ],
     "/checkout/login": [

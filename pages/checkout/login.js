@@ -6,17 +6,16 @@ import RegisterBlock                         from '@components/login/RegisterBlo
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
     // If the user is already logged in, we will automatically redirect to the page /account/informations
     const user = await authProtectedPage(req.headers.cookie);
     if (user) {
         return serverRedirect('/checkout/clickandcollect');
     }
-    return dispatcher();
+    return dispatcher(req, res);
 }
 
 export default function CheckoutLogin() {
-    
     const { t } = useTranslation();
 
     return (

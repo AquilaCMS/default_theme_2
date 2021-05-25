@@ -1,9 +1,14 @@
-import Head                                  from 'next/head';
-import useTranslation                        from 'next-translate/useTranslation';
-import Layout                                from '@components/layouts/Layout';
-import OrderDetails                          from '@components/order/OrderDetails';
-import { authProtectedPage, serverRedirect } from '@lib/utils';
-import { dispatcher }                        from '@lib/redux/dispatcher';
+import { useEffect, useState }                            from 'react';
+import Head                                               from 'next/head';
+import Link                                               from 'next/link';
+import { useRouter }                                      from 'next/router';
+import useTranslation                                     from 'next-translate/useTranslation';
+import cookie                                             from 'cookie';
+import Layout                                             from '@components/layouts/Layout';
+import OrderDetails                                       from '@components/order/OrderDetails';
+import { getOrderById }                                   from '@lib/aquila-connector/order';
+import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
+import { dispatcher }                                     from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ req }) {
     const user = await authProtectedPage(req.headers.cookie);
@@ -14,7 +19,29 @@ export async function getServerSideProps({ req }) {
 }
 
 export default function CheckoutConfirmation() {
-    const { t } = useTranslation();
+    const [order, setOrder] = useState();
+    const router            = useRouter();
+    const { t }             = useTranslation();
+
+    useEffect(() => {
+        const orderId   = cookie.parse(document.cookie).order_id;
+        const fetchData = async () => {
+            try {
+                const data = await getOrderById(orderId);
+                setOrder(data);
+                unsetCookie('order_id');
+            } catch (err) {
+                console.error(err.message || t('common:message.unknownError'));
+                router.push('/');
+            }
+        };
+        if (orderId) {
+            fetchData();
+        } else {
+            router.push('/');
+        }
+    }, []);
+
     return (
         <Layout>
             <Head>
@@ -30,12 +57,20 @@ export default function CheckoutConfirmation() {
                 </div>
             </div>
 
-            <div id="03" className="section-tunnel">
-                <div id="03" className="container-tunnel-02">
-                    <h2 className="heading-2-steps">TODOTRAD Récapitulatif de ma commande: # 123456789</h2>
-                </div>
-                <OrderDetails />
-            </div>
+            {
+                order && (
+                    <div className="section-tunnel">
+                        <div className="container-tunnel-02">
+                            <h2 className="heading-2-steps">{t('pages/checkout:confirmation.summary')} : #{order.number}</h2>
+                        </div>
+                        <OrderDetails order={order} />
+
+                        <Link href='/account'>
+                            <a className="log-button-03 w-button">{t('pages/checkout:confirmation.viewOrders')}</a>
+                        </Link>
+                    </div>
+                )
+            }
         </Layout>
     );
 }

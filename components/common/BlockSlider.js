@@ -4,8 +4,7 @@ import { useCmsBlocks } from '@lib/hooks';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 export default function BlockSlider({ nsCodeList }) {
-    const { cmsBlocks } = useCmsBlocks();
-    
+    const cmsBlocks  = useCmsBlocks();
     const listBlocks = cmsBlocks.filter((e) => nsCodeList.indexOf(e.code) !== -1);
 
     if (listBlocks && listBlocks.length > 0) {

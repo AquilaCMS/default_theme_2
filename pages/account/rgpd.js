@@ -85,12 +85,12 @@ export default function Rgpd({ user }) {
             <div className="container-account">
                 <div className="div-block-tunnel w-form">
                     <BlockCMS nsCode="top-text-rgpd" />
-                    <div>
-                        <button type="button" onClick={exportData} className="w-button">{t('pages/account/rgpd:buttonExportData')}</button>
+                    <div style={{ marginTop: '30px' }}>
+                        <button type="button" onClick={exportData} className="log-button w-button">{t('pages/account/rgpd:buttonExportData')}</button>
                         <p>{t('pages/account/rgpd:labelExportData')}</p>
                     </div>
                     <div>
-                        <button type="button" onClick={onOpenModal} className="w-button">{t('pages/account/rgpd:buttonRemoveAccount')}</button>
+                        <button type="button" onClick={onOpenModal} className="log-button w-button">{t('pages/account/rgpd:buttonRemoveAccount')}</button>
                         <p>{t('pages/account/rgpd:labelRemoveAccount')}</p>
                     </div>
                     <Modal open={openModal} onClose={onCloseModal} center>

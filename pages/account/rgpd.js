@@ -4,7 +4,9 @@ import { useRouter }                                      from 'next/router';
 import useTranslation                                     from 'next-translate/useTranslation';
 import { Modal }                                          from 'react-responsive-modal';
 import AccountLayout                                      from '@components/account/AccountLayout';
-import { dataUserExport, anonymizeUser, deleteUser }      from '@lib/aquila-connector/user';
+import BlockCMS                                           from '@components/common/BlockCMS';
+import { getBlocksCMS }                                   from '@lib/aquila-connector/blockcms';
+import { dataUserExport, deleteUser }                     from '@lib/aquila-connector/user';
 import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                     from '@lib/redux/dispatcher';
 
@@ -13,15 +15,22 @@ import 'react-responsive-modal/styles.css';
 export async function getServerSideProps({ req, res }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
-        return serverRedirect('/account/login?redirect=' + encodeURI('/account/informations'));
+        return serverRedirect('/account/login?redirect=' + encodeURI('/account/rgpd'));
     }
-    const pageProps      = await dispatcher(req, res);
+
+    const actions = [
+        {
+            type: 'PUSH_CMSBLOCKS',
+            func: getBlocksCMS.bind(this, ['top-text-rgpd'])
+        }
+    ];
+
+    const pageProps      = await dispatcher(req, res, actions);
     pageProps.props.user = user;
     return pageProps;
 }
 
 export default function Rgpd({ user }) {
-    const [modalMode, setModalMode] = useState(1);
     const [openModal, setOpenModal] = useState();
     const [message, setMessage]     = useState();
     const router                    = useRouter();
@@ -41,21 +50,6 @@ export default function Rgpd({ user }) {
         }
     };
 
-    const anonymiseData = async () => {
-        try {
-            await anonymizeUser(user._id);
-            setOpenModal(false);
-
-            // Logout
-            unsetCookie('jwt');
-
-            // Redirection to login
-            router.push('/account/login');
-        } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-        }
-    };
-
     const deleteAccount = async () => {
         try {
             await deleteUser(user._id);
@@ -71,8 +65,7 @@ export default function Rgpd({ user }) {
         }
     };
 
-    const onOpenModal = (mode) => {
-        setModalMode(mode);
+    const onOpenModal = () => {
         setOpenModal(true);
     };
 
@@ -91,23 +84,20 @@ export default function Rgpd({ user }) {
             </div>
             <div className="container-account">
                 <div className="div-block-tunnel w-form">
+                    <BlockCMS nsCode="top-text-rgpd" />
                     <div>
                         <button type="button" onClick={exportData} className="w-button">{t('pages/account/rgpd:buttonExportData')}</button>
                         <p>{t('pages/account/rgpd:labelExportData')}</p>
                     </div>
                     <div>
-                        <button type="button" onClick={() => onOpenModal(1)} className="w-button">{t('pages/account/rgpd:buttonAnonymizedData')}</button>
-                        <p>{t('pages/account/rgpd:labelAnonymizedData')}</p>
-                    </div>
-                    <div>
-                        <button type="button" onClick={() => onOpenModal(2)} className="w-button">{t('pages/account/rgpd:buttonRemoveAccount')}</button>
+                        <button type="button" onClick={onOpenModal} className="w-button">{t('pages/account/rgpd:buttonRemoveAccount')}</button>
                         <p>{t('pages/account/rgpd:labelRemoveAccount')}</p>
                     </div>
                     <Modal open={openModal} onClose={onCloseModal} center>
                         <h3>{t('pages/account/rgpd:modalTitle')}</h3>
                         <p>{t('pages/account/rgpd:modalWarning')}</p>
                         <div>
-                            <button type="button" className="w-button" onClick={modalMode === 1 ? anonymiseData : deleteAccount}>
+                            <button type="button" className="w-button" onClick={deleteAccount}>
                                 {t('pages/account/rgpd:yes')}
                             </button>
                             &nbsp;
@@ -127,8 +117,6 @@ export default function Rgpd({ user }) {
                     }
                 </div>
             </div>
-
-
         </AccountLayout>
     );
 }

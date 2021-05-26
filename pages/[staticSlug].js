@@ -47,7 +47,7 @@ export default function StaticPage({ error, origin }) {
 
             {/* <Breadcrumb /> */}{/*  The Breadcrumb sould be between the title and the text, but its not possible now */}
             
-            <div dangerouslySetInnerHTML={{ __html: staticPage.content }} />
+            <BlockCMS content={staticPage.content} />
             
             <BlockCMS nsCode="bottom-parallax" />
 

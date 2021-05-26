@@ -50,8 +50,6 @@ export default function Account({ user }) {
             delivery_address: 1
         };
 
-        const optinNewsletter = e.currentTarget.newsletter.checked;
-
         const addresses = [
             {
                 firstname     : e.currentTarget.billing_address_firstname.value,
@@ -133,7 +131,8 @@ export default function Account({ user }) {
                                         <input 
                                             type="checkbox"
                                             name="newsletter"
-                                            defaultChecked={optinNewsletter}
+                                            checked={optinNewsletter}
+                                            onChange={(e) => setOptinNewsletter(e.target.checked)}
                                             style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
                                         />
                                         <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene"></div>

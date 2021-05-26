@@ -97,11 +97,11 @@ export default function Rgpd({ user }) {
                         <h3>{t('pages/account/rgpd:modalTitle')}</h3>
                         <p>{t('pages/account/rgpd:modalWarning')}</p>
                         <div>
-                            <button type="button" className="w-button" onClick={deleteAccount}>
+                            <button type="button" className="button w-button" onClick={deleteAccount}>
                                 {t('pages/account/rgpd:yes')}
                             </button>
                             &nbsp;
-                            <button type="button" className="w-button" onClick={onCloseModal}>
+                            <button type="button" className="button w-button" onClick={onCloseModal}>
                                 {t('pages/account/rgpd:no')}
                             </button>
                         </div>

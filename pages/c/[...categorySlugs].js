@@ -52,6 +52,13 @@ export default function CategoryList({ breadcrumb, error }) {
 
     return (
         <Layout>
+            <NextSeoCustom
+                title={category.name}
+                description={category.metaDescription}
+                canonical="TODO"
+                lang={lang}
+                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
+            />
 
             <div dangerouslySetInnerHTML={{
                 __html: category.extraText,
@@ -91,16 +98,6 @@ export default function CategoryList({ breadcrumb, error }) {
                     __html: category.extraText3,
                 }} />
             </div>
-
-
-            <NextSeoCustom
-                title={category.name}
-                description={category.metaDescription}
-                canonical="TODO"
-                lang={lang}
-                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
-            />
-
         </Layout>
     );
 }

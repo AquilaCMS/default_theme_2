@@ -1,9 +1,9 @@
 import { useState }       from 'react';
-import Head               from 'next/head';
 import { useRouter }      from 'next/router';
 import useTranslation     from 'next-translate/useTranslation';
 import Layout             from '@components/layouts/Layout';
 import Button             from '@components/ui/Button';
+import NextSeoCustom      from '@components/tools/NextSeoCustom';
 import { resetPassword }  from '@lib/aquila-connector/user';
 import { serverRedirect } from '@lib/utils';
 import { dispatcher }     from '@lib/redux/dispatcher';
@@ -58,10 +58,12 @@ export default function ResetPassword({ token }) {
 
     return (
         <Layout>
-            <Head>
-                <title>{t('pages/resetpass:title')}</title>
-                <meta name="description" content={t('pages/resetpass:description')} />
-            </Head>
+            <NextSeoCustom
+                noindex={true}
+                title={t('pages/resetpass:title')}
+                description={t('pages/resetpass:description')}
+            />
+
             <div className="header-section-panier">
                 <div className="container-flex-2">
                     <div className="title-wrap-centre">

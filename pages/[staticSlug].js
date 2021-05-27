@@ -44,14 +44,6 @@ export default function StaticPage({ error, origin }) {
 
     return (
         <Layout>
-
-            {/* <Breadcrumb /> */}{/*  The Breadcrumb sould be between the title and the text, but its not possible now */}
-            
-            <BlockCMS content={staticPage.content} />
-            
-            <BlockCMS nsCode="bottom-parallax" />
-
-
             <NextSeoCustom
                 title={staticPage.title}
                 description={staticPage.metaDesc}
@@ -60,7 +52,11 @@ export default function StaticPage({ error, origin }) {
                 image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
             />
 
-
+            {/* <Breadcrumb /> */}{/*  The Breadcrumb sould be between the title and the text, but its not possible now */}
+            
+            <BlockCMS content={staticPage.content} />
+            
+            <BlockCMS nsCode="bottom-parallax" />
         </Layout>
     );
 }

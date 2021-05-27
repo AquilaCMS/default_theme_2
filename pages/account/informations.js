@@ -1,8 +1,8 @@
 import { useEffect, useState }               from 'react';
-import Head                                  from 'next/head';
 import useTranslation                        from 'next-translate/useTranslation';
 import AccountLayout                         from '@components/account/AccountLayout';
 import Button                                from '@components/ui/Button';
+import NextSeoCustom                         from '@components/tools/NextSeoCustom';
 import { getNewsletter, setNewsletter }      from '@lib/aquila-connector/newsletter';
 import { setUser, setAddressesUser }         from '@lib/aquila-connector/user';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
@@ -90,10 +90,12 @@ export default function Account({ user }) {
 
     return (
         <AccountLayout active="1">
-            <Head>
-                <title>{t('pages/account/informations:title')}</title>
-            </Head>
-
+            <NextSeoCustom
+                noindex={true}
+                title={t('pages/account/informations:title')}
+                description=""
+            />
+            
             <div className="container-tunnel-01">
                 <h2 className="heading-2-steps">{t('pages/account/informations:titleNav')}</h2>
             </div>
@@ -233,8 +235,6 @@ export default function Account({ user }) {
                     }
                 </div>
             </div>
-
-
         </AccountLayout>
     );
 }

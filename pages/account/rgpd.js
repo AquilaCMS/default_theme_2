@@ -1,10 +1,10 @@
 import { useState }                                       from 'react';
-import Head                                               from 'next/head';
 import { useRouter }                                      from 'next/router';
 import useTranslation                                     from 'next-translate/useTranslation';
 import { Modal }                                          from 'react-responsive-modal';
 import AccountLayout                                      from '@components/account/AccountLayout';
 import BlockCMS                                           from '@components/common/BlockCMS';
+import NextSeoCustom                                      from '@components/tools/NextSeoCustom';
 import { getBlocksCMS }                                   from '@lib/aquila-connector/blockcms';
 import { dataUserExport, deleteUser }                     from '@lib/aquila-connector/user';
 import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
@@ -75,10 +75,12 @@ export default function Rgpd({ user }) {
 
     return (
         <AccountLayout active="3">
-            <Head>
-                <title>{t('pages/account/rgpd:title')}</title>
-            </Head>
-
+            <NextSeoCustom
+                noindex={true}
+                title={t('pages/account/rgpd:title')}
+                description=""
+            />
+            
             <div className="container-tunnel-01">
                 <h2 className="heading-2-steps">{t('pages/account/rgpd:titleNav')}</h2>
             </div>

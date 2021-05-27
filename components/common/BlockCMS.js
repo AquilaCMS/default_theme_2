@@ -24,7 +24,7 @@ export default function BlockCMS({ nsCode, content = '', displayError = false })
                     nsComponents[name],
                     {
                         ...attribs,
-                        children: domToReact(children, options),
+                        children: domToReact(children, options)
                     }
                 );
                 return component;
@@ -33,7 +33,7 @@ export default function BlockCMS({ nsCode, content = '', displayError = false })
     };
 
     if (html) {
-        return <div className={nsCode}>{parse(html, options)}</div>;
+        return <>{parse(html, options)}</>;
     } else if (displayError) {
         return (
             <div>No BlockCMS for ns-code &apos;{nsCode}&apos;</div>

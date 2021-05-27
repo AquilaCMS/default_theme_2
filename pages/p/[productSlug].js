@@ -121,6 +121,54 @@ export default function CategoryList({ breadcrumb, origin }) {
     return (
 
         <Layout>
+            <NextSeoCustom
+                title={product.name}
+                description={product?.description2?.text}
+                canonical={origin + product.canonical}
+                lang={lang}
+                image={coverImageUrl}
+            />
+
+            <ProductJsonLd
+                productName={product.name}
+                images={getTabImageURL(product.images)}
+                description={product?.description2?.text}
+                // brand="TODO"
+                //     reviews={[
+                //         {
+                //             author: {
+                //                 type: 'Person',
+                //                 name: 'Jim',
+                //             },
+                //             datePublished: '2017-01-06T03:37:40Z',
+                //             reviewBody   :
+                // 'This is my favorite product yet! Thanks Nate for the example products and reviews.',
+                //             name        : 'So awesome!!!',
+                //             reviewRating: {
+                //                 bestRating : '5',
+                //                 ratingValue: '5',
+                //                 worstRating: '1',
+                //             },
+                //             publisher: {
+                //                 type: 'Organization',
+                //                 name: 'TwoVit',
+                //             },
+                //         },
+                //     ]}
+                //     aggregateRating={{
+                //         ratingValue: '4.4',
+                //         reviewCount: '89',
+                //     }}
+                offers={[
+                    {
+                        price        : product.price?.ati?.special ? product.price.ati.special : product.price?.ati.normal,
+                        priceCurrency: 'EUR',
+                        itemCondition: 'https://schema.org/NewCondition',
+                        availability : 'https://schema.org/InStock',
+                        url          : product.canonical
+                    }
+                ]}
+            />
 
             <div className="header-section product">
                 <div className="container-flex-2">
@@ -247,55 +295,6 @@ export default function CategoryList({ breadcrumb, origin }) {
             }
 
             <BlockCMS nsCode="info-bottom-1" /> {/* TODO : il faudrait afficher le contenu d'une description de la catégorie rattachée ! */}
-
-            <NextSeoCustom
-                title={product.name}
-                description={product?.description2?.text}
-                canonical={origin + product.canonical}
-                lang={lang}
-                image={coverImageUrl}
-            />
-
-            <ProductJsonLd
-                productName={product.name}
-                images={getTabImageURL(product.images)}
-                description={product?.description2?.text}
-                // brand="TODO"
-                //     reviews={[
-                //         {
-                //             author: {
-                //                 type: 'Person',
-                //                 name: 'Jim',
-                //             },
-                //             datePublished: '2017-01-06T03:37:40Z',
-                //             reviewBody   :
-                // 'This is my favorite product yet! Thanks Nate for the example products and reviews.',
-                //             name        : 'So awesome!!!',
-                //             reviewRating: {
-                //                 bestRating : '5',
-                //                 ratingValue: '5',
-                //                 worstRating: '1',
-                //             },
-                //             publisher: {
-                //                 type: 'Organization',
-                //                 name: 'TwoVit',
-                //             },
-                //         },
-                //     ]}
-                //     aggregateRating={{
-                //         ratingValue: '4.4',
-                //         reviewCount: '89',
-                //     }}
-                offers={[
-                    {
-                        price        : product.price?.ati?.special ? product.price.ati.special : product.price?.ati.normal,
-                        priceCurrency: 'EUR',
-                        itemCondition: 'https://schema.org/NewCondition',
-                        availability : 'https://schema.org/InStock',
-                        url          : product.canonical
-                    }
-                ]}
-            />
 
             <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
                 <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />

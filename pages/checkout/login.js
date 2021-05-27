@@ -1,8 +1,11 @@
-import Head                                  from 'next/head';
+import { useEffect }                         from 'react';
+import { useRouter }                         from 'next/router';
 import useTranslation                        from 'next-translate/useTranslation';
 import Layout                                from '@components/layouts/Layout';
 import LoginBlock                            from '@components/login/LoginBlock';
 import RegisterBlock                         from '@components/login/RegisterBlock';
+import NextSeoCustom                         from '@components/tools/NextSeoCustom';
+import { useCart }                           from '@lib/hooks';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 
@@ -16,15 +19,29 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function CheckoutLogin() {
-    const { t } = useTranslation();
+    const router   = useRouter();
+    const { cart } = useCart();
+    const { t }    = useTranslation();
+
+    useEffect(() => {
+        // Check if the cart is empty
+        if (!cart?.items?.length) {
+            router.push('/');
+        }
+    }, []);
+
+    if (!cart?.items?.length) {
+        return null;
+    }
 
     return (
         <Layout>
-            <Head>
-                <title>{t('pages/checkout:login.title')}</title>
-                <meta name="description" content={t('pages/checkout:login.description')} />
-            </Head>
-
+            <NextSeoCustom
+                noindex={true}
+                title={t('pages/checkout:login.title')}
+                description={t('pages/checkout:login.description')}
+            />
+            
             <div className="header-section-panier">
                 <div className="container-flex-2">
                     <div className="title-wrap-centre">
@@ -48,7 +65,6 @@ export default function CheckoutLogin() {
                     </div>
                 </div>
             </div>
-
         </Layout>
     );
 }

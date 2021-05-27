@@ -7,7 +7,7 @@ export default function NextSeoCustom({ noindex, title, description, canonical, 
     return (
         <>
             {
-                environment.demoMode && (
+                environment?.demoMode && (
                     <Head>
                         <style>
                             {`
@@ -29,8 +29,8 @@ export default function NextSeoCustom({ noindex, title, description, canonical, 
             }
 
             <NextSeo
-                noindex={noindex || environment.demoMode}
-                nofollow={noindex || environment.demoMode}
+                noindex={noindex || environment?.demoMode}
+                nofollow={noindex || environment?.demoMode}
                 title={title}
                 description={description}
                 canonical={canonical}

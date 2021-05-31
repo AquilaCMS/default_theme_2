@@ -83,9 +83,7 @@ export default function CategoryList({ breadcrumb, error }) {
                         <div id="tabs_content" className="tabs-content w-tab-content">
                             <div className="tab-pane-wrap w-tab-pane w--tab-active">
                                 <div className="w-dyn-list">
-                                    <ProductList
-                                        productsList={categoryProducts.datas}
-                                    />
+                                    <ProductList type="data" value={categoryProducts.datas} />
                                 </div>
                             </div>
                         </div>

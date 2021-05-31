@@ -42,14 +42,20 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function Home({ origin }) {
-
     const { lang }             = useTranslation();
     const { categoryProducts } = useCategoryProducts();
     const staticPage           = useStaticPage();
 
     return (
         <Layout>
-            
+            <NextSeoCustom
+                title={staticPage.title}
+                description={staticPage.metaDesc}
+                canonical={origin}
+                lang={lang}
+                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
+            />
+
             <BlockSlider nsCodeList={['Slide-Home-1', 'Slide-Home-2', 'Slide-Home-3']} />
 
             <BlockCMS nsCode="home-promote-product-1" />
@@ -82,16 +88,6 @@ export default function Home({ origin }) {
             <BlockCMS nsCode="home-bottom-faq" />
             <BlockCMS nsCode="home-bottom-call" />
             <BlockCMS nsCode="info-bottom-1" />
-
-
-            <NextSeoCustom
-                title={staticPage.title}
-                description={staticPage.metaDesc}
-                canonical={origin}
-                lang={lang}
-                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
-            />
-
         </Layout>
     );
 }

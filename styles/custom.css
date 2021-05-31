@@ -208,6 +208,17 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
     }
 }
 
+/* Image 404 (delete useless .slide) [CHECK WITH DESIGNER] */
+.slide {
+    background-image: unset;
+}
+
+@media screen and (max-width: 479px) {
+    .slide {
+        background-image: unset;
+    }
+}
+
 /* Toasts */
 .w-commerce-commerceerror {
     margin-top: 10px;

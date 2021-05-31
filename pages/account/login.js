@@ -1,8 +1,8 @@
-import Head                                  from 'next/head';
 import useTranslation                        from 'next-translate/useTranslation';
 import Layout                                from '@components/layouts/Layout';
 import LoginBlock                            from '@components/login/LoginBlock';
 import RegisterBlock                         from '@components/login/RegisterBlock';
+import NextSeoCustom                         from '@components/tools/NextSeoCustom';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 
@@ -20,11 +20,11 @@ export default function Login() {
     
     return (
         <Layout>
-            <Head>
-                <title>{t('pages/account/login:title')}</title>
-                <meta name="description" content={t('pages/account/login:description')} />
-            </Head>
-
+            <NextSeoCustom
+                title={t('pages/account/login:title')}
+                description={t('pages/account/login:description')}
+            />
+            
             <div className="header-section-panier">
                 <div className="container-flex-2">
                     <div className="title-wrap-centre">

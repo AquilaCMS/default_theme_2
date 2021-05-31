@@ -1,10 +1,10 @@
 import { useState }                                       from 'react';
-import Head                                               from 'next/head';
 import { useRouter }                                      from 'next/router';
 import useTranslation                                     from 'next-translate/useTranslation';
 import { Modal }                                          from 'react-responsive-modal';
 import AccountLayout                                      from '@components/account/AccountLayout';
 import BlockCMS                                           from '@components/common/BlockCMS';
+import NextSeoCustom                                      from '@components/tools/NextSeoCustom';
 import { getBlocksCMS }                                   from '@lib/aquila-connector/blockcms';
 import { dataUserExport, deleteUser }                     from '@lib/aquila-connector/user';
 import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
@@ -75,33 +75,35 @@ export default function Rgpd({ user }) {
 
     return (
         <AccountLayout active="3">
-            <Head>
-                <title>{t('pages/account/rgpd:title')}</title>
-            </Head>
-
+            <NextSeoCustom
+                noindex={true}
+                title={t('pages/account/rgpd:title')}
+                description=""
+            />
+            
             <div className="container-tunnel-01">
                 <h2 className="heading-2-steps">{t('pages/account/rgpd:titleNav')}</h2>
             </div>
             <div className="container-account">
                 <div className="div-block-tunnel w-form">
                     <BlockCMS nsCode="top-text-rgpd" />
-                    <div>
-                        <button type="button" onClick={exportData} className="w-button">{t('pages/account/rgpd:buttonExportData')}</button>
+                    <div style={{ marginTop: '30px' }}>
+                        <button type="button" onClick={exportData} className="log-button w-button">{t('pages/account/rgpd:buttonExportData')}</button>
                         <p>{t('pages/account/rgpd:labelExportData')}</p>
                     </div>
                     <div>
-                        <button type="button" onClick={onOpenModal} className="w-button">{t('pages/account/rgpd:buttonRemoveAccount')}</button>
+                        <button type="button" onClick={onOpenModal} className="log-button w-button">{t('pages/account/rgpd:buttonRemoveAccount')}</button>
                         <p>{t('pages/account/rgpd:labelRemoveAccount')}</p>
                     </div>
                     <Modal open={openModal} onClose={onCloseModal} center>
                         <h3>{t('pages/account/rgpd:modalTitle')}</h3>
                         <p>{t('pages/account/rgpd:modalWarning')}</p>
                         <div>
-                            <button type="button" className="w-button" onClick={deleteAccount}>
+                            <button type="button" className="button w-button" onClick={deleteAccount}>
                                 {t('pages/account/rgpd:yes')}
                             </button>
                             &nbsp;
-                            <button type="button" className="w-button" onClick={onCloseModal}>
+                            <button type="button" className="button w-button" onClick={onCloseModal}>
                                 {t('pages/account/rgpd:no')}
                             </button>
                         </div>

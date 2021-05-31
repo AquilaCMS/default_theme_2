@@ -1,11 +1,11 @@
 import { useEffect, useState }                            from 'react';
-import Head                                               from 'next/head';
 import Link                                               from 'next/link';
 import { useRouter }                                      from 'next/router';
 import useTranslation                                     from 'next-translate/useTranslation';
 import cookie                                             from 'cookie';
 import Layout                                             from '@components/layouts/Layout';
 import OrderDetails                                       from '@components/order/OrderDetails';
+import NextSeoCustom                                      from '@components/tools/NextSeoCustom';
 import { getOrderById }                                   from '@lib/aquila-connector/order';
 import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                     from '@lib/redux/dispatcher';
@@ -42,12 +42,17 @@ export default function CheckoutConfirmation() {
         }
     }, []);
 
+    if (!order) {
+        return null;
+    }
+
     return (
         <Layout>
-            <Head>
-                <title>{t('pages/checkout:confirmation.title')}</title>
-                <meta name="description" content={t('pages/checkout:confirmation.description')} />
-            </Head>
+            <NextSeoCustom
+                noindex={true}
+                title={t('pages/checkout:confirmation.title')}
+                description={t('pages/checkout:confirmation.description')}
+            />
 
             <div className="header-section-panier">
                 <div className="container-flex-2">
@@ -56,21 +61,18 @@ export default function CheckoutConfirmation() {
                     </div>
                 </div>
             </div>
+            
+            <div className="section-tunnel">
+                <div className="container-tunnel-02">
+                    <h2 className="heading-2-steps">{t('pages/checkout:confirmation.summary')} : #{order.number}</h2>
+                </div>
 
-            {
-                order && (
-                    <div className="section-tunnel">
-                        <div className="container-tunnel-02">
-                            <h2 className="heading-2-steps">{t('pages/checkout:confirmation.summary')} : #{order.number}</h2>
-                        </div>
-                        <OrderDetails order={order} />
+                <OrderDetails order={order} />
 
-                        <Link href='/account'>
-                            <a className="log-button-03 w-button">{t('pages/checkout:confirmation.viewOrders')}</a>
-                        </Link>
-                    </div>
-                )
-            }
+                <Link href='/account'>
+                    <a className="log-button-03 w-button">{t('pages/checkout:confirmation.viewOrders')}</a>
+                </Link>
+            </div>
         </Layout>
     );
 }

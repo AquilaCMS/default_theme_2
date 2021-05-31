@@ -1,8 +1,8 @@
 import { Fragment, useState }                                                from 'react';
-import Head                                                                  from 'next/head';
 import useTranslation                                                        from 'next-translate/useTranslation';
 import AccountLayout                                                         from '@components/account/AccountLayout';
 import OrderDetails                                                          from '@components/order/OrderDetails';
+import NextSeoCustom                                                         from '@components/tools/NextSeoCustom';
 import { useOrders }                                                         from '@lib/hooks';
 import { authProtectedPage, serverRedirect, formatPrice, formatOrderStatus } from '@lib/utils';
 import { dispatcher }                                                        from '@lib/redux/dispatcher';
@@ -29,10 +29,12 @@ export default function Account() {
     
     return (
         <AccountLayout active="2">
-            <Head>
-                <title>{t('pages/account/index:title')}</title>
-            </Head>
-
+            <NextSeoCustom
+                noindex={true}
+                title={t('pages/account/index:title')}
+                description=""
+            />
+            
             <div className="container-tunnel-02">
                 <h2 className="heading-2-steps">{t('pages/account/index:titleNav')}</h2>
             </div>
@@ -63,7 +65,6 @@ export default function Account() {
                     }
                 </div>
             </div>
-
         </AccountLayout>
     );
 }

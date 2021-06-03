@@ -286,9 +286,7 @@ export default function CategoryList({ breadcrumb, origin }) {
                         </div>
 
                         <div className="w-dyn-list">
-                            <ProductList
-                                productsList={product.associated_prds}
-                            />
+                            <ProductList type="data" value={product.associated_prds} />
                         </div>
                     </div>
                 </div>

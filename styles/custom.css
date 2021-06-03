@@ -1,28 +1,38 @@
+/* FUSION => .link-footer l.6365 mon-restaurant.webflow.css */
 .link-footer {
     display: block;
 }
 
+/* FUSION => .tab-menu-round l.3376 mon-restaurant.webflow.css */
 .tab-menu-round {
     opacity: 0;
     max-height: 0px;
     transition: all 0.5s
 }
 
+/* ADD */
 .tab-menu-round-open {
     opacity: 1;
     max-height: 500px;
 }
 
+/* FUSION => .faq-content l.3490 mon-restaurant.webflow.css */
 .faq-content {
     max-height: 0px;
     transition: max-height 0.5s;
 }
 
+/* ADD */
 .faq-question-open {
     max-height: 400px;
 }
 
-.lien_alergenes,
+/* FUSION => .lien_alergenes l.5066 mon-restaurant.webflow.css */
+.lien_alergenes {
+    cursor: pointer;
+}
+
+/* FUSION => .lien_carte l.5502 mon-restaurant.webflow.css */
 .lien_carte {
     cursor: pointer;
 }

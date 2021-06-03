@@ -67,9 +67,7 @@ export default function Home({ origin }) {
 
             <div className="content-section-bg">
                 <div className="container-col">
-                    <BlockCMS nsCode="home-product-listing-title" />
                     <BlockCMS nsCode="home-product-listing" />
-
                     {/* <div className="button-wrapper">
                         <a href="/category" className="button w-button">Voir la Carte</a>
                     </div> */}

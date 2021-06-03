@@ -62,21 +62,7 @@ export default function Home({ origin }) {
 
             <BlockSlider nsCodeList={['Slide-Home-1', 'Slide-Home-2', 'Slide-Home-3']} />
 
-            <BlockCMS nsCode="home-promote-product-1" />
-            <BlockCMS nsCode="home-promote-product-2" />
-
-            <div className="content-section-bg">
-                <div className="container-col">
-                    <BlockCMS nsCode="home-product-listing" />
-                    {/* <div className="button-wrapper">
-                        <a href="/category" className="button w-button">Voir la Carte</a>
-                    </div> */}
-                </div>
-            </div>
-
-            <BlockCMS nsCode="home-bottom-faq" />
-            <BlockCMS nsCode="home-bottom-call" />
-            <BlockCMS nsCode="info-bottom-1" />
+            <BlockCMS content={staticPage.content} />
         </Layout>
     );
 }

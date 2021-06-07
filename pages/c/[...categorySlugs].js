@@ -89,12 +89,11 @@ export default function CategoryList({ breadcrumb, error }) {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="container w-container">
-                <p className="paragraph-seo" dangerouslySetInnerHTML={{
-                    __html: category.extraText3,
-                }} />
+                <div className="container w-container">
+                    <p className="paragraph-seo" dangerouslySetInnerHTML={{
+                        __html: category.extraText3,
+                    }} />
+                </div>
             </div>
         </Layout>
     );

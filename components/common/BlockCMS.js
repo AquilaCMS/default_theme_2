@@ -42,6 +42,11 @@ export default function BlockCMS({ nsCode, content = '', displayError = false, r
                     return;
                 }
                 
+                // IMPORTANT : Detection of infinite loops in the CMS block
+                if (nsCode === attribs['ns-code']) {
+                    console.error(`Infinite loop detected in CMS block "${attribs['ns-code']}" !\nCheck the content of this CMS block !`);
+                    return;
+                }
                 // IMPORTANT : Recursion limit to avoid infinite loops (fixed at 10)
                 if (recursion > 10) {
                     console.error(`Recursion limit reached on CMS block "${attribs['ns-code']}" !\nCheck the content of this CMS block !`);

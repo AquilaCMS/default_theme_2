@@ -5,7 +5,7 @@ import Contact                                  from '@components/ns/Contact';
 import ProductList                              from '@components/product/ProductList';
 import { useCmsBlocks, useComponentData }       from '@lib/hooks';
 
-export default function BlockCMS({ nsCode, content = '', displayError = false }) {
+export default function BlockCMS({ nsCode, content = '', displayError = false, recursion = 0 }) {
     const cmsBlocks     = useCmsBlocks();
     const componentData = useComponentData();
     
@@ -41,7 +41,14 @@ export default function BlockCMS({ nsCode, content = '', displayError = false })
                 if (!attribs['ns-code']) {
                     return;
                 }
-                const component = React.cloneElement(<BlockCMS />, { nsCode: attribs['ns-code'] });
+                
+                // IMPORTANT : Recursion limit to avoid infinite loops (fixed at 10)
+                if (recursion > 10) {
+                    console.error(`Recursion limit reached on CMS block "${attribs['ns-code']}" !\nCheck the content of this CMS block !`);
+                    return;
+                }
+
+                const component = React.cloneElement(<BlockCMS />, { nsCode: attribs['ns-code'], recursion: recursion + 1 });
                 return component;
             }
 

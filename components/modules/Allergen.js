@@ -21,8 +21,6 @@ export default function Allergen({ limit = 15 }) {
     const categorySlugs = Array.isArray(router.query.categorySlugs) ? router.query.categorySlugs : [router.query.categorySlugs];
     const slug          = categorySlugs[categorySlugs.length - 1];
 
-    // In the case where we go from one category to another, 
-    // we put the "slug" variable in dependence on the useEffect so that it is executed again.
     useEffect(() => {
         const fetchData = async () => {
             try {

@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useRouter }           from 'next/router';
-import cookie                  from 'cookie';
-import useTranslation          from 'next-translate/useTranslation';
-import { getAllergens }        from '@lib/aquila-connector/allergen';
-import { getCategoryProducts } from '@lib/aquila-connector/category';
-import { useCategoryProducts } from '@lib/hooks';
-import { unsetCookie }         from '@lib/utils';
+import { useEffect, useState }                  from 'react';
+import { useRouter }                            from 'next/router';
+import cookie                                   from 'cookie';
+import useTranslation                           from 'next-translate/useTranslation';
+import { getAllergens }                         from '@lib/aquila-connector/allergen';
+import { getCategoryProducts }                  from '@lib/aquila-connector/category';
+import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
+import { unsetCookie }                          from '@lib/utils';
 
-export default function Allergen() {
+export default function Allergen({ limit = 15 }) {
     const [allergens, setAllergens]               = useState([]);
     const [checkedAllergens, setCheckedAllergens] = useState({});
     const [open, setOpen]                         = useState(false);
     const [message, setMessage]                   = useState();
     const router                                  = useRouter();
+    const { setCategoryPage }                     = useCategoryPage();
     const { setCategoryProducts }                 = useCategoryProducts();
     const { t }                                   = useTranslation();
 
@@ -42,10 +43,6 @@ export default function Allergen() {
                     }
                     setCheckedAllergens(checked);
 
-                    // Updating the products list
-                    const products = await getCategoryProducts({ slug, id: '', postBody: { PostBody: { filter } } });
-                    setCategoryProducts(products);
-
                     // Opening the allergens block
                     openBlock(true);
                 }
@@ -54,7 +51,7 @@ export default function Allergen() {
             }
         };
         fetchData();
-    }, [slug]);
+    }, []);
 
     const filterAllergens = async (e, _id) => {
         const checked = { ...checkedAllergens };
@@ -84,8 +81,18 @@ export default function Allergen() {
         }
 
         // Updating the products list
-        const products = await getCategoryProducts({ slug, id: '', postBody: { PostBody: { filter } } });
-        setCategoryProducts(products);
+        try {
+            const products = await getCategoryProducts({ slug, id: '', postBody: { PostBody: { filter, page: 1, limit } } });
+            setCategoryProducts(products);
+
+            // Back to page 1
+            setCategoryPage(1);
+
+            // Back to page 1... so useless "page" cookie
+            unsetCookie('page');
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
     };
 
     const openBlock = (force = undefined) => {

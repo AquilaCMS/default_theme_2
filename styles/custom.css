@@ -337,3 +337,27 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
     background-color: #deffe8;
     border-radius:5px;
 }
+
+/* 
+    FUSION => .pagination l.4200 mon-restaurant.webflow.css
+    Pagination
+*/
+.pagination {
+    list-style: none;
+    margin-top: 0px;
+}
+
+/* 
+    ADD after .pagination l.4200 mon-restaurant.webflow.css
+*/
+.pagination li a {
+    padding: 10px;
+    cursor: pointer;
+}
+.pagination li.active a {
+    cursor: initial;
+    color: #ff8946;
+}
+.pagination li a {
+    text-decoration: none;
+}

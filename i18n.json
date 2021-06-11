@@ -5,6 +5,7 @@
     "*": [
       "common",
       "components/allergen",
+      "components/blogList",
       "components/bundleProduct",
       "components/cart",
       "components/clickAndCollect",

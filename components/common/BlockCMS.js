@@ -1,6 +1,7 @@
 import React                                    from 'react';
 import Link                                     from 'next/link';
 import parse, { attributesToProps, domToReact } from 'html-react-parser';
+import BlogList                                 from '@components/common/BlogList';
 import Contact                                  from '@components/ns/Contact';
 import ProductList                              from '@components/product/ProductList';
 import { useCmsBlocks, useComponentData }       from '@lib/hooks';
@@ -18,6 +19,7 @@ export default function BlockCMS({ nsCode, content = '', displayError = false, r
 
     // Next Sourcia components array
     const nsComponents = {
+        'ns-blog-articles'    : <BlogList />,
         'ns-contact'          : <Contact />,
         'ns-product-card-list': <ProductList />
     };

@@ -1,4 +1,5 @@
 import { useState }                             from 'react';
+import absoluteUrl                              from 'next-absolute-url';
 import getT                                     from 'next-translate/getT';
 import useTranslation                           from 'next-translate/useTranslation';
 import Cookies                                  from 'cookies';
@@ -84,19 +85,27 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     ];
 
     const pageProps = await dispatcher(req, res, actions);
-    let breadcrumb  = [];
+
+    // Get breadcrumb
+    let breadcrumb = [];
     try {
         breadcrumb = await getBreadcrumb(resolvedUrl);
     } catch (err) {
         console.error(err.message || t('common:message.unknownError'));
     }
-    pageProps.props.breadcrumb = breadcrumb;
-    pageProps.props.category   = category;
-    pageProps.props.limit      = limit;
+
+    // URL origin
+    const { origin } = absoluteUrl(req);
+    
+    pageProps.props.categorySlugs = categorySlugs.join('/');
+    pageProps.props.origin        = origin;
+    pageProps.props.breadcrumb    = breadcrumb;
+    pageProps.props.category      = category;
+    pageProps.props.limit         = limit;
     return pageProps;
 }
 
-export default function CategoryList({ breadcrumb, category, limit, error }) {
+export default function CategoryList({ breadcrumb, category, categorySlugs, limit, origin, error }) {
     const [message, setMessage]                     = useState();
     const { lang }                                  = useTranslation();
     const { categoryPage, setCategoryPage }         = useCategoryPage();
@@ -138,7 +147,7 @@ export default function CategoryList({ breadcrumb, category, limit, error }) {
             <NextSeoCustom
                 title={category.name}
                 description={category.metaDescription}
-                canonical="TODO"
+                canonical={`${origin}/c/${categorySlugs}`}
                 lang={lang}
                 image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
             />

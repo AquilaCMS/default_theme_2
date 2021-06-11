@@ -1,22 +1,15 @@
-import { Fragment }    from 'react';
-import { useRouter }   from 'next/router';
-import useTranslation  from 'next-translate/useTranslation';
-import { useState }    from 'react';
-import Link            from 'next/link';
-import { useSelector } from 'react-redux';
-import { isMobile }    from '@lib/utils';
-
-const getDatas = () => {
-    const navMenu = useSelector((state) => state.navMenu);
-    return { navMenu };
-};
-
+import { Fragment, useState } from 'react';
+import { useRouter }          from 'next/router';
+import useTranslation         from 'next-translate/useTranslation';
+import Link                   from 'next/link';
+import { useNavMenu }         from '@lib/hooks';
+import { isMobile }           from '@lib/utils';
 
 export default function NavMenu() {
     const [burger, setBurger]                   = useState(false);
     const [view, setView]                       = useState([]);
     const [boolOpenSubMenu, setBoolOpenSubMenu] = useState(false);
-    const { navMenu }                           = getDatas();
+    const navMenu                               = useNavMenu();
     const { asPath }                            = useRouter();
     const { lang, t }                           = useTranslation();
 

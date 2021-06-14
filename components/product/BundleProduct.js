@@ -34,9 +34,9 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
         let price    = product.price.ati.special ? product.price.ati.special : product.price.ati.normal;
         const inputs = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
         for (const input of inputs) {
-            const value = parseFloat(input.value.split('|')[1]);
             if (input.checked || input.checked === undefined) { // If select box, input.checked is undefined
-                price += parseFloat(value);
+                const value = parseFloat(input.value.split('|')[1]);
+                price      += value;
             }
         }
         setPriceBundle(price);

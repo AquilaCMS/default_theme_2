@@ -1,4 +1,5 @@
 import { useEffect, useState }                                        from 'react';
+import Head                                                           from 'next/head';
 import Geosuggest                                                     from 'react-geosuggest';
 import useTranslation                                                 from 'next-translate/useTranslation';
 import moment                                                         from 'moment';
@@ -78,7 +79,7 @@ function getArraySchedules(currentPOS, date) {
 }
 
 function convertGeoSuggest(suggest) {
-    if (suggest === undefined || suggest.gmaps === undefined) return;
+    if (suggest === undefined || suggest.gmaps === undefined) return;
     const delivery = {
         street_number : '',
         route         : '',
@@ -370,6 +371,11 @@ export default function ClickAndCollect() {
 
     return (
         <>
+
+            <Head>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0ISY810uOtckysZpUrTEcrygh8crpd1w&libraries=places" defer></script>
+            </Head>
+                
             <div className="section-picker">
                 <div className="container w-container">
                     <div className="w-form">

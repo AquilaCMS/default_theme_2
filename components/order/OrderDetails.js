@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react';
-import useTranslation          from 'next-translate/useTranslation';
-import moment                  from 'moment';
-import { getImage }            from '@lib/aquila-connector/product/helpersProduct';
-import { downloadbillOrder }   from '@lib/aquila-connector/order';
-import { formatPrice }         from '@lib/utils';
+import { useEffect, useRef, useState } from 'react';
+import useTranslation                  from 'next-translate/useTranslation';
+import moment                          from 'moment';
+import { getImage }                    from '@lib/aquila-connector/product/helpersProduct';
+import { downloadbillOrder }           from '@lib/aquila-connector/order';
+import { formatPrice }                 from '@lib/utils';
 
 export default function OrderDetails({ order }) {
     const [message, setMessage] = useState();
-    const [timer, setTimer]     = useState();
+    const timer                 = useRef();
     const { lang, t }           = useTranslation();
 
     moment.locale(lang);
 
     useEffect(() => {
-        return () => clearTimeout(timer);
+        return () => clearTimeout(timer.current);
     }, []);
 
     const downloadBill = async (bill, index) => {
@@ -27,8 +27,8 @@ export default function OrderDetails({ order }) {
             link.click();
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-            const st = setTimeout(() => { setMessage(); }, 3000);
-            setTimer(st);
+            const st      = setTimeout(() => { setMessage(); }, 3000);
+            timer.current = st;
         }
     };
 

@@ -1,4 +1,4 @@
-import { useEffect, useState }         from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link                            from 'next/link';
 import { useRouter }                   from 'next/router';
 import useTranslation                  from 'next-translate/useTranslation';
@@ -15,9 +15,9 @@ import 'react-responsive-modal/styles.css';
 export default function ProductCard({ product }) {
     const [qty, setQty]             = useState(1);
     const [message, setMessage]     = useState();
-    const [timer, setTimer]         = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const timer                     = useRef();
     const { query }                 = useRouter();
     const { cart, setCart }         = useCart();
     const { setShowCartSidebar }    = useShowCartSidebar();
@@ -32,7 +32,7 @@ export default function ProductCard({ product }) {
     });
 
     useEffect(() => {
-        return () => clearTimeout(timer);
+        return () => clearTimeout(timer.current);
     }, []);
 
     const onChangeQty = (e) => {
@@ -57,8 +57,8 @@ export default function ProductCard({ product }) {
             setShowCartSidebar(true);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-            const st = setTimeout(() => { setMessage(); }, 3000);
-            setTimer(st);
+            const st      = setTimeout(() => { setMessage(); }, 3000);
+            timer.current = st;
         } finally {
             setIsLoading(false);
         }

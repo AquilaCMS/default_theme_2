@@ -34,5 +34,8 @@ yarn-error.log*
 # vercel
 .vercel
 
-#aquila
+# aquila
 /_original_html
+
+# module
+components/modules/list_modules.js

@@ -11,8 +11,8 @@ import NextSeoCustom                            from '@components/tools/NextSeoC
 import Breadcrumb                               from '@components/navigation/Breadcrumb';
 import ProductList                              from '@components/product/ProductList';
 import MenuCategories                           from '@components/navigation/MenuCategories';
-import ClickAndCollect                          from '@components/modules/ClickAndCollect';
-import Allergen                                 from '@components/modules/Allergen';
+import Allergen                                 from 'modules/Allergen';
+import ClickAndCollect                          from 'modules/ClickAndCollect';
 import { dispatcher }                           from '@lib/redux/dispatcher';
 import { getBreadcrumb }                        from '@lib/aquila-connector/breadcrumb';
 import { getCategories, getCategoryProducts }   from '@lib/aquila-connector/category';
@@ -107,9 +107,9 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
 
 export default function CategoryList({ breadcrumb, category, categorySlugs, limit, origin, error }) {
     const [message, setMessage]                     = useState();
-    const { lang }                                  = useTranslation();
     const { categoryPage, setCategoryPage }         = useCategoryPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
+    const { lang, t }                               = useTranslation();
 
     const handlePageClick = async (data) => {
         const page = data.selected + 1;

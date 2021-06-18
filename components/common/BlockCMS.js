@@ -2,7 +2,7 @@ import React                                    from 'react';
 import Link                                     from 'next/link';
 import parse, { attributesToProps, domToReact } from 'html-react-parser';
 import BlogList                                 from '@components/common/BlogList';
-import Contact                                  from '@components/ns/Contact';
+import Contact                                  from '@components/common/Contact';
 import ProductList                              from '@components/product/ProductList';
 import { useCmsBlocks, useComponentData }       from '@lib/hooks';
 

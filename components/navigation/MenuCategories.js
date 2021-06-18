@@ -1,24 +1,19 @@
-import { useState }    from 'react';
-import { useSelector } from 'react-redux';
-import useTranslation  from 'next-translate/useTranslation';
-
-const getDatas = () => {
-    const navMenu = useSelector((state) => state.navMenu);
-    const menuCat = navMenu?.children?.filter((item) => item.action === 'catalog');
-    return { menuCat };
-};
+import { useState }   from 'react';
+import useTranslation from 'next-translate/useTranslation';
+import { useNavMenu } from '@lib/hooks';
 
 export default function MenuCategories() {
     const [open, setOpen] = useState(false);
+    const navMenu         = useNavMenu();
     const { t }           = useTranslation();
 
     const openBlock = () => {
         setOpen(!open);
     };
 
-    const { menuCat } = getDatas();
+    const menuCat = navMenu?.children?.filter((item) => item.action === 'catalog');
 
-    if(menuCat?.length > 0) {
+    if (menuCat?.length > 0) {
         return (
             <>
                 <div className="lien_carte w-inline-block" onClick={openBlock}>

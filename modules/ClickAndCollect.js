@@ -188,7 +188,6 @@ export default function ClickAndCollect() {
     const { cart, setCart }                   = useCart();
     
     moment.locale(lang);
-    console.log(lang, moment.locale());
     
     useEffect(() => {
         const fetchData = async () => {

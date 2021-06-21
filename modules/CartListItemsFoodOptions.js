@@ -72,10 +72,8 @@ export default function FoodOptions() {
         const fetchData = async () => {
             try {
                 // Get food options groups
-                const data = [
-                    'prd-comp-1,prd-comp-3,prd-comp-5',
-                    'prd-comp-2,prd-comp-6'
-                ];
+                // TODO use futur route
+                const data = [];
                 
                 for (let i in items) {
                     items[i] = items[i].id.code;
@@ -84,6 +82,16 @@ export default function FoodOptions() {
                 const groups = [];
                 for (let group of data) {
                     const codes = group.split(',');
+
+                    // Check if codes exists in cart
+                    for (let i = 0; i < codes.length; i++) {
+                        if (!items.includes(codes[i])) {
+                            codes.splice(codes.indexOf(codes[i]), 1);
+                        }
+                    }
+                    if (!codes.length) {
+                        continue;
+                    }
 
                     // Calculation of the number of products offered for each group 
                     let productsOffered = 0;
@@ -166,12 +174,11 @@ export default function FoodOptions() {
                     ) : (
                         <>
                             <div className="w-commerce-commercecartlist">
-                                <button type="button" className="checkout-button-2 w-button" onClick={() => setPart(1)}>{t('modules/food-options-aquila:back')}</button>
                                 <BlockCMS content={cmsBlockTop} />
                                 {
                                     cart.items?.filter((item) => item.foodOption).length > 0 && foodOptionsGroups.length > 0 ? foodOptionsGroups.map((group) => (
-                                        <div key={group.codes.join('-')} style={group.codes.length > 1 ? { border: '2px dashed #e6e6e6', padding: '10px', marginBottom: '10px' } : {}}>
-                                            {group.productsOffered && <span>{group.productsOffered} {group.productsOffered > 1 ? t('modules/food-options-aquila:productsOffered') : t('modules/food-options-aquila:productOffered')}</span>}
+                                        <div key={group.codes.join('-')} style={group.codes.length > 1 ? { border: '2px dashed #ff8946', padding: '10px', marginBottom: '10px' } : {}}>
+                                            {group.productsOffered > 0 && group.codes.length > 1 && <span>{group.productsOffered} {group.productsOffered > 1 ? t('modules/food-options-aquila:productsOffered') : t('modules/food-options-aquila:productOffered')}</span>}
                                             {
                                                 group.codes.length && group.codes.map((code) => {
                                                     const item = itemsFoodOptions.find((i) => i.code === code);
@@ -222,11 +229,10 @@ export default function FoodOptions() {
                                     </div>
                                 </div>
                                 <div>
-                                    {/* TODO : si form, alors il faut un bouton de validation */}
                                     <Link href="/checkout/clickandcollect">
                                         <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
                                     </Link>
-                                    {/* <a href="checkout.html" value="Continue to Checkout" className="w-commerce-commercecartcheckoutbutton checkout-button">Continue to Checkout</a> */}
+                                    <button type="button" className="checkout-button-2 w-button" onClick={() => setPart(1)} style={{ width: '100%' }}>{t('modules/food-options-aquila:back')}</button>
                                 </div>
                             </div>
                         </>

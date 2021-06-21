@@ -3,5 +3,6 @@
     "productOffered": "produit offert",
     "productsOffered": "produits offerts",
     "free": "Offert",
-    "back": "Retour"
+    "back": "Retour",
+    "noFoodOptions": "Aucun produit complémentaires"
 }

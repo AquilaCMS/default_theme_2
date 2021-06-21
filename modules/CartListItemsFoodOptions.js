@@ -169,7 +169,7 @@ export default function FoodOptions() {
                                 <button type="button" className="checkout-button-2 w-button" onClick={() => setPart(1)}>{t('modules/food-options-aquila:back')}</button>
                                 <BlockCMS content={cmsBlockTop} />
                                 {
-                                    foodOptionsGroups.map((group) => (
+                                    cart.items?.filter((item) => item.foodOption).length > 0 && foodOptionsGroups.length > 0 ? foodOptionsGroups.map((group) => (
                                         <div key={group.codes.join('-')} style={group.codes.length > 1 ? { border: '2px dashed #e6e6e6', padding: '10px', marginBottom: '10px' } : {}}>
                                             {group.productsOffered && <span>{group.productsOffered} {group.productsOffered > 1 ? t('modules/food-options-aquila:productsOffered') : t('modules/food-options-aquila:productOffered')}</span>}
                                             {
@@ -196,7 +196,9 @@ export default function FoodOptions() {
                                                 })
                                             }
                                         </div>
-                                    ))
+                                    )) : (
+                                        <p>{t('modules/food-options-aquila:noFoodOptions')}</p>
+                                    )
                                 }
                                 <div style={{ display: 'flex', justifyContent: 'flex-end', color: 'grey' }}>
                                     Supplément : {itemsFoodOptions?.length > 0 ? itemsFoodOptions.map((i) => i.price.total.ati).reduce((a, b) => a + b).toFixed(2) : 0} €

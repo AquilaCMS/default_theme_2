@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import useTranslation                  from 'next-translate/useTranslation';
-import moment                          from 'moment';
+import moment                          from 'moment/min/moment-with-locales';
 import { getImage }                    from '@lib/aquila-connector/product/helpersProduct';
 import { downloadbillOrder }           from '@lib/aquila-connector/order';
 import { formatPrice }                 from '@lib/utils';

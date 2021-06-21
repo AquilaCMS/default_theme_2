@@ -1,5 +1,5 @@
 import useTranslation       from 'next-translate/useTranslation';
-import moment               from 'moment';
+import moment               from 'moment/min/moment-with-locales';
 import { useComponentData } from '@lib/hooks';
 
 export default function BlogList({ list = [] }) {

@@ -2,7 +2,7 @@ import { useEffect, useState }        from 'react';
 import Head                           from 'next/head';
 import Geosuggest                     from 'react-geosuggest';
 import useTranslation                 from 'next-translate/useTranslation';
-import moment                         from 'moment';
+import moment                         from 'moment/min/moment-with-locales';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import fr                             from 'date-fns/locale/fr';
 import Button                         from '@components/ui/Button';
@@ -188,6 +188,7 @@ export default function ClickAndCollect() {
     const { cart, setCart }                   = useCart();
     
     moment.locale(lang);
+    console.log(lang, moment.locale());
     
     useEffect(() => {
         const fetchData = async () => {

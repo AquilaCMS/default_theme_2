@@ -174,7 +174,10 @@ export default function FoodOptions() {
                                             {group.productsOffered && <span>{group.productsOffered} {group.productsOffered > 1 ? t('modules/food-options-aquila:productsOffered') : t('modules/food-options-aquila:productOffered')}</span>}
                                             {
                                                 group.codes.length && group.codes.map((code) => {
-                                                    const item     = itemsFoodOptions.find((i) => i.code === code);
+                                                    const item = itemsFoodOptions.find((i) => i.code === code);
+                                                    if (!item) {
+                                                        return null;
+                                                    }
                                                     const foundImg = item.id.images.find((img) => img.default);
                                                     return (
                                                         <div key={item._id} className="w-commerce-commercecartitem cart-item">

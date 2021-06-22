@@ -1237,6 +1237,41 @@
           "description": "Texte d'information allergènes"
         }
       }
-    }
+    },
+    { 
+      "group" : "Module", 
+      "translation" : {
+          "fr" : {
+              "description" : "Information FoodOption", 
+              "html" : "Nous vous proposons des produits complémentaires pour agrémenter votre repas.", 
+              "variables" : [
+  
+              ], 
+              "content" : "Nous vous proposons des produits complémentaires pour agrémenter votre repas."
+          }
+      }, 
+      "code" : "foodoption-info"
+  },
+  { 
+    "group" : "Legal", 
+    "translation" : {
+        "fr" : {
+            "description" : "Texte légal concernant le RGPD", 
+            "html" : "TODO", 
+            "variables" : [
+
+            ], 
+            "content" : "TODO"
+        }, 
+        "en" : {
+            "html" : "en-TODO", 
+            "variables" : [
+
+            ], 
+            "content" : "en-TODO"
+        }
+    }, 
+    "code" : "top-text-rgpd"
+}
   ]
 }

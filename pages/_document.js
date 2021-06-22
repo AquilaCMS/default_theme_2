@@ -2,13 +2,15 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 import Favicon                                    from '@components/layouts/Favicon';
 import GTMScripts                                 from '@components/tools/GTMScripts';
 import FbpScripts                                 from '@components/tools/FbpScripts';
-
-
-const TMPlang = 'fr';
 export default class MyDocument extends Document {
+    static async getInitialProps(ctx) {
+        const initialProps = await Document.getInitialProps(ctx);
+        return { ...initialProps, locale: ctx.locale };
+    }
+      
     render() {
         return (
-            <Html lang={TMPlang}>
+            <Html lang={this.props.locale}>
                 <Head>
                     <GTMScripts script="header" />
                     <FbpScripts />

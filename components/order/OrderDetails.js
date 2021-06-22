@@ -1,16 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import useTranslation                  from 'next-translate/useTranslation';
-import moment                          from 'moment/min/moment-with-locales';
-import { getImage }                    from '@lib/aquila-connector/product/helpersProduct';
 import { downloadbillOrder }           from '@lib/aquila-connector/order';
-import { formatPrice }                 from '@lib/utils';
+import { formatDate, formatPrice }     from '@lib/utils';
 
 export default function OrderDetails({ order }) {
     const [message, setMessage] = useState();
     const timer                 = useRef();
     const { lang, t }           = useTranslation();
-
-    moment.locale(lang);
 
     useEffect(() => {
         return () => clearTimeout(timer.current);
@@ -46,12 +42,11 @@ export default function OrderDetails({ order }) {
                                     <div role="listitem" className="w-dyn-item">
                                         {
                                             order.items.map((item) => {
-                                                const foundImg = item.id.images.find((img) => img.default);
                                                 return (
                                                     <div className="item-tunnel w-row" key={item._id}>
                                                         <div className="w-col w-col-3">
                                                             <div className="food-image-square-tunnel w-inline-block">
-                                                                <img src={getImage(foundImg, '60x60') || '/images/no-image.svg'} alt="" className="food-image" style={{ 'width': '60px' }} />
+                                                                <img src={item.image ? `${process.env.NEXT_PUBLIC_IMG_URL}/${item.image}` : '/images/no-image.svg'} alt="" className="food-image" style={{ 'width': '60px' }} />
                                                             </div>
                                                         </div>
                                                         <div className="w-col w-col-9">
@@ -99,7 +94,7 @@ export default function OrderDetails({ order }) {
                                     <label htmlFor="email-2">
                                         {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
                                     </label>
-                                    <p className="label-tunnel">{moment(order.orderReceipt.date).format('L')} - {moment(order.orderReceipt.date).format('HH[h]mm')}</p>
+                                    <p className="label-tunnel">{formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p>
                                 </div>
                             </div>
                             <div className="w-commerce-commercecheckoutsummaryblockheader block-header">

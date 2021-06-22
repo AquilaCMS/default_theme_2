@@ -1,16 +1,15 @@
-import { useEffect, useState }        from 'react';
-import Head                           from 'next/head';
-import Geosuggest                     from 'react-geosuggest';
-import useTranslation                 from 'next-translate/useTranslation';
-import moment                         from 'moment/min/moment-with-locales';
-import DatePicker, { registerLocale } from 'react-datepicker';
-import fr                             from 'date-fns/locale/fr';
-import Button                         from '@components/ui/Button';
-import { setCartAddresses }           from '@lib/aquila-connector/cart';
-import { getUser }                    from '@lib/aquila-connector/user';
-import axios                          from '@lib/axios/AxiosInstance';
-import { useCart }                    from '@lib/hooks';
-import { getUserIdFromJwt }           from '@lib/utils';
+import { useEffect, useState }                      from 'react';
+import Head                                         from 'next/head';
+import Geosuggest                                   from 'react-geosuggest';
+import useTranslation                               from 'next-translate/useTranslation';
+import DatePicker, { registerLocale }               from 'react-datepicker';
+import fr                                           from 'date-fns/locale/fr';
+import Button                                       from '@components/ui/Button';
+import { setCartAddresses }                         from '@lib/aquila-connector/cart';
+import { getUser }                                  from '@lib/aquila-connector/user';
+import axios                                        from '@lib/axios/AxiosInstance';
+import { useCart }                                  from '@lib/hooks';
+import { formatDate, formatTime, getUserIdFromJwt } from '@lib/utils';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -186,9 +185,7 @@ export default function ClickAndCollect() {
     const [isLoading, setIsLoading]           = useState(false);
     const { lang, t }                         = useTranslation();
     const { cart, setCart }                   = useCart();
-    
-    moment.locale(lang);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -241,7 +238,7 @@ export default function ClickAndCollect() {
 
                     // Preselect date & time
                     const localDeliveryDate = cart.orderReceipt.date ? new Date(cart.orderReceipt.date) : new Date();
-                    const localDeliveryTime = cart.orderReceipt.date ? moment(new Date(cart.orderReceipt.date)).format('HH[h]mm') : '';
+                    const localDeliveryTime = cart.orderReceipt.date ? formatTime(cart.orderReceipt.date).replace(':', 'h') : '';
                     setDeliveryDate(localDeliveryDate);
                     setDeliveryTime(localDeliveryTime);
 
@@ -352,7 +349,7 @@ export default function ClickAndCollect() {
         const body       = {
             pointOfSale  : localCurrentPOS,
             cartId       : cart._id,
-            receiptDate  : new Date(`${moment(localDeliveryDate).format('MM/DD/YYYY')} ${dateToSend}`),
+            receiptDate  : new Date(`${formatDate(localDeliveryDate, 'en')} ${dateToSend}`),
             receiptMethod: localDeliveryHome ? 'delivery' : 'withdrawal',
             country      : 'FR',
             dateToSend
@@ -499,7 +496,7 @@ export default function ClickAndCollect() {
                             <div>
                                 <DatePicker
                                     minDate={new Date()}
-                                    value={moment(deliveryDate).format('L')}
+                                    value={formatDate(deliveryDate, lang)}
                                     selected={deliveryDate}
                                     locale={lang}
                                     required

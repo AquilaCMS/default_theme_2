@@ -81,7 +81,7 @@ export default function FoodOptions() {
                 
                 const groups = [];
                 for (let group of data) {
-                    const codes = group.split(',');
+                    const codes = group.replace(/\s/, '').split(',');
 
                     // Check if codes exists in cart
                     for (let i = 0; i < codes.length; i++) {

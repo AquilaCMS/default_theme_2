@@ -1,6 +1,7 @@
 import { useEffect }  from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import CartListItems  from '@components/cart/CartListItems';
+import { moduleHook } from '@lib/utils';
 
 export default function CartSidebarView({ hideCartSidebar }) {
     // TODO : essayer de faire l'animation :
@@ -16,7 +17,6 @@ export default function CartSidebarView({ hideCartSidebar }) {
     }, []);
 
     return (
-
         <div className="w-commerce-commercecartcontainerwrapper w-commerce-commercecartcontainerwrapper--cartType-rightSidebar">
             <div className="w-commerce-commerceoutcartcontainer" onClick={hideCartSidebar} />
             <div className="w-commerce-commercecartcontainer">
@@ -33,10 +33,11 @@ export default function CartSidebarView({ hideCartSidebar }) {
                     </button>
                 </div>
                 <div className="w-commerce-commercecartformwrapper">
-                    <CartListItems />
+                    {
+                        moduleHook('cart') || <CartListItems />
+                    }
                 </div>
             </div>
         </div>
-
     );
 }

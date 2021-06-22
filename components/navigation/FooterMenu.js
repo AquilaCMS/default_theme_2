@@ -1,17 +1,12 @@
-import useTranslation  from 'next-translate/useTranslation';
-import Link            from 'next/link';
-import { useSelector } from 'react-redux';
-
-const getDatas = () => {
-    const footerMenu = useSelector((state) => state.footerMenu);
-    return { footerMenu };
-};
+import useTranslation    from 'next-translate/useTranslation';
+import Link              from 'next/link';
+import { useFooterMenu } from '@lib/hooks';
 
 export default function FooterMenu() {
-    const { lang }       = useTranslation();
-    const { footerMenu } = getDatas();
-    const nbCol          = 5 - footerMenu?.children?.length;
-    const nbColClass     = `w-col w-col-${nbCol} w-col-medium-4`;
+    const { lang }   = useTranslation();
+    const footerMenu = useFooterMenu();
+    const nbCol      = 5 - footerMenu?.children?.length;
+    const nbColClass = `w-col w-col-${nbCol} w-col-medium-4`;
 
     if(footerMenu && footerMenu.children) {
         return (

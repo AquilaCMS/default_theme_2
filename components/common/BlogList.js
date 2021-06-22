@@ -1,12 +1,10 @@
 import useTranslation       from 'next-translate/useTranslation';
-import moment               from 'moment';
 import { useComponentData } from '@lib/hooks';
+import { formatDate }       from '@lib/utils';
 
 export default function BlogList({ list = [] }) {
     const componentData = useComponentData();
     const { lang, t }   = useTranslation();
-
-    moment.locale(lang);
 
     // Get data in redux store or prop list
     const blogList = componentData['nsBlogList'] || list;
@@ -14,11 +12,11 @@ export default function BlogList({ list = [] }) {
     return (
         <div className="content-section">
             <div className="container">
-                {blogList.length ? blogList.map((item) => (
+                {blogList.length > 0 ? blogList.map((item) => (
                     <div key={item._id} className="w-layout-grid content-grid" itemType="http://schema.org/Article">
                         <div className="content-block">
                             <h2 className="heading-5">{item.title}</h2>
-                            <p>{moment(item.createdAt).format('LLL')}</p>
+                            <p>{formatDate(item.createdAt, lang, { hour: '2-digit', minute: '2-digit', weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>
                             <div dangerouslySetInnerHTML={{ __html: item.content.text }}></div>
                         </div>
                         <div className="image-block">

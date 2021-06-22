@@ -1,16 +1,15 @@
-import { useEffect, useState }                                        from 'react';
-import Head                                                           from 'next/head';
-import Geosuggest                                                     from 'react-geosuggest';
-import useTranslation                                                 from 'next-translate/useTranslation';
-import moment                                                         from 'moment';
-import DatePicker, { registerLocale }                                 from 'react-datepicker';
-import fr                                                             from 'date-fns/locale/fr';
-import Button                                                         from '@components/ui/Button';
-import { setCartAddresses }                                           from '@lib/aquila-connector/cart';
-import { getPointsOfSale, getPointOfSaleForDelivery, setPointOfSale } from '@lib/aquila-connector/pointsOfSale';
-import { getUser }                                                    from '@lib/aquila-connector/user';
-import { useCart }                                                    from '@lib/hooks';
-import { getUserIdFromJwt }                                           from '@lib/utils';
+import { useEffect, useState }                      from 'react';
+import Head                                         from 'next/head';
+import Geosuggest                                   from 'react-geosuggest';
+import useTranslation                               from 'next-translate/useTranslation';
+import DatePicker, { registerLocale }               from 'react-datepicker';
+import fr                                           from 'date-fns/locale/fr';
+import Button                                       from '@components/ui/Button';
+import { setCartAddresses }                         from '@lib/aquila-connector/cart';
+import { getUser }                                  from '@lib/aquila-connector/user';
+import axios                                        from '@lib/axios/AxiosInstance';
+import { useCart }                                  from '@lib/hooks';
+import { formatDate, formatTime, getUserIdFromJwt } from '@lib/utils';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -126,6 +125,50 @@ function toAquilaAddress(address) {
     }
 }
 
+// GET API key for Google Maps 
+async function getAPIKeyGMaps() {
+    try {
+        const response = await axios.get('pointOfSale/getKey');
+        return response.data.api_key_google_map;
+    } catch(err) {
+        console.error('pointsOfSale.getAPIKeyGMaps');
+        throw new Error(err?.response?.data?.message);
+    }
+}
+
+// GET points of sale
+async function getPointsOfSale() {
+    try {
+        const response = await axios.get('pointsOfSale/populate');
+        return response.data;
+    } catch(err) {
+        console.error('pointsOfSale.getPointsOfSale');
+        throw new Error(err?.response?.data?.message);
+    }
+}
+
+// GET point of sale corresponding to an address
+async function getPointOfSaleForDelivery(address) {
+    try {
+        const response = await axios.post('pointsOfSale/findForDelivery', address);
+        return response.data;
+    } catch(err) {
+        console.error('pointsOfSale.getPointOfSaleForDelivery');
+        throw new Error(err?.response?.data?.message);
+    }
+}
+
+// Submit point of sale
+async function setPointOfSale(body) {
+    try {
+        const response = await axios.put('pointOfSale/orderReceipt', body);
+        return response.data;
+    } catch(err) {
+        console.error('pointsOfSale.setPointOfSale');
+        throw new Error(err?.response?.data?.message);
+    }
+}
+
 export default function ClickAndCollect() {
     const [hasWithdrawal, setHasWithdrawal]   = useState(0);
     const [hasDelivery, setHasDelivery]       = useState(0);
@@ -142,9 +185,7 @@ export default function ClickAndCollect() {
     const [isLoading, setIsLoading]           = useState(false);
     const { lang, t }                         = useTranslation();
     const { cart, setCart }                   = useCart();
-    
-    moment.locale(lang);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -197,7 +238,7 @@ export default function ClickAndCollect() {
 
                     // Preselect date & time
                     const localDeliveryDate = cart.orderReceipt.date ? new Date(cart.orderReceipt.date) : new Date();
-                    const localDeliveryTime = cart.orderReceipt.date ? moment(new Date(cart.orderReceipt.date)).format('HH[h]mm') : '';
+                    const localDeliveryTime = cart.orderReceipt.date ? formatTime(cart.orderReceipt.date).replace(':', 'h') : '';
                     setDeliveryDate(localDeliveryDate);
                     setDeliveryTime(localDeliveryTime);
 
@@ -235,7 +276,7 @@ export default function ClickAndCollect() {
         }
         if (!deliveryAddress.zipcode || !deliveryAddress.line1 || !deliveryAddress.city) {
             setIsValidAddress(false);
-            return setMessage({ type: 'error', message: t('components/clickAndCollect:submitAddressError') });
+            return setMessage({ type: 'error', message: t('modules/pointofsale-aquila:submitAddressError') });
         }
         try {
             const response = await getPointOfSaleForDelivery(deliveryAddress);
@@ -298,17 +339,17 @@ export default function ClickAndCollect() {
         setIsLoading(true);
         if (!localDeliveryHome && !localCurrentPOS._id) {
             setIsLoading(false);
-            return setMessage({ type: 'error', message: t('components/clickAndCollect:submitError') });
+            return setMessage({ type: 'error', message: t('modules/pointofsale-aquila:submitError') });
         }
         if (localDeliveryHome && !localIsValidAddress) {
             setIsLoading(false);
-            return setMessage({ type: 'error', message: t('components/clickAndCollect:submitError2') });
+            return setMessage({ type: 'error', message: t('modules/pointofsale-aquila:submitError2') });
         }
         const dateToSend = localDeliveryTime.replace('h', ':');
         const body       = {
             pointOfSale  : localCurrentPOS,
             cartId       : cart._id,
-            receiptDate  : new Date(`${moment(localDeliveryDate).format('MM/DD/YYYY')} ${dateToSend}`),
+            receiptDate  : new Date(`${formatDate(localDeliveryDate, 'en')} ${dateToSend}`),
             receiptMethod: localDeliveryHome ? 'delivery' : 'withdrawal',
             country      : 'FR',
             dateToSend
@@ -322,7 +363,7 @@ export default function ClickAndCollect() {
                 // Address entered by user for cart billing & delivery address
                 if (address.gmaps === undefined) {
                     setIsLoading(false);
-                    return setMessage({ type: 'info', message: t('components/clickAndCollect:submitSuccess') });
+                    return setMessage({ type: 'info', message: t('modules/pointofsale-aquila:submitSuccess') });
                 }
                 const addresses = {
                     billing : toAquilaAddress(address),
@@ -361,7 +402,7 @@ export default function ClickAndCollect() {
                     }
                 }
             }
-            setMessage({ type: 'info', message: t('components/clickAndCollect:submitSuccess') });
+            setMessage({ type: 'info', message: t('modules/pointofsale-aquila:submitSuccess') });
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         } finally {
@@ -399,7 +440,7 @@ export default function ClickAndCollect() {
                                     )
                                 }
                                 {
-                                    ((hasWithdrawal === 1 && hasDelivery === 1) || (hasWithdrawal === 1 && hasDelivery !== 1)) && <span className="checkbox-label w-form-label">{t('components/clickAndCollect:withDrawal')}</span>
+                                    ((hasWithdrawal === 1 && hasDelivery === 1) || (hasWithdrawal === 1 && hasDelivery !== 1)) && <span className="checkbox-label w-form-label">{t('modules/pointofsale-aquila:withDrawal')}</span>
                                 }
                             </label>
                             <label className="checkbox-click-collect w-radio">
@@ -420,7 +461,7 @@ export default function ClickAndCollect() {
                                     )
                                 }
                                 {
-                                    ((hasWithdrawal === 1 && hasDelivery === 1 ) || (hasWithdrawal !== 1 && hasDelivery === 1)) && <span className="checkbox-label w-form-label">{t('components/clickAndCollect:delivery')}</span>
+                                    ((hasWithdrawal === 1 && hasDelivery === 1 ) || (hasWithdrawal !== 1 && hasDelivery === 1)) && <span className="checkbox-label w-form-label">{t('modules/pointofsale-aquila:delivery')}</span>
                                 }
                             </label>
                             {
@@ -440,7 +481,7 @@ export default function ClickAndCollect() {
                                     />
                                 ) : (
                                     <select required className="text-ville w-select" value={currentPOS._id} onChange={onChangePos}>
-                                        { pointsOfSale.filter(pos => pos.isWithdrawal).length > 1 && <option value="">{t('components/clickAndCollect:selectPOS')}</option> }
+                                        { pointsOfSale.filter(pos => pos.isWithdrawal).length > 1 && <option value="">{t('modules/pointofsale-aquila:selectPOS')}</option> }
                                         {
                                             pointsOfSale?.filter(pos => pos.isWithdrawal)?.map(pos => {
                                                 return (
@@ -455,7 +496,7 @@ export default function ClickAndCollect() {
                             <div>
                                 <DatePicker
                                     minDate={new Date()}
-                                    value={moment(deliveryDate).format('L')}
+                                    value={formatDate(deliveryDate, lang)}
                                     selected={deliveryDate}
                                     locale={lang}
                                     required
@@ -471,8 +512,8 @@ export default function ClickAndCollect() {
                                 }
                             </select>
                             <Button 
-                                text={t('components/clickAndCollect:submit')}
-                                loadingText={t('components/clickAndCollect:submitLoading')}
+                                text={t('modules/pointofsale-aquila:submit')}
+                                loadingText={t('modules/pointofsale-aquila:submitLoading')}
                                 isLoading={isLoading}
                                 className="adresse-button w-button"
                             />

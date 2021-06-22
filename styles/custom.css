@@ -361,3 +361,10 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
 .pagination li a {
     text-decoration: none;
 }
+
+/*
+    REMOVE => .slide l.2773 mon-restaurant.webflow.css
+*/
+.navbar:hover {
+    color: unset;
+}

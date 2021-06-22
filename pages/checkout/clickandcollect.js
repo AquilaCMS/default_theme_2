@@ -1,9 +1,9 @@
 import { useEffect, useState }               from 'react';
 import { useRouter }                         from 'next/router';
 import useTranslation                        from 'next-translate/useTranslation';
-import ClickAndCollect                       from '@components/modules/ClickAndCollect';
 import LightLayout                           from '@components/layouts/LightLayout';
 import NextSeoCustom                         from '@components/tools/NextSeoCustom';
+import ClickAndCollect                       from 'modules/ClickAndCollect';
 import { setUser }                           from '@lib/aquila-connector/user';
 import { useCart }                           from '@lib/hooks';
 import { authProtectedPage, serverRedirect } from '@lib/utils';

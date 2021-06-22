@@ -1,19 +1,19 @@
-import { useEffect, useState }       from 'react';
-import useTranslation                from 'next-translate/useTranslation';
-import { deleteItem, updateQtyItem } from '@lib/aquila-connector/cart';
-import { getImage }                  from '@lib/aquila-connector/product/helpersProduct';
-import { useCart }                   from '@lib/hooks';
-import { formatPrice }               from '@lib/utils';
+import { useEffect, useRef, useState } from 'react';
+import useTranslation                  from 'next-translate/useTranslation';
+import { deleteItem, updateQtyItem }   from '@lib/aquila-connector/cart';
+import { getImage }                    from '@lib/aquila-connector/product/helpersProduct';
+import { useCart }                     from '@lib/hooks';
+import { formatPrice }                 from '@lib/utils';
 
 export default function CartItem({ item }) {
     const [qty, setQty]         = useState(item.quantity);
     const [message, setMessage] = useState();
-    const [timer, setTimer]     = useState();
+    const timer                 = useRef();
     const { cart, setCart }     = useCart();
     const { t }                 = useTranslation();
 
     useEffect(() => {
-        return () => clearTimeout(timer);
+        return () => clearTimeout(timer.current);
     }, []);
 
     const onChangeQtyItem = async (e) => {
@@ -30,8 +30,8 @@ export default function CartItem({ item }) {
                 setCart(newCart);
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-                const st = setTimeout(() => { setMessage(); }, 3000);
-                setTimer(st);
+                const st      = setTimeout(() => { setMessage(); }, 3000);
+                timer.current = st;
             }
         }
     };
@@ -42,8 +42,8 @@ export default function CartItem({ item }) {
             setCart(newCart);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-            const st = setTimeout(() => { setMessage(); }, 3000);
-            setTimer(st);
+            const st      = setTimeout(() => { setMessage(); }, 3000);
+            timer.current = st;
         }
     };
 

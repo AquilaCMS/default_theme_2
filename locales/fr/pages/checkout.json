@@ -21,7 +21,8 @@
     "titleH1" : "Ma commande",
     "paymentMethod" : "Moyen de paiement",
     "previous" : "RETOUR",
-    "pay" : "PAYER"
+    "pay" : "PAYER",
+    "submitLoading" : "PAIEMENT..."
   },
   "confirmation" : {
     "title" : "Ma commande - Confirmation",

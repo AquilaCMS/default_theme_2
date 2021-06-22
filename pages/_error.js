@@ -1,4 +1,5 @@
 import Head           from 'next/head';
+import Link           from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import Layout         from '@components/layouts/Layout';
 
@@ -22,7 +23,9 @@ function Error({ statusCode }) {
                     <h2>{title}</h2>
                     <div>
                         <p className="utility-paragraph">{text}<br />
-                            <a href="/" className="link-2">{t('pages/error:back')}</a>
+                            <Link href="/">
+                                <a className="link-2">{t('pages/error:back')}</a>
+                            </Link>
                         </p>
                     </div>
                 </div>

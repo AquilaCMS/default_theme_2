@@ -4,15 +4,17 @@
   "pages": {
     "*": [
       "common",
-      "components/allergen",
+      "components/blogList",
       "components/bundleProduct",
       "components/cart",
-      "components/clickAndCollect",
       "components/cookiesBanner",
       "components/contact",
       "components/newsletter",
       "components/navigation",
       "components/product",
+      "modules/allergen-aquila",
+      "modules/food-options-aquila",
+      "modules/pointofsale-aquila",
       "pages/error"
     ],
     "/account": [

@@ -1,21 +1,16 @@
-import { Fragment }    from 'react';
-import useTranslation  from 'next-translate/useTranslation';
-import { useState }    from 'react';
-import Link            from 'next/link';
-import { useSelector } from 'react-redux';
-import { isMobile }    from '@lib/utils';
-
-const getDatas = () => {
-    const navMenu = useSelector((state) => state.navMenu);
-    return { navMenu };
-};
-
+import { Fragment, useState } from 'react';
+import { useRouter }          from 'next/router';
+import useTranslation         from 'next-translate/useTranslation';
+import Link                   from 'next/link';
+import { useNavMenu }         from '@lib/hooks';
+import { isMobile }           from '@lib/utils';
 
 export default function NavMenu() {
     const [burger, setBurger]                   = useState(false);
     const [view, setView]                       = useState([]);
     const [boolOpenSubMenu, setBoolOpenSubMenu] = useState(false);
-    const { navMenu }                           = getDatas();
+    const navMenu                               = useNavMenu();
+    const { asPath }                            = useRouter();
     const { lang, t }                           = useTranslation();
 
     const toggleBurger = () => {
@@ -60,11 +55,15 @@ export default function NavMenu() {
 
             <nav className={`nav-menu w-nav-menu${burger ? ' w-nav-button-open' : ''}`}>
                 {navMenu ? navMenu.children?.map((item) => {
+                    let current = false;
+                    if ((item.action === 'catalog' && asPath.indexOf(`/c/${item.slug[lang]}`) > -1) || asPath.indexOf(`/${item.pageSlug}`) > -1) {
+                        current = true;
+                    }
                     return (
                         item.children && item.children.length > 0 ? (
                             <div className="nav-link-2 pd w-dropdown" onMouseEnter={() => openSubMenu(item._id, 1)} onMouseLeave={closeSubMenu} key={item._id}>
                                 <div className={`dropdown-pd-toggle w-dropdown-toggle${view.find((v) => v === item._id) ? ' w--open' : ''}`} onClick={() => openSubMenuOnClick(item._id, 1)} >
-                                    <div>{item.name}</div>
+                                    <div style={current ? { color: '#ff8946' } : {} }>{item.name}</div>
                                     <div className="w-icon-dropdown-toggle" />
                                 </div>
                                 <nav className={`dropdown-pd-list w-clearfix w-dropdown-list${view.find((v) => v === item._id) ? ' w--open' : ''}`}>
@@ -84,7 +83,7 @@ export default function NavMenu() {
                                                                         return (
                                                                             <div className="dropdown-nav-link-2" key={item3._id}>
                                                                                 <div className="icon-3 w-icon-dropdown-toggle" />
-                                                                                <Link href={item3.action === 'catalog' ? `/c/${item.slug.fr}/${item2.slug.fr}/${item3.slug.fr}` : `/${item3.pageSlug}`}>
+                                                                                <Link href={item3.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}/${item3.slug[lang]}` : `/${item3.pageSlug}`}>
                                                                                     <a className="dropdown-link-3 w-dropdown-link">{item3.name}</a>
                                                                                 </Link>
                                                                             </div>
@@ -94,7 +93,7 @@ export default function NavMenu() {
                                                             </div>
                                                         </Fragment>
                                                     ) : (
-                                                        <Link href={item2.action === 'catalog' ? `/c/${item.slug.fr}/${item2.slug.fr}` : `/${item2.pageSlug}`} key={item2._id}>
+                                                        <Link href={item2.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : `/${item2.pageSlug}`} key={item2._id}>
                                                             <a className="dropdown-nav-link w-dropdown-link">{item2.name}</a>
                                                         </Link>
                                                     )
@@ -106,14 +105,14 @@ export default function NavMenu() {
                             </div>
                         ) : (
                             <Link href={item.action === 'catalog' ? `/c/${item.slug[lang]}` : `/${item.pageSlug}`} key={item._id}>
-                                <a className="nav-link-2 w-nav-link" >{item.name}</a>
+                                <a className={`nav-link-2 w-nav-link${current ? ' w--current' : ''}`} >{item.name}</a>
                             </Link>
                         )
                     );
                 }) : null}
 
                 <Link href="/account/login">
-                    <a className="nav-link-2 w-nav-link">{t('components/navigation:myAccount')}</a>
+                    <a className={`nav-link-2 w-nav-link${asPath.indexOf('/account') > -1 ? ' w--current' : ''}`}>{t('components/navigation:myAccount')}</a>
                 </Link>
             </nav>
         </>

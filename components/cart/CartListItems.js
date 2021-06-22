@@ -9,12 +9,11 @@ export default function CartListItems() {
 
     if (cart.items?.length > 0) {
         return (
-
             <form className="w-commerce-commercecartform">
 
                 {/* TMP : partie rajouté "à la main" à partir du html en ligne */}
                 <div className="w-commerce-commercecartlist" >
-                    {cart.items?.map((item) => (
+                    {cart.items.map((item) => (
                         <CartItem item={item} key={item._id} />
                     ))}
                 </div>
@@ -35,7 +34,6 @@ export default function CartListItems() {
                     </div>
                 </div>
             </form>
-
         );
     }
 
@@ -43,7 +41,9 @@ export default function CartListItems() {
         <div className="w-commerce-commercecartemptystate empty-state">
             <div>{t('components/cart:cartListItem.empty')}</div>
             <div className="button-arrow-wrap">
-                <a href="/" className="button w-button">{t('components/cart:cartListItem.goToHome')}</a>
+                <Link href="/">
+                    <a className="button w-button">{t('components/cart:cartListItem.goToHome')}</a>
+                </Link>
             </div>
         </div>
     );

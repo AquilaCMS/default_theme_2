@@ -2,6 +2,7 @@
   "collection": "products",
   "datas": [
     {
+      "_id": "605364234b9ac91f54fcabad",
       "stock": {
         "qty": 0,
         "qty_booked": 0,
@@ -15,12 +16,7 @@
           "en": {
             "value": "Available product"
           }
-        },
-        "qty_real": 0
-      },
-      "trademark": {
-        "name": "BrandSample",
-        "code": "brandsample"
+        }
       },
       "price": {
         "et": {
@@ -56,7 +52,6 @@
       ],
       "is_new": false,
       "kind": "SimpleProduct",
-      "attributes": [],
       "images": [
         {
           "default": true,
@@ -89,10 +84,61 @@
           "url": "photos/product/l/o/original-burger3.jpg"
         }
       ],
-      "pictos": [],
-      "_id": "605364234b9ac91f54fcabad",
       "type": "simple",
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d06ea4e197fd1fc0d9b6ed",
+          "id": "60d06ea4e197fd1fc0d9b6ec",
+          "code": "sauce-ketchup",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Ketchup"
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
       "code": "loriginal",
       "translation": {
         "fr": {
@@ -120,18 +166,24 @@
           "canonical": "/en/burgers/loriginal"
         }
       },
-      "createdAt": "2021-03-18T14:30:59.907Z",
-      "updatedAt": "2021-04-25T18:37:58.676Z",
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
       "universe": "burger-burger",
       "code_ean": "1234567896541",
+      "trademark": {
+        "name": "BrandSample",
+        "code": "brandsample"
+      },
       "allergens": [
         "607ecb35d23bc05a98874b4b",
         "607ecb35d23bc05a98874b51",
         "607ecb35d23bc05a98874b4e"
       ],
-      "id": "605364234b9ac91f54fcabad"
+      "component_template": "<food-options-config></food-options-config>"
     },
     {
+      "_id": "605365894b9ac91f54fcabb8",
       "stock": {
         "qty": 0,
         "qty_booked": 0,
@@ -145,8 +197,7 @@
           "en": {
             "value": "Available product"
           }
-        },
-        "qty_real": 0
+        }
       },
       "price": {
         "et": {
@@ -180,7 +231,6 @@
       ],
       "is_new": false,
       "kind": "SimpleProduct",
-      "attributes": [],
       "images": [
         {
           "default": true,
@@ -203,10 +253,61 @@
           "url": "photos/product/l/e/le-bacon-burger2.jpg"
         }
       ],
-      "pictos": [],
-      "_id": "605365894b9ac91f54fcabb8",
       "type": "simple",
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d06ea4e197fd1fc0d9b6ed",
+          "id": "60d06ea4e197fd1fc0d9b6ec",
+          "code": "sauce-ketchup",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Ketchup"
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
       "code": "lebacon",
       "translation": {
         "fr": {
@@ -233,16 +334,23 @@
           "canonical": "/en/burgers/the-bacon"
         }
       },
-      "createdAt": "2021-03-18T14:36:57.650Z",
-      "updatedAt": "2021-04-25T18:37:58.691Z",
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
       "universe": "burger-burger",
       "allergens": [
         "607ecb35d23bc05a98874b4b",
-        "607ecb35d23bc05a98874b51"
+        "607ecb35d23bc05a98874b51",
+        "60a38dc81f60701cac587c8e",
+        "60a38dc81f60701cac587c8f",
+        "60a38dc81f60701cac587c91",
+        "60a38dc81f60701cac587c92",
+        "60a38dc81f60701cac587c94"
       ],
-      "id": "605365894b9ac91f54fcabb8"
+      "component_template": "<food-options-config></food-options-config>"
     },
     {
+      "_id": "605366a34b9ac91f54fcabc7",
       "stock": {
         "qty": 0,
         "qty_booked": 0,
@@ -256,8 +364,7 @@
           "en": {
             "value": "Available product"
           }
-        },
-        "qty_real": 0
+        }
       },
       "price": {
         "et": {
@@ -288,7 +395,6 @@
       "associated_prds": [],
       "is_new": false,
       "kind": "SimpleProduct",
-      "attributes": [],
       "images": [
         {
           "default": true,
@@ -311,10 +417,61 @@
           "url": "photos/product/c/h/chicken-burger2.jpg"
         }
       ],
-      "pictos": [],
-      "_id": "605366a34b9ac91f54fcabc7",
       "type": "simple",
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d06ea4e197fd1fc0d9b6ed",
+          "id": "60d06ea4e197fd1fc0d9b6ec",
+          "code": "sauce-ketchup",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Ketchup"
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
       "code": "chickenburger",
       "translation": {
         "fr": {
@@ -342,15 +499,21 @@
         }
       },
       "universe": "burger-burger",
-      "createdAt": "2021-03-18T14:41:39.770Z",
-      "updatedAt": "2021-04-25T18:37:58.702Z",
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
       "allergens": [
         "607ecb35d23bc05a98874b4b",
-        "607ecb35d23bc05a98874b51"
+        "607ecb35d23bc05a98874b51",
+        "60a38dc81f60701cac587c8e",
+        "60a38dc81f60701cac587c8f",
+        "60a38dc81f60701cac587c91",
+        "60a38dc81f60701cac587c92"
       ],
-      "id": "605366a34b9ac91f54fcabc7"
+      "component_template": "<food-options-config></food-options-config>"
     },
     {
+      "_id": "605367d64b9ac91f54fcabd9",
       "stock": {
         "qty": 0,
         "qty_booked": 0,
@@ -364,8 +527,7 @@
           "en": {
             "value": "Available product"
           }
-        },
-        "qty_real": 0
+        }
       },
       "price": {
         "et": {
@@ -398,7 +560,6 @@
       ],
       "is_new": false,
       "kind": "SimpleProduct",
-      "attributes": [],
       "images": [
         {
           "default": true,
@@ -411,10 +572,62 @@
           "url": "photos/product/c/o/coca-cola.jpg"
         }
       ],
-      "pictos": [],
-      "_id": "605367d64b9ac91f54fcabd9",
       "type": "simple",
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d06ea4e197fd1fc0d9b6ed",
+          "id": "60d06ea4e197fd1fc0d9b6ec",
+          "code": "sauce-ketchup",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "value": 0,
+              "name": "Ketchup"
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
       "code": "coca",
       "translation": {
         "fr": {
@@ -441,12 +654,16 @@
           "canonical": "/en/drinks/coca"
         }
       },
-      "createdAt": "2021-03-18T14:46:46.111Z",
-      "updatedAt": "2021-04-25T18:37:58.740Z",
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
       "universe": "boissons-boissons",
-      "id": "605367d64b9ac91f54fcabd9"
+      "component_template": "<food-options-config></food-options-config>",
+      "allergens": [],
+      "foodOption": false
     },
     {
+      "_id": "605368a04b9ac91f54fcabe5",
       "stock": {
         "qty": 0,
         "qty_booked": 0,
@@ -460,8 +677,7 @@
           "en": {
             "value": "Available product"
           }
-        },
-        "qty_real": 0
+        }
       },
       "price": {
         "et": {
@@ -492,7 +708,6 @@
       "associated_prds": [],
       "is_new": false,
       "kind": "SimpleProduct",
-      "attributes": [],
       "images": [
         {
           "default": true,
@@ -505,10 +720,62 @@
           "url": "photos/product/b/i/biere.jpg"
         }
       ],
-      "pictos": [],
-      "_id": "605368a04b9ac91f54fcabe5",
       "type": "simple",
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d06ea4e197fd1fc0d9b6ed",
+          "id": "60d06ea4e197fd1fc0d9b6ec",
+          "code": "sauce-ketchup",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "value": 0,
+              "name": "Ketchup"
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
       "code": "biere",
       "translation": {
         "fr": {
@@ -535,12 +802,16 @@
           "canonical": "/en/drinks/beer"
         }
       },
-      "createdAt": "2021-03-18T14:50:08.345Z",
-      "updatedAt": "2021-04-25T18:37:58.748Z",
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
       "universe": "boissons-boissons",
-      "id": "605368a04b9ac91f54fcabe5"
+      "component_template": "<food-options-config></food-options-config>",
+      "allergens": [],
+      "foodOption": false
     },
     {
+      "_id": "605369344b9ac91f54fcabe9",
       "stock": {
         "qty": 0,
         "qty_booked": 0,
@@ -554,8 +825,7 @@
           "en": {
             "value": "Available product"
           }
-        },
-        "qty_real": 0
+        }
       },
       "price": {
         "et": {
@@ -586,7 +856,6 @@
       "associated_prds": [],
       "is_new": false,
       "kind": "SimpleProduct",
-      "attributes": [],
       "images": [
         {
           "default": true,
@@ -599,10 +868,62 @@
           "url": "photos/product/c/a/cake-choco.jpg"
         }
       ],
-      "pictos": [],
-      "_id": "605369344b9ac91f54fcabe9",
       "type": "simple",
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d06ea4e197fd1fc0d9b6ed",
+          "id": "60d06ea4e197fd1fc0d9b6ec",
+          "code": "sauce-ketchup",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "value": 0,
+              "name": "Ketchup"
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
       "code": "cakechoco",
       "translation": {
         "fr": {
@@ -629,17 +950,23 @@
           "canonical": "/en/desserts/cake-choco"
         }
       },
-      "createdAt": "2021-03-18T14:52:36.345Z",
-      "updatedAt": "2021-04-25T18:37:58.782Z",
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
       "universe": "desserts-desserts",
       "allergens": [
         "607ecb35d23bc05a98874b52",
         "607ecb35d23bc05a98874b51",
-        "607ecb35d23bc05a98874b4b"
+        "607ecb35d23bc05a98874b4b",
+        "60a38dc81f60701cac587c95",
+        "60a38dc81f60701cac587c8f",
+        "60a38dc81f60701cac587c94"
       ],
-      "id": "605369344b9ac91f54fcabe9"
+      "component_template": "<food-options-config></food-options-config>",
+      "foodOption": false
     },
     {
+      "_id": "60536cf34b9ac91f54fcac05",
       "stock": {
         "orderable": true,
         "status": "liv",
@@ -682,73 +1009,6 @@
       "associated_prds": [],
       "is_new": false,
       "kind": "BundleProduct",
-      "bundle_sections": [
-        {
-          "_id": "6054ca9d1a189d261888c548",
-          "ref": "Burger",
-          "type": "SINGLE",
-          "products": [
-            {
-              "_id": "608fe1ce11874f1cd8ab2fa5",
-              "id": "605364234b9ac91f54fcabad",
-              "isDefault": false
-            },
-            {
-              "_id": "608fe1ce11874f1cd8ab2fa6",
-              "id": "605365894b9ac91f54fcabb8",
-              "isDefault": false
-            },
-            {
-              "_id": "608fe1ce11874f1cd8ab2fa7",
-              "id": "605366a34b9ac91f54fcabc7",
-              "isDefault": false
-            }
-          ],
-          "isRequired": true,
-          "title": "Burger",
-          "displayMode": "RADIO_BUTTON"
-        },
-        {
-          "_id": "6054cbdc1a189d261888c55e",
-          "ref": "Accompagnement",
-          "type": "SINGLE",
-          "products": [
-            {
-              "_id": "608fe1ce11874f1cd8ab2fa9",
-              "id": "6054a7776153ac1a34d4334a",
-              "isDefault": false
-            }
-          ],
-          "isRequired": true,
-          "title": "Accompagnement",
-          "displayMode": "RADIO_BUTTON"
-        },
-        {
-          "_id": "6054cbdc1a189d261888c560",
-          "ref": "Boisson",
-          "type": "SINGLE",
-          "products": [
-            {
-              "_id": "608fe1ce11874f1cd8ab2fab",
-              "id": "605367d64b9ac91f54fcabd9",
-              "isDefault": false
-            },
-            {
-              "modifier_price": {
-                "ati": 1,
-                "et": 0.83
-              },
-              "_id": "608fe1ce11874f1cd8ab2fac",
-              "id": "605368a04b9ac91f54fcabe5",
-              "isDefault": false
-            }
-          ],
-          "isRequired": true,
-          "title": "Boisson",
-          "displayMode": "RADIO_BUTTON"
-        }
-      ],
-      "attributes": [],
       "images": [
         {
           "default": true,
@@ -771,11 +1031,134 @@
           "url": "photos/product/m/e/menu-burger2.jpg"
         }
       ],
-      "pictos": [],
-      "_id": "60536cf34b9ac91f54fcac05",
       "type": "bundle",
+      "bundle_sections": [
+        {
+          "_id": "6054ca9d1a189d261888c548",
+          "ref": "Burger",
+          "type": "SINGLE",
+          "products": [
+            {
+              "_id": "60d09dc97fc52b22e0c3da3b",
+              "id": "605364234b9ac91f54fcabad",
+              "isDefault": false
+            },
+            {
+              "_id": "60d09dc97fc52b22e0c3da3c",
+              "id": "605365894b9ac91f54fcabb8",
+              "isDefault": false
+            },
+            {
+              "_id": "60d09dc97fc52b22e0c3da3d",
+              "id": "605366a34b9ac91f54fcabc7",
+              "isDefault": false
+            }
+          ],
+          "isRequired": true,
+          "title": "Burger",
+          "displayMode": "RADIO_BUTTON"
+        },
+        {
+          "_id": "6054cbdc1a189d261888c55e",
+          "ref": "Accompagnement",
+          "type": "SINGLE",
+          "products": [
+            {
+              "_id": "60d09dc97fc52b22e0c3da3f",
+              "id": "6054a7776153ac1a34d4334a",
+              "isDefault": false
+            }
+          ],
+          "isRequired": true,
+          "title": "Accompagnement",
+          "displayMode": "RADIO_BUTTON"
+        },
+        {
+          "_id": "6054cbdc1a189d261888c560",
+          "ref": "Boisson",
+          "type": "SINGLE",
+          "products": [
+            {
+              "_id": "60d09dc97fc52b22e0c3da41",
+              "id": "605367d64b9ac91f54fcabd9",
+              "isDefault": false
+            },
+            {
+              "_id": "60d09dc97fc52b22e0c3da42",
+              "id": "605368a04b9ac91f54fcabe5",
+              "isDefault": false,
+              "modifier_price": {
+                "ati": 1,
+                "et": 0.83
+              }
+            }
+          ],
+          "isRequired": true,
+          "title": "Boisson",
+          "displayMode": "RADIO_BUTTON"
+        }
+      ],
       "qty": 0,
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d06ea4e197fd1fc0d9b6ed",
+          "id": "60d06ea4e197fd1fc0d9b6ec",
+          "code": "sauce-ketchup",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Ketchup",
+              "value": 0.5
+            },
+            "en": {
+              "name": "Ketchup",
+              "value": 0.5
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise",
+              "value": 0
+            },
+            "en": {
+              "name": "Mayonnaise",
+              "value": 0
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts",
+              "value": 1
+            },
+            "en": {
+              "name": "Cutlery",
+              "value": 1
+            }
+          }
+        }
+      ],
       "code": "menu",
       "translation": {
         "fr": {
@@ -803,16 +1186,22 @@
         }
       },
       "universe": "burger-burger",
-      "createdAt": "2021-03-18T15:08:35.496Z",
-      "updatedAt": "2021-05-03T11:43:10.313Z",
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
       "allergens": [
         "607ecb35d23bc05a98874b4e",
         "607ecb35d23bc05a98874b4f",
         "607ecb35d23bc05a98874b51",
-        "607ecb35d23bc05a98874b52"
-      ]
+        "607ecb35d23bc05a98874b52",
+        "60a38dc81f60701cac587c8e",
+        "60a38dc81f60701cac587c94"
+      ],
+      "component_template": "<food-options-config></food-options-config>",
+      "foodOption": false
     },
     {
+      "_id": "6054a7776153ac1a34d4334a",
       "stock": {
         "qty": 0,
         "qty_booked": 0,
@@ -826,8 +1215,7 @@
           "en": {
             "value": "Available product"
           }
-        },
-        "qty_real": 0
+        }
       },
       "price": {
         "et": {
@@ -858,7 +1246,6 @@
       "associated_prds": [],
       "is_new": false,
       "kind": "SimpleProduct",
-      "attributes": [],
       "images": [
         {
           "default": true,
@@ -871,10 +1258,61 @@
           "url": "photos/product/f/r/frite.jpg"
         }
       ],
-      "pictos": [],
-      "_id": "6054a7776153ac1a34d4334a",
       "type": "simple",
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d06ea4e197fd1fc0d9b6ed",
+          "id": "60d06ea4e197fd1fc0d9b6ec",
+          "code": "sauce-ketchup",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Ketchup"
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
       "code": "frite",
       "translation": {
         "fr": {
@@ -902,18 +1340,19 @@
           "metaDesc": "French fries"
         }
       },
-      "createdAt": "2021-03-19T13:30:31.269Z",
-      "updatedAt": "2021-04-25T18:37:58.806Z",
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
       "universe": "autre-autre",
-      "id": "6054a7776153ac1a34d4334a"
+      "component_template": "<food-options-config></food-options-config>"
     },
     {
+      "_id": "605682531a189d261888c586",
       "stock": {
         "qty": 0,
         "qty_booked": 0,
         "orderable": false,
-        "status": "liv",
-        "qty_real": 0
+        "status": "liv"
       },
       "price": {
         "et": {
@@ -944,12 +1383,62 @@
       "associated_prds": [],
       "is_new": false,
       "kind": "SimpleProduct",
-      "attributes": [],
       "images": [],
-      "pictos": [],
-      "_id": "605682531a189d261888c586",
       "type": "simple",
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d06ea4e197fd1fc0d9b6ed",
+          "id": "60d06ea4e197fd1fc0d9b6ec",
+          "code": "sauce-ketchup",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Ketchup"
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
       "code": "glace",
       "translation": {
         "fr": {
@@ -973,9 +1462,365 @@
           }
         }
       },
-      "createdAt": "2021-03-20T23:16:35.809Z",
-      "updatedAt": "2021-04-25T18:37:58.775Z",
-      "id": "605682531a189d261888c586"
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
+      "component_template": "<food-options-config></food-options-config>"
+    },
+    {
+      "_id": "60d06e1ae197fd1fc0d9b6e3",
+      "price": {
+        "et": {
+          "normal": 0.25
+        },
+        "ati": {
+          "normal": 0.3
+        },
+        "priceSort": {
+          "et": 0.25,
+          "ati": 0.3
+        },
+        "purchase": 0,
+        "tax": 20
+      },
+      "reviews": {
+        "average": 0,
+        "reviews_nb": 0,
+        "questions": [],
+        "datas": []
+      },
+      "stats": {
+        "views": 0
+      },
+      "downloadLink": null,
+      "downloadInfos": null,
+      "active": false,
+      "_visible": false,
+      "weight": 0,
+      "associated_prds": [],
+      "is_new": false,
+      "allergens": [],
+      "foodOption": true,
+      "kind": "VirtualProduct",
+      "images": [
+        {
+          "default": true,
+          "extension": ".png",
+          "_id": "60d0858c7fc52b22e0c3d780",
+          "position": null,
+          "alt": "la-sauce-tomate-ketchup",
+          "name": "la-sauce-tomate-ketchup.png",
+          "title": "la-sauce-tomate-ketchup",
+          "url": "photos/product/s/a/la-sauce-tomate-ketchup.png"
+        }
+      ],
+      "type": "virtual",
+      "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d06ea4e197fd1fc0d9b6ed",
+          "id": "60d06ea4e197fd1fc0d9b6ec",
+          "code": "sauce-ketchup",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Ketchup",
+              "value": null
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
+      "code": "sauce-ketchup",
+      "translation": {
+        "fr": {
+          "name": "Ketchup",
+          "slug": "ketchup"
+        },
+        "en": {
+          "name": "Ketchup",
+          "slug": "ketchup"
+        }
+      },
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
+      "component_template": "<food-options-config></food-options-config>"
+    },
+    {
+      "_id": "60d096737fc52b22e0c3d835",
+      "price": {
+        "et": {
+          "normal": 0.25
+        },
+        "ati": {
+          "normal": 0.3
+        },
+        "priceSort": {
+          "et": 0.25,
+          "ati": 0.3
+        },
+        "purchase": 0,
+        "tax": 20
+      },
+      "reviews": {
+        "average": 0,
+        "reviews_nb": 0,
+        "questions": [],
+        "datas": []
+      },
+      "stats": {
+        "views": 0
+      },
+      "downloadLink": null,
+      "downloadInfos": null,
+      "active": false,
+      "_visible": false,
+      "weight": 0,
+      "associated_prds": [],
+      "is_new": false,
+      "allergens": [],
+      "foodOption": true,
+      "kind": "VirtualProduct",
+      "images": [
+        {
+          "default": true,
+          "extension": ".jpg",
+          "_id": "60d09d107fc52b22e0c3da1e",
+          "position": null,
+          "alt": "sauce-mayo",
+          "name": "sauce-mayo_1624284432760.jpg",
+          "title": "sauce-mayo_1624284432760",
+          "url": "photos/product/s/a/sauce-mayo_1624284432760.jpg"
+        }
+      ],
+      "type": "virtual",
+      "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d096737fc52b22e0c3d836",
+          "param": "Non",
+          "code": "sauce-ketchup",
+          "translation": {
+            "fr": {
+              "name": "Ketchup"
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          },
+          "id": "60d06ea4e197fd1fc0d9b6ec"
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d097677fc52b22e0c3d83c",
+          "id": "60d097677fc52b22e0c3d83b",
+          "code": "sauce-mayonnaise",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          }
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
+      "code": "sauce-mayonnaise",
+      "translation": {
+        "fr": {
+          "name": "Mayonnaise",
+          "slug": "sauce-mayonnaise"
+        },
+        "en": {
+          "name": "Mayonnaise",
+          "slug": "sauce-mayonnaise"
+        }
+      },
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
+      "component_template": "<food-options-config></food-options-config>"
+    },
+    {
+      "_id": "60d09a1f7fc52b22e0c3d942",
+      "price": {
+        "et": {
+          "normal": 0.42
+        },
+        "ati": {
+          "normal": 0.5
+        },
+        "priceSort": {
+          "et": 0.42,
+          "ati": 0.5
+        },
+        "purchase": 0,
+        "tax": 20
+      },
+      "reviews": {
+        "average": 0,
+        "reviews_nb": 0,
+        "questions": [],
+        "datas": []
+      },
+      "stats": {
+        "views": 0
+      },
+      "downloadLink": null,
+      "downloadInfos": null,
+      "active": false,
+      "_visible": false,
+      "weight": 0,
+      "associated_prds": [],
+      "is_new": false,
+      "allergens": [],
+      "foodOption": true,
+      "kind": "VirtualProduct",
+      "images": [
+        {
+          "default": true,
+          "extension": ".jpg",
+          "_id": "60d09b617fc52b22e0c3d949",
+          "position": null,
+          "alt": "couverts",
+          "name": "couverts.jpg",
+          "title": "couverts",
+          "url": "photos/product/c/o/couverts.jpg"
+        }
+      ],
+      "type": "virtual",
+      "set_attributes": "5c5abe92c1f87b5f46c451fa",
+      "attributes": [
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09a1f7fc52b22e0c3d943",
+          "param": "Non",
+          "code": "sauce-ketchup",
+          "translation": {
+            "fr": {
+              "name": "Ketchup"
+            },
+            "en": {
+              "name": "Ketchup"
+            }
+          },
+          "id": "60d06ea4e197fd1fc0d9b6ec"
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09a1f7fc52b22e0c3d944",
+          "param": "Non",
+          "code": "sauce-mayonnaise",
+          "translation": {
+            "fr": {
+              "name": "Mayonnaise"
+            },
+            "en": {
+              "name": "Mayonnaise"
+            }
+          },
+          "id": "60d097677fc52b22e0c3d83b"
+        },
+        {
+          "type": "number",
+          "position": 1,
+          "visible": true,
+          "_id": "60d09b837fc52b22e0c3d94e",
+          "id": "60d09b837fc52b22e0c3d94d",
+          "code": "couverts",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Couverts"
+            },
+            "en": {
+              "name": "Cutlery"
+            }
+          }
+        }
+      ],
+      "code": "couverts",
+      "translation": {
+        "fr": {
+          "slug": "couverts",
+          "name": "Couverts"
+        },
+        "en": {
+          "name": "Cutlery",
+          "slug": "cutlery"
+        }
+      },
+      "pictos": [],
+      "createdAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2021-06-22T00:00:00.000Z",
+      "component_template": "<food-options-config></food-options-config>"
     }
   ]
 }

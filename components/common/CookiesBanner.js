@@ -29,6 +29,11 @@ export default function CookiesBanner() {
         setShow(false);
     };
 
+    const denyCookie = () => {
+        document.cookie = 'cookie_notice=deny; path=/;';
+        setShow(false);
+    };
+
     if (show) {
         return (
 
@@ -36,6 +41,8 @@ export default function CookiesBanner() {
                 <blockquote className="block-quote-rgpd">Cookies<br />&amp;<br />RGPD</blockquote>
                 <p className="paragraph-rgpd" dangerouslySetInnerHTML={{ __html: txtLegal }}></p>
                 <button type="button" onClick={acceptCookie} className="button-white w-button">{t('components/cookiesBanner:agree')}</button>
+                &nbsp;
+                <button type="button" onClick={denyCookie} className="button-white w-button">{t('components/cookiesBanner:deny')}</button>
             </div>
 
         );

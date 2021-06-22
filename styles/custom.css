@@ -1,40 +1,53 @@
+/* FUSION => .link-footer l.6365 mon-restaurant.webflow.css */
 .link-footer {
     display: block;
 }
 
+/* FUSION => .tab-menu-round l.3376 mon-restaurant.webflow.css */
 .tab-menu-round {
     opacity: 0;
     max-height: 0px;
     transition: all 0.5s
 }
 
+/* ADD */
 .tab-menu-round-open {
     opacity: 1;
     max-height: 500px;
 }
 
+/* FUSION => .faq-content l.3490 mon-restaurant.webflow.css */
 .faq-content {
     max-height: 0px;
     transition: max-height 0.5s;
 }
 
+/* ADD */
 .faq-question-open {
     max-height: 400px;
 }
 
-.lien_alergenes,
+/* FUSION => .lien_alergenes l.5066 mon-restaurant.webflow.css */
+.lien_alergenes {
+    cursor: pointer;
+}
+
+/* FUSION => .lien_carte l.5502 mon-restaurant.webflow.css */
 .lien_carte {
     cursor: pointer;
 }
 
+/* FUSION => .page-2 l.6235 mon-restaurant.webflow.css */
 .page-2 {
     height: 0px;
 }
 
+/* ADD after .page-2 l.6235 mon-restaurant.webflow.css */
 .page-2-open {
     height: auto;
 }
 
+/* ADD before .slide-2 l.4388 mon-restaurant.webflow.css */
 .slide-1 {
     min-width: 100vw;
     background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0, 0, 0, 0.51)), to(rgba(0, 0, 0, 0.32))), url('/images/photo.jpeg');
@@ -44,6 +57,7 @@
     background-repeat: repeat, no-repeat;
 }
 
+/* FUSION => .nav-menu l.6561 mon-restaurant.webflow.css */
 @media screen and (max-width: 991px) {
     .nav-menu {
         position: absolute;
@@ -52,10 +66,12 @@
     }
 }
 
+/* ADD after .w-nav-button l.1671 webflow.css */
 .w-nav-button-open {
     display: block !important;
 }
 
+/* ADD */
 .w-radio input[type='radio']:checked + .radio-retrait {
     border-color: #ff8946;
     background-color: #ff5c00;
@@ -65,16 +81,23 @@
     border-right-width: 4px;
 }
 
+/* FUSION => .w-dropdown l.1067 webflow.css */
 .w-dropdown {
     z-index: auto;
 }
 
-/* Cookies block [CHECK WITH DESIGNER] */
+/* 
+    FUSION => .div-block-cookies l.6370 mon-restaurant.webflow.css
+    Cookies block
+*/
 .div-block-cookies {
     z-index: 9999;
 }
 
-/* Clickable area outside the cart to close it */
+/*
+    ADD
+    Clickable area outside the cart to close it 
+*/
 .w-commerce-commerceoutcartcontainer {
     width: 100%;
 }
@@ -84,54 +107,85 @@
     }
 }
 
-/* Input or button disabled style [CHECK WITH DESIGNER] */
+/* 
+    ADD
+    Input or button disabled style
+*/
 input:disabled, button:disabled { opacity: 0.5; }
 
-/* Submit button in account/informations page [CHECK WITH DESIGNER] */
-.submit-button-tunnel { width: 100%; margin-left: auto; margin-right: auto; }
-
-/* Newsletter button [CHECK WITH DESIGNER] */
-.submit-button-newsletter { align-items: center; }
-
-/* Account page [CHECK WITH DESIGNER] */
-.tab-pane-wrap-account { width: 900px; }
-.tab-menu-round-account {
-    -ms-grid-columns: 1fr 1fr 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+/* 
+    FUSION / REMOVE
+    Submit button in account/informations page 
+*/
+.submit-button-tunnel { 
+    width: 100%; /* FUSION => .submit-button-tunnel l.5855 mon-restaurant.webflow.css */
+    margin-left: auto; /* REMOVE l.8073 mon-restaurant.webflow.css */
+    margin-right: auto; /* REMOVE l.8074 mon-restaurant.webflow.css */
 }
 
-@media screen and (max-width: 479px) {
+/* 
+    FUSION => .submit-button-newsletter l.5215 mon-restaurant.webflow.css
+    Newsletter button
+*/
+.submit-button-newsletter { align-items: center; }
+
+
+.tab-pane-wrap-account { width: 900px; }
+
+/*
+    FUSION => .tab-menu-round-account l.6033 mon-restaurant.webflow.css
+    Account page
+*/
+.tab-menu-round-account {
+    -ms-grid-columns: 1fr 1fr 1fr 1fr; /* view l.6055 mon-restaurant.webflow.css */
+    grid-template-columns: 1fr 1fr 1fr 1fr; /* view l.6056 mon-restaurant.webflow.css */
+}
+/*
+    FUSION => .tab-menu-round-account l.6931 mon-restaurant.webflow.css
+    Account page
+*/
+@media screen and (max-width: 991px) {
     .tab-menu-round-account {
-        -ms-grid-columns: 1fr;
-        grid-template-columns: 1fr;
+        -ms-grid-columns: 1fr; /* view l.6932 mon-restaurant.webflow.css */
+        grid-template-columns: 1fr; /* view l.6933 mon-restaurant.webflow.css */
     }
 }
 
-/* Button expand (+) in account/orders page */
-.tab-pane-wrap-account .plus-2 {
-    opacity: 0.5;
+/* 
+    FUSION => .plus-2 l.5534 mon-restaurant.webflow.css
+    Button expand (+) in account/orders page
+*/
+.plus-2 {
     transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
     transform-style: preserve-3d;
     transition: all 0.5s;
 }
-.tab-pane-wrap-account .plus-2-active {
+/* ADD after .plus-2 l.5534 mon-restaurant.webflow.css */
+.plus-2-active {
     opacity: 1;
     transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(45deg) skew(0deg, 0deg);
 }
 
-/* Top banner hide in mobile... [CHECK WITH DESIGNER] */
+/* 
+    REMOVE => .banner l.7503 mon-restaurant.webflow.css
+    Top banner hide in mobile => NO
+*/
 @media screen and (max-width: 479px) {
   .banner {
     display: block;
   }
 }
 
-/* Languages block [CHECK WITH DESIGNER] */
+/* 
+    FUSION => .div-block-lang l.6497 mon-restaurant.webflow.css
+    Languages block
+*/
 .div-block-lang {
     display: flex;
     justify-content: flex-end;
     margin-top: 5px;
 }
+/* ADD after .div-block-lang l.6497 mon-restaurant.webflow.css */
 .div-block-lang button {
     background-color: unset;
 }
@@ -141,7 +195,12 @@ input:disabled, button:disabled { opacity: 0.5; }
     color: white;
 }
 
-/* Checkbox checked + focused [CHECK WITH DESIGNER] */
+/*
+    ADD after .w-checkbox-input--inputType-custom l.2352 mon-restaurant.webflow.css
+    REMOVE => .w-checkbox-input--inputType-custom.w--redirected-checked l.2373 mon-restaurant.webflow.css
+    REMOVE => .w-checkbox-input--inputType-custom.w--redirected-focus l.2385 mon-restaurant.webflow.css
+    Checkbox checked + focused
+*/
 input[type='checkbox']:checked + .w-checkbox-input--inputType-custom {
     background-color: #3898ec;
     border-top-color: #3898ec;
@@ -158,6 +217,13 @@ input[type='checkbox']:checked + .w-checkbox-input--inputType-custom {
 input[type='checkbox']:focus + .w-checkbox-input--inputType-custom {
     box-shadow: 0px 0px 3px 1px #3898ec;
 }
+
+/*
+    ADD after .w-form-formradioinput--inputType-custom l.2389 mon-restaurant.webflow.css
+    REMOVE => .w-form-formradioinput--inputType-custom.w--redirected-focus l.2410 mon-restaurant.webflow.css
+    REMOVE => .w-form-formradioinput--inputType-custom.w--redirected-checked l.2414 mon-restaurant.webflow.css
+    Radio checked + focused
+*/
 input[type='radio']:checked + .w-form-formradioinput--inputType-custom {
     border-top-width: 4px;
     border-bottom-width: 4px;
@@ -170,22 +236,34 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
     box-shadow: 0px 0px 3px 1px #3898ec;
 }
 
-/* Product name & price/Delete button block in cart [CHECK WITH DESIGNER] */
+/*
+    FUSION => .div-block-4 l.5549 mon-restaurant.webflow.css
+    Product name & price/Delete button block in cart
+*/
 .div-block-4 {
     align-items: center;
 }
 
-/* List of product selected in cart [CHECK WITH DESIGNER]*/
+/*
+    ADD after .w-commerce-commercecartoptionlist l.519 mon-restaurant.webflow.css
+    List of product selected in cart
+*/
 .w-commerce-commercecartoptionlist li {
     font-size: 12px;
 }
 
-/* Input quantity in cart [CHECK WITH DESIGNER] */
+/* 
+    FUSION => .w-commerce-commercecartquantity l.526 mon-restaurant.webflow.css
+    Input quantity in cart
+*/
 .w-commerce-commercecartquantity {
     margin-bottom: 0px;
 }
 
-/* Bundle content [CHECK WITH DESIGNER] */
+/* 
+    ADD
+    Bundle content
+*/
 .bundle-content {
     display: flex;
     overflow: hidden;
@@ -201,25 +279,37 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
     }
 }
 
-/* margin-left problem in product card (mobile only) [CHECK WITH DESIGNER] */
+/*
+    REMOVE => .food-card-content l.6683 mon-restaurant.webflow.css
+    margin-left problem in product card (mobile only)
+*/
 @media screen and (max-width: 991px) {
     .food-card-content {
         margin-left: unset;
     }
 }
 
-/* Image 404 (delete useless .slide) [CHECK WITH DESIGNER] */
+/* 
+    REMOVE => .slide l.4333 mon-restaurant.webflow.css
+    Image 404 (delete useless .slide)
+*/
 .slide {
     background-image: unset;
 }
-
+/* 
+    REMOVE => .slide l.7757 mon-restaurant.webflow.css
+    Image 404 (delete useless .slide)
+*/
 @media screen and (max-width: 479px) {
     .slide {
         background-image: unset;
     }
 }
 
-/* Toasts */
+/*
+    ADD everywhere
+    Toasts
+*/
 .w-commerce-commerceerror {
     margin-top: 10px;
     padding-top: 10px;
@@ -246,4 +336,35 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
     padding-right: 10px;
     background-color: #deffe8;
     border-radius:5px;
+}
+
+/* 
+    FUSION => .pagination l.4200 mon-restaurant.webflow.css
+    Pagination
+*/
+.pagination {
+    list-style: none;
+    margin-top: 0px;
+}
+
+/* 
+    ADD after .pagination l.4200 mon-restaurant.webflow.css
+*/
+.pagination li a {
+    padding: 10px;
+    cursor: pointer;
+}
+.pagination li.active a {
+    cursor: initial;
+    color: #ff8946;
+}
+.pagination li a {
+    text-decoration: none;
+}
+
+/*
+    REMOVE => .slide l.2773 mon-restaurant.webflow.css
+*/
+.navbar:hover {
+    color: unset;
 }

@@ -1,18 +1,30 @@
-import { useEffect, useState } from 'react';
-import { useRouter }           from 'next/router';
-import cookie                  from 'cookie';
-import useTranslation          from 'next-translate/useTranslation';
-import { getAllergens }        from '@lib/aquila-connector/allergen';
-import { getCategoryProducts } from '@lib/aquila-connector/category';
-import { useCategoryProducts } from '@lib/hooks';
-import { unsetCookie }         from '@lib/utils';
+import { useEffect, useState }                  from 'react';
+import { useRouter }                            from 'next/router';
+import cookie                                   from 'cookie';
+import useTranslation                           from 'next-translate/useTranslation';
+import { getCategoryProducts }                  from '@lib/aquila-connector/category';
+import axios                                    from '@lib/axios/AxiosInstance';
+import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
+import { unsetCookie }                          from '@lib/utils';
 
-export default function Allergen() {
+// GET allergens
+async function getAllergens () {
+    try {
+        const response = await axios.post('v2/allergens', { PostBody: { limit: 100 } });
+        return response.data.datas;
+    } catch(err) {
+        console.error('allergen.allergens');
+        throw new Error(err?.response?.data?.message);
+    }
+}
+
+export default function Allergen({ limit = 15 }) {
     const [allergens, setAllergens]               = useState([]);
     const [checkedAllergens, setCheckedAllergens] = useState({});
     const [open, setOpen]                         = useState(false);
     const [message, setMessage]                   = useState();
     const router                                  = useRouter();
+    const { setCategoryPage }                     = useCategoryPage();
     const { setCategoryProducts }                 = useCategoryProducts();
     const { t }                                   = useTranslation();
 
@@ -20,8 +32,6 @@ export default function Allergen() {
     const categorySlugs = Array.isArray(router.query.categorySlugs) ? router.query.categorySlugs : [router.query.categorySlugs];
     const slug          = categorySlugs[categorySlugs.length - 1];
 
-    // In the case where we go from one category to another, 
-    // we put the "slug" variable in dependence on the useEffect so that it is executed again.
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -42,10 +52,6 @@ export default function Allergen() {
                     }
                     setCheckedAllergens(checked);
 
-                    // Updating the products list
-                    const products = await getCategoryProducts({ slug, id: '', postBody: { PostBody: { filter } } });
-                    setCategoryProducts(products);
-
                     // Opening the allergens block
                     openBlock(true);
                 }
@@ -54,7 +60,7 @@ export default function Allergen() {
             }
         };
         fetchData();
-    }, [slug]);
+    }, []);
 
     const filterAllergens = async (e, _id) => {
         const checked = { ...checkedAllergens };
@@ -84,8 +90,18 @@ export default function Allergen() {
         }
 
         // Updating the products list
-        const products = await getCategoryProducts({ slug, id: '', postBody: { PostBody: { filter } } });
-        setCategoryProducts(products);
+        try {
+            const products = await getCategoryProducts({ slug, id: '', postBody: { PostBody: { filter, page: 1, limit } } });
+            setCategoryProducts(products);
+
+            // Back to page 1
+            setCategoryPage(1);
+
+            // Back to page 1... so useless "page" cookie
+            unsetCookie('page');
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
     };
 
     const openBlock = (force = undefined) => {
@@ -97,12 +113,12 @@ export default function Allergen() {
             <div className="faq-question-wrap">
                 <div className="lien_alergenes w-inline-block" onClick={() => openBlock()}>
                     <h6 className="heading-6-center">
-                        {t('components/allergen:checkedAllergens')}
+                        {t('modules/allergen-aquila:checkedAllergens')}
                     </h6>
                     <img src="/images/Plus.svg" alt="" className="plus" />
                 </div>
                 <div className={`faq-content${open ? ' faq-question-open' : ''}`}>
-                    <div className="text-span-center">{t('components/allergen:warning')}</div>
+                    <div className="text-span-center">{t('modules/allergen-aquila:warning')}</div>
                     <div className="form-block w-form">
                         <form name="form-alergies" className="form alergies">
                             {

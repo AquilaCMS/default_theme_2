@@ -3,8 +3,10 @@ import { useRouter }                                      from 'next/router';
 import useTranslation                                     from 'next-translate/useTranslation';
 import LightLayout                                        from '@components/layouts/LightLayout';
 import NextSeoCustom                                      from '@components/tools/NextSeoCustom';
+import Button                                             from '@components/ui/Button';
 import { cartToOrder }                                    from '@lib/aquila-connector/cart';
 import { deferredPayment }                                from '@lib/aquila-connector/payment';
+import { useState }                                       from 'react';
 import { useCart, usePaymentMethods }                     from '@lib/hooks';
 import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                     from '@lib/redux/dispatcher';
@@ -18,10 +20,11 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function CheckoutPayment() {
-    const router         = useRouter();
-    const { cart }       = useCart();
-    const paymentMethods = usePaymentMethods();
-    const { t }          = useTranslation();
+    const [isLoading, setIsLoading] = useState(false);
+    const router                    = useRouter();
+    const { cart }                  = useCart();
+    const paymentMethods            = usePaymentMethods();
+    const { t }                     = useTranslation();
 
     useEffect(() => {
         // Check if the cart is empty
@@ -38,9 +41,10 @@ export default function CheckoutPayment() {
     const onSubmitPayment = async (e) => {
         e.preventDefault();
 
+        setIsLoading(true);
         try {
             const payment_code = e.currentTarget.payment.value;
-            if (!payment_code) return;
+            if (!payment_code) return setIsLoading(false);
 
             // Cart to order
             const order = await cartToOrder(cart._id);
@@ -59,6 +63,8 @@ export default function CheckoutPayment() {
             router.push('/checkout/confirmation');
         } catch (err) {
             console.error(err.message || t('common:message.unknownError'));
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -114,8 +120,13 @@ export default function CheckoutPayment() {
                                 }
                             </div>
                             <button type="button" className="log-button-03 w-button" onClick={previousStep}>{t('pages/checkout:payment.previous')}</button>
-                                        &nbsp;
-                            <button type="submit" className="log-button-03 w-button">{t('pages/checkout:payment.pay')}</button>
+                            &nbsp;
+                            <Button 
+                                text={t('pages/checkout:payment.pay')}
+                                loadingText={t('pages/checkout:payment.submitLoading')}
+                                isLoading={isLoading}
+                                className="log-button-03 w-button"
+                            />
                         </form>
                     </div>
                 </div>

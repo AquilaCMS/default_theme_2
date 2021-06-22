@@ -20,7 +20,8 @@
     "titleH1" : "en-Ma commande",
     "paymentMethod" : "en-Moyen de paiement",
     "previous" : "en-RETOUR",
-    "pay" : "en-PAYER"
+    "pay" : "en-PAYER",
+    "submitLoading" : "en-PAIEMENT..."
   },
   "confirmation" : {
     "title" : "en-Ma commande - Confirmation",

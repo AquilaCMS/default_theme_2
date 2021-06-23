@@ -1,7 +1,7 @@
 import { FB_PIXEL_ID } from '@lib/common/fb-pixel/fpixel';
 
-export default function FbpScripts() {
-    if (!FB_PIXEL_ID) return null;
+export default function FbpScripts({ cookieNotice }) {
+    if (!FB_PIXEL_ID || !cookieNotice || cookieNotice === 'deny') return null;
     return (
         <>
             <script

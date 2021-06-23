@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useRouter }           from 'next/router';
 import useTranslation          from 'next-translate/useTranslation';
 import cookie                  from 'cookie';
 import { getBlockCMS }         from '@lib/aquila-connector/blockcms';
 
 export default function CookiesBanner() {
     const [show, setShow]         = useState(false);
+    const router                  = useRouter();
     const { t }                   = useTranslation();
     const [txtLegal, setTxtLegal] = useState(t('components/cookiesBanner:defaultTxt'));
 
@@ -16,7 +18,7 @@ export default function CookiesBanner() {
                 setTxtLegal(response.content);
             }
         };
-        if (cookieNotice === 'true') {
+        if (cookieNotice === 'true' || cookieNotice === 'deny') {
             setShow(false);
         } else {
             setShow(true);
@@ -27,6 +29,7 @@ export default function CookiesBanner() {
     const acceptCookie = () => {
         document.cookie = 'cookie_notice=true; path=/;';
         setShow(false);
+        router.reload();
     };
 
     const denyCookie = () => {

@@ -35,6 +35,17 @@ function getFoodOptionsProducts(products) {
     return items;
 }
 
+// Get linked products
+async function getLinkedProducts() {
+    try {
+        const res = await axios.get('v2/food-options/getLinks');
+        return res.data;
+    } catch (err) {
+        console.error('foodOptions.getLinkedProducts');
+        throw new Error(err?.response?.data?.message);
+    }
+}
+
 // Update quantity of a complementary product from cart
 async function updateQtyItem(cartId, itemId, itemIdProduct, quantity) {
     try {
@@ -71,16 +82,15 @@ export default function FoodOptions() {
 
         const fetchData = async () => {
             try {
-                // Get food options groups
-                // TODO use futur route
-                const data = [];
+                // Get linked products
+                const linkedProducts = await getLinkedProducts();
                 
                 for (let i in items) {
                     items[i] = items[i].id.code;
                 }
                 
                 const groups = [];
-                for (let group of data) {
+                for (let group of linkedProducts.links) {
                     const codes = group.replace(/\s/, '').split(',');
 
                     // Check if codes exists in cart

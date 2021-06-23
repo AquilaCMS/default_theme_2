@@ -1,5 +1,4 @@
 import { useEffect, useState }                      from 'react';
-import Head                                         from 'next/head';
 import Geosuggest                                   from 'react-geosuggest';
 import useTranslation                               from 'next-translate/useTranslation';
 import DatePicker, { registerLocale }               from 'react-datepicker';
@@ -126,7 +125,7 @@ function toAquilaAddress(address) {
 }
 
 // GET API key for Google Maps 
-async function getAPIKeyGMaps() {
+/*async function getAPIKeyGMaps() {
     try {
         const response = await axios.get('pointOfSale/getKey');
         return response.data.api_key_google_map;
@@ -134,7 +133,7 @@ async function getAPIKeyGMaps() {
         console.error('pointsOfSale.getAPIKeyGMaps');
         throw new Error(err?.response?.data?.message);
     }
-}
+}*/
 
 // GET points of sale
 async function getPointsOfSale() {
@@ -170,6 +169,7 @@ async function setPointOfSale(body) {
 }
 
 export default function ClickAndCollect() {
+    //const [apiKey, setApiKey]                 = useState('');
     const [hasWithdrawal, setHasWithdrawal]   = useState(0);
     const [hasDelivery, setHasDelivery]       = useState(0);
     const [deliveryHome, setDeliveryHome]     = useState(0);
@@ -189,6 +189,10 @@ export default function ClickAndCollect() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // Get API key for Google Maps
+                /*const APIKeyGM = await getAPIKeyGMaps();
+                setApiKey(APIKeyGM);*/
+
                 // Get points of sale
                 const data     = await getPointsOfSale();
                 const arrayPOS = data.filter(pos => pos.isWithdrawal || pos.isDelivery);
@@ -411,12 +415,7 @@ export default function ClickAndCollect() {
     };
 
     return (
-        <>
-
-            <Head>
-                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0ISY810uOtckysZpUrTEcrygh8crpd1w&libraries=places" defer></script>
-            </Head>
-                
+        <>  
             <div className="section-picker">
                 <div className="container w-container">
                     <div className="w-form">

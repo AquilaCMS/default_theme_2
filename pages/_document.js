@@ -21,6 +21,9 @@ export default class MyDocument extends Document {
                     <link rel="preload" href="/fonts/Inter-SemiBold.woff" as="font" crossOrigin='anonymous'></link>
                     <link rel="preload" href="/fonts/Inter-Regular.woff" as="font" crossOrigin='anonymous'></link>
                     <link rel="preload" href="/fonts/Inter-Bold.woff" as="font" crossOrigin='anonymous'></link>
+
+                    {/* Here because duplication problem in the ClickAndCollect component */}
+                    <script src={'https://maps.googleapis.com/maps/api/js?key=AIzaSyC0ISY810uOtckysZpUrTEcrygh8crpd1w&libraries=places'} defer></script>
                     
                     <meta name="powered-by" content="AquilaCMS" />
 

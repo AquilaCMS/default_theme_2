@@ -43,7 +43,7 @@ export async function getServerSideProps({ locale, params, req, res }) {
     // Breadcrumb
     let breadcrumb = [];
     try {
-        breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product.canonical);
+        breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product?.canonical);
     } catch (err) {
         const t = await getT(locale, 'common');
         console.error(err.message || t('common:message.unknownError'));

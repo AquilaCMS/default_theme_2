@@ -24,14 +24,14 @@ const Video = ({ content }) => (
     />
 );
 
-export default function Gallery({ 'ns-code': nsCode, gallery }) {
-    const componentData                   = useComponentData();
-    const [arrayGallery, setArrayGallery] = useState(gallery || componentData[`nsGallery_${nsCode}`]);
-    const [photoIndex, setPhotoIndex]     = useState(0);
-    const [isOpen, setIsOpen]             = useState(false);
-    const [message, setMessage]           = useState();
-    const timer                           = useRef();
-    const { t }                           = useTranslation();
+export default function Gallery({ 'ns-code': nsCode, galleryContent }) {
+    const componentData               = useComponentData();
+    const [gallery, setGallery]       = useState(galleryContent || componentData[`nsGallery_${nsCode}`]);
+    const [photoIndex, setPhotoIndex] = useState(0);
+    const [isOpen, setIsOpen]         = useState(false);
+    const [message, setMessage]       = useState();
+    const timer                       = useRef();
+    const { t }                       = useTranslation();
 
     useEffect(() => {
         return () => clearTimeout(timer.current);
@@ -45,7 +45,7 @@ export default function Gallery({ 'ns-code': nsCode, gallery }) {
     const loadMoreData = async () => {
         try {
             const galleryItems = await getItemsGallery(nsCode);
-            setArrayGallery(galleryItems);
+            setGallery(galleryItems);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
             const st      = setTimeout(() => { setMessage(); }, 3000);
@@ -53,11 +53,14 @@ export default function Gallery({ 'ns-code': nsCode, gallery }) {
         }
     };
 
-    if (!arrayGallery) {
+    if (!gallery) {
         return <div>{t('components/gallery:noGallery', { nsCode })}</div>;
     }
+    if (!gallery.datas.length) {
+        return <div>{t('components/gallery:noItem', { nsCode })}</div>;
+    }
     
-    const array = arrayGallery.datas.map((item, index) => {
+    const array = gallery.datas.map((item, index) => {
         if (item.content) return { content: <Video content={item.content} />, alt: item.alt };
         return { content: `${process.env.NEXT_PUBLIC_IMG_URL}/images/gallery/max/${item._id}/${item.alt || index}${item.extension}`, alt: item.alt };
     });
@@ -79,7 +82,7 @@ export default function Gallery({ 'ns-code': nsCode, gallery }) {
             }
             <div className="gallery-grid">
                 {
-                    arrayGallery.datas.map((item, index) => (
+                    gallery.datas.map((item, index) => (
                         <div key={item._id} className="grid-item" onClick={() => openLightBox(index)}>
                             <div className="overlay">
                                 <div className="text">{item.alt}</div>
@@ -94,7 +97,7 @@ export default function Gallery({ 'ns-code': nsCode, gallery }) {
                 }
             </div>
             {
-                arrayGallery.datas.length !== arrayGallery.count && (
+                gallery.datas.length !== gallery.count && (
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <button type="button" className="log-button-03 w-button" onClick={loadMoreData}>{t('components/gallery:loadMore')}</button>
                     </div>
@@ -114,7 +117,7 @@ export default function Gallery({ 'ns-code': nsCode, gallery }) {
                     .gallery .gallery-grid {
                         display: grid;
                         grid-gap: 36px;
-                        grid-template-columns: repeat(${arrayGallery.maxColumnNumber}, minmax(100px,1fr));
+                        grid-template-columns: repeat(${gallery.maxColumnNumber}, minmax(100px,1fr));
                         justify-items: center;
                         position: relative;
                     }

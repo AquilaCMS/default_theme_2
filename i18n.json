@@ -13,6 +13,7 @@
       "components/newsletter",
       "components/navigation",
       "components/product",
+      "components/slider",
       "modules/allergen-aquila",
       "modules/food-options-aquila",
       "modules/pointofsale-aquila",

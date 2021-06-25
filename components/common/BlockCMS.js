@@ -5,6 +5,7 @@ import BlogList                                 from '@components/common/BlogLis
 import Contact                                  from '@components/common/Contact';
 import Gallery                                  from '@components/common/Gallery';
 import ProductList                              from '@components/product/ProductList';
+import Slider                                   from '@components/common/Slider';
 import { useCmsBlocks, useComponentData }       from '@lib/hooks';
 
 export default function BlockCMS({ nsCode, content = '', displayError = false, recursion = 0 }) {
@@ -23,7 +24,8 @@ export default function BlockCMS({ nsCode, content = '', displayError = false, r
         'ns-blog-articles'    : <BlogList />,
         'ns-contact'          : <Contact />,
         'ns-gallery'          : <Gallery />,
-        'ns-product-card-list': <ProductList />
+        'ns-product-card-list': <ProductList />,
+        'ns-slider'           : <Slider />
     };
 
     const options = {

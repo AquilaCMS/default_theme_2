@@ -9,6 +9,7 @@
       "components/cart",
       "components/cookiesBanner",
       "components/contact",
+      "components/gallery",
       "components/newsletter",
       "components/navigation",
       "components/product",

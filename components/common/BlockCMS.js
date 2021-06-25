@@ -3,6 +3,7 @@ import Link                                     from 'next/link';
 import parse, { attributesToProps, domToReact } from 'html-react-parser';
 import BlogList                                 from '@components/common/BlogList';
 import Contact                                  from '@components/common/Contact';
+import Gallery                                  from '@components/common/Gallery';
 import ProductList                              from '@components/product/ProductList';
 import { useCmsBlocks, useComponentData }       from '@lib/hooks';
 
@@ -21,6 +22,7 @@ export default function BlockCMS({ nsCode, content = '', displayError = false, r
     const nsComponents = {
         'ns-blog-articles'    : <BlogList />,
         'ns-contact'          : <Contact />,
+        'ns-gallery'          : <Gallery />,
         'ns-product-card-list': <ProductList />
     };
 

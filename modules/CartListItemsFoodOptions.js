@@ -91,7 +91,7 @@ export default function FoodOptions() {
                 
                 const groups = [];
                 for (let group of linkedProducts.links) {
-                    const codes = group.replace(/\s/, '').split(',');
+                    const codes = group.replace(/\s/g, '').split(',');
 
                     // Check if codes exists in cart
                     for (let i = 0; i < codes.length; i++) {

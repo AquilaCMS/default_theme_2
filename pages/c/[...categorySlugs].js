@@ -1,4 +1,4 @@
-import { useState }                             from 'react';
+import { useEffect, useState }                  from 'react';
 import absoluteUrl                              from 'next-absolute-url';
 import getT                                     from 'next-translate/getT';
 import useTranslation                           from 'next-translate/useTranslation';
@@ -32,7 +32,6 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     } catch (err) {
         console.error(err.message || t('common:message.unknownError'));
     }
-    
 
     // Get cookie server instance
     const cookiesServerInstance = new Cookies(req, res);
@@ -45,7 +44,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     }
 
     // Get page from GET param or cookie
-    // Important : the cookie "page" is used to remember the page when you consult a product and want to go back,
+    // Important : the "page" cookie is used to remember the page when you consult a product and want to go back,
     // we can't do it with Redux because it is reinitialized at each change of page unlike the cookie available on the server side.
     let page        = 1;
     const queryPage = Number(query.page);
@@ -62,7 +61,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         if (cookiePage) {
             const dataPage = JSON.parse(cookiePage);
             // We take the value only if category ID matches
-            // Otherwise, we delete the cookie
+            // Otherwise, we delete "page" cookie
             if (dataPage.id === category._id) {
                 page = dataPage.page;
             } else {
@@ -110,6 +109,11 @@ export default function CategoryList({ breadcrumb, category, categorySlugs, limi
     const { categoryPage, setCategoryPage }         = useCategoryPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
     const { lang, t }                               = useTranslation();
+
+    // Unset "page" cookie if we leave the category page
+    useEffect(() => {
+        return () => unsetCookie('page');
+    }, []);
 
     const handlePageClick = async (data) => {
         const page = data.selected + 1;

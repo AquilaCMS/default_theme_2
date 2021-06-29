@@ -4,6 +4,7 @@
   "pages": {
     "*": [
       "common",
+      "components/blockSlider",
       "components/blogList",
       "components/bundleProduct",
       "components/cart",

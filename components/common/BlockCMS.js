@@ -1,6 +1,7 @@
 import React                                    from 'react';
 import Link                                     from 'next/link';
 import parse, { attributesToProps, domToReact } from 'html-react-parser';
+import BlockSlider                              from '@components/common/BlockSlider';
 import BlogList                                 from '@components/common/BlogList';
 import Contact                                  from '@components/common/Contact';
 import Gallery                                  from '@components/common/Gallery';
@@ -8,19 +9,24 @@ import ProductList                              from '@components/product/Produc
 import Slider                                   from '@components/common/Slider';
 import { useCmsBlocks, useComponentData }       from '@lib/hooks';
 
-export default function BlockCMS({ nsCode, content = '', displayError = false, recursion = 0 }) {
+export default function BlockCMS({ nsCode, content = '', displayerror = false, recursion = 0 }) {
     const cmsBlocks     = useCmsBlocks();
     const componentData = useComponentData();
     
     let html = '';
     if (content) {
+        // Live use in code (data in prop "content")
         html = content;
     } else {
+        // 2 options :
+        // Live use in code (data in redux store => PUSH_CMSBLOCKS)
+        // Use in CMS block (data in redux store => SET_COMPONENT_DATA)
         html = cmsBlocks.find(cms => cms.code === nsCode)?.content || componentData[`nsCms_${nsCode}`]?.content;
     }
 
     // Next Sourcia components array
     const nsComponents = {
+        'ns-block-slider'     : <BlockSlider />,
         'ns-blog-articles'    : <BlogList />,
         'ns-contact'          : <Contact />,
         'ns-gallery'          : <Gallery />,
@@ -59,8 +65,7 @@ export default function BlockCMS({ nsCode, content = '', displayError = false, r
                     return;
                 }
 
-                const component = React.cloneElement(<BlockCMS />, { nsCode: attribs['ns-code'], recursion: recursion + 1 });
-                return component;
+                return <BlockCMS nsCode={attribs['ns-code']} recursion={recursion + 1} />;
             }
 
             // Replace <a> by Next link
@@ -70,20 +75,11 @@ export default function BlockCMS({ nsCode, content = '', displayError = false, r
                     attribs.href = '/';
                 }
                 if (attribs.href.startsWith('/') && !attribs.href.match(/\.[a-z0-9]{1,}$/i)) {
-                    return React.cloneElement(
-                        <Link>
-                            {
-                                React.createElement(
-                                    'a',
-                                    { ...attributesToProps(attribs) },
-                                    domToReact(children, options)
-                                )
-                            }
-                        </Link>,
-                        {
-                            href: attribs.href
-                        }
-                    );
+                    return <Link href={attribs.href}>
+                        <a {...attributesToProps(attribs)}>
+                            {domToReact(children, options)}
+                        </a>
+                    </Link>;
                 }
             }
         }
@@ -91,7 +87,7 @@ export default function BlockCMS({ nsCode, content = '', displayError = false, r
 
     if (html) {
         return <>{parse(html, options)}</>;
-    } else if (displayError) {
+    } else if (displayerror) {
         return (
             <div>No BlockCMS for ns-code &apos;{nsCode}&apos;</div>
         );

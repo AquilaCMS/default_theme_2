@@ -1,4 +1,4 @@
-import { useEffect, useState }                  from 'react';
+import { useState }                             from 'react';
 import absoluteUrl                              from 'next-absolute-url';
 import getT                                     from 'next-translate/getT';
 import useTranslation                           from 'next-translate/useTranslation';
@@ -109,11 +109,6 @@ export default function CategoryList({ breadcrumb, category, categorySlugs, limi
     const { categoryPage, setCategoryPage }         = useCategoryPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
     const { lang, t }                               = useTranslation();
-
-    // Unset "page" cookie if we leave the category page
-    useEffect(() => {
-        return () => unsetCookie('page');
-    }, []);
 
     const handlePageClick = async (data) => {
         const page = data.selected + 1;

@@ -5,6 +5,7 @@ import BlockSlider                              from '@components/common/BlockSl
 import BlogList                                 from '@components/common/BlogList';
 import Contact                                  from '@components/common/Contact';
 import Gallery                                  from '@components/common/Gallery';
+import ProductCard                              from '@components/product/ProductCard';
 import ProductList                              from '@components/product/ProductList';
 import Slider                                   from '@components/common/Slider';
 import { useCmsBlocks, useComponentData }       from '@lib/hooks';
@@ -15,7 +16,7 @@ export default function BlockCMS({ nsCode, content = '', displayerror = false, r
     
     let html = '';
     if (content) {
-        // Live use in code (data in prop "content")
+        // Live use in code (data in "content" prop)
         html = content;
     } else {
         // 2 options :
@@ -30,6 +31,7 @@ export default function BlockCMS({ nsCode, content = '', displayerror = false, r
         'ns-blog-articles'    : <BlogList />,
         'ns-contact'          : <Contact />,
         'ns-gallery'          : <Gallery />,
+        'ns-product-card'     : <ProductCard col="12" />,
         'ns-product-card-list': <ProductList />,
         'ns-slider'           : <Slider />
     };
@@ -68,7 +70,7 @@ export default function BlockCMS({ nsCode, content = '', displayerror = false, r
                 return <BlockCMS nsCode={attribs['ns-code']} recursion={recursion + 1} />;
             }
 
-            // Replace <a> by Next link
+            // Replace <a> by Next link (if not an external link)
             if (type === 'tag' && name === 'a') {
                 // if no href => home page
                 if (!attribs.href) {

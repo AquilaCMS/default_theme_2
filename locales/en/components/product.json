@@ -2,7 +2,8 @@
     "productCard": {
         "addToBasket": "en-Ajouter au panier",
         "compose": "en-Composer",
-        "addToCartLoading": "en-Ajout..."
+        "addToCartLoading": "en-Ajout...",
+        "noProduct": "en-Impossible d'afficher le produit [{{product}}]"
     },
     "product": {
         "tab1": "en-Description",

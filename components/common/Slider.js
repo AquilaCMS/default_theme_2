@@ -12,10 +12,10 @@ export default function Slider({ 'ns-code': nsCode, sliderContent }) {
     const slider = sliderContent || componentData[`nsSlider_${nsCode}`];
     
     if (!slider) {
-        return <div>{t('components/slider:noSlider', { nsCode })}</div>;
+        return <div className="w-dyn-empty">{t('components/slider:noSlider', { nsCode })}</div>;
     }
     if (!slider.items.length) {
-        return <div>{t('components/slider:noItem', { nsCode })}</div>;
+        return <div className="w-dyn-empty">{t('components/slider:noItem', { nsCode })}</div>;
     }
     return (
         <Carousel

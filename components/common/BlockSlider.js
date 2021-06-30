@@ -23,7 +23,7 @@ export default function BlockSlider({ 'ns-code': nsCodeList }) {
     }
 
     if (!listBlocks?.length) {
-        return <div>{t('components/blockSlider:noItem', { nsCodeList })}</div>;
+        return <div className="w-dyn-empty">{t('components/blockSlider:noItem', { nsCodeList })}</div>;
     }
     return (
         <Carousel

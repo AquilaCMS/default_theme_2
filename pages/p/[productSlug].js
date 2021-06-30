@@ -30,7 +30,7 @@ export async function getServerSideProps({ locale, params, req, res }) {
     const actions = [
         {
             type: 'SET_PRODUCT',
-            func: getProduct.bind(this, params.productSlug)
+            func: getProduct.bind(this, 'slug', params.productSlug)
         },
         {
             type: 'PUSH_CMSBLOCKS',

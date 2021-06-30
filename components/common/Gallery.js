@@ -54,10 +54,10 @@ export default function Gallery({ 'ns-code': nsCode, galleryContent }) {
     };
 
     if (!gallery) {
-        return <div>{t('components/gallery:noGallery', { nsCode })}</div>;
+        return <div className="w-dyn-empty">{t('components/gallery:noGallery', { nsCode })}</div>;
     }
     if (!gallery.datas.length) {
-        return <div>{t('components/gallery:noItem', { nsCode })}</div>;
+        return <div className="w-dyn-empty">{t('components/gallery:noItem', { nsCode })}</div>;
     }
     
     const array = gallery.datas.map((item, index) => {

@@ -7,12 +7,18 @@ export default function BlogList({ list = [] }) {
     const { lang, t }   = useTranslation();
 
     // Get data in redux store or prop list
-    const blogList = componentData['nsBlogList'] || list;
+    let blogList = componentData['nsBlogList'] || list;
+    
+    if (!blogList?.length) {
+        return <div className="w-dyn-empty">
+            <div>{t('components/blogList:noArticle')}</div>
+        </div>;
+    }
 
     return (
         <div className="content-section">
             <div className="container">
-                {blogList.length > 0 ? blogList.map((item) => (
+                {blogList.map((item) => (
                     <div key={item._id} className="w-layout-grid content-grid" itemType="http://schema.org/Article">
                         <div className="content-block">
                             <h2 className="heading-5">{item.title}</h2>
@@ -23,11 +29,7 @@ export default function BlogList({ list = [] }) {
                             <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/images/blog/578x266/${item._id}/${item.slug[lang]}${item.extension}`} alt={item.title} />
                         </div>
                     </div>
-                )) : (
-                    <div className="w-dyn-empty">
-                        <div>{t('components/blogList:noArticle')}</div>
-                    </div>
-                )}
+                ))}
             </div>
         </div>
     );

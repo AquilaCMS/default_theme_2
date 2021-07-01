@@ -5,6 +5,7 @@ import BlockSlider                              from '@components/common/BlockSl
 import BlogList                                 from '@components/common/BlogList';
 import Contact                                  from '@components/common/Contact';
 import Gallery                                  from '@components/common/Gallery';
+import Newsletter                               from '@components/common/Newsletter';
 import ProductCard                              from '@components/product/ProductCard';
 import ProductList                              from '@components/product/ProductList';
 import Slider                                   from '@components/common/Slider';
@@ -31,6 +32,7 @@ export default function BlockCMS({ nsCode, content = '', displayerror = false, r
         'ns-blog-articles'    : <BlogList />,
         'ns-contact'          : <Contact />,
         'ns-gallery'          : <Gallery />,
+        'ns-newsletter'       : <Newsletter />,
         'ns-product-card'     : <ProductCard col="12" />,
         'ns-product-card-list': <ProductList />,
         'ns-slider'           : <Slider />

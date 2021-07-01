@@ -187,7 +187,7 @@ export default function FoodOptions() {
                                 <BlockCMS content={cmsBlockTop} />
                                 {
                                     cart.items?.filter((item) => item.foodOption).length > 0 && foodOptionsGroups.length > 0 ? foodOptionsGroups.map((group) => (
-                                        <div key={group.codes.join('-')} style={group.codes.length > 1 ? { border: '2px dashed #ff8946', padding: '10px', marginBottom: '10px' } : {}}>
+                                        <div key={group.codes.join('-')} style={group.codes.length > 1 ? { border: '2px dashed #ff8946', padding: '10px', marginTop: '15px', marginBottom: '15px' } : {}}>
                                             {group.productsOffered > 0 && group.codes.length > 1 && <span>{group.productsOffered} {group.productsOffered > 1 ? t('modules/food-options-aquila:productsOffered') : t('modules/food-options-aquila:productOffered')}</span>}
                                             {
                                                 group.codes.length && group.codes.map((code) => {

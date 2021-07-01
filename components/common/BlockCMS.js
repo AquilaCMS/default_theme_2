@@ -1,6 +1,7 @@
 import React                                    from 'react';
 import Link                                     from 'next/link';
 import parse, { attributesToProps, domToReact } from 'html-react-parser';
+import Accordion                                from '@components/common/Accordion';
 import BlockSlider                              from '@components/common/BlockSlider';
 import BlogList                                 from '@components/common/BlogList';
 import Contact                                  from '@components/common/Contact';
@@ -28,6 +29,7 @@ export default function BlockCMS({ nsCode, content = '', displayerror = false, r
 
     // Next Sourcia components array
     const nsComponents = {
+        'ns-accordion'        : <Accordion />,
         'ns-block-slider'     : <BlockSlider />,
         'ns-blog-articles'    : <BlogList />,
         'ns-contact'          : <Contact />,

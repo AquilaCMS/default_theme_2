@@ -1,18 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
-import Link                            from 'next/link';
-import { useRouter }                   from 'next/router';
-import useTranslation                  from 'next-translate/useTranslation';
-import { Modal }                       from 'react-responsive-modal';
-import BundleProduct                   from '@components/product/BundleProduct';
-import Button                          from '@components/ui/Button';
-import { generateSlug }                from '@lib/aquila-connector/product/helpersProduct';
-import { addToCart }                   from '@lib/aquila-connector/cart';
-import { useCart, useShowCartSidebar } from '@lib/hooks';
-import { formatPrice }                 from '@lib/utils';
+import { useEffect, useRef, useState }                   from 'react';
+import Link                                              from 'next/link';
+import { useRouter }                                     from 'next/router';
+import useTranslation                                    from 'next-translate/useTranslation';
+import { Modal }                                         from 'react-responsive-modal';
+import BundleProduct                                     from '@components/product/BundleProduct';
+import Button                                            from '@components/ui/Button';
+import { generateSlug, getImage }                        from '@lib/aquila-connector/product/helpersProduct';
+import { addToCart }                                     from '@lib/aquila-connector/cart';
+import { useCart, useComponentData, useShowCartSidebar } from '@lib/hooks';
+import { formatPrice }                                   from '@lib/utils';
 
 import 'react-responsive-modal/styles.css';
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ type, value, col = 6 }) {
     const [qty, setQty]             = useState(1);
     const [message, setMessage]     = useState();
     const [isLoading, setIsLoading] = useState(false);
@@ -21,19 +21,27 @@ export default function ProductCard({ product }) {
     const { query }                 = useRouter();
     const { cart, setCart }         = useCart();
     const { setShowCartSidebar }    = useShowCartSidebar();
-    const { t }                     = useTranslation();
-    
-    const { slug, name, description, img, canonical } = product;
+    const componentData             = useComponentData();
+    const { lang, t }               = useTranslation();
 
-    const currentSlug = generateSlug({
-        categorySlugs: query.categorySlugs,
-        slug,
-        canonical
-    });
+    // 2 options :
+    // Live use in code (data in "value" prop => type = "data")
+    // Use in CMS block (data in redux store => SET_COMPONENT_DATA => type = "id|code")
+    const product = type === 'data' ? value : componentData[`nsProductCard_${type}_${value}`];
 
     useEffect(() => {
         return () => clearTimeout(timer.current);
     }, []);
+
+    if (!product) {
+        return <div className="w-dyn-empty">{t('components/product:productCard.noProduct', { product: value })}</div>;
+    }
+
+    const currentSlug = generateSlug({
+        categorySlugs: query.categorySlugs,
+        slug         : product.slug[lang] || '',
+        canonical    : product.canonical
+    });
 
     const onChangeQty = (e) => {
         if (!e.target.value) {
@@ -72,25 +80,24 @@ export default function ProductCard({ product }) {
     const onCloseModal = () => setOpenModal(false);
 
     return (
-
-        <div role="listitem" className="menu-item w-dyn-item w-col w-col-6">
+        <div role="listitem" className={`menu-item w-dyn-item w-col w-col-${col}`}>
             <div className="food-card">
                 <Link href={currentSlug}>
                     <a className="food-image-square w-inline-block">
-                        <img src={img || '/images/no-image.svg'} alt={name || 'Image produit'} style={{ 'width': '100%' }} className="food-image" loading="lazy" />
+                        <img src={getImage(product.images[0], '250x250') || '/images/no-image.svg'} alt={product.name || 'Image produit'} style={{ 'width': '100%' }} className="food-image" loading="lazy" />
                     </a>
                 </Link>
                 <div className="food-card-content">
                     <Link href={currentSlug}>
                         <a className="food-title-wrap w-inline-block">
-                            <h6 className="heading-9" >{name}</h6>
+                            <h6 className="heading-9" >{product.name}</h6>
                             <div className="div-block-prix">
                                 <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
                                 { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
                             </div>
                         </a>
                     </Link>
-                    <p className="paragraph">{description}</p>
+                    <p className="paragraph">{product.description2?.title}</p>
                     <div className="add-to-cart">
                         {
                             message ? (

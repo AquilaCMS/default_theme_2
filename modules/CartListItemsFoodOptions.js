@@ -35,6 +35,17 @@ function getFoodOptionsProducts(products) {
     return items;
 }
 
+// Get linked products
+async function getLinkedProducts() {
+    try {
+        const res = await axios.get('v2/food-options/getLinks');
+        return res.data;
+    } catch (err) {
+        console.error('foodOptions.getLinkedProducts');
+        throw new Error(err?.response?.data?.message);
+    }
+}
+
 // Update quantity of a complementary product from cart
 async function updateQtyItem(cartId, itemId, itemIdProduct, quantity) {
     try {
@@ -71,17 +82,16 @@ export default function FoodOptions() {
 
         const fetchData = async () => {
             try {
-                // Get food options groups
-                // TODO use futur route
-                const data = [];
+                // Get linked products
+                const linkedProducts = await getLinkedProducts();
                 
                 for (let i in items) {
                     items[i] = items[i].id.code;
                 }
                 
                 const groups = [];
-                for (let group of data) {
-                    const codes = group.replace(/\s/, '').split(',');
+                for (let group of linkedProducts.links) {
+                    const codes = group.replace(/\s/g, '').split(',');
 
                     // Check if codes exists in cart
                     for (let i = 0; i < codes.length; i++) {
@@ -177,7 +187,7 @@ export default function FoodOptions() {
                                 <BlockCMS content={cmsBlockTop} />
                                 {
                                     cart.items?.filter((item) => item.foodOption).length > 0 && foodOptionsGroups.length > 0 ? foodOptionsGroups.map((group) => (
-                                        <div key={group.codes.join('-')} style={group.codes.length > 1 ? { border: '2px dashed #ff8946', padding: '10px', marginBottom: '10px' } : {}}>
+                                        <div key={group.codes.join('-')} style={group.codes.length > 1 ? { border: '2px dashed #ff8946', padding: '10px', marginTop: '15px', marginBottom: '15px' } : {}}>
                                             {group.productsOffered > 0 && group.codes.length > 1 && <span>{group.productsOffered} {group.productsOffered > 1 ? t('modules/food-options-aquila:productsOffered') : t('modules/food-options-aquila:productOffered')}</span>}
                                             {
                                                 group.codes.length && group.codes.map((code) => {

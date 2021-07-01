@@ -30,7 +30,7 @@ export async function getServerSideProps({ locale, params, req, res }) {
     const actions = [
         {
             type: 'SET_PRODUCT',
-            func: getProduct.bind(this, params.productSlug)
+            func: getProduct.bind(this, 'slug', params.productSlug)
         },
         {
             type: 'PUSH_CMSBLOCKS',
@@ -43,7 +43,7 @@ export async function getServerSideProps({ locale, params, req, res }) {
     // Breadcrumb
     let breadcrumb = [];
     try {
-        breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product.canonical);
+        breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product?.canonical);
     } catch (err) {
         const t = await getT(locale, 'common');
         console.error(err.message || t('common:message.unknownError'));

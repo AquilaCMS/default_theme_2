@@ -2,7 +2,8 @@
     "productCard": {
         "addToBasket": "Ajouter au panier",
         "compose": "Composer",
-        "addToCartLoading": "Ajout..."
+        "addToCartLoading": "Ajout...",
+        "noProduct": "Impossible d'afficher le produit [{{product}}]"
     },
     "product": {
         "tab1": "Description",

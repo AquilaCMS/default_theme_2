@@ -1,8 +1,9 @@
 import { GTM_ID } from '@lib/common/google-tag-manager/gtm';
 
-export default function GTMScripts({ script }) {
-    if(!GTM_ID) return null;
-    if(script === 'header') {
+export default function GTMScripts({ cookieNotice, script }) {
+    if (!GTM_ID || !cookieNotice || cookieNotice === 'deny') return null;
+
+    if (script === 'header') {
         return (
             <script
                 dangerouslySetInnerHTML={{
@@ -17,7 +18,7 @@ export default function GTMScripts({ script }) {
             />
         );
     }
-    else if(script === 'body') {
+    else if (script === 'body') {
         return (
             <noscript>
                 <iframe

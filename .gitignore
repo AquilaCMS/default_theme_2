@@ -38,4 +38,4 @@ yarn-error.log*
 /_original_html
 
 # module
-components/modules/list_modules.js
+/modules/list_modules.js

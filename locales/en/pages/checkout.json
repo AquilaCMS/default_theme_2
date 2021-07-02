@@ -1,13 +1,13 @@
 {
   "login": {
     "title": "en-Ma commande - Connexion",
-    "description": "en-TODO",
+    "description": "en-Ma commande - Connexion",
     "titleH1" : "en-Ma commande",
     "step1" : "en-Connexion / Inscription"
   },
   "clickandcollect" :{
     "title" : "en-Ma commande - Click & Collect",
-    "description" : "en-TODO",
+    "description" : "en-Ma commande - Click & Collect",
     "titleH1" : "en-Ma commande",
     "clickandcollect" : "Click & Collect",
     "next" : "en-SUIVANT",
@@ -16,7 +16,7 @@
   },
   "payment" : {
     "title" : "en-Ma commande - Moyen de paiement",
-    "description" : "en-TODO",
+    "description" : "en-Ma commande - Moyen de paiement",
     "titleH1" : "en-Ma commande",
     "paymentMethod" : "en-Moyen de paiement",
     "previous" : "en-RETOUR",
@@ -25,7 +25,7 @@
   },
   "confirmation" : {
     "title" : "en-Ma commande - Confirmation",
-    "description" : "en-TODO",
+    "description" : "en-Ma commande - Confirmation",
     "titleH1" : "en-Merci pour votre commande !",
     "summary" : "en-Récapitulatif de ma commande",
     "viewOrders" : "en-Voir mes commandes"

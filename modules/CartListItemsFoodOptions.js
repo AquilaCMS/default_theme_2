@@ -11,27 +11,30 @@ import { formatPrice, unsetCookie }    from '@lib/utils';
 
 function getFoodOptionsProducts(products) {
     let items = [];
-    for (let j = 0; j < products.length; j++) {
-        if (products[j].foodOptionFree) {
-            let item = {
-                ...products[j],
-                quantity: products[j].quantity,
-                price   : {
-                    unit : { ati: 0, et: 0 },
-                    total: { ati: 0 }
+    if (products) {
+        for (let j = 0; j < products.length; j++) {
+            if (products[j].foodOptionFree) {
+                let item = {
+                    ...products[j],
+                    quantity: products[j].quantity,
+                    price   : {
+                        unit : { ati: 0, et: 0 },
+                        total: { ati: 0 }
+                    }
+                };
+                if (products.find(i => i.code === products[j].code && !i.foodOptionFree)) {
+                    const itemPaid        = { ...products.find(i => i.code === products[j].code && !i.foodOptionFree) };
+                    item.quantity        += itemPaid.quantity;
+                    item.price.unit.ati  += itemPaid.price.unit.ati;
+                    item.price.unit.et   += itemPaid.price.unit.et;
+                    item.price.total.ati += itemPaid.price.total.ati;
                 }
-            };
-            if (products.find(i => i.code === products[j].code && !i.foodOptionFree)) {
-                const itemPaid        = { ...products.find(i => i.code === products[j].code && !i.foodOptionFree) };
-                item.quantity        += itemPaid.quantity;
-                item.price.unit.ati  += itemPaid.price.unit.ati;
-                item.price.unit.et   += itemPaid.price.unit.et;
-                item.price.total.ati += itemPaid.price.total.ati;
+                items.push(item);
             }
-            items.push(item);
         }
+        items = items.sort((a, b) => a.weight - b.weight);
     }
-    items = items.sort((a, b) => a.weight - b.weight);
+    
     return items;
 }
 
@@ -63,7 +66,7 @@ async function updateQtyItem(cartId, itemId, itemIdProduct, quantity) {
     }
 }
 
-export default function FoodOptions() {
+export default function CartListItemsFoodOptions() {
     const [part, setPart]                           = useState(1);
     const [foodOptionsGroups, setFoodOptionsGroups] = useState([]);
     const [itemsFoodOptions, setItemsFoodOptions]   = useState([]);
@@ -73,62 +76,10 @@ export default function FoodOptions() {
     const { cart, setCart }                         = useCart();
     const { t }                                     = useTranslation();
 
-    // Get and format food options products
+    // Get food options products
     useEffect(() => {
-        let items = getFoodOptionsProducts(cart.items);
+        const items = getFoodOptionsProducts(cart.items);
         setItemsFoodOptions([...items]);
-
-        const itemsNoFood = cart.items?.filter((item) => !item.typeDisplay);
-
-        const fetchData = async () => {
-            try {
-                // Get linked products
-                const linkedProducts = await getLinkedProducts();
-                
-                for (let i in items) {
-                    items[i] = items[i].id.code;
-                }
-                
-                const groups = [];
-                for (let group of linkedProducts.links) {
-                    const codes = group.replace(/\s/g, '').split(',');
-
-                    // Check if codes exists in cart
-                    for (let i = 0; i < codes.length; i++) {
-                        if (!items.includes(codes[i])) {
-                            codes.splice(codes.indexOf(codes[i]), 1);
-                        }
-                    }
-                    if (!codes.length) {
-                        continue;
-                    }
-
-                    // Calculation of the number of products offered for each group 
-                    let productsOffered = 0;
-                    for (let i = 0; i < itemsNoFood.length; i++) {
-                        for (let j = 0; j < codes.length; j++) {
-                            const value      = itemsNoFood[i].id.attributes.find((a) => a.code === codes[j])?.value ? itemsNoFood[i].id.attributes.find((a) => a.code === codes[j]).value * itemsNoFood[i].quantity : 0;
-                            productsOffered += value;
-                        }
-                    }
-                    productsOffered = Math.ceil(productsOffered);
-
-                    for (let code of codes) {
-                        items.splice(items.indexOf(code), 1);
-                    }
-                    groups.push({ productsOffered, codes });
-                }
-
-                // Remaining products
-                for (let item of items) {
-                    groups.push({ codes: [item] });
-                }
-                setFoodOptionsGroups(groups);
-            } catch (err) {
-                console.error(err.message || t('common:message.unknownError'));
-            }
-        };
-        fetchData();
 
         return () => clearTimeout(timer.current);
     }, [cart]);
@@ -162,6 +113,61 @@ export default function FoodOptions() {
             timer.current = st;
         }
     };
+
+    const onChangePart = async (part) => {
+        // Get and format food options products
+        let items = getFoodOptionsProducts(cart.items);
+        
+        const itemsNoFood = cart.items?.filter((item) => !item.typeDisplay);
+
+        try {
+            // Get linked products
+            const linkedProducts = await getLinkedProducts();
+            
+            for (let i in items) {
+                items[i] = items[i].id.code;
+            }
+            
+            const groups = [];
+            for (let group of linkedProducts.links) {
+                const codes = group.replace(/\s/g, '').split(',');
+
+                // Check if codes exists in cart
+                for (let i = 0; i < codes.length; i++) {
+                    if (!items.includes(codes[i])) {
+                        codes.splice(codes.indexOf(codes[i]), 1);
+                    }
+                }
+                if (!codes.length) {
+                    continue;
+                }
+
+                // Calculation of the number of products offered for each group 
+                let productsOffered = 0;
+                for (let i = 0; i < itemsNoFood.length; i++) {
+                    for (let j = 0; j < codes.length; j++) {
+                        const value      = itemsNoFood[i].id.attributes.find((a) => a.code === codes[j])?.value ? itemsNoFood[i].id.attributes.find((a) => a.code === codes[j]).value * itemsNoFood[i].quantity : 0;
+                        productsOffered += value;
+                    }
+                }
+                productsOffered = Math.ceil(productsOffered);
+
+                for (let code of codes) {
+                    items.splice(items.indexOf(code), 1);
+                }
+                groups.push({ productsOffered, codes });
+            }
+
+            // Remaining products
+            for (let item of items) {
+                groups.push({ codes: [item] });
+            }
+            setFoodOptionsGroups(groups);
+        } catch (err) {
+            console.error(err.message || t('common:message.unknownError'));
+        }
+        setPart(part);
+    };
     
     if (cart.items?.filter((item) => !item.typeDisplay).length > 0) {
         return (
@@ -177,7 +183,7 @@ export default function FoodOptions() {
 
                             <div className="w-commerce-commercecartfooter">
                                 <div>
-                                    <button type="button" className="checkout-button-2 w-button" onClick={() => setPart(2)} style={{ width: '100%' }}>{t('modules/food-options-aquila:next')}</button>
+                                    <button type="button" className="checkout-button-2 w-button" onClick={() => onChangePart(2)} style={{ width: '100%' }}>{t('modules/food-options-aquila:next')}</button>
                                 </div>
                             </div>
                         </>
@@ -242,7 +248,7 @@ export default function FoodOptions() {
                                     <Link href="/checkout/clickandcollect">
                                         <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
                                     </Link>
-                                    <button type="button" className="checkout-button-2 w-button" onClick={() => setPart(1)} style={{ width: '100%' }}>{t('modules/food-options-aquila:back')}</button>
+                                    <button type="button" className="checkout-button-2 w-button" onClick={() => onChangePart(1)} style={{ width: '100%' }}>{t('modules/food-options-aquila:back')}</button>
                                 </div>
                             </div>
                         </>

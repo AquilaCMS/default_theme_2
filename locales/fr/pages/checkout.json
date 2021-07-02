@@ -1,13 +1,13 @@
 {
   "login": {
     "title": "Ma commande - Connexion",
-    "description": "TODO",
+    "description": "Ma commande - Connexion",
     "titleH1" : "Ma commande",
     "step1" : "Connexion / Inscription"
   },
   "clickandcollect" :{
     "title" : "Ma commande - Click & Collect",
-    "description" : "TODO",
+    "description" : "Ma commande - Click & Collect",
     "titleH1" : "Ma commande",
     "clickandcollect" : "Click & Collect",
     "labelPhone" : "Téléphone (requis)",
@@ -17,7 +17,7 @@
   },
   "payment" : {
     "title" : "Ma commande - Moyen de paiement",
-    "description" : "TODO",
+    "description" : "Ma commande - Moyen de paiement",
     "titleH1" : "Ma commande",
     "paymentMethod" : "Moyen de paiement",
     "previous" : "RETOUR",
@@ -26,7 +26,7 @@
   },
   "confirmation" : {
     "title" : "Ma commande - Confirmation",
-    "description" : "TODO",
+    "description" : "Ma commande - Confirmation",
     "titleH1" : "Merci pour votre commande !",
     "summary" : "Récapitulatif de ma commande",
     "viewOrders" : "Voir mes commandes"

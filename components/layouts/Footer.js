@@ -1,16 +1,9 @@
-// import { useSelector } from 'react-redux';
-import Newsletter from '@components/common/Newsletter';
-import FooterMenu from '@components/navigation/FooterMenu';
-
-// const getDatas = () => {
-//     const siteConfig = useSelector((state) => state.siteConfig);
-//     return { siteConfig };
-// };
+import Newsletter        from '@components/common/Newsletter';
+import FooterMenu        from '@components/navigation/FooterMenu';
+import { useSiteConfig } from '@lib/hooks';
 
 export default function Footer() {
-
-    // const { siteConfig } = getDatas();
-    const siteName = 'TODO';
+    const { environment } = useSiteConfig();
 
     return (
 
@@ -20,7 +13,7 @@ export default function Footer() {
             <div className="section-footer">
                 <div className="columns-3 w-row">
                     <div className="w-col w-col-2 w-col-medium-4">
-                        <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`} loading="lazy" alt={siteName} />
+                        <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`} loading="lazy" alt={environment?.siteName} />
                     </div>
                     <div className="w-col w-col-2 w-col-medium-4" />
 

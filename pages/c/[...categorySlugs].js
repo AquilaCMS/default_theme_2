@@ -1,4 +1,5 @@
 import { useState }                             from 'react';
+import dynamic                                  from 'next/dynamic';
 import absoluteUrl                              from 'next-absolute-url';
 import getT                                     from 'next-translate/getT';
 import useTranslation                           from 'next-translate/useTranslation';
@@ -12,12 +13,13 @@ import Breadcrumb                               from '@components/navigation/Bre
 import ProductList                              from '@components/product/ProductList';
 import MenuCategories                           from '@components/navigation/MenuCategories';
 import Allergen                                 from 'modules/Allergen';
-import ClickAndCollect                          from 'modules/ClickAndCollect';
 import { dispatcher }                           from '@lib/redux/dispatcher';
 import { getBreadcrumb }                        from '@lib/aquila-connector/breadcrumb';
 import { getCategories, getCategoryProducts }   from '@lib/aquila-connector/category';
 import { formatBreadcrumb, unsetCookie }        from '@lib/utils';
 import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
+
+const ClickAndCollect = dynamic(() => import('modules/ClickAndCollect'));
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     const categorySlugs = Array.isArray(params.categorySlugs) ? params.categorySlugs : [params.categorySlugs];

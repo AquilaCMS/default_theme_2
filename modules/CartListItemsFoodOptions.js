@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Link                            from 'next/link';
+import { useRouter }                   from 'next/router';
 import useTranslation                  from 'next-translate/useTranslation';
 import BlockCMS                        from '@components/common/BlockCMS';
 import CartItem                        from '@components/cart/CartItem';
@@ -76,6 +77,7 @@ export default function CartListItemsFoodOptions() {
     const [isLoading, setIsLoading]                 = useState(false);
     const timer                                     = useRef();
     const { cart, setCart }                         = useCart();
+    const router                                    = useRouter();
     const { t }                                     = useTranslation();
 
     // Get food options products
@@ -118,12 +120,10 @@ export default function CartListItemsFoodOptions() {
 
     const onChangePart = async (part) => {
         setIsLoading(true);
-
-        // Get and format food options products
-        let items = getFoodOptionsProducts(cart.items);
         
         if (part === 2) {
-            const itemsNoFood = cart.items?.filter((item) => !item.typeDisplay);
+            // Get and format food options products
+            let items = getFoodOptionsProducts(cart.items);
 
             try {
                 // Get linked products
@@ -147,7 +147,8 @@ export default function CartListItemsFoodOptions() {
                         continue;
                     }
 
-                    // Calculation of the number of products offered for each group 
+                    // Calculation of the number of products offered for each group
+                    const itemsNoFood   = cart.items?.filter((item) => !item.typeDisplay);
                     let productsOffered = 0;
                     for (let i = 0; i < itemsNoFood.length; i++) {
                         for (let j = 0; j < codes.length; j++) {
@@ -191,15 +192,23 @@ export default function CartListItemsFoodOptions() {
 
                             <div className="w-commerce-commercecartfooter">
                                 <div>
-                                    <Button
-                                        type="button"
-                                        text={t('modules/food-options-aquila:next')}
-                                        loadingText={t('modules/food-options-aquila:nextLoading')}
-                                        isLoading={isLoading}
-                                        className="checkout-button-2 w-button"
-                                        hookOnClick={() => onChangePart(2)}
-                                        style={{ width: '100%' }}
-                                    />
+                                    {
+                                        itemsFoodOptions.length > 0 ? (
+                                            <Button
+                                                type="button"
+                                                text={t('modules/food-options-aquila:next')}
+                                                loadingText={t('modules/food-options-aquila:nextLoading')}
+                                                isLoading={isLoading}
+                                                className="checkout-button-2 w-button"
+                                                hookOnClick={() => onChangePart(2)}
+                                                style={{ width: '100%' }}
+                                            />
+                                        ) : (
+                                            <Link href="/checkout/clickandcollect">
+                                                <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                                            </Link>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </>

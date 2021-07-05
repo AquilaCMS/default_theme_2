@@ -64,6 +64,7 @@ export default function CategoryList({ breadcrumb, origin }) {
     const [message, setMessage]       = useState();
     const [isLoading, setIsLoading]   = useState(false);
     const [openModal, setOpenModal]   = useState(false);
+    const [tabs, setTabs]             = useState(0);
     const { cart, setCart }           = useCart();
     const product                     = useProduct();
     const { lang, t }                 = useTranslation();
@@ -252,27 +253,43 @@ export default function CategoryList({ breadcrumb, origin }) {
                 <div className="container-tight">
                     <div className="w-tabs">
                         <div className="tab-menu w-tab-menu">
-                            <a className="tab-link-round w-inline-block w-tab-link  w--current">
+                            <a className={`tab-link-round w-inline-block w-tab-link${tabs === 0 ? ' w--current' : ''}`} onClick={() => setTabs(0)}>
                                 <div>{t('components/product:product.tab1')}</div>
                             </a>
-                            <a className="tab-link-round w-inline-block w-tab-link">
-                                <div>{t('components/product:product.tab2')}</div>
-                            </a>
+                            {
+                                product?.allergens.length > 0 && (
+                                    <a className={`tab-link-round w-inline-block w-tab-link${tabs === 1 ? ' w--current' : ''}`} onClick={() => setTabs(1)}>
+                                        <div>{t('components/product:product.tab2')}</div>
+                                    </a>
+                                )
+                            }
                             {/* <a className="tab-link-round w-inline-block w-tab-link w--current">
                                 <div>Reviews (0)</div>
                             </a> */}
                         </div>
                         <div className="w-tab-content">
-                            <p dangerouslySetInnerHTML={{ __html: product.description1?.text }} />
-                            {/* <div className="w-tab-pane">
-                                <div className="additional-details w-richtext" />
-                            </div>
-                            <div className="w-tab-pane">
-                                <div className="additional-details w-richtext" />
-                            </div>
-                            <div className="w-tab-pane w--tab-active">
-                                <div className="additional-details w-richtext" />
-                            </div> */}
+                            <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`} dangerouslySetInnerHTML={{ __html: product.description1?.text }} />
+                            {
+                                product?.allergens.length > 0 && (
+                                    <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
+                                        <table>
+                                            {
+                                                product.allergens.map((allergen) => {
+                                                    return (
+                                                        <tr key={allergen._id}>
+                                                            <td style={{ padding: '10px' }}>
+                                                                <img src={process.env.NEXT_PUBLIC_IMG_URL + allergen.image} alt={allergen.code} />
+                                                            </td>
+                                                            <td style={{ padding: '10px' }}>{allergen.name}</td>
+                                                        </tr>
+                                                    );
+                                                })
+                                            }    
+                                        </table>
+                                    </div>
+                                )
+                            }
+                            
                         </div>
                     </div>
                 </div>

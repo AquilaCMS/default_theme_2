@@ -3,6 +3,7 @@ import Link                            from 'next/link';
 import useTranslation                  from 'next-translate/useTranslation';
 import BlockCMS                        from '@components/common/BlockCMS';
 import CartItem                        from '@components/cart/CartItem';
+import Button                          from '@components/ui/Button';
 import { getBlockCMS }                 from '@lib/aquila-connector/blockcms';
 import { getImage }                    from '@lib/aquila-connector/product/helpersProduct';
 import axios                           from '@lib/axios/AxiosInstance';
@@ -72,6 +73,7 @@ export default function CartListItemsFoodOptions() {
     const [itemsFoodOptions, setItemsFoodOptions]   = useState([]);
     const [cmsBlockTop, setCmsBlockTop]             = useState('');
     const [message, setMessage]                     = useState();
+    const [isLoading, setIsLoading]                 = useState(false);
     const timer                                     = useRef();
     const { cart, setCart }                         = useCart();
     const { t }                                     = useTranslation();
@@ -115,58 +117,64 @@ export default function CartListItemsFoodOptions() {
     };
 
     const onChangePart = async (part) => {
+        setIsLoading(true);
+
         // Get and format food options products
         let items = getFoodOptionsProducts(cart.items);
         
-        const itemsNoFood = cart.items?.filter((item) => !item.typeDisplay);
+        if (part === 2) {
+            const itemsNoFood = cart.items?.filter((item) => !item.typeDisplay);
 
-        try {
-            // Get linked products
-            const linkedProducts = await getLinkedProducts();
-            
-            for (let i in items) {
-                items[i] = items[i].id.code;
-            }
-            
-            const groups = [];
-            for (let group of linkedProducts.links) {
-                const codes = group.replace(/\s/g, '').split(',');
+            try {
+                // Get linked products
+                const linkedProducts = await getLinkedProducts();
+                
+                for (let i in items) {
+                    items[i] = items[i].id.code;
+                }
+                
+                const groups = [];
+                for (let group of linkedProducts.links) {
+                    const codes = group.replace(/\s/g, '').split(',');
 
-                // Check if codes exists in cart
-                for (let i = 0; i < codes.length; i++) {
-                    if (!items.includes(codes[i])) {
-                        codes.splice(codes.indexOf(codes[i]), 1);
+                    // Check if codes exists in cart
+                    for (let i = 0; i < codes.length; i++) {
+                        if (!items.includes(codes[i])) {
+                            codes.splice(codes.indexOf(codes[i]), 1);
+                        }
                     }
-                }
-                if (!codes.length) {
-                    continue;
-                }
-
-                // Calculation of the number of products offered for each group 
-                let productsOffered = 0;
-                for (let i = 0; i < itemsNoFood.length; i++) {
-                    for (let j = 0; j < codes.length; j++) {
-                        const value      = itemsNoFood[i].id.attributes.find((a) => a.code === codes[j])?.value ? itemsNoFood[i].id.attributes.find((a) => a.code === codes[j]).value * itemsNoFood[i].quantity : 0;
-                        productsOffered += value;
+                    if (!codes.length) {
+                        continue;
                     }
-                }
-                productsOffered = Math.ceil(productsOffered);
 
-                for (let code of codes) {
-                    items.splice(items.indexOf(code), 1);
-                }
-                groups.push({ productsOffered, codes });
-            }
+                    // Calculation of the number of products offered for each group 
+                    let productsOffered = 0;
+                    for (let i = 0; i < itemsNoFood.length; i++) {
+                        for (let j = 0; j < codes.length; j++) {
+                            const value      = itemsNoFood[i].id.attributes.find((a) => a.code === codes[j])?.value ? itemsNoFood[i].id.attributes.find((a) => a.code === codes[j]).value * itemsNoFood[i].quantity : 0;
+                            productsOffered += value;
+                        }
+                    }
+                    productsOffered = Math.ceil(productsOffered);
 
-            // Remaining products
-            for (let item of items) {
-                groups.push({ codes: [item] });
+                    for (let code of codes) {
+                        items.splice(items.indexOf(code), 1);
+                    }
+                    groups.push({ productsOffered, codes });
+                }
+
+                // Remaining products
+                for (let item of items) {
+                    groups.push({ codes: [item] });
+                }
+                setFoodOptionsGroups(groups);
+            } catch (err) {
+                console.error(err.message || t('common:message.unknownError'));
             }
-            setFoodOptionsGroups(groups);
-        } catch (err) {
-            console.error(err.message || t('common:message.unknownError'));
         }
+        
         setPart(part);
+        setIsLoading(false);
     };
     
     if (cart.items?.filter((item) => !item.typeDisplay).length > 0) {
@@ -183,7 +191,15 @@ export default function CartListItemsFoodOptions() {
 
                             <div className="w-commerce-commercecartfooter">
                                 <div>
-                                    <button type="button" className="checkout-button-2 w-button" onClick={() => onChangePart(2)} style={{ width: '100%' }}>{t('modules/food-options-aquila:next')}</button>
+                                    <Button
+                                        type="button"
+                                        text={t('modules/food-options-aquila:next')}
+                                        loadingText={t('modules/food-options-aquila:nextLoading')}
+                                        isLoading={isLoading}
+                                        className="checkout-button-2 w-button"
+                                        hookOnClick={() => onChangePart(2)}
+                                        style={{ width: '100%' }}
+                                    />
                                 </div>
                             </div>
                         </>

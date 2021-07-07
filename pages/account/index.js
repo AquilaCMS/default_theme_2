@@ -3,6 +3,7 @@ import useTranslation                                                        fro
 import AccountLayout                                                         from '@components/account/AccountLayout';
 import OrderDetails                                                          from '@components/order/OrderDetails';
 import NextSeoCustom                                                         from '@components/tools/NextSeoCustom';
+import { getOrders }                                                         from '@lib/aquila-connector/order';
 import { useOrders }                                                         from '@lib/hooks';
 import { authProtectedPage, serverRedirect, formatPrice, formatOrderStatus } from '@lib/utils';
 import { dispatcher }                                                        from '@lib/redux/dispatcher';
@@ -12,14 +13,22 @@ export async function getServerSideProps({ req, res }) {
     if (!user) {
         return serverRedirect('/account/login?redirect=' + encodeURI('/account'));
     }
-    const pageProps      = await dispatcher(req, res);
+
+    const actions = [
+        {
+            type: 'SET_ORDERS',
+            func: getOrders.bind(this)
+        }
+    ];
+
+    const pageProps      = await dispatcher(req, res, actions);
     pageProps.props.user = user;
     return pageProps;
 }
 
 export default function Account() {
     const [viewOrders, setViewOrders] = useState([]);
-    const orders                      = useOrders();
+    const { orders, setOrders }       = useOrders();
     const { t }                       = useTranslation();
 
     const onChangeViewOrders = (index) => {
@@ -57,7 +66,7 @@ export default function Account() {
                                         <div className="container-tunnel-02">
                                             <h2 className="heading-5 center">{t('pages/account/index:orderSummary')} : #{order.number}</h2>
                                         </div>
-                                        <OrderDetails order={order} />
+                                        <OrderDetails order={order} setOrders={setOrders} />
                                     </div>
                                 </Fragment>
                             );

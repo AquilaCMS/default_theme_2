@@ -1,12 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
-import useTranslation                  from 'next-translate/useTranslation';
-import { downloadbillOrder }           from '@lib/aquila-connector/order';
-import { formatDate, formatPrice }     from '@lib/utils';
+import { useEffect, useRef, useState }                  from 'react';
+import { Modal }                                        from 'react-responsive-modal';
+import useTranslation                                   from 'next-translate/useTranslation';
+import { useRouter }                                    from 'next/router';
+import Button                                           from '@components/ui/Button';
+import { askCancelOrder, downloadbillOrder, getOrders } from '@lib/aquila-connector/order';
+import { formatDate, formatPrice }                      from '@lib/utils';
 
-export default function OrderDetails({ order }) {
-    const [message, setMessage] = useState();
-    const timer                 = useRef();
-    const { lang, t }           = useTranslation();
+export default function OrderDetails({ order, setOrders = undefined }) {
+    const [message, setMessage]     = useState();
+    const [openModal, setOpenModal] = useState();
+    const [isLoading, setIsLoading] = useState(false);
+    const timer                     = useRef();
+    const router                    = useRouter();
+    const { lang, t }               = useTranslation();
 
     useEffect(() => {
         return () => clearTimeout(timer.current);
@@ -26,6 +32,34 @@ export default function OrderDetails({ order }) {
             const st      = setTimeout(() => { setMessage(); }, 3000);
             timer.current = st;
         }
+    };
+
+    const cancelOrder = async () => {
+        setIsLoading(true);
+        try {
+            const res = await askCancelOrder(order._id);
+            if (res.code === 'ORDER_ASK_CANCEL_SUCCESS') {
+                if (setOrders) {
+                    const orders = await getOrders();
+                    setOrders(orders);
+                } else {
+                    router.push('/account');
+                }
+                onCloseModal();
+            }
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const onOpenModal = () => {
+        setOpenModal(true);
+    };
+
+    const onCloseModal = () => {
+        setOpenModal(false);
     };
 
     return (
@@ -180,12 +214,39 @@ export default function OrderDetails({ order }) {
                     {
                         order.bills.length > 0 && order.bills.map((bill, index) => (
                             <div key={bill._id} style={{ marginBottom: '20px' }}>
-                                <button type="button" className="w-button" onClick={() => downloadBill(bill, index)}>
+                                <button type="button" className="log-button w-button" onClick={() => downloadBill(bill, index)}>
                                     {t(`components/orderDetails:download${bill.avoir === false ? 'Bill' : 'Asset'}`)}
                                 </button>
                             </div>
                         ))
                     }
+                    {
+                        ['PAYMENT_CONFIRMATION_PENDING', 'PAYMENT_RECEIPT_PENDING', 'PAYMENT_PENDING', 'PROCESSED', 'PROCESSING'].includes(order.status) && (
+                            <div style={{ marginBottom: '20px' }}>
+                                <button type="button" className="log-button w-button" onClick={onOpenModal}>
+                                    {t('components/orderDetails:cancelOrder')}
+                                </button>
+                            </div>
+                        )
+                    }
+                    <Modal open={openModal} onClose={onCloseModal} center>
+                        <h3>{t('components/orderDetails:modalTitle')}</h3>
+                        <p>{t('components/orderDetails:modalWarning')}</p>
+                        <div>
+                            <Button
+                                type="button"
+                                text={t('components/orderDetails:yes')}
+                                loadingText={t('components/orderDetails:cancelLoading')}
+                                isLoading={isLoading}
+                                className="button w-button"
+                                hookOnClick={cancelOrder}
+                            />
+                            &nbsp;
+                            <button type="button" className="button w-button" onClick={onCloseModal}>
+                                {t('components/orderDetails:no')}
+                            </button>
+                        </div>
+                    </Modal>
                     {
                         message && (
                             <div className={`w-commerce-commerce${message.type}`}>

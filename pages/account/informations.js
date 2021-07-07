@@ -41,6 +41,8 @@ export default function Account({ user }) {
     const onSetUser = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+
+        // Get form data
         const updateUser = {
             _id             : user._id,
             firstname       : e.currentTarget.firstname.value,

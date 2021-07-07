@@ -19,6 +19,7 @@ export default function LoginBlock() {
         e.preventDefault();
         setIsLoading(true);
 
+        // Get form data
         const email    = e.currentTarget.email.value;
         const password = e.currentTarget.password.value;
         try {

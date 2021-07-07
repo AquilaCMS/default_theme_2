@@ -16,6 +16,7 @@ export default function RegisterBlock() {
         e.preventDefault();
         setIsLoading(true);
 
+        // Get form data
         const user = {
             firstname   : e.currentTarget.firstname.value,
             lastname    : e.currentTarget.lastname.value,

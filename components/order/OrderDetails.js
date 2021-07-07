@@ -43,7 +43,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                     const orders = await getOrders();
                     setOrders(orders);
                 } else {
-                    router.push('/account');
+                    router.push('/account'); // If we are in the checkout/success page
                 }
                 onCloseModal();
             }

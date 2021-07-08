@@ -401,3 +401,18 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
     font-style: normal;
     font-display: swap;
 }
+
+/*
+    FUSION => .button.absolu l.2857 mon-restaurant.webflow.css
+*/
+.button.absolu {
+    right: -25px;
+}
+/*
+    FUSION => .button.absolu l.7534 mon-restaurant.webflow.css
+*/
+@media screen and (max-width: 479px) {
+    .button.absolu {
+        right: auto;
+    }
+}

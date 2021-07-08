@@ -46,6 +46,8 @@
         "key-spacing": ["error", { "align": "colon" }], // Align colon
         "align-assignments/align-assignments": [2, { "requiresOnly": false } ], // Align equal
         "align-import/align-import": "error", // Align import
-        "@next/next/no-img-element":"off"
-    }
+        "@next/next/no-img-element":"off",
+        "react-hooks/exhaustive-deps":"off"
+    },
+    "ignorePatterns": ["modules/list_modules.js"]
 }

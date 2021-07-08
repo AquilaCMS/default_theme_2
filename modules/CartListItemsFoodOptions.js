@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import Link                            from 'next/link';
-import { useRouter }                   from 'next/router';
 import useTranslation                  from 'next-translate/useTranslation';
 import BlockCMS                        from '@components/common/BlockCMS';
 import CartItem                        from '@components/cart/CartItem';
@@ -77,7 +76,6 @@ export default function CartListItemsFoodOptions() {
     const [isLoading, setIsLoading]                 = useState(false);
     const timer                                     = useRef();
     const { cart, setCart }                         = useCart();
-    const router                                    = useRouter();
     const { t }                                     = useTranslation();
 
     // Get food options products

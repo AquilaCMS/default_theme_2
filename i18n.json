@@ -53,6 +53,9 @@
     "/checkout/payment": [
       "pages/checkout"
     ],
+    "/checkemailvalid": [
+      "pages/checkemailvalid"
+    ],
     "/resetpass": [
       "pages/resetpass"
     ]

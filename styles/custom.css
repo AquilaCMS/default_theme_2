@@ -50,8 +50,6 @@
 /* ADD before .slide-2 l.4388 mon-restaurant.webflow.css */
 .slide-1 {
     min-width: 100vw;
-    background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0, 0, 0, 0.51)), to(rgba(0, 0, 0, 0.32))), url('/images/photo.jpeg');
-    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), rgba(0, 0, 0, 0.32)), url('/images/photo.jpeg');
     background-position: 0px 0px, 50% 50%;
     background-size: auto, cover;
     background-repeat: repeat, no-repeat;
@@ -207,7 +205,7 @@ input[type='checkbox']:checked + .w-checkbox-input--inputType-custom {
     border-bottom-color: #3898ec;
     border-left-color: #3898ec;
     border-right-color: #3898ec;
-    background-image: url('https://d3e54v103j8qbb.cloudfront.net/static/custom-checkbox-checkmark.589d534424.svg');
+    background-image: url('/images/check.svg');
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;

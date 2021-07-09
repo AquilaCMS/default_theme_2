@@ -132,8 +132,9 @@ export default function CartListItemsFoodOptions() {
                 }
                 
                 const groups = [];
-                for (let group of linkedProducts.links) {
-                    const codes = group.replace(/\s/g, '').split(',');
+                for (let group of linkedProducts) {
+                    const name  = group.name;
+                    const codes = group.link.replace(/\s/g, '').split(',');
 
                     // Check if codes exists in cart
                     for (let i = 0; i < codes.length; i++) {
@@ -159,7 +160,7 @@ export default function CartListItemsFoodOptions() {
                     for (let code of codes) {
                         items.splice(items.indexOf(code), 1);
                     }
-                    groups.push({ productsOffered, codes });
+                    groups.push({ name, productsOffered, codes });
                 }
 
                 // Remaining products
@@ -217,7 +218,7 @@ export default function CartListItemsFoodOptions() {
                                 {
                                     cart.items?.filter((item) => item.foodOption).length > 0 && foodOptionsGroups.length > 0 ? foodOptionsGroups.map((group) => (
                                         <div key={group.codes.join('-')} style={group.codes.length > 1 ? { border: '2px dashed #ff8946', padding: '10px', marginTop: '15px', marginBottom: '15px' } : {}}>
-                                            {group.productsOffered > 0 && group.codes.length > 1 && <span>{group.productsOffered} {group.productsOffered > 1 ? t('modules/food-options-aquila:productsOffered') : t('modules/food-options-aquila:productOffered')}</span>}
+                                            {group.productsOffered > 0 && group.codes.length > 1 && <span>{group.name} | {group.productsOffered} {group.productsOffered > 1 ? t('modules/food-options-aquila:productsOffered') : t('modules/food-options-aquila:productOffered')}</span>}
                                             {
                                                 group.codes.length && group.codes.map((code) => {
                                                     const item = itemsFoodOptions.find((i) => i.code === code);

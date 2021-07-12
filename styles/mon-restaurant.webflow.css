@@ -8490,7 +8490,7 @@ li {
   }
 }
 
-@font-face {
+/* @font-face {
   font-family: 'Inter';
   src: url('/fonts/Inter-Medium.woff') format('woff');
   font-weight: 500;
@@ -8517,4 +8517,4 @@ li {
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-}
+} */

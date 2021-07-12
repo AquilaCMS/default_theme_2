@@ -81,7 +81,7 @@ export default function BlockCMS({ nsCode, content = '', displayerror = false, r
                     attribs.href = '/';
                 }
                 if (attribs.href.startsWith('/') && !attribs.href.match(/\.[a-z0-9]{1,}$/i)) {
-                    return <Link href={attribs.href}>
+                    return <Link href={attribs.href} prefetch={false}>
                         <a {...attributesToProps(attribs)}>
                             {domToReact(children, options)}
                         </a>

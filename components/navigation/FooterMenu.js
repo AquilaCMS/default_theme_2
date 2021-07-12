@@ -18,7 +18,7 @@ export default function FooterMenu() {
                             <p className="footer-paragraphe">
                                 {item?.children?.map((itemChild) => {
                                     return (
-                                        <Link href={itemChild.action === 'catalog' ? `/c/${itemChild.slug[lang]}` : `/${itemChild.pageSlug}`} key={itemChild._id}>
+                                        <Link href={itemChild.action === 'catalog' ? `/c/${itemChild.slug[lang]}` : `/${itemChild.pageSlug}`} key={itemChild._id} prefetch={false}>
                                             <a className="link-footer" >{itemChild.name}</a>
                                         </Link>
                                     );

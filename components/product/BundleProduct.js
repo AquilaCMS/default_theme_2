@@ -136,7 +136,7 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
                                                                         <h6 className="heading-14">{item.id.name}</h6>
                                                                     </div>
                                                                     <div className="form-block-4 w-form">
-                                                                        <div name="email-form-3" data-name="Email Form 3">
+                                                                        <div>
                                                                             {
                                                                                 section.type === 'MULTIPLE' ? (
                                                                                     <label className="w-checkbox checkbox-field-allergene">

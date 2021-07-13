@@ -119,64 +119,62 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                         </div>
                     </div>
                     <div className="div-block-tunnel w-form">
-                        <form id="email-form-3" name="email-form-3" data-name="Email Form 3">
-                            <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                <h5>{t('components/orderDetails:deliveryMethod')}</h5>
+                        <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
+                            <h5>{t('components/orderDetails:deliveryMethod')}</h5>
+                        </div>
+                        <div className="block-content-tunnel-space-flex">
+                            <div className="w-col w-col-6">
+                                <label htmlFor="email-2">
+                                    {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
+                                </label>
+                                <p className="label-tunnel">{formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p>
                             </div>
-                            <div className="block-content-tunnel-space-flex">
+                        </div>
+                        <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
+                            <h5>{t('components/orderDetails:yourInformations')}</h5>
+                        </div>
+                        <div className="block-content-tunnel">
+                            <div className="w-row">
                                 <div className="w-col w-col-6">
-                                    <label htmlFor="email-2">
-                                        {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
-                                    </label>
-                                    <p className="label-tunnel">{formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p>
+                                    <label htmlFor="email-3">{t('components/orderDetails:name')}</label>
+                                    <p className="label-tunnel">{order.customer.fullname}</p>
+                                    <label htmlFor="email-3">{t('components/orderDetails:email')}</label>
+                                    <p className="label-tunnel">{order.customer.email}</p>
+                                </div>
+                                <div className="w-col w-col-6">
+                                    <label htmlFor="email-2">{order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawalAddress') : t('components/orderDetails:deliveryAddress')}</label>
+                                    <p className="label-tunnel">
+                                        {order.addresses.delivery.line1}<br />
+                                        {order.addresses.delivery.line2 ? <>{order.addresses.delivery.line2}<br /></> : null}
+                                        {order.addresses.delivery.zipcode}<br />
+                                        {order.addresses.delivery.city}
+                                    </p>
                                 </div>
                             </div>
-                            <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                <h5>{t('components/orderDetails:yourInformations')}</h5>
-                            </div>
-                            <div className="block-content-tunnel">
-                                <div className="w-row">
-                                    <div className="w-col w-col-6">
-                                        <label htmlFor="email-3">{t('components/orderDetails:name')}</label>
-                                        <p className="label-tunnel">{order.customer.fullname}</p>
-                                        <label htmlFor="email-3">{t('components/orderDetails:email')}</label>
-                                        <p className="label-tunnel">{order.customer.email}</p>
-                                    </div>
-                                    <div className="w-col w-col-6">
-                                        <label htmlFor="email-2">{order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawalAddress') : t('components/orderDetails:deliveryAddress')}</label>
-                                        <p className="label-tunnel">
-                                            {order.addresses.delivery.line1}<br />
-                                            {order.addresses.delivery.line2 ? <>{order.addresses.delivery.line2}<br /></> : null}
-                                            {order.addresses.delivery.zipcode}<br />
-                                            {order.addresses.delivery.city}
-                                        </p>
-                                    </div>
+                        </div>
+                        <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
+                            <h5>{t('components/orderDetails:paymentInformations')}</h5>
+                        </div>
+                        <div className="block-content-tunnel">
+                            <div className="w-row">
+                                <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:paymentMethod')}</label>
+                                    <p className="label-tunnel">{order.payment[0].mode}</p>
                                 </div>
-                            </div>
-                            <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                <h5>{t('components/orderDetails:paymentInformations')}</h5>
-                            </div>
-                            <div className="block-content-tunnel">
-                                <div className="w-row">
-                                    <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:paymentMethod')}</label>
-                                        <p className="label-tunnel">{order.payment[0].mode}</p>
-                                    </div>
-                                    {
-                                        order.addresses.billing.line1 && (
-                                            <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:billingAddress')}</label>
-                                                <p className="label-tunnel">
-                                                    {order.addresses.billing.line1}<br />
-                                                    {order.addresses.billing.line2 ? <>{order.addresses.billing.line2}<br /></> : null}
-                                                    {order.addresses.billing.zipcode}<br />
-                                                    {order.addresses.billing.city}
-                                                </p>
-                                            </div>
-                                        )
-                                    }
+                                {
+                                    order.addresses.billing.line1 && (
+                                        <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:billingAddress')}</label>
+                                            <p className="label-tunnel">
+                                                {order.addresses.billing.line1}<br />
+                                                {order.addresses.billing.line2 ? <>{order.addresses.billing.line2}<br /></> : null}
+                                                {order.addresses.billing.zipcode}<br />
+                                                {order.addresses.billing.city}
+                                            </p>
+                                        </div>
+                                    )
+                                }
                                     
-                                </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
                 <div className="column-tunnel-prix w-col w-col-4">

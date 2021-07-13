@@ -257,7 +257,7 @@ export default function CategoryList({ breadcrumb, origin }) {
                                 <div>{t('components/product:product.tab1')}</div>
                             </a>
                             {
-                                product?.allergens.length > 0 && (
+                                product.allergens?.length > 0 && (
                                     <a className={`tab-link-round w-inline-block w-tab-link${tabs === 1 ? ' w--current' : ''}`} onClick={() => setTabs(1)}>
                                         <div>{t('components/product:product.tab2')}</div>
                                     </a>
@@ -270,7 +270,7 @@ export default function CategoryList({ breadcrumb, origin }) {
                         <div className="w-tab-content">
                             <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`} dangerouslySetInnerHTML={{ __html: product.description1?.text }} />
                             {
-                                product?.allergens.length > 0 && (
+                                product.allergens?.length > 0 && (
                                     <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
                                         <table>
                                             {

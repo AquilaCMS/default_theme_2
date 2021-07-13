@@ -104,6 +104,28 @@ export default function Allergen({ limit = 15 }) {
         }
     };
 
+    const resetAllergens = async () => {
+        setCheckedAllergens([]);
+
+        // Filter construction
+        let filter = {};
+        unsetCookie('filter');
+
+        // Updating the products list
+        try {
+            const products = await getCategoryProducts({ slug, id: '', postBody: { PostBody: { filter, page: 1, limit } } });
+            setCategoryProducts(products);
+
+            // Back to page 1
+            setCategoryPage(1);
+
+            // Back to page 1... so useless "page" cookie
+            unsetCookie('page');
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
+    };
+
     const openBlock = (force = undefined) => {
         setOpen(force || !open);
     };
@@ -120,23 +142,28 @@ export default function Allergen({ limit = 15 }) {
                 <div className={`faq-content${open ? ' faq-question-open' : ''}`}>
                     <div className="text-span-center">{t('modules/allergen-aquila:warning')}</div>
                     <div className="form-block w-form">
-                        <form name="form-alergies" className="form alergies">
-                            {
-                                allergens.map((allergen) => {
-                                    return (
-                                        <label key={allergen._id} className="w-checkbox checkbox-field-allergene">
-                                            <input 
-                                                type="checkbox"
-                                                style={{ opacity: 0, position: 'absolute', zIndex: -1 }} 
-                                                checked={checkedAllergens[allergen._id] ? true : false}
-                                                onChange={(e) => filterAllergens(e, allergen._id)}
-                                            />
-                                            <div className={'w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene'} />
-                                            <span className="checkbox-label-allergene w-form-label">{allergen.name}</span>
-                                        </label>
-                                    );
-                                })
-                            }
+                        <form>
+                            <div className="form alergies">
+                                {
+                                    allergens.map((allergen) => {
+                                        return (
+                                            <label key={allergen._id} className="w-checkbox checkbox-field-allergene">
+                                                <input 
+                                                    type="checkbox"
+                                                    style={{ opacity: 0, position: 'absolute', zIndex: -1 }} 
+                                                    checked={checkedAllergens[allergen._id] ? true : false}
+                                                    onChange={(e) => filterAllergens(e, allergen._id)}
+                                                />
+                                                <div className={'w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene'} />
+                                                <span className="checkbox-label-allergene w-form-label">{allergen.name}</span>
+                                            </label>
+                                        );
+                                    })
+                                }
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <button type="button" className="log-button-03 w-button" onClick={resetAllergens}>{t('modules/allergen-aquila:reset')}</button>
+                            </div>
                         </form>
                         {
                             message && (

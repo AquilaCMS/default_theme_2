@@ -1,4 +1,5 @@
 {
     "checkedAllergens": "COCHEZ VOS ALLERGÈNES AFIN DE NE VOIR QUE LES PRODUITS QUE VOUS POUVEZ CONSOMMER",
-    "warning": "Passez obligatoirement une commande unique en cas d'allergie afin que les produits soient isolés"
+    "warning": "Passez obligatoirement une commande unique en cas d'allergie afin que les produits soient isolés",
+    "reset": "Réinitialiser"
 }

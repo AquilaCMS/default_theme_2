@@ -4,8 +4,8 @@ import useTranslation                                     from 'next-translate/u
 import LightLayout                                        from '@components/layouts/LightLayout';
 import NextSeoCustom                                      from '@components/tools/NextSeoCustom';
 import Button                                             from '@components/ui/Button';
-import { cartToOrder }                                    from '@lib/aquila-connector/cart';
-import { deferredPayment }                                from '@lib/aquila-connector/payment';
+import { cartToOrder }                                    from 'aquila-connector/api/cart';
+import { deferredPayment }                                from 'aquila-connector/api/payment';
 import { useState }                                       from 'react';
 import { useCart, usePaymentMethods }                     from '@lib/hooks';
 import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
@@ -118,6 +118,22 @@ export default function CheckoutPayment() {
                                         </div>
                                     ))
                                 }
+                            </div>
+                            <div className="w-commerce-commercecartfooter" style={{ width: '100%' }}>
+                                {
+                                    cart.delivery?.value && (
+                                        <div className="w-commerce-commercecartlineitem cart-line-item">
+                                            <div>{t('components/cart:cartListItem.delivery')}</div>
+                                            <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                        </div>
+                                    )
+                                }
+                                <div className="w-commerce-commercecartlineitem cart-line-item">
+                                    <div>{t('components/cart:cartListItem.total')}</div>
+                                    <div className="w-commerce-commercecartordervalue text-block">
+                                        {cart.priceTotal.ati.toFixed(2)} €
+                                    </div>
+                                </div>
                             </div>
                             <button type="button" className="log-button-03 w-button" onClick={previousStep}>{t('pages/checkout:payment.previous')}</button>
                             &nbsp;

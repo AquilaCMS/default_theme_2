@@ -3,7 +3,7 @@ import { Modal }                                        from 'react-responsive-m
 import useTranslation                                   from 'next-translate/useTranslation';
 import { useRouter }                                    from 'next/router';
 import Button                                           from '@components/ui/Button';
-import { askCancelOrder, downloadbillOrder, getOrders } from '@lib/aquila-connector/order';
+import { askCancelOrder, downloadbillOrder, getOrders } from 'aquila-connector/api/order';
 import { formatDate, formatPrice }                      from '@lib/utils';
 
 export default function OrderDetails({ order, setOrders = undefined }) {
@@ -158,7 +158,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                         <div className="block-content-tunnel">
                             <div className="w-row">
                                 <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:paymentMethod')}</label>
-                                    <p className="label-tunnel">{order.payment[0].mode}</p>
+                                    <p className="label-tunnel">{order.payment[0].name}</p>
                                 </div>
                                 {
                                     order.addresses.billing.line1 && (

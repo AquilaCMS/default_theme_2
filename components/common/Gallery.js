@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import useTranslation                  from 'next-translate/useTranslation';
 import Lightbox                        from 'lightbox-react';
-import { getItemsGallery }             from '@lib/aquila-connector/gallery';
+import { getItemsGallery }             from 'aquila-connector/api/gallery';
 import { useComponentData }            from '@lib/hooks';
 
 import 'lightbox-react/style.css';

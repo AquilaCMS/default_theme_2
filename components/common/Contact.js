@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import useTranslation                  from 'next-translate/useTranslation';
 import Button                          from '@components/ui/Button';
-import { setContact }                  from '@lib/aquila-connector/contact';
+import { setContact }                  from 'aquila-connector/api/contact';
 import { useUser }                     from '@lib/hooks';
 
 export default function Contact({ classdiv, classinput, 'button-title': value, mode = 'send', firstnameid = 'First-Name', lastnameid = 'Last-Name', emailid = 'Email' }) {

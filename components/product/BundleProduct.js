@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import useTranslation                            from 'next-translate/useTranslation';
 import Button                                    from '@components/ui/Button';
-import { addToCart }                             from '@lib/aquila-connector/cart';
-import { getImage }                              from '@lib/aquila-connector/product/helpersProduct';
+import { addToCart }                             from 'aquila-connector/api/cart';
+import { getImage }                              from 'aquila-connector/api/product/helpersProduct';
 import { useCart, useShowCartSidebar }           from '@lib/hooks';
 import { formatPrice }                           from '@lib/utils';
 

@@ -4,8 +4,8 @@ import useTranslation                  from 'next-translate/useTranslation';
 import BlockCMS                        from '@components/common/BlockCMS';
 import CartItem                        from '@components/cart/CartItem';
 import Button                          from '@components/ui/Button';
-import { getBlockCMS }                 from '@lib/aquila-connector/blockcms';
-import { getImage }                    from '@lib/aquila-connector/product/helpersProduct';
+import { getBlockCMS }                 from 'aquila-connector/api/blockcms';
+import { getImage }                    from 'aquila-connector/api/product/helpersProduct';
 import axios                           from '@lib/axios/AxiosInstance';
 import { useCart }                     from '@lib/hooks';
 import { formatPrice, unsetCookie }    from '@lib/utils';
@@ -262,6 +262,14 @@ export default function CartListItemsFoodOptions() {
                             </div>
 
                             <div className="w-commerce-commercecartfooter">
+                                {
+                                    cart.delivery?.value && (
+                                        <div className="w-commerce-commercecartlineitem cart-line-item">
+                                            <div>{t('components/cart:cartListItem.delivery')}</div>
+                                            <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                        </div>
+                                    )
+                                }
                                 <div className="w-commerce-commercecartlineitem cart-line-item">
                                     <div>{t('components/cart:cartListItem.total')}</div>
                                     <div className="w-commerce-commercecartordervalue text-block">

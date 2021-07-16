@@ -16,6 +16,14 @@ export default function CartListItems() {
                     ))}
                 </div>
                 <div className="w-commerce-commercecartfooter">
+                    {
+                        cart.delivery?.value && (
+                            <div className="w-commerce-commercecartlineitem cart-line-item">
+                                <div>{t('components/cart:cartListItem.delivery')}</div>
+                                <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                            </div>
+                        )
+                    }
                     <div className="w-commerce-commercecartlineitem cart-line-item">
                         <div>{t('components/cart:cartListItem.total')}</div>
                         <div className="w-commerce-commercecartordervalue text-block">

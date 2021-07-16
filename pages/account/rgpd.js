@@ -5,8 +5,8 @@ import { Modal }                                          from 'react-responsive
 import AccountLayout                                      from '@components/account/AccountLayout';
 import BlockCMS                                           from '@components/common/BlockCMS';
 import NextSeoCustom                                      from '@components/tools/NextSeoCustom';
-import { getBlocksCMS }                                   from '@lib/aquila-connector/blockcms';
-import { dataUserExport, deleteUser }                     from '@lib/aquila-connector/user';
+import { getBlocksCMS }                                   from 'aquila-connector/api/blockcms';
+import { dataUserExport, deleteUser }                     from 'aquila-connector/api/user';
 import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                     from '@lib/redux/dispatcher';
 

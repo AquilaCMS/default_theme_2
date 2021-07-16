@@ -14,8 +14,8 @@ import ProductList                              from '@components/product/Produc
 import MenuCategories                           from '@components/navigation/MenuCategories';
 import Allergen                                 from 'modules/Allergen';
 import { dispatcher }                           from '@lib/redux/dispatcher';
-import { getBreadcrumb }                        from '@lib/aquila-connector/breadcrumb';
-import { getCategories, getCategoryProducts }   from '@lib/aquila-connector/category';
+import { getBreadcrumb }                        from 'aquila-connector/api/breadcrumb';
+import { getCategories, getCategoryProducts }   from 'aquila-connector/api/category';
 import { formatBreadcrumb, unsetCookie }        from '@lib/utils';
 import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
 

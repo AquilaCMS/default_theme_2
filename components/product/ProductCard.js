@@ -5,8 +5,8 @@ import useTranslation                                    from 'next-translate/us
 import { Modal }                                         from 'react-responsive-modal';
 import BundleProduct                                     from '@components/product/BundleProduct';
 import Button                                            from '@components/ui/Button';
-import { generateSlug, getImage }                        from '@lib/aquila-connector/product/helpersProduct';
-import { addToCart }                                     from '@lib/aquila-connector/cart';
+import { generateSlug, getImage }                        from 'aquila-connector/api/product/helpersProduct';
+import { addToCart }                                     from 'aquila-connector/api/cart';
 import { useCart, useComponentData, useShowCartSidebar } from '@lib/hooks';
 import { formatPrice }                                   from '@lib/utils';
 

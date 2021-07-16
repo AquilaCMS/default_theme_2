@@ -15,11 +15,11 @@ import ProductList                                 from '@components/product/Pro
 import BlockCMS                                    from '@components/common/BlockCMS';
 import Button                                      from '@components/ui/Button';
 import { dispatcher }                              from '@lib/redux/dispatcher';
-import { getBlocksCMS }                            from '@lib/aquila-connector/blockcms';
-import { getBreadcrumb }                           from '@lib/aquila-connector/breadcrumb';
-import { addToCart }                               from '@lib/aquila-connector/cart';
-import { getProduct }                              from '@lib/aquila-connector/product/providerProduct';
-import { getImage, getMainImage, getTabImageURL }  from '@lib/aquila-connector/product/helpersProduct';
+import { getBlocksCMS }                            from 'aquila-connector/api/blockcms';
+import { getBreadcrumb }                           from 'aquila-connector/api/breadcrumb';
+import { addToCart }                               from 'aquila-connector/api/cart';
+import { getProduct }                              from 'aquila-connector/api/product';
+import { getImage, getMainImage, getTabImageURL }  from 'aquila-connector/api/product/helpersProduct';
 import { useCart, useProduct, useShowCartSidebar } from '@lib/hooks';
 import { formatBreadcrumb, formatPrice }           from '@lib/utils';
 

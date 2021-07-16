@@ -4,7 +4,7 @@ import useTranslation                        from 'next-translate/useTranslation
 import LightLayout                           from '@components/layouts/LightLayout';
 import NextSeoCustom                         from '@components/tools/NextSeoCustom';
 import ClickAndCollect                       from 'modules/ClickAndCollect';
-import { setUser }                           from '@lib/aquila-connector/user';
+import { setUser }                           from 'aquila-connector/api/user';
 import { useCart }                           from '@lib/hooks';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
@@ -97,7 +97,22 @@ export default function CheckoutClickAndCollect({ user }) {
                         <div className="w-form">
                             <div><label>{t('pages/checkout:clickandcollect.labelPhone')}</label><input type="text" className="w-input" maxLength={256} name="phone_mobile" defaultValue={user.phone_mobile} required /></div>
                         </div>
-
+                        <div className="w-commerce-commercecartfooter">
+                            {
+                                cart.delivery?.value && (
+                                    <div className="w-commerce-commercecartlineitem cart-line-item">
+                                        <div>{t('components/cart:cartListItem.delivery')}</div>
+                                        <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                    </div>
+                                )
+                            }
+                            <div className="w-commerce-commercecartlineitem cart-line-item">
+                                <div>{t('components/cart:cartListItem.total')}</div>
+                                <div className="w-commerce-commercecartordervalue text-block">
+                                    {cart.priceTotal.ati.toFixed(2)} €
+                                </div>
+                            </div>
+                        </div>
                         <div className="form-mode-paiement-tunnel">
                             <button type="submit" className="log-button-03 w-button">{t('pages/checkout:clickandcollect.next')}</button>
                         </div>

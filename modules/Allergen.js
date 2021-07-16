@@ -2,7 +2,7 @@ import { useEffect, useState }                  from 'react';
 import { useRouter }                            from 'next/router';
 import cookie                                   from 'cookie';
 import useTranslation                           from 'next-translate/useTranslation';
-import { getCategoryProducts }                  from '@lib/aquila-connector/category';
+import { getCategoryProducts }                  from 'aquila-connector/api/category';
 import axios                                    from '@lib/axios/AxiosInstance';
 import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
 import { unsetCookie }                          from '@lib/utils';

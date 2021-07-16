@@ -3,7 +3,7 @@ import useTranslation                                                        fro
 import AccountLayout                                                         from '@components/account/AccountLayout';
 import OrderDetails                                                          from '@components/order/OrderDetails';
 import NextSeoCustom                                                         from '@components/tools/NextSeoCustom';
-import { getOrders }                                                         from '@lib/aquila-connector/order';
+import { getOrders }                                                         from 'aquila-connector/api/order';
 import { useOrders }                                                         from '@lib/hooks';
 import { authProtectedPage, serverRedirect, formatPrice, formatOrderStatus } from '@lib/utils';
 import { dispatcher }                                                        from '@lib/redux/dispatcher';

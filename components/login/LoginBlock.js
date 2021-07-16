@@ -1,9 +1,8 @@
 import { useState }                    from 'react';
 import { useRouter }                   from 'next/router';
-import axios                           from '@lib/axios/AxiosInstance';
 import useTranslation                  from 'next-translate/useTranslation';
 import Button                          from '@components/ui/Button';
-import { auth, sendMailResetPassword } from '@lib/aquila-connector/login';
+import { auth, sendMailResetPassword } from 'aquila-connector/api/login';
 
 export default function LoginBlock() {
     const [step, setStep]                 = useState(0);
@@ -23,9 +22,8 @@ export default function LoginBlock() {
         const email    = e.currentTarget.email.value;
         const password = e.currentTarget.password.value;
         try {
-            const res                                      = await auth(email, password);
-            document.cookie                                = 'jwt=' + res.data + '; path=/;';
-            axios.defaults.headers.common['Authorization'] = res.data;
+            const res       = await auth(email, password);
+            document.cookie = 'jwt=' + res.data + '; path=/;';
             router.push(redirect);
         } catch (err) {
             setMessageLogin({ type: 'error', message: err.message || t('common:message.unknownError') });

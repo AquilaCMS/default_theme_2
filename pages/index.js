@@ -4,7 +4,7 @@ import Layout            from '@components/layouts/Layout';
 import NextSeoCustom     from '@components/tools/NextSeoCustom';
 import BlockCMS          from '@components/common/BlockCMS';
 import { dispatcher }    from '@lib/redux/dispatcher';
-import { getPageStatic } from '@lib/aquila-connector/static';
+import { getPageStatic } from 'aquila-connector/api/static';
 import { useStaticPage } from '@lib/hooks';
 
 export async function getServerSideProps({ req, res }) {

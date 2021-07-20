@@ -40,7 +40,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
             const res = await askCancelOrder(order._id);
             if (res.code === 'ORDER_ASK_CANCEL_SUCCESS') {
                 if (setOrders) {
-                    const orders = await getOrders();
+                    const orders = await getOrders(lang);
                     setOrders(orders);
                 } else {
                     router.push('/account'); // If we are in the checkout/success page

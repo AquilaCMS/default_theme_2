@@ -7,15 +7,15 @@ import { dispatcher }    from '@lib/redux/dispatcher';
 import { getPageStatic } from 'aquila-connector/api/static';
 import { useStaticPage } from '@lib/hooks';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ locale, req, res }) {
     const actions = [
         {
             type: 'SET_STATICPAGE',
-            func: getPageStatic.bind(this, 'home')
+            func: getPageStatic.bind(this, 'home', locale)
         }
     ];
 
-    const pageProps = await dispatcher(req, res, actions);
+    const pageProps = await dispatcher(locale, req, res, actions);
 
     // URL origin
     const { origin }       = absoluteUrl(req);

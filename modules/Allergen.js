@@ -3,7 +3,7 @@ import { useRouter }                            from 'next/router';
 import cookie                                   from 'cookie';
 import useTranslation                           from 'next-translate/useTranslation';
 import { getCategoryProducts }                  from 'aquila-connector/api/category';
-import axios                                    from '@lib/axios/AxiosInstance';
+import axios                                    from 'aquila-connector/lib/AxiosInstance';
 import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
 import { unsetCookie }                          from '@lib/utils';
 
@@ -26,7 +26,7 @@ export default function Allergen({ limit = 15 }) {
     const router                                  = useRouter();
     const { setCategoryPage }                     = useCategoryPage();
     const { setCategoryProducts }                 = useCategoryProducts();
-    const { t }                                   = useTranslation();
+    const { lang, t }                             = useTranslation();
 
     // We determine the slug of the category
     const categorySlugs = Array.isArray(router.query.categorySlugs) ? router.query.categorySlugs : [router.query.categorySlugs];
@@ -91,7 +91,7 @@ export default function Allergen({ limit = 15 }) {
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts({ slug, id: '', postBody: { PostBody: { filter, page: 1, limit } } });
+            const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter, page: 1, limit } } });
             setCategoryProducts(products);
 
             // Back to page 1
@@ -113,7 +113,7 @@ export default function Allergen({ limit = 15 }) {
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts({ slug, id: '', postBody: { PostBody: { filter, page: 1, limit } } });
+            const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter, page: 1, limit } } });
             setCategoryProducts(products);
 
             // Back to page 1

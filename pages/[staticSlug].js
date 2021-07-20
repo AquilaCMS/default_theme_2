@@ -12,19 +12,19 @@ import { useStaticPage } from '@lib/hooks';
 // import Breadcrumb   from '@components/navigation/Breadcrumb';
 
 // voir pour le SSG
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ locale, params, req, res }) {
     const actions = [
         {
             type: 'PUSH_CMSBLOCKS',
-            func: getBlocksCMS.bind(this, ['bottom-parallax'])
+            func: getBlocksCMS.bind(this, ['bottom-parallax'], locale)
         },
         {
             type: 'SET_STATICPAGE',
-            func: getPageStatic.bind(this, params.staticSlug)
+            func: getPageStatic.bind(this, params.staticSlug, locale)
         }
     ];
 
-    const pageProps = await dispatcher(req, res, actions);
+    const pageProps = await dispatcher(locale, req, res, actions);
 
     // URL origin
     const { origin }       = absoluteUrl(req);

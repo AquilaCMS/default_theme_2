@@ -6,7 +6,7 @@ import CartItem                        from '@components/cart/CartItem';
 import Button                          from '@components/ui/Button';
 import { getBlockCMS }                 from 'aquila-connector/api/blockcms';
 import { getImage }                    from 'aquila-connector/api/product/helpersProduct';
-import axios                           from '@lib/axios/AxiosInstance';
+import axios                           from 'aquila-connector/lib/AxiosInstance';
 import { useCart }                     from '@lib/hooks';
 import { formatPrice, unsetCookie }    from '@lib/utils';
 
@@ -76,7 +76,7 @@ export default function CartListItemsFoodOptions() {
     const [isLoading, setIsLoading]                 = useState(false);
     const timer                                     = useRef();
     const { cart, setCart }                         = useCart();
-    const { t }                                     = useTranslation();
+    const { lang, t }                               = useTranslation();
 
     // Get food options products
     useEffect(() => {
@@ -90,7 +90,7 @@ export default function CartListItemsFoodOptions() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await getBlockCMS('foodoption-info');
+                const data = await getBlockCMS('foodoption-info', lang);
                 setCmsBlockTop(data.content);
             } catch (err) {
                 console.error(err.message || t('common:message.unknownError'));

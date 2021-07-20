@@ -10,24 +10,24 @@ import { getOrderById }                                   from 'aquila-connector
 import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                     from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ locale, req, res }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));
     }
-    return dispatcher();
+    return dispatcher(locale, req, res);
 }
 
 export default function CheckoutConfirmation() {
     const [order, setOrder] = useState();
     const router            = useRouter();
-    const { t }             = useTranslation();
+    const { lang, t }       = useTranslation();
 
     useEffect(() => {
         const orderId   = cookie.parse(document.cookie).order_id;
         const fetchData = async () => {
             try {
-                const data = await getOrderById(orderId);
+                const data = await getOrderById(orderId, lang);
                 setOrder(data);
                 unsetCookie('order_id');
             } catch (err) {

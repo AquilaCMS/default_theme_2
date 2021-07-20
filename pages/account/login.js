@@ -6,13 +6,13 @@ import NextSeoCustom                         from '@components/tools/NextSeoCust
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ locale, req, res }) {
     // If the user is already logged in, we will automatically redirect to the page /account/informations
     const user = await authProtectedPage(req.headers.cookie);
     if (user) {
         return serverRedirect('/account/informations');
     }
-    return dispatcher(req, res);
+    return dispatcher(locale, req, res);
 }
 
 export default function Login() {

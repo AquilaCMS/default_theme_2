@@ -10,7 +10,7 @@ export default function LoginBlock() {
     const [messageReset, setMessageReset] = useState();
     const [isLoading, setIsLoading]       = useState(false);
     const router                          = useRouter();
-    const { t }                           = useTranslation();
+    const { lang, t }                     = useTranslation();
     const redirect                        = router?.query?.redirect || '/account/informations';
 
 
@@ -38,7 +38,7 @@ export default function LoginBlock() {
         
         const email = e.currentTarget.email.value;
         try {
-            await sendMailResetPassword(email);
+            await sendMailResetPassword(email, lang);
             setMessageReset({ type: 'info', message: t('components/login/loginBlock:forgot.infoGetMail') });
         } catch (err) {
             setMessageReset({ type: 'error', message: err.message || t('common:message.unknownError') });

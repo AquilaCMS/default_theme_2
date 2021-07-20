@@ -12,7 +12,7 @@ import { dispatcher }                                     from '@lib/redux/dispa
 
 import 'react-responsive-modal/styles.css';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ locale, req, res }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/account/login?redirect=' + encodeURI('/account/rgpd'));
@@ -21,11 +21,11 @@ export async function getServerSideProps({ req, res }) {
     const actions = [
         {
             type: 'PUSH_CMSBLOCKS',
-            func: getBlocksCMS.bind(this, ['top-text-rgpd'])
+            func: getBlocksCMS.bind(this, ['top-text-rgpd'], locale)
         }
     ];
 
-    const pageProps      = await dispatcher(req, res, actions);
+    const pageProps      = await dispatcher(locale, req, res, actions);
     pageProps.props.user = user;
     return pageProps;
 }

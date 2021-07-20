@@ -9,12 +9,12 @@ import { useCart }                           from '@lib/hooks';
 import { authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                        from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ locale, req, res }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));
     }
-    const pageProps      = await dispatcher(req, res);
+    const pageProps      = await dispatcher(locale, req, res);
     pageProps.props.user = user;
     return pageProps;
 }

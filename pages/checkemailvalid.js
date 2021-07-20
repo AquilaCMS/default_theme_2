@@ -7,12 +7,12 @@ import { serverRedirect }      from '@lib/utils';
 import { dispatcher }          from '@lib/redux/dispatcher';
 
 
-export async function getServerSideProps({ query, req, res }) {
+export async function getServerSideProps({ locale, query, req, res }) {
     if (!query.token) {
         return serverRedirect('/');
     }
 
-    const pageProps       = await dispatcher(req, res);
+    const pageProps       = await dispatcher(locale, req, res);
     pageProps.props.token = query.token;
     return pageProps;
 }

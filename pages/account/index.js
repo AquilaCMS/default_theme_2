@@ -8,7 +8,7 @@ import { useOrders }                                                         fro
 import { authProtectedPage, serverRedirect, formatPrice, formatOrderStatus } from '@lib/utils';
 import { dispatcher }                                                        from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ locale, req, res }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/account/login?redirect=' + encodeURI('/account'));
@@ -17,11 +17,11 @@ export async function getServerSideProps({ req, res }) {
     const actions = [
         {
             type: 'SET_ORDERS',
-            func: getOrders.bind(this)
+            func: getOrders.bind(this, locale)
         }
     ];
 
-    const pageProps      = await dispatcher(req, res, actions);
+    const pageProps      = await dispatcher(locale, req, res, actions);
     pageProps.props.user = user;
     return pageProps;
 }

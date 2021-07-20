@@ -7,14 +7,14 @@ import { getBlockCMS }         from 'aquila-connector/api/blockcms';
 export default function CookiesBanner() {
     const [show, setShow]         = useState(false);
     const router                  = useRouter();
-    const { t }                   = useTranslation();
+    const { lang, t }             = useTranslation();
     const [txtLegal, setTxtLegal] = useState(t('components/cookiesBanner:defaultTxt'));
 
     useEffect(() => {
         const cookieNotice = cookie.parse(document.cookie).cookie_notice;
         const fetchData    = async () => {
-            const response = await getBlockCMS('CookiesBan');
-            if(response.content) {
+            const response = await getBlockCMS('CookiesBan', lang);
+            if (response.content) {
                 setTxtLegal(response.content);
             }
         };

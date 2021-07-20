@@ -11,12 +11,12 @@ import { useCart, usePaymentMethods }                     from '@lib/hooks';
 import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                     from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ locale, req, res }) {
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));
     }
-    return dispatcher(req, res);
+    return dispatcher(locale, req, res);
 }
 
 export default function CheckoutPayment() {
@@ -24,7 +24,7 @@ export default function CheckoutPayment() {
     const router                    = useRouter();
     const { cart }                  = useCart();
     const paymentMethods            = usePaymentMethods();
-    const { t }                     = useTranslation();
+    const { lang, t }               = useTranslation();
 
     useEffect(() => {
         // Check if the cart is empty
@@ -47,13 +47,13 @@ export default function CheckoutPayment() {
             if (!payment_code) return setIsLoading(false);
 
             // Cart to order
-            const order = await cartToOrder(cart._id);
+            const order = await cartToOrder(cart._id, lang);
 
             // Payment
             const payment = paymentMethods.find((p) => p.code === payment_code);
             if (payment.isDeferred === true) {
                 // Deferred payment (check, cash...)
-                await deferredPayment(order.number, payment_code);
+                await deferredPayment(order.number, payment_code, lang);
             } else {
                 // Immediat payment (CB...)
                 

@@ -6,7 +6,7 @@ import fr                                           from 'date-fns/locale/fr';
 import Button                                       from '@components/ui/Button';
 import { setCartAddresses }                         from 'aquila-connector/api/cart';
 import { getUser }                                  from 'aquila-connector/api/user';
-import axios                                        from '@lib/axios/AxiosInstance';
+import axios                                        from 'aquila-connector/lib/AxiosInstance';
 import { useCart }                                  from '@lib/hooks';
 import { formatDate, formatTime, getUserIdFromJwt } from '@lib/utils';
 

@@ -30,15 +30,15 @@ export async function getServerSideProps({ locale, params, req, res }) {
     const actions = [
         {
             type: 'SET_PRODUCT',
-            func: getProduct.bind(this, 'slug', params.productSlug)
+            func: getProduct.bind(this, 'slug', params.productSlug, locale)
         },
         {
             type: 'PUSH_CMSBLOCKS',
-            func: getBlocksCMS.bind(this, ['info-bottom-1'])
+            func: getBlocksCMS.bind(this, ['info-bottom-1'], locale)
         }
     ];
 
-    const pageProps = await dispatcher(req, res, actions);
+    const pageProps = await dispatcher(locale, req, res, actions);
 
     // Breadcrumb
     let breadcrumb = [];

@@ -29,7 +29,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Get category from slug
     let category = {};
     try {
-        const dataCategories = await getCategories({ PostBody: { filter: { 'translation.fr.slug': slug } } });
+        const dataCategories = await getCategories(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: slug } } });
         category             = dataCategories.datas.length ? dataCategories.datas[0] : {}; // Normally returns only 1 result
     } catch (err) {
         console.error(err.message || t('common:message.unknownError'));
@@ -81,11 +81,11 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             value: page
         }, {
             type: 'SET_CATEGORY_PRODUCTS',
-            func: getCategoryProducts.bind(this, { id: category._id, postBody: { PostBody: { filter, page, limit } } })
+            func: getCategoryProducts.bind(this, { id: category._id, postBody: { PostBody: { filter, page, limit } }, lang: locale })
         }
     ];
 
-    const pageProps = await dispatcher(req, res, actions);
+    const pageProps = await dispatcher(locale, req, res, actions);
 
     // Get breadcrumb
     let breadcrumb = [];
@@ -124,7 +124,7 @@ export default function CategoryList({ breadcrumb, category, categorySlugs, limi
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts({ id: category._id, postBody: { PostBody: { filter, page, limit } } });
+            const products = await getCategoryProducts({ id: category._id, lang, postBody: { PostBody: { filter, page, limit } } });
             setCategoryProducts(products);
 
             // Updating category page

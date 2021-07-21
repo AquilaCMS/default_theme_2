@@ -167,7 +167,7 @@ export default function Account({ user }) {
                             <label className="field-label">{t('pages/account/informations:address')}</label>
                             <input type="text" className="input-field w-input" name="delivery_address_line1" defaultValue={user.addresses[user.delivery_address]?.line1} maxLength={256} required />
                             <label className="field-label">{t('pages/account/informations:address2')}</label>
-                            <input type="text" className="input-field w-input" name="delivery_address_line2" defaultValue={user.addresses[user.delivery_address]?.line2} maxLength={256} required />
+                            <input type="text" className="input-field w-input" name="delivery_address_line2" defaultValue={user.addresses[user.delivery_address]?.line2} maxLength={256} />
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:city')}</label>
@@ -202,7 +202,7 @@ export default function Account({ user }) {
                             <label className="field-label">{t('pages/account/informations:address')}</label>
                             <input type="text" className="input-field w-input" name="billing_address_line1" defaultValue={user.addresses[user.billing_address]?.line1} maxLength={256} required />
                             <label className="field-label">{t('pages/account/informations:address2')}</label>
-                            <input type="text" className="input-field w-input" name="billing_address_line2" defaultValue={user.addresses[user.billing_address]?.line2} maxLength={256} required />
+                            <input type="text" className="input-field w-input" name="billing_address_line2" defaultValue={user.addresses[user.billing_address]?.line2} maxLength={256} />
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
                                     <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:city')}</label>

@@ -32,7 +32,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         const dataCategories = await getCategories(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: slug } } });
         category             = dataCategories.datas.length ? dataCategories.datas[0] : {}; // Normally returns only 1 result
     } catch (err) {
-        console.error(err.message || t('common:message.unknownError'));
+        return { notFound: true };
     }
 
     // Get cookie server instance

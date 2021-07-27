@@ -35,13 +35,13 @@ export default function CheckoutClickAndCollect({ user }) {
     const nextStep = async (e) => {
         e.preventDefault();
 
-        // Check if the billing address exists
-        if (!cart.addresses || !cart.addresses.billing) {
+        // Check if click & collect is validated
+        if (!cart.orderReceipt?.date) {
             return setMessage({ type: 'error', message: t('pages/checkout:clickandcollect.submitError') });
         }
 
         // Check if the date of receipt is consistent
-        if (cart.orderReceipt?.date) {
+        if (cart.orderReceipt.date) {
             const now         = Date.now() / 1000;
             const receiptDate = new Date(cart.orderReceipt.date).getTime() / 1000;
             if (receiptDate - now <= 0) {
@@ -60,7 +60,7 @@ export default function CheckoutClickAndCollect({ user }) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
 
-        router.push('/checkout/payment');
+        router.push('/checkout/address');
     };
 
     if (!cart?.items?.length) {
@@ -113,9 +113,14 @@ export default function CheckoutClickAndCollect({ user }) {
                                 </div>
                             </div>
                         </div>
-                        <div className="form-mode-paiement-tunnel">
-                            <button type="submit" className="log-button-03 w-button">{t('pages/checkout:clickandcollect.next')}</button>
-                        </div>
+                        {
+                            cart.orderReceipt?.date && (
+                                <div className="form-mode-paiement-tunnel">
+                                    <button type="submit" className="log-button-03 w-button">{t('pages/checkout:clickandcollect.next')}</button>
+                                </div>
+                            )
+                        }
+                        
                     </form>
                     {
                         message && (

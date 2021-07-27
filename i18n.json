@@ -41,6 +41,9 @@
     "/checkout/clickandcollect": [
       "pages/checkout"
     ],
+    "/checkout/address": [
+      "pages/checkout"
+    ],
     "/checkout/confirmation": [
       "components/orderDetails",
       "pages/checkout"

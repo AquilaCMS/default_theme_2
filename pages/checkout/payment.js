@@ -32,9 +32,14 @@ export default function CheckoutPayment() {
             return router.push('/');
         }
 
+        // Check if click & collect is validated
+        if (!cart.orderReceipt?.date) {
+            return router.push('/checkout/clickandcollect');
+        }
+
         // Check if the billing address exists
         if (!cart.addresses || !cart.addresses.billing) {
-            return router.push('/checkout/clickandcollect');
+            return router.push('/checkout/address');
         }
     }, []);
 
@@ -72,7 +77,7 @@ export default function CheckoutPayment() {
         router.back();
     };
 
-    if (!cart?.items?.length) {
+    if (!cart?.items?.length || !cart.orderReceipt?.date || !cart.addresses || !cart.addresses.billing) {
         return null;
     }
 
@@ -95,7 +100,7 @@ export default function CheckoutPayment() {
             <div className="section-tunnel">
                 <div className="container-tunnel">
                     <div className="container-step w-container">
-                        <h2 className="heading-steps">3</h2>
+                        <h2 className="heading-steps">4</h2>
                         <h2 className="heading-2-steps">{t('pages/checkout:payment.paymentMethod')}</h2>
                     </div>
                     <div className="col-log w-row">

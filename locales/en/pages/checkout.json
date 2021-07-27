@@ -5,7 +5,7 @@
     "titleH1" : "en-Ma commande",
     "step1" : "en-Connexion / Inscription"
   },
-  "clickandcollect" :{
+  "clickandcollect": {
     "title" : "en-Ma commande - Click & Collect",
     "description" : "en-Ma commande - Click & Collect",
     "titleH1" : "en-Ma commande",
@@ -14,6 +14,24 @@
     "next" : "en-SUIVANT",
     "submitError": "en-Veuillez valider un retrait ou une livraison !",
     "submitError2": "en-La date de retrait/livraison est dépassée !"
+  },
+  "address": {
+    "title" : "en-Ma commande - Adresse",
+    "description" : "en-Ma commande - Adresse",
+    "titleH1" : "en-Ma commande",
+    "address" : "en-Adresse",
+    "mandatory" : "en-* Obligatoire",
+    "titleBilling":"en-Adresse de facturation",
+    "firstname":"en-Prénom *",
+    "name":"en-Nom *",
+    "newsletter":"en-Je m'abonne à la newsletter",
+    "line1":"en-Adresse *",
+    "line2":"en-Adresse 2",
+    "city":"en-Ville *",
+    "postal":"en-Code postal *",
+    "country":"en-Pays *",
+    "next": "en-SUIVANT",
+    "nextLoading": "en-ENREGISTREMENT..."
   },
   "payment" : {
     "title" : "en-Ma commande - Moyen de paiement",

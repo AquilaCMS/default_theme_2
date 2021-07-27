@@ -103,34 +103,34 @@ export default function CheckoutAddress({ user }) {
                         <div style={{ width: '100%' }}>
                             <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
                                 <h5>{t('pages/checkout:address.titleBilling')}</h5>
-                                <label className="required">{t('pages/checkout:address.mandatory')}</label>
+                                <label className="required">* {t('pages/checkout:address.mandatory')}</label>
                             </div>
                             <div className="block-content-tunnel">
                                 <div className="w-commerce-commercecheckoutrow">
                                     <div className="w-commerce-commercecheckoutcolumn">
-                                        <label>{t('pages/checkout:address.firstname')}</label>
+                                        <label>{t('pages/checkout:address.firstname')} *</label>
                                         <input type="text" className="input-field w-input" name="billing_address_firstname" defaultValue={user.addresses[user.billing_address]?.firstname} maxLength={256} required />
                                     </div>
                                     <div className="w-commerce-commercecheckoutcolumn">
-                                        <label>{t('pages/checkout:address.name')}</label>
+                                        <label>{t('pages/checkout:address.lastname')} *</label>
                                         <input type="text" className="input-field w-input" name="billing_address_lastname" defaultValue={user.addresses[user.billing_address]?.lastname} maxLength={256} required />
                                     </div>
                                 </div>
-                                <label className="field-label">{t('pages/checkout:address.line1')}</label>
+                                <label className="field-label">{t('pages/checkout:address.line1')} *</label>
                                 <input type="text" className="input-field w-input" name="billing_address_line1" defaultValue={user.addresses[user.billing_address]?.line1} maxLength={256} required />
                                 <label className="field-label">{t('pages/checkout:address.line2')}</label>
                                 <input type="text" className="input-field w-input" name="billing_address_line2" defaultValue={user.addresses[user.billing_address]?.line2} maxLength={256} />
                                 <div className="w-commerce-commercecheckoutrow">
                                     <div className="w-commerce-commercecheckoutcolumn">
-                                        <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/checkout:address.city')}</label>
+                                        <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/checkout:address.city')} *</label>
                                         <input type="text" className="w-commerce-commercecheckoutshippingcity input-field" name="billing_address_city" defaultValue={user.addresses[user.billing_address]?.city} required />
                                     </div>
                                     <div className="w-commerce-commercecheckoutcolumn">
-                                        <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/checkout:address.postal')}</label>
+                                        <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/checkout:address.postal')} *</label>
                                         <input type="text" className="w-commerce-commercecheckoutshippingzippostalcode input-field" name="billing_address_zipcode" defaultValue={user.addresses[user.billing_address]?.zipcode} required />
                                     </div>
                                 </div>
-                                <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/checkout:address.country')}</label>
+                                <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/checkout:address.country')} *</label>
                                 <select className="w-commerce-commercecheckoutshippingcountryselector dropdown" name="billing_address_isoCountryCode">
                                     <option value="FR">France</option>
                                 </select>

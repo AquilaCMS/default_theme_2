@@ -106,26 +106,26 @@ export default function Account({ user }) {
                     <form onSubmit={onSetUser}>
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
                             <h5>{t('pages/account/informations:titleInformation')}</h5>
-                            <label className="required">{t('pages/account/informations:mandatory')}</label>
+                            <label className="required">* {t('pages/account/informations:mandatory')}</label>
                         </div>
                         <div className="block-content-tunnel">
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label>{t('pages/account/informations:name')}</label>
+                                    <label>{t('pages/account/informations:firstname')} *</label>
                                     <input type="text" className="input-field w-input" name="firstname" defaultValue={user.firstname} maxLength={256} required />
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label>{t('pages/account/informations:firstname')}</label>
+                                    <label>{t('pages/account/informations:lastname')} *</label>
                                     <input type="text" className="input-field w-input" name="lastname" defaultValue={user.lastname} maxLength={256} required />
                                 </div>
                             </div>
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label>{t('pages/account/informations:email')}</label>
+                                    <label>{t('pages/account/informations:email')} *</label>
                                     <input type="email" className="input-field w-input" name="email" defaultValue={user.email} maxLength={256} required disabled />
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label>{t('pages/account/informations:phone')}</label>
+                                    <label>{t('pages/account/informations:phone')} *</label>
                                     <input type="text" className="input-field w-input" name="phone_mobile" defaultValue={user.phone_mobile} maxLength={256} required />
                                 </div>
                             </div>
@@ -151,34 +151,34 @@ export default function Account({ user }) {
                         </div>
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
                             <h5>{t('pages/account/informations:titleDelivery')}</h5>
-                            <label className="required">{t('pages/account/informations:mandatory')}</label>
+                            <label className="required">* {t('pages/account/informations:mandatory')}</label>
                         </div>
                         <div className="block-content-tunnel">
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label>{t('pages/account/informations:firstname')}</label>
+                                    <label>{t('pages/account/informations:firstname')} *</label>
                                     <input type="text" className="input-field w-input" name="delivery_address_firstname" defaultValue={user.addresses[user.delivery_address]?.firstname} maxLength={256} required />
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label>{t('pages/account/informations:name')}</label>
+                                    <label>{t('pages/account/informations:lastname')} *</label>
                                     <input type="text" className="input-field w-input" name="delivery_address_lastname" defaultValue={user.addresses[user.delivery_address]?.lastname} maxLength={256} required />
                                 </div>
                             </div>
-                            <label className="field-label">{t('pages/account/informations:address')}</label>
+                            <label className="field-label">{t('pages/account/informations:line1')} *</label>
                             <input type="text" className="input-field w-input" name="delivery_address_line1" defaultValue={user.addresses[user.delivery_address]?.line1} maxLength={256} required />
-                            <label className="field-label">{t('pages/account/informations:address2')}</label>
+                            <label className="field-label">{t('pages/account/informations:line2')}</label>
                             <input type="text" className="input-field w-input" name="delivery_address_line2" defaultValue={user.addresses[user.delivery_address]?.line2} maxLength={256} />
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:city')}</label>
+                                    <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:city')} *</label>
                                     <input type="text" className="w-commerce-commercecheckoutshippingcity input-field" name="delivery_address_city" defaultValue={user.addresses[user.delivery_address]?.city} required />
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:postal')}</label>
+                                    <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:postal')} *</label>
                                     <input type="text" className="w-commerce-commercecheckoutshippingzippostalcode input-field" name="delivery_address_zipcode" defaultValue={user.addresses[user.delivery_address]?.zipcode} required />
                                 </div>
                             </div>
-                            <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:country')}</label>
+                            <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:country')} *</label>
                             <select name="delivery_address_isoCountryCode" className="w-commerce-commercecheckoutshippingcountryselector dropdown">
                                 <option value="FR">France</option>
                             </select>
@@ -186,34 +186,34 @@ export default function Account({ user }) {
                         
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
                             <h5>{t('pages/account/informations:titleBilling')}</h5>
-                            <label className="required">{t('pages/account/informations:mandatory')}</label>
+                            <label className="required">* {t('pages/account/informations:mandatory')}</label>
                         </div>
                         <div className="block-content-tunnel">
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label>{t('pages/account/informations:firstname')}</label>
+                                    <label>{t('pages/account/informations:firstname')} *</label>
                                     <input type="text" className="input-field w-input" name="billing_address_firstname" defaultValue={user.addresses[user.billing_address]?.firstname} maxLength={256} required />
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label>{t('pages/account/informations:name')}</label>
+                                    <label>{t('pages/account/informations:lastname')} *</label>
                                     <input type="text" className="input-field w-input" name="billing_address_lastname" defaultValue={user.addresses[user.billing_address]?.lastname} maxLength={256} required />
                                 </div>
                             </div>
-                            <label className="field-label">{t('pages/account/informations:address')}</label>
+                            <label className="field-label">{t('pages/account/informations:line1')} *</label>
                             <input type="text" className="input-field w-input" name="billing_address_line1" defaultValue={user.addresses[user.billing_address]?.line1} maxLength={256} required />
-                            <label className="field-label">{t('pages/account/informations:address2')}</label>
+                            <label className="field-label">{t('pages/account/informations:line2')}</label>
                             <input type="text" className="input-field w-input" name="billing_address_line2" defaultValue={user.addresses[user.billing_address]?.line2} maxLength={256} />
                             <div className="w-commerce-commercecheckoutrow">
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:city')}</label>
+                                    <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:city')} *</label>
                                     <input type="text" className="w-commerce-commercecheckoutshippingcity input-field" name="billing_address_city" defaultValue={user.addresses[user.billing_address]?.city} required />
                                 </div>
                                 <div className="w-commerce-commercecheckoutcolumn">
-                                    <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:postal')}</label>
+                                    <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:postal')} *</label>
                                     <input type="text" className="w-commerce-commercecheckoutshippingzippostalcode input-field" name="billing_address_zipcode" defaultValue={user.addresses[user.billing_address]?.zipcode} required />
                                 </div>
                             </div>
-                            <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:country')}</label>
+                            <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:country')} *</label>
                             <select className="w-commerce-commercecheckoutshippingcountryselector dropdown" name="billing_address_isoCountryCode">
                                 <option value="FR">France</option>
                             </select>

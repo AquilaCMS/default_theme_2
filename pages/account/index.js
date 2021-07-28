@@ -1,14 +1,16 @@
-import { Fragment, useState }                                                from 'react';
-import useTranslation                                                        from 'next-translate/useTranslation';
-import AccountLayout                                                         from '@components/account/AccountLayout';
-import OrderDetails                                                          from '@components/order/OrderDetails';
-import NextSeoCustom                                                         from '@components/tools/NextSeoCustom';
-import { getOrders }                                                         from 'aquila-connector/api/order';
-import { useOrders }                                                         from '@lib/hooks';
-import { authProtectedPage, serverRedirect, formatPrice, formatOrderStatus } from '@lib/utils';
-import { dispatcher }                                                        from '@lib/redux/dispatcher';
+import { Fragment, useState }                                                              from 'react';
+import useTranslation                                                                      from 'next-translate/useTranslation';
+import AccountLayout                                                                       from '@components/account/AccountLayout';
+import OrderDetails                                                                        from '@components/order/OrderDetails';
+import NextSeoCustom                                                                       from '@components/tools/NextSeoCustom';
+import { getOrders }                                                                       from 'aquila-connector/api/order';
+import { useOrders }                                                                       from '@lib/hooks';
+import { setLangAxios, authProtectedPage, serverRedirect, formatPrice, formatOrderStatus } from '@lib/utils';
+import { dispatcher }                                                                      from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
+    setLangAxios(locale, req, res);
+
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/account/login?redirect=' + encodeURI('/account'));

@@ -1,14 +1,16 @@
-import { useEffect, useState }               from 'react';
-import useTranslation                        from 'next-translate/useTranslation';
-import AccountLayout                         from '@components/account/AccountLayout';
-import Button                                from '@components/ui/Button';
-import NextSeoCustom                         from '@components/tools/NextSeoCustom';
-import { getNewsletter, setNewsletter }      from 'aquila-connector/api/newsletter';
-import { setUser, setAddressesUser }         from 'aquila-connector/api/user';
-import { authProtectedPage, serverRedirect } from '@lib/utils';
-import { dispatcher }                        from '@lib/redux/dispatcher';
+import { useEffect, useState }                             from 'react';
+import useTranslation                                      from 'next-translate/useTranslation';
+import AccountLayout                                       from '@components/account/AccountLayout';
+import Button                                              from '@components/ui/Button';
+import NextSeoCustom                                       from '@components/tools/NextSeoCustom';
+import { getNewsletter, setNewsletter }                    from 'aquila-connector/api/newsletter';
+import { setUser, setAddressesUser }                       from 'aquila-connector/api/user';
+import { setLangAxios, authProtectedPage, serverRedirect } from '@lib/utils';
+import { dispatcher }                                      from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
+    setLangAxios(locale, req, res);
+
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/account/login?redirect=' + encodeURI('/account/informations'));

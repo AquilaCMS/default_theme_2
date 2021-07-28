@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
-import useTranslation          from 'next-translate/useTranslation';
-import Layout                  from '@components/layouts/Layout';
-import NextSeoCustom           from '@components/tools/NextSeoCustom';
-import { validateAccount }     from 'aquila-connector/api/user';
-import { serverRedirect }      from '@lib/utils';
-import { dispatcher }          from '@lib/redux/dispatcher';
+import { useEffect, useState }          from 'react';
+import useTranslation                   from 'next-translate/useTranslation';
+import Layout                           from '@components/layouts/Layout';
+import NextSeoCustom                    from '@components/tools/NextSeoCustom';
+import { validateAccount }              from 'aquila-connector/api/user';
+import { setLangAxios, serverRedirect } from '@lib/utils';
+import { dispatcher }                   from '@lib/redux/dispatcher';
 
 
 export async function getServerSideProps({ locale, query, req, res }) {
+    setLangAxios(locale, req, res);
+
     if (!query.token) {
         return serverRedirect('/');
     }

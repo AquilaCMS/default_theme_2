@@ -1,16 +1,18 @@
-import { useEffect, useState }               from 'react';
-import { useRouter }                         from 'next/router';
-import useTranslation                        from 'next-translate/useTranslation';
-import Button                                from '@components/ui/Button';
-import LightLayout                           from '@components/layouts/LightLayout';
-import NextSeoCustom                         from '@components/tools/NextSeoCustom';
-import { setCartAddresses }                  from 'aquila-connector/api/cart';
-import { setAddressesUser }                  from 'aquila-connector/api/user';
-import { useCart }                           from '@lib/hooks';
-import { authProtectedPage, serverRedirect } from '@lib/utils';
-import { dispatcher }                        from '@lib/redux/dispatcher';
+import { useEffect, useState }                             from 'react';
+import { useRouter }                                       from 'next/router';
+import useTranslation                                      from 'next-translate/useTranslation';
+import Button                                              from '@components/ui/Button';
+import LightLayout                                         from '@components/layouts/LightLayout';
+import NextSeoCustom                                       from '@components/tools/NextSeoCustom';
+import { setCartAddresses }                                from 'aquila-connector/api/cart';
+import { setAddressesUser }                                from 'aquila-connector/api/user';
+import { useCart }                                         from '@lib/hooks';
+import { setLangAxios, authProtectedPage, serverRedirect } from '@lib/utils';
+import { dispatcher }                                      from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
+    setLangAxios(locale, req, res);
+
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));

@@ -9,10 +9,13 @@ import { dispatcher }    from '@lib/redux/dispatcher';
 import { getPageStatic } from 'aquila-connector/api/static';
 import { getBlocksCMS }  from 'aquila-connector/api/blockcms';
 import { useStaticPage } from '@lib/hooks';
+import { setLangAxios }  from '@lib/utils';
 // import Breadcrumb   from '@components/navigation/Breadcrumb';
 
 // voir pour le SSG
 export async function getServerSideProps({ locale, params, req, res }) {
+    setLangAxios(locale, req, res);
+
     const actions = [
         {
             type: 'PUSH_CMSBLOCKS',

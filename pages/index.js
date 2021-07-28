@@ -6,8 +6,11 @@ import BlockCMS          from '@components/common/BlockCMS';
 import { dispatcher }    from '@lib/redux/dispatcher';
 import { getPageStatic } from 'aquila-connector/api/static';
 import { useStaticPage } from '@lib/hooks';
+import { setLangAxios }  from '@lib/utils';
 
 export async function getServerSideProps({ locale, req, res }) {
+    setLangAxios(locale, req, res);
+    
     const actions = [
         {
             type: 'SET_STATICPAGE',

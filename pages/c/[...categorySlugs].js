@@ -1,27 +1,29 @@
-import { useState }                             from 'react';
-import dynamic                                  from 'next/dynamic';
-import absoluteUrl                              from 'next-absolute-url';
-import getT                                     from 'next-translate/getT';
-import useTranslation                           from 'next-translate/useTranslation';
-import Cookies                                  from 'cookies';
-import cookie                                   from 'cookie';
-import ReactPaginate                            from 'react-paginate';
-import Error                                    from '@pages/_error';
-import Layout                                   from '@components/layouts/Layout';
-import NextSeoCustom                            from '@components/tools/NextSeoCustom';
-import Breadcrumb                               from '@components/navigation/Breadcrumb';
-import ProductList                              from '@components/product/ProductList';
-import MenuCategories                           from '@components/navigation/MenuCategories';
-import Allergen                                 from 'modules/Allergen';
-import { dispatcher }                           from '@lib/redux/dispatcher';
-import { getBreadcrumb }                        from 'aquila-connector/api/breadcrumb';
-import { getCategories, getCategoryProducts }   from 'aquila-connector/api/category';
-import { formatBreadcrumb, unsetCookie }        from '@lib/utils';
-import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
+import { useState }                                    from 'react';
+import dynamic                                         from 'next/dynamic';
+import absoluteUrl                                     from 'next-absolute-url';
+import getT                                            from 'next-translate/getT';
+import useTranslation                                  from 'next-translate/useTranslation';
+import Cookies                                         from 'cookies';
+import cookie                                          from 'cookie';
+import ReactPaginate                                   from 'react-paginate';
+import Error                                           from '@pages/_error';
+import Layout                                          from '@components/layouts/Layout';
+import NextSeoCustom                                   from '@components/tools/NextSeoCustom';
+import Breadcrumb                                      from '@components/navigation/Breadcrumb';
+import ProductList                                     from '@components/product/ProductList';
+import MenuCategories                                  from '@components/navigation/MenuCategories';
+import Allergen                                        from 'modules/Allergen';
+import { dispatcher }                                  from '@lib/redux/dispatcher';
+import { getBreadcrumb }                               from 'aquila-connector/api/breadcrumb';
+import { getCategories, getCategoryProducts }          from 'aquila-connector/api/category';
+import { setLangAxios, formatBreadcrumb, unsetCookie } from '@lib/utils';
+import { useCategoryPage, useCategoryProducts }        from '@lib/hooks';
 
 const ClickAndCollect = dynamic(() => import('modules/ClickAndCollect'));
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
+    setLangAxios(locale, req, res);
+
     const categorySlugs = Array.isArray(params.categorySlugs) ? params.categorySlugs : [params.categorySlugs];
     const slug          = categorySlugs[categorySlugs.length - 1];
     const t             = await getT(locale, 'common');

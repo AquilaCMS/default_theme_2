@@ -1,17 +1,19 @@
-import { useEffect }                                      from 'react';
-import { useRouter }                                      from 'next/router';
-import useTranslation                                     from 'next-translate/useTranslation';
-import LightLayout                                        from '@components/layouts/LightLayout';
-import NextSeoCustom                                      from '@components/tools/NextSeoCustom';
-import Button                                             from '@components/ui/Button';
-import { cartToOrder }                                    from 'aquila-connector/api/cart';
-import { deferredPayment }                                from 'aquila-connector/api/payment';
-import { useState }                                       from 'react';
-import { useCart, usePaymentMethods }                     from '@lib/hooks';
-import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
-import { dispatcher }                                     from '@lib/redux/dispatcher';
+import { useEffect }                                                    from 'react';
+import { useRouter }                                                    from 'next/router';
+import useTranslation                                                   from 'next-translate/useTranslation';
+import LightLayout                                                      from '@components/layouts/LightLayout';
+import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
+import Button                                                           from '@components/ui/Button';
+import { cartToOrder }                                                  from 'aquila-connector/api/cart';
+import { deferredPayment }                                              from 'aquila-connector/api/payment';
+import { useState }                                                     from 'react';
+import { useCart, usePaymentMethods }                                   from '@lib/hooks';
+import { setLangAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
+import { dispatcher }                                                   from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
+    setLangAxios(locale, req, res);
+
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));

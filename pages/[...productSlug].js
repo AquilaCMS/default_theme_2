@@ -26,13 +26,15 @@ import { setLangAxios, formatBreadcrumb, formatPrice } from '@lib/utils';
 import 'lightbox-react/style.css';
 import 'react-responsive-modal/styles.css';
 
-export async function getServerSideProps({ locale, params, req, res }) {
+export async function getServerSideProps({ locale, params, req, res, resolvedUrl }) {
     setLangAxios(locale, req, res);
+
+    const productSlug = params.productSlug[params.productSlug.length - 1];
 
     const actions = [
         {
             type: 'SET_PRODUCT',
-            func: getProduct.bind(this, 'slug', params.productSlug, locale)
+            func: getProduct.bind(this, 'slug', productSlug, locale)
         },
         {
             type: 'PUSH_CMSBLOCKS',
@@ -45,7 +47,7 @@ export async function getServerSideProps({ locale, params, req, res }) {
     // Breadcrumb
     let breadcrumb = [];
     try {
-        breadcrumb = await getBreadcrumb(pageProps.props.initialReduxState.product?.canonical);
+        breadcrumb = await getBreadcrumb(resolvedUrl);
     } catch (err) {
         const t = await getT(locale, 'common');
         console.error(err.message || t('common:message.unknownError'));

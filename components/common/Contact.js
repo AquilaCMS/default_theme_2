@@ -38,15 +38,16 @@ export default function Contact({ classdiv, classinput, 'button-title': value, m
         try {
             await setContact(mode, formdata);
             setMessage({ type: 'info', message: t('components/contact:messageSuccess') });
+
+            // Form reset
+            let form = divRef.current;
+            do { form = form.parentNode; } while (form.tagName !== 'FORM' && form.tagName !== 'HTML');
+            form.reset();
         } catch(err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         } finally {
             setIsLoading(false);
         }
-        
-        let form = divRef.current;
-        do { form = form.parentNode; } while (form.tagName !== 'FORM' && form.tagName !== 'HTML');
-        form.reset();
     };
 
     return (

@@ -6,19 +6,19 @@
   "orderSummary" : "en-Récapitulatif de ma commande",
   "status": {
     "ASK_CANCEL": "en-Annulation demandée par le client",
-    "BILLED": "en-Facturée",
+    "BILLED": "en-Facturé",
     "CANCELED": "en-Annulé",
     "DEFAULT": "en-Aucun status",
-    "DELIVERY_PARTIAL_PROGRESS": "en-Expédié",
+    "DELIVERY_PARTIAL_PROGRESS": "en-Expédié partiel",
     "DELIVERY_PROGRESS": "en-Expédié",
-    "FINISHED": "en-Terminée",
-    "PAID": "en-Payée",
-    "PAYMENT_CONFIRMATION_PENDING": "en-Paiement en attente de confirmation",
-    "PAYMENT_FAILED": "en-Paiement échoué",
-    "PAYMENT_PENDING": "en-Paiement en attente",
-    "PAYMENT_RECEIPT_PENDING": "en-Paiement en attente de réception",
-    "PROCESSED": "en-Préparée",
-    "PROCESSING": "en-Traitement en cours",
-    "RETURNED": "en-Retour"
+    "FINISHED": "en-Traité",
+    "PAID": "en-Payé",
+    "PAYMENT_CONFIRMATION_PENDING": "en-En attente de confirmation de paiement",
+    "PAYMENT_FAILED": "en-Echec de paiment",
+    "PAYMENT_PENDING": "en-En attente de paiement",
+    "PAYMENT_RECEIPT_PENDING": "en-En attente de réception de paiement",
+    "PROCESSED": "en-Préparé",
+    "PROCESSING": "en-En cours de traitement",
+    "RETURNED": "en-Retour et remboursement"
   }
 }

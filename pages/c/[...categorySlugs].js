@@ -25,16 +25,32 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     setLangAxios(locale, req, res);
 
     const categorySlugs = Array.isArray(params.categorySlugs) ? params.categorySlugs : [params.categorySlugs];
-    const slug          = categorySlugs[categorySlugs.length - 1];
     const t             = await getT(locale, 'common');
     
     // Get category from slug
-    let category = {};
+    let categories = [];
+    let category   = {};
     try {
-        const dataCategories = await getCategories(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: slug } } });
-        category             = dataCategories.datas.length ? dataCategories.datas[0] : {}; // Normally returns only 1 result
+        const dataCategories = await getCategories(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: { $in: categorySlugs } }, limit: 9999 } });
+        categories           = dataCategories.datas;
+        category             = dataCategories.datas.length ? dataCategories.datas[dataCategories.datas.length - 1] : {};
     } catch (err) {
         return { notFound: true };
+    }
+
+    // Get URLs for language change
+    const slugsLangs    = {};
+    const urlsLanguages = [];
+    for (const c of categories) {
+        for (const [lang, sl] of Object.entries(c.slug)) {
+            if (!slugsLangs[lang]) {
+                slugsLangs[lang] = [];
+            }
+            slugsLangs[lang].push(sl);
+        }
+    }
+    for (const [lang, sl] of Object.entries(slugsLangs)) {
+        urlsLanguages.push({ lang, url: `/c/${sl.join('/')}` });
     }
 
     // Get cookie server instance
@@ -84,6 +100,9 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         }, {
             type: 'SET_CATEGORY_PRODUCTS',
             func: getCategoryProducts.bind(this, { id: category._id, postBody: { PostBody: { filter, page, limit } }, lang: locale })
+        }, {
+            type : 'SET_URLS_LANGUAGES',
+            value: urlsLanguages
         }
     ];
 

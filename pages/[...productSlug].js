@@ -18,9 +18,10 @@ import { dispatcher }                                  from '@lib/redux/dispatch
 import { getBlocksCMS }                                from 'aquila-connector/api/blockcms';
 import { getBreadcrumb }                               from 'aquila-connector/api/breadcrumb';
 import { addToCart }                                   from 'aquila-connector/api/cart';
+import { getCategories }                               from 'aquila-connector/api/category';
 import { getProduct }                                  from 'aquila-connector/api/product';
 import { getImage, getMainImage, getTabImageURL }      from 'aquila-connector/api/product/helpersProduct';
-import { useCart, useProduct, useShowCartSidebar }     from '@lib/hooks';
+import { useCart, useShowCartSidebar }                 from '@lib/hooks';
 import { setLangAxios, formatBreadcrumb, formatPrice } from '@lib/utils';
 
 import 'lightbox-react/style.css';
@@ -29,16 +30,46 @@ import 'react-responsive-modal/styles.css';
 export async function getServerSideProps({ locale, params, req, res, resolvedUrl }) {
     setLangAxios(locale, req, res);
 
-    const productSlug = params.productSlug[params.productSlug.length - 1];
+    const productSlug   = params.productSlug.pop();
+    const categorySlugs = params.productSlug;
+
+    // Get category from slug
+    let categories = [];
+    let product    = {};
+    try {
+        const dataCategories = await getCategories(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: { $in: categorySlugs } }, limit: 9999 } });
+        categories           = dataCategories.datas;
+
+        product = await getProduct('slug', productSlug, locale);
+    } catch (err) {
+        return { notFound: true };
+    }
+
+    // Get URLs for language change
+    const slugsLangs    = {};
+    const urlsLanguages = [];
+    for (const c of categories) {
+        for (const [lang, sl] of Object.entries(c.slug)) {
+            if (!slugsLangs[lang]) {
+                slugsLangs[lang] = [];
+            }
+            slugsLangs[lang].push(sl);
+        }
+    }
+    for (const [lang, sl] of Object.entries(product.slug)) {
+        slugsLangs[lang].push(sl);
+    }
+    for (const [lang, sl] of Object.entries(slugsLangs)) {
+        urlsLanguages.push({ lang, url: `/${sl.join('/')}` });
+    }
 
     const actions = [
         {
-            type: 'SET_PRODUCT',
-            func: getProduct.bind(this, 'slug', productSlug, locale)
-        },
-        {
             type: 'PUSH_CMSBLOCKS',
             func: getBlocksCMS.bind(this, ['info-bottom-1'], locale)
+        }, {
+            type : 'SET_URLS_LANGUAGES',
+            value: urlsLanguages
         }
     ];
 
@@ -55,13 +86,14 @@ export async function getServerSideProps({ locale, params, req, res, resolvedUrl
     pageProps.props.breadcrumb = breadcrumb;
 
     // URL origin
-    const { origin }       = absoluteUrl(req);
-    pageProps.props.origin = origin;
+    const { origin }        = absoluteUrl(req);
+    pageProps.props.origin  = origin;
+    pageProps.props.product = product;
 
     return pageProps;
 }
 
-export default function CategoryList({ breadcrumb, origin }) {
+export default function CategoryList({ breadcrumb, origin, product }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
@@ -70,7 +102,6 @@ export default function CategoryList({ breadcrumb, origin }) {
     const [openModal, setOpenModal]   = useState(false);
     const [tabs, setTabs]             = useState(0);
     const { cart, setCart }           = useCart();
-    const product                     = useProduct();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
     const router                      = useRouter();

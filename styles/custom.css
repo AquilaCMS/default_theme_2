@@ -193,11 +193,13 @@ input:disabled, button:disabled { opacity: 0.5; }
     margin-top: 5px;
 }
 /* ADD after .div-block-lang l.6497 mon-restaurant.webflow.css */
-.div-block-lang button {
+.div-block-lang .link-lang {
     background-color: unset;
+    margin: 5px;
+    padding: 5px;
 }
-.div-block-lang button:hover,
-.div-block-lang button.selected {
+.div-block-lang .link-lang:hover,
+.div-block-lang .link-lang.selected {
     background-color: #ff8946;
     color: white;
 }

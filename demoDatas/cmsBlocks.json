@@ -5,6 +5,7 @@
       "group": "Aquila",
       "_id": "5e29a422286b512918a391bb",
       "code": "invoice",
+      "active" : "false",
       "translation": {
         "fr": {
           "description": "invoice",
@@ -314,7 +315,8 @@
           ]
         }
       },
-      "code": "top-banner"
+      "code": "top-banner",
+      "active" : "true"
     },
     {
       "group": null,
@@ -390,7 +392,8 @@
           "content": "<div class=\"cta-section\">\n<div class=\"w-layout-grid cta-grid\">\n<div class=\"cta-image\" style=\"background-image: /images/Group-Photo.png;\"></div>\n<div class=\"cta-content\">\n<h2 class=\"cta-heading\"><span class=\"dark-span\">enDégustez</span> local<br />& aidez la <span class=\"text-span-7\">filière équitable !</span></h2>\n<a href=\"/\" class=\"button-white button-space w-button\">enCommandez &amp; dégustez !</a></div>\n</div>\n</div>"
         }
       },
-      "code": "info-bottom-1"
+      "code": "info-bottom-1",
+      "active" : "true"
     },
     {
       "group": null,
@@ -483,7 +486,8 @@
           "content": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading-4\">enContactez nous<br />et <span class=\"text-span-6\">récupérez</span><br />votre commande<br /><span class=\"text-span-5\">quand vous voulez</span></h2>\n<p>en- Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"/\" class=\"button button-space w-button\">Tél. : +33 0 00 00 00</a></div>\n<div class=\"image-block\"><img src=\"/images/Food-Takeaway.png\" alt=\"Click and collect\" loading=\"lazy\" /></div>\n</div>\n</div>\n</div>"
         }
       },
-      "code": "home-bottom-call"
+      "code": "home-bottom-call",
+      "active" : "true"
     },
     {
       "group": null,
@@ -567,7 +571,8 @@
           "content": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"image-block\"><img src=\"/images/Phones.png\" sizes=\"94vw\" srcset=\"images/Phones-p-500.png 500w, images/Phones-p-800.png 800w, images/Phones.png 2103w\" alt=\"\" loading=\"lazy\" /></div>\n<div class=\"content-block\">\n<h2 class=\"heading-3\">enCommandez <span class=\"text-span-4\">dégustez</span><br />grâce à la<br /><span class=\"text-span-3\">Commande Rapide</span></h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"/\" class=\"button button-space w-button\">enDécouvrez comment commander</a></div>\n</div>\n</div>\n</div>"
         }
       },
-      "code": "home-bottom-faq"
+      "code": "home-bottom-faq",
+      "active" : "true"
     },
     {
       "group": null,
@@ -668,7 +673,8 @@
           ]
         }
       },
-      "code": "home-promote-product-1"
+      "code": "home-promote-product-1",
+      "active" : "true"
     },
     {
       "group": null,
@@ -793,7 +799,8 @@
           "content": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">enComment ça marche</h2>\n</div>\n<div class=\"w-layout-grid works-grid\">\n<div class=\"content-card\"><img src=\"/images/Step-01.png\" alt=\"Etape 1\" class=\"step-image\" loading=\"lazy\" />\n<div class=\"content-wrapper\">\n<h5>enAjouter un Menu au panier</h5>\n<p>enEasily adapt your menu using the webflow CMS and allow customers to browse your items.</p>\n</div>\n</div>\n<div class=\"line-column\">\n<div class=\"line\"></div>\n</div>\n<div class=\"content-card\"><img src=\"/images/Step-02.png\" alt=\"Etape 2\" class=\"step-image\" loading=\"lazy\" />\n<div class=\"content-wrapper\">\n<h5>enPayez et récupérez</h5>\n<p>enLet your customers order and pay via the powerful ecommerce system, or simple let them call your store.</p>\n</div>\n</div>\n<div class=\"line-column\">\n<div class=\"line\"></div>\n</div>\n<div class=\"content-card\"><img src=\"/images/Step-03.png\" alt=\"Etape 3\" class=\"step-image\" loading=\"lazy\" />\n<div class=\"content-wrapper\">\n<h5>Enlever ou Livré ?</h5>\n<p>enManage your own logistics and take orders simply through the ecommerce system.</p>\n</div>\n</div>\n</div>\n</div>\n</div>"
         }
       },
-      "code": "home-promote-product-2"
+      "code": "home-promote-product-2",
+      "active" : "true"
     },
     {
       "group": null,
@@ -881,7 +888,8 @@
           "content": "<div class=\"cta-full-image\">\n<div class=\"container\">\n<div class=\"w-layout-grid grid-3\">\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">7</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">enSpécialité</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">26</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">enNombre de plat</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">3</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Restaurant</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">❤</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">For you</div>\n</div>\n</div>\n</div>\n</div>"
         }
       },
-      "code": "bottom-parallax"
+      "code": "bottom-parallax",
+      "active" : "true"
     },
     {
       "group": "Bandeau",
@@ -973,7 +981,8 @@
           "content": "<div class=\"slide-1 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/photo.jpeg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h1 class=\"hero-h1\">en - Découvrez nos Menus <span class=\"text-span\">à Emporter</span> !</h1>\n<p class=\"hero-paragraph\">en - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500 !</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">en - Commander !</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/Phones.png\" alt=\"en - Nos menus\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
         }
       },
-      "code": "Slide-Home-1"
+      "code": "Slide-Home-1",
+      "active" : "true"
     },
     {
       "group": "Bandeau",
@@ -1065,7 +1074,8 @@
           "content": "<div class=\"slide-2 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/pexels-mali-maeder-64208.jpg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h2 class=\"hero-h1\">en - Plats du jour <span class=\"text-span\">à Emporter</span> !</h2>\n<p class=\"hero-paragraph\">en - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">en- Commander !</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/pexels-pixabay-416510.jpg\" alt=\"Plats du jour\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
         }
       },
-      "code": "Slide-Home-2"
+      "code": "Slide-Home-2",
+      "active" : "true"
     },
     {
       "group": "Bandeau",
@@ -1157,7 +1167,8 @@
           "content": "<div class=\"slide-3 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/mohamad-babayan-l8sjctHOqOo-unsplash.jpg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h2 class=\"hero-h1\">en - Coktail & Drink <span class=\"text-span\">à Emporter</span> !</h2>\n<p class=\"hero-paragraph\">en - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 150</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">en- Commander !</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/kaleb-tapp-8q19GH2I88s-unsplash-2.jpg\" alt=\"Coktail & Drink\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
         }
       },
-      "code": "Slide-Home-3"
+      "code": "Slide-Home-3",
+      "active" : "true"
     },
     {
       "group": "Legal",
@@ -1201,7 +1212,8 @@
           "content": "en - Nous utilisons des cookies. Vous pouvez configurer ou refuser les cookies dans votre navigateur. Vous pouvez aussi accepter tous les cookies en cliquant sur le bouton « Accepter ». Pour plus d’informations, vous pouvez consulter notre Politique de confidentialité et des cookies. <br /><a href=\"/legal-notice\">en - Lire notre Politique de confidentialité</a>"
         }
       },
-      "code": "CookiesBan"
+      "code": "CookiesBan",
+      "active" : "true"
     },
     {
       "group": null,
@@ -1223,12 +1235,14 @@
           "description": "Présentation des produits mise en avant"
         }
       },
-      "code": "home-product-listing-title"
+      "code": "home-product-listing-title",
+      "active" : "true"
     },
     {
       "group": null,
       "_id": "607eadf6dc79b23614400109",
       "code": "cms_allergens",
+      "active" : "true",
       "translation": {
         "fr": {
           "html": "Passez obligatoirement une commande unique en cas d'allergie afin que les produits soient isolés",
@@ -1250,7 +1264,8 @@
               "content" : "Nous vous proposons des produits complémentaires pour agrémenter votre repas."
           }
       }, 
-      "code" : "foodoption-info"
+      "code" : "foodoption-info",
+      "active" : "true"
   },
   { 
     "group" : "Legal", 
@@ -1271,7 +1286,8 @@
             "content" : "en-TODO"
         }
     }, 
-    "code" : "top-text-rgpd"
+    "code" : "top-text-rgpd",
+    "active" : "true"
 }
   ]
 }

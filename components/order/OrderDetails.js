@@ -219,7 +219,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                         ))
                     }
                     {
-                        ['PAYMENT_CONFIRMATION_PENDING', 'PAYMENT_RECEIPT_PENDING', 'PAYMENT_PENDING', 'PROCESSED', 'PROCESSING'].includes(order.status) && (
+                        !['BILLED', 'DELIVERY_PROGRESS', 'DELIVERY_PARTIAL_PROGRESS', 'ASK_CANCEL', 'CANCELED', 'RETURNED'].includes(order.status) && (
                             <div style={{ marginBottom: '20px' }}>
                                 <button type="button" className="log-button w-button" onClick={onOpenModal}>
                                     {t('components/orderDetails:cancelOrder')}

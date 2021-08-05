@@ -16,7 +16,7 @@ import Allergen                                        from 'modules/Allergen';
 import { dispatcher }                                  from '@lib/redux/dispatcher';
 import { getBreadcrumb }                               from 'aquila-connector/api/breadcrumb';
 import { getCategories, getCategoryProducts }          from 'aquila-connector/api/category';
-import { setLangAxios, formatBreadcrumb, unsetCookie } from '@lib/utils';
+import { setLangAxios, formatBreadcrumb, unsetCookie, moduleHook } from '@lib/utils';
 import { useCategoryPage, useCategoryProducts }        from '@lib/hooks';
 
 const ClickAndCollect = dynamic(() => import('modules/ClickAndCollect'));
@@ -178,7 +178,9 @@ export default function CategoryList({ breadcrumb, category, categorySlugs, limi
                 __html: category.extraText,
             }} />
 
-            <ClickAndCollect />
+            {
+                moduleHook('category-top')
+            }
 
             <Breadcrumb items={formatBreadcrumb(breadcrumb)} />
 
@@ -187,7 +189,9 @@ export default function CategoryList({ breadcrumb, category, categorySlugs, limi
                     <p className="paragraph-seo" dangerouslySetInnerHTML={{
                         __html: category.extraText2,
                     }} />
-                    <Allergen limit={limit} />
+                    {
+                        moduleHook('category-top-list', {limit})
+                    }
                 </div>
                 <div className="container-col">
 

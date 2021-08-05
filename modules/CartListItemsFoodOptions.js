@@ -8,7 +8,7 @@ import { getBlockCMS }                 from 'aquila-connector/api/blockcms';
 import { getImage }                    from 'aquila-connector/api/product/helpersProduct';
 import axios                           from 'aquila-connector/lib/AxiosInstance';
 import { useCart }                     from '@lib/hooks';
-import { formatPrice, unsetCookie }    from '@lib/utils';
+import { formatPrice, moduleHook, unsetCookie }    from '@lib/utils';
 
 function getFoodOptionsProducts(products) {
     let items = [];
@@ -277,9 +277,13 @@ export default function CartListItemsFoodOptions() {
                                     </div>
                                 </div>
                                 <div>
-                                    <Link href="/checkout/clickandcollect">
-                                        <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
-                                    </Link>
+                                    {
+                                        moduleHook("cart-validate-btn") || (
+                                            <Link href="/checkout/address">
+                                                <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                                            </Link>
+                                        )
+                                    }
                                     <button type="button" className="checkout-button-2 w-button" onClick={() => onChangePart(1)} style={{ width: '100%' }}>{t('modules/food-options-aquila:back')}</button>
                                 </div>
                             </div>

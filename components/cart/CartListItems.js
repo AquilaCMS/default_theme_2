@@ -2,6 +2,7 @@ import Link           from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import CartItem       from '@components/cart/CartItem';
 import { useCart }    from '@lib/hooks';
+import { moduleHook } from '@lib/utils';
 
 export default function CartListItems() {
     const { cart } = useCart();
@@ -31,9 +32,12 @@ export default function CartListItems() {
                         </div>
                     </div>
                     <div>
-                        <Link href="/checkout/clickandcollect">
-                            <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
-                        </Link>
+                        {
+                            moduleHook("cart-list-items") || 
+                            <Link href="/checkout/addresshaha">
+                                <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                            </Link>
+                        }
                     </div>
                 </div>
             </form>

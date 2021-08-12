@@ -1,17 +1,21 @@
 const nextTranslate = require('next-translate');
-module.exports      = nextTranslate({
+module.exports = nextTranslate({
     async headers() {
         return [
             {
-                source : '/(.*)',
+                source: '/(.*)',
                 headers: [
                     {
-                        key  : 'Powered-by',
+                        key: 'Powered-by',
                         value: 'AquilaCMS',
                     }
                 ],
             },
         ];
+    },
+    // disable eslint during build https://nextjs.org/docs/api-reference/next.config.js/ignoring-eslint
+    eslint: {
+        ignoreDuringBuilds: true,
     },
     /*async rewrites () {
         return [

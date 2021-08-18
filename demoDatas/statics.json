@@ -11,18 +11,18 @@
         "fr": {
           "metaDesc": "home",
           "title": "home",
-          "content": "Home page fr",
+          "content": "<ns-cms ns-code=\"home-promote-product-1\"></ns-cms> <ns-cms ns-code=\"home-promote-product-2\"></ns-cms>\n<div class=\"content-section-bg\">\n<div class=\"container-col\"><ns-cms ns-code=\"home-product-listing\"></ns-cms></div>\n</div>\n<ns-cms ns-code=\"home-bottom-faq\"></ns-cms> <ns-cms ns-code=\"home-bottom-call\"></ns-cms> <ns-cms ns-code=\"info-bottom-1\"></ns-cms>",
           "slug": "home",
           "name": "home",
-          "html": "Home page fr",
+          "html": "<ns-cms ns-code=\"home-promote-product-1\"></ns-cms> <ns-cms ns-code=\"home-promote-product-2\"></ns-cms>\n<div class=\"content-section-bg\">\n<div class=\"container-col\"><ns-cms ns-code=\"home-product-listing\"></ns-cms></div>\n</div>\n<ns-cms ns-code=\"home-bottom-faq\"></ns-cms> <ns-cms ns-code=\"home-bottom-call\"></ns-cms> <ns-cms ns-code=\"info-bottom-1\"></ns-cms>",
           "variables": []
         },
         "en": {
           "metaDesc": "home",
           "title": "home",
-          "content": "Home page en",
+          "content": "<ns-cms ns-code=\"home-promote-product-1\"></ns-cms> <ns-cms ns-code=\"home-promote-product-2\"></ns-cms>\n<div class=\"content-section-bg\">\n<div class=\"container-col\"><ns-cms ns-code=\"home-product-listing\"></ns-cms></div>\n</div>\n<ns-cms ns-code=\"home-bottom-faq\"></ns-cms> <ns-cms ns-code=\"home-bottom-call\"></ns-cms> <ns-cms ns-code=\"info-bottom-1\"></ns-cms>",
           "slug": "home",
-          "html": "Home page en",
+          "html": "<ns-cms ns-code=\"home-promote-product-1\"></ns-cms> <ns-cms ns-code=\"home-promote-product-2\"></ns-cms>\n<div class=\"content-section-bg\">\n<div class=\"container-col\"><ns-cms ns-code=\"home-product-listing\"></ns-cms></div>\n</div>\n<ns-cms ns-code=\"home-bottom-faq\"></ns-cms> <ns-cms ns-code=\"home-bottom-call\"></ns-cms> <ns-cms ns-code=\"info-bottom-1\"></ns-cms>",
           "variables": []
         }
       },

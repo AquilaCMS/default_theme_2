@@ -11,5 +11,5 @@ export default function POSValidateCartBtn() {
                 <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
             </Link>
         </div>
-    )
+    );
 }

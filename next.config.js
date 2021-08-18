@@ -1,12 +1,12 @@
 const nextTranslate = require('next-translate');
-module.exports = nextTranslate({
+module.exports      = nextTranslate({
     async headers() {
         return [
             {
-                source: '/(.*)',
+                source : '/(.*)',
                 headers: [
                     {
-                        key: 'Powered-by',
+                        key  : 'Powered-by',
                         value: 'AquilaCMS',
                     }
                 ],

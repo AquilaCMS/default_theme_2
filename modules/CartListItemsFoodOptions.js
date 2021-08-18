@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
-import Link                            from 'next/link';
-import useTranslation                  from 'next-translate/useTranslation';
-import BlockCMS                        from '@components/common/BlockCMS';
-import CartItem                        from '@components/cart/CartItem';
-import Button                          from '@components/ui/Button';
-import { getBlockCMS }                 from 'aquila-connector/api/blockcms';
-import { getImage }                    from 'aquila-connector/api/product/helpersProduct';
-import axios                           from 'aquila-connector/lib/AxiosInstance';
-import { useCart }                     from '@lib/hooks';
-import { formatPrice, moduleHook, unsetCookie }    from '@lib/utils';
+import { useEffect, useRef, useState }          from 'react';
+import Link                                     from 'next/link';
+import useTranslation                           from 'next-translate/useTranslation';
+import BlockCMS                                 from '@components/common/BlockCMS';
+import CartItem                                 from '@components/cart/CartItem';
+import Button                                   from '@components/ui/Button';
+import { getBlockCMS }                          from 'aquila-connector/api/blockcms';
+import { getImage }                             from 'aquila-connector/api/product/helpersProduct';
+import axios                                    from 'aquila-connector/lib/AxiosInstance';
+import { useCart }                              from '@lib/hooks';
+import { formatPrice, moduleHook, unsetCookie } from '@lib/utils';
 
 function getFoodOptionsProducts(products) {
     let items = [];
@@ -278,7 +278,7 @@ export default function CartListItemsFoodOptions() {
                                 </div>
                                 <div>
                                     {
-                                        moduleHook("cart-validate-btn") || (
+                                        moduleHook('cart-validate-btn') || (
                                             <Link href="/checkout/address">
                                                 <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
                                             </Link>

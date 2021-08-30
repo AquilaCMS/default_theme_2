@@ -15,8 +15,6 @@ export default function BlogList({ list = [] }) {
         </div>;
     }
 
-    console.log(blogList);
-
     return (
         <div className="content-section">
             <div className="container">

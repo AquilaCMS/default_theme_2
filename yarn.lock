@@ -330,6 +330,14 @@ anymatch@~3.1.1:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
+aquila-connector@^1.0.10:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/aquila-connector/-/aquila-connector-1.0.11.tgz#e60acc13b2a83a1a48f7891d5855a4928b6e74ef"
+  integrity sha512-PU/6yVL6EhKj5GvSU9Gjs8YZl0n1X51B/iOpKFoiEdmEvBPBC+vj6rVKgkMSvSUx5MRvEC2bYE7h0aejAUiBLQ==
+  dependencies:
+    axios "^0.21.1"
+    cookie "^0.4.1"
+
 argparse@^1.0.7:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"

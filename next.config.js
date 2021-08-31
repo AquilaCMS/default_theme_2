@@ -13,6 +13,10 @@ module.exports      = nextTranslate({
             },
         ];
     },
+    // disable eslint during build https://nextjs.org/docs/api-reference/next.config.js/ignoring-eslint
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
     /*async rewrites () {
         return [
             {

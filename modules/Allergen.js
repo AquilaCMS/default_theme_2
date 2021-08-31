@@ -2,6 +2,7 @@ import { useEffect, useState }                                       from 'react
 import { useRouter }                                                 from 'next/router';
 import cookie                                                        from 'cookie';
 import useTranslation                                                from 'next-translate/useTranslation';
+import { getBlockCMS }                                               from 'aquila-connector/api/blockcms';
 import { getCategoryProducts }                                       from 'aquila-connector/api/category';
 import axios                                                         from 'aquila-connector/lib/AxiosInstance';
 import { useCategoryPage, useCategoryPriceEnd, useCategoryProducts } from '@lib/hooks';
@@ -60,6 +61,19 @@ export default function Allergen({ limit = 15 }) {
                 }
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            }
+        };
+        fetchData();
+    }, []);
+
+    // Get CMS block cms_allergens
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getBlockCMS('cms_allergens', lang);
+                setCmsBlockWarning(data.content);
+            } catch (err) {
+                console.error(err.message || t('common:message.unknownError'));
             }
         };
         fetchData();
@@ -158,7 +172,7 @@ export default function Allergen({ limit = 15 }) {
                     <img src="/images/Plus.svg" alt="" className="plus" />
                 </div>
                 <div className={`faq-content${open ? ' faq-question-open' : ''}`}>
-                    <div className="text-span-center">{t('modules/allergen-aquila:warning')}</div>
+                    <div className="text-span-center">{cmsBlockWarning}</div>
                     <div className="form-block w-form">
                         <form>
                             <div className="form alergies">

@@ -30,7 +30,7 @@ export default function CartSidebarView({ hideCartSidebar }) {
                 </div>
                 <div className="w-commerce-commercecartformwrapper">
                     {
-                        moduleHook('cart') || <CartListItems />
+                        moduleHook('cart-list-items') || <CartListItems />
                     }
                 </div>
             </div>

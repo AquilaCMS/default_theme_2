@@ -23,8 +23,10 @@ export async function getServerSideProps({ locale, params, req, res }) {
 
     // Get URLs for language change
     const urlsLanguages = [];
-    for (const [lang, sl] of Object.entries(staticPage.slug)) {
-        urlsLanguages.push({ lang, url: `/${sl}` });
+    if (staticPage) {
+        for (const [lang, sl] of Object.entries(staticPage.slug)) {
+            urlsLanguages.push({ lang, url: `/${sl}` });
+        }
     }
 
     const actions = [

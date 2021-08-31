@@ -79,8 +79,47 @@ export default function ProductCard({ type, value, col = 6 }) {
 
     const onCloseModal = () => setOpenModal(false);
 
+    // Pictos
+    const pictos = [];
+    if (product.pictos) {
+        product.pictos.forEach((picto) => {
+            if (pictos.find((p) => p.location === picto.location) !== undefined) {
+                pictos.find((p) => p.location === picto.location).pictos.push(picto);
+            } else {
+                const cardinals = picto.location.split('_');
+                const style     = { position: 'absolute', top: 0, left: 0 };
+                if (cardinals.includes('RIGHT')) {
+                    style.left  = 'inherit';
+                    style.right = 0;
+                }
+                if (cardinals.includes('BOTTOM')) {
+                    style.top    = 'inherit';
+                    style.bottom = 0;
+                }
+                if (cardinals.includes('CENTER')) {
+                    style.left      = '50%';
+                    style.transform = 'translate(-50%, 0)';
+                }
+                if (cardinals.includes('MIDDLE')) {
+                    style.top       = '50%';
+                    style.transform = 'translate(0, -50%)';
+                }
+                pictos.push({ location: picto.location, style, pictos: [picto] });
+            }
+        });
+    }
+
     return (
         <div role="listitem" className={`menu-item w-dyn-item w-col w-col-${col}`}>
+            {
+                pictos ? pictos.map((picto) => (
+                    <div style={picto.style} key={picto.location + Math.random()}>
+                        {
+                            picto.pictos && picto.pictos.map((p) => <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/images/picto/32x32-70/${p.pictoId}/${p.image}`} alt={p.title} title={p.title} key={p._id} />)
+                        }
+                    </div>
+                )) : ''
+            }
             <div className="food-card">
                 <Link href={currentSlug}>
                     <a className="food-image-square w-inline-block">

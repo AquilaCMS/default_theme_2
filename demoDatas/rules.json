@@ -68,6 +68,23 @@
       "other_rules": [],
       "operand": "OU",
       "effects": []
+    },
+    {
+      "_id": "612f48686253e44490f71bdf",
+      "owner_type": "picto",
+      "owner_id": "612f47f56253e44490f71bde",
+      "conditions": [
+        {
+          "_id": "612f48686253e44490f71be0",
+          "target": "code",
+          "type": "text",
+          "value": "chickenburger",
+          "operator": "eq"
+        }
+      ],
+      "other_rules": [],
+      "operand": "OU",
+      "effects": []
     }
   ]
 }

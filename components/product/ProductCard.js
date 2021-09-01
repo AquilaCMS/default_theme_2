@@ -87,14 +87,16 @@ export default function ProductCard({ type, value, col = 6 }) {
                 pictos.find((p) => p.location === picto.location).pictos.push(picto);
             } else {
                 const cardinals = picto.location.split('_');
-                const style     = { position: 'absolute', top: 0, left: 0 };
+                const style     = { position: 'absolute', top: 0, left: 0, margin: '5px 0 0 15px' };
                 if (cardinals.includes('RIGHT')) {
-                    style.left  = 'inherit';
-                    style.right = 0;
+                    style.left        = 'inherit';
+                    style.right       = 0;
+                    style.marginRight = '15px';
                 }
                 if (cardinals.includes('BOTTOM')) {
-                    style.top    = 'inherit';
-                    style.bottom = 0;
+                    style.top          = 'inherit';
+                    style.bottom       = 0;
+                    style.marginBottom = '5px';
                 }
                 if (cardinals.includes('CENTER')) {
                     style.left      = '50%';

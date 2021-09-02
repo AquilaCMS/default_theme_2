@@ -1,8 +1,8 @@
-const path        = require('path');
-const next        = require('next').default;
-const nextBuild   = require('next/dist/build').default;
-const serverUtils = require('../../utils/server');
-const dev         = serverUtils.dev;
+const path           = require('path');
+const next           = require('next').default;
+const serverUtils    = require('../../utils/server');
+const packageManager = require('../../utils/packageManager');
+const dev            = serverUtils.dev;
 
 const themeName   = path.basename(__dirname);
 const pathToTheme = path.join(global.appRoot, 'themes', themeName, '/');
@@ -24,8 +24,7 @@ const start = async () => {
 
 
 const build = async () => {
-    // do yarn if you want using ../../utils/themes
-    await nextBuild(pathToTheme);
+    await packageManager.execCmd(`npx next build`, pathToTheme);
 };
 
 module.exports = {

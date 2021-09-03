@@ -33,7 +33,7 @@ body {
 
 /* ADD */
 .faq-question-open {
-    max-height: 400px;
+    max-height: 1000px;
 }
 
 /* FUSION => .lien_alergenes l.5066 mon-restaurant.webflow.css */
@@ -390,5 +390,23 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
 @media screen and (max-width: 479px) {
     .button.absolu {
         right: auto;
+    }
+}
+
+/* 
+    ADD mon-restaurant.webflow.css
+*/
+.filters-attributes {
+    display: flex;
+}
+.filters-attributes > div {
+    padding: 20px;
+}
+@media screen and (max-width: 479px) {
+    .filters-attributes {
+        flex-direction: column;
+    }
+    .filters-attributes > div {
+        padding: 5px;
     }
 }

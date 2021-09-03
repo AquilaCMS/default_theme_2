@@ -1,12 +1,12 @@
-import { useEffect, useState }                                       from 'react';
-import { useRouter }                                                 from 'next/router';
-import cookie                                                        from 'cookie';
-import useTranslation                                                from 'next-translate/useTranslation';
-import { getBlockCMS }                                               from 'aquila-connector/api/blockcms';
-import { getCategoryProducts }                                       from 'aquila-connector/api/category';
-import axios                                                         from 'aquila-connector/lib/AxiosInstance';
-import { useCategoryPage, useCategoryPriceEnd, useCategoryProducts } from '@lib/hooks';
-import { cloneObj, convertFilter, unsetCookie }                      from '@lib/utils';
+import { useEffect, useState }                  from 'react';
+import { useRouter }                            from 'next/router';
+import cookie                                   from 'cookie';
+import useTranslation                           from 'next-translate/useTranslation';
+import { getBlockCMS }                          from 'aquila-connector/api/blockcms';
+import { getCategoryProducts }                  from 'aquila-connector/api/category';
+import axios                                    from 'aquila-connector/lib/AxiosInstance';
+import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
+import { cloneObj, convertFilter, unsetCookie } from '@lib/utils';
 
 // GET allergens
 async function getAllergens () {
@@ -20,15 +20,15 @@ async function getAllergens () {
 }
 
 export default function Allergen({ limit = 15 }) {
-    const [allergens, setAllergens]                 = useState([]);
-    const [checkedAllergens, setCheckedAllergens]   = useState({});
-    const [open, setOpen]                           = useState(false);
-    const [message, setMessage]                     = useState();
-    const router                                    = useRouter();
-    const { setCategoryPage }                       = useCategoryPage();
-    const { categoryPriceEnd, setCategoryPriceEnd } = useCategoryPriceEnd();
-    const { setCategoryProducts }                   = useCategoryProducts();
-    const { lang, t }                               = useTranslation();
+    const [allergens, setAllergens]               = useState([]);
+    const [checkedAllergens, setCheckedAllergens] = useState({});
+    const [cmsBlockWarning, setCmsBlockWarning]   = useState('');
+    const [open, setOpen]                         = useState(false);
+    const [message, setMessage]                   = useState();
+    const router                                  = useRouter();
+    const { setCategoryPage }                     = useCategoryPage();
+    const { setCategoryProducts }                 = useCategoryProducts();
+    const { lang, t }                             = useTranslation();
 
     // We determine the slug of the category
     const categorySlugs = Array.isArray(router.query.categorySlugs) ? router.query.categorySlugs : [router.query.categorySlugs];
@@ -94,6 +94,10 @@ export default function Allergen({ limit = 15 }) {
         const cookieFilter = cookie.parse(document.cookie).filter;
         if (cookieFilter) {
             const filter = JSON.parse(cookieFilter);
+            let sort     = { sortWeight: -1 };
+            if (filter.sort) {
+                sort = JSON.parse(filter.sort);
+            }
 
             // Filter construction
             let filterAllergens = {};
@@ -114,7 +118,7 @@ export default function Allergen({ limit = 15 }) {
 
             // Updating the products list
             try {
-                const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter: convertFilter(cloneObj(filter)), page: 1, limit } } });
+                const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } } });
                 setCategoryProducts(products);
 
                 // Back to page 1
@@ -135,6 +139,10 @@ export default function Allergen({ limit = 15 }) {
         const cookieFilter = cookie.parse(document.cookie).filter;
         if (cookieFilter) {
             const filter = JSON.parse(cookieFilter);
+            let sort     = { sortWeight: -1 };
+            if (filter.sort) {
+                sort = JSON.parse(filter.sort);
+            }
 
             // Filter construction
             delete filter.conditions.allergens;
@@ -144,7 +152,7 @@ export default function Allergen({ limit = 15 }) {
 
             // Updating the products list
             try {
-                const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter: convertFilter(cloneObj(filter)), page: 1, limit } } });
+                const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } } });
                 setCategoryProducts(products);
 
                 // Back to page 1

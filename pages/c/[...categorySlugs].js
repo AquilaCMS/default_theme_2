@@ -1,5 +1,4 @@
 import { useState }                                                                         from 'react';
-import dynamic                                                                              from 'next/dynamic';
 import absoluteUrl                                                                          from 'next-absolute-url';
 import getT                                                                                 from 'next-translate/getT';
 import useTranslation                                                                       from 'next-translate/useTranslation';
@@ -13,14 +12,11 @@ import NextSeoCustom                                                            
 import Breadcrumb                                                                           from '@components/navigation/Breadcrumb';
 import ProductList                                                                          from '@components/product/ProductList';
 import MenuCategories                                                                       from '@components/navigation/MenuCategories';
-import Allergen                                                                             from 'modules/Allergen';
 import { dispatcher }                                                                       from '@lib/redux/dispatcher';
 import { getBreadcrumb }                                                                    from 'aquila-connector/api/breadcrumb';
-import { getCategory, getCategories, getCategoryProducts }                                  from 'aquila-connector/api/category';
+import { getCategory, getCategoryProducts }                                                 from 'aquila-connector/api/category';
 import { useCategoryPage, useCategoryProducts }                                             from '@lib/hooks';
 import { setLangAxios, formatBreadcrumb, cloneObj, convertFilter, moduleHook, unsetCookie } from '@lib/utils';
-
-const ClickAndCollect = dynamic(() => import('modules/ClickAndCollect'));
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     setLangAxios(locale, req, res);
@@ -39,16 +35,6 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         }
     }
     const category = categories.length ? categories[categories.length - 1] : {};
-
-    /*let categories = [];
-    let category   = [];
-    try {
-        const dataCategories = await getCategories(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: { $in: categorySlugs } }, limit: 9999 } });
-        categories           = dataCategories.datas;
-        category             = dataCategories.datas.length ? dataCategories.datas[dataCategories.datas.length - 1] : {};
-    } catch (err) {
-        return { notFound: true };
-    }*/
 
     // Get URLs for language change
     const slugsLangs    = {};
@@ -101,10 +87,15 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Get filter from cookie
     const cookieFilter = cookiesServerInstance.get('filter');
     let filter         = {};
+    let sort           = { sortWeight: -1 };
     if (cookieFilter) {
         filter = JSON.parse(cookieFilter);
+        if (filter.sort) {
+            sort = JSON.parse(filter.sort);
+        }
     }
 
+    // If we change category, we remove the filters except the allergens
     if (filter.category !== category._id) {
         delete filter.priceValues;
         if (filter.conditions?.price) {
@@ -112,6 +103,9 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         }
         if (filter.conditions?.attributes) {
             delete filter.conditions.attributes;
+        }
+        if (filter.conditions?.pictos) {
+            delete filter.conditions.pictos;
         }
     }
 
@@ -134,7 +128,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     }
 
     try {
-        productsData = await getCategoryProducts({ id: category._id, postBody: { PostBody: { filter: convertFilter(cloneObj(filter)), page, limit } }, lang: locale });
+        productsData = await getCategoryProducts({ id: category._id, postBody: { PostBody: { filter: convertFilter(cloneObj(filter)), page, limit, sort } }, lang: locale });
     } catch (err) {
         return { notFound: true };
     }
@@ -206,13 +200,17 @@ export default function CategoryList({ breadcrumb, category, categorySlugs, limi
         // Get filter from cookie
         const cookieFilter = cookie.parse(document.cookie).filter;
         let filter         = {};
+        let sort           = { sortWeight: -1 };
         if (cookieFilter) {
             filter = JSON.parse(cookieFilter);
+            if (filter.sort) {
+                sort = JSON.parse(filter.sort);
+            }
         }
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts({ id: category._id, lang, postBody: { PostBody: { filter, page, limit } } });
+            const products = await getCategoryProducts({ id: category._id, lang, postBody: { PostBody: { filter: convertFilter(filter), page, limit, sort } } });
             setCategoryProducts(products);
 
             // Updating category page
@@ -266,7 +264,7 @@ export default function CategoryList({ breadcrumb, category, categorySlugs, limi
 
                     <div className="tabs w-tabs">
                         <div id="tabs_content" className="tabs-content w-tab-content">
-                            <div className="tab-pane-wrap w-tab-pane w--tab-active">
+                            <div className="div-block-allergenes">
                                 <Filters category={category} limit={limit} />
                             </div>
                             <div className="tab-pane-wrap w-tab-pane w--tab-active">

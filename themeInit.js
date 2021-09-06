@@ -1,4 +1,3 @@
-
 const path           = require('path');
 const next           = require('next').default;
 const serverUtils    = require('../../utils/server');
@@ -25,7 +24,7 @@ const start = async () => {
 
 
 const build = async () => {
-    await packageManager.execCmd(`npx next build`, pathToTheme);
+    await packageManager.execCmd('npx next build', pathToTheme);
 };
 
 module.exports = {

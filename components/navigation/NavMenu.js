@@ -84,7 +84,7 @@ export default function NavMenu() {
                                                                             <div className="dropdown-nav-link-2" key={item3._id}>
                                                                                 <div className="icon-3 w-icon-dropdown-toggle" />
                                                                                 <Link href={item3.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}/${item3.slug[lang]}` : (item3.action === 'page' ? `/${item3.pageSlug}` : item3.url)}>
-                                                                                    <a className="dropdown-link-3 w-dropdown-link">{item3.name}</a>
+                                                                                    <a className="dropdown-link-3 w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item3.name}</a>
                                                                                 </Link>
                                                                             </div>
                                                                         );
@@ -94,7 +94,7 @@ export default function NavMenu() {
                                                         </Fragment>
                                                     ) : (
                                                         <Link href={item2.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : item2.url)} key={item2._id}>
-                                                            <a className="dropdown-nav-link w-dropdown-link">{item2.name}</a>
+                                                            <a className="dropdown-nav-link w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item2.name}</a>
                                                         </Link>
                                                     )
                                                 );
@@ -105,7 +105,7 @@ export default function NavMenu() {
                             </div>
                         ) : (
                             <Link href={item.action === 'catalog' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : item.url)} key={item._id}>
-                                <a className={`nav-link-2 w-nav-link${current ? ' w--current' : ''}`} >{item.name}</a>
+                                <a className={`nav-link-2 w-nav-link${current ? ' w--current' : ''}`} target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item.name}</a>
                             </Link>
                         )
                     );

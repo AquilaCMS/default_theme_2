@@ -499,7 +499,16 @@
         }
       },
       "universe": "burger-burger",
-      "pictos": [],
+      "pictos": [
+        {
+          "_id": "612f4e2b27756b19a49a7d44",
+          "code": "veggie",
+          "image": "veggie.png",
+          "pictoId": "612f47f56253e44490f71bde",
+          "title": "Veggie",
+          "location": "TOP_LEFT"
+        }
+      ],
       "createdAt": "2021-06-22T00:00:00.000Z",
       "updatedAt": "2021-06-22T00:00:00.000Z",
       "allergens": [

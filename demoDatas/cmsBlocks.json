@@ -1238,7 +1238,7 @@
       "_id": "607daf2db33c8e623487b5d2",
       "translation": {
         "fr": {
-          "html": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">{{Titre}}</h2>\n<p>{{Information}}</p>\n</div>",
+          "html": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">{{Titre}}</h2>\n<p>{{Information}}<br /><br /></p>\n</div>\n<ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>",
           "variables": [
             {
               "label": "Titre",
@@ -1249,11 +1249,11 @@
               "value": "Choisissez dans notre carte et offres du jour,<br />Et récupéré votre commande"
             }
           ],
-          "content": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">Découvrez notre carte</h2>\n<p>Choisissez dans notre carte et offres du jour,<br />Et récupéré votre commande</p>\n</div>",
+          "content": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">Découvrez notre carte</h2>\n<p>Choisissez dans notre carte et offres du jour,<br />Et récupéré votre commande<br /><br /></p>\n</div>\n<ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>",
           "description": "Présentation des produits mise en avant"
         },
         "en": {
-          "html": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">{{Title}}</h2>\n<p>{{Information}}</p>\n</div>",
+          "html": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">{{Title}}</h2>\n<p>{{Information}}</p>\n</div><ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>",
           "variables": [
             {
               "label": "Title",
@@ -1265,13 +1265,13 @@
             }
           ],
           "description": "Presentation of the products put forward",
-          "content": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">Discover our menu</h2>\n<p>Choose from our menu and offers of the day,<br/>And pick up your order</p>\n</div>"
+          "content": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">Discover our menu</h2>\n<p>Choose from our menu and offers of the day,<br/>And pick up your order</p>\n</div>\n<ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>"
         }
       },
       "code": "home-product-listing"
     },
     {
-      "group": null,
+      "group": "Module",
       "active": true,
       "_id": "607eadf6dc79b23614400109",
       "code": "cms_allergens",
@@ -1328,20 +1328,6 @@
         }
       },
       "code": "top-text-rgpd"
-    },
-    {
-      "group": "",
-      "active": false,
-      "_id": "612cca94540cec342404a152",
-      "code": "foodoptions-info",
-      "translation": {
-        "en": {
-          "description": "foodoptions-info"
-        },
-        "fr": {
-          "description": "foodoptions-info"
-        }
-      }
     }
   ]
 }

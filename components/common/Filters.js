@@ -294,9 +294,9 @@ export default function Filters({ category, limit }) {
                 <h6 className="heading-6-center">{t('components/filters:title')}</h6>
                 <img src="/images/Plus.svg" alt="" className="plus" />
             </div>
-            <div className={`faq-content${open ? ' faq-question-open' : ''}`}>
-                <div className="filters-attributes">
-                    <div>
+            <div className={`faq-content${open ? ' filters-open' : ''}`}>
+                <div className="filters-list">
+                    <div className="filter">
                         <h6>{t('components/filters:price')}</h6>
                         <div style={{ minWidth: '200px' }}>
                             <Range
@@ -318,7 +318,7 @@ export default function Filters({ category, limit }) {
                     {
                         category.filters.attributes.map((attribute) => {
                             return (
-                                <div key={attribute._id}>
+                                <div className="filter" key={attribute._id}>
                                     <h6>{attribute.name}</h6>
                                     <div>
                                         {
@@ -334,7 +334,9 @@ export default function Filters({ category, limit }) {
                                                             style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
                                                         />
                                                         <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene"></div>
-                                                        <span className="checkbox-label-allergene w-form-label">{attribute.type === 'bool' ? (value ? t('components/filters:yes') : t('components/filters:no')) : value}</span>
+                                                        <span className="checkbox-label-allergene w-form-label" style={attribute.type === 'color' ? { width: '50px', height: '20px', backgroundColor: value, borderRadius: '5px' } : {}}>
+                                                            {attribute.type === 'bool' ? (value ? t('components/filters:yes') : t('components/filters:no')) : (attribute.type === 'color' ? '' : value)}
+                                                        </span>
                                                     </label>
                                                 );
                                             })
@@ -344,7 +346,7 @@ export default function Filters({ category, limit }) {
                             );
                         })
                     }
-                    <div>
+                    <div className="filter">
                         <h6>{t('components/filters:pictogram')}</h6>
                         <div>
                             {
@@ -368,7 +370,7 @@ export default function Filters({ category, limit }) {
                         </div>
                     </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
                     <button type="button" className="log-button-03 w-button" onClick={resetFilters}>{t('components/filters:btnReset')}</button>
                 </div>
             </div>

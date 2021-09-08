@@ -24,7 +24,7 @@ const start = async () => {
 
 
 const build = async () => {
-    await packageManager.execCmd(`npx next build`, pathToTheme);
+    await packageManager.execCmd('npx next build', pathToTheme);
 };
 
 module.exports = {

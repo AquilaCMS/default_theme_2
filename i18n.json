@@ -10,6 +10,7 @@
       "components/cart",
       "components/cookiesBanner",
       "components/contact",
+      "components/filters",
       "components/gallery",
       "components/newsletter",
       "components/navigation",

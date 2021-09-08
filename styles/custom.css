@@ -392,3 +392,22 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
         right: auto;
     }
 }
+
+/* 
+    ADD mon-restaurant.webflow.css
+*/
+.filters-open {
+    max-height: 400px;
+}
+.filters-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+.filter {
+    padding: 5px 20px;
+}
+@media screen and (max-width: 479px) {
+    .filters-open {
+        max-height: 500px;
+    }
+}

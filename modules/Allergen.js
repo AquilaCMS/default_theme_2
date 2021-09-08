@@ -6,7 +6,7 @@ import { getBlockCMS }                          from 'aquila-connector/api/block
 import { getCategoryProducts }                  from 'aquila-connector/api/category';
 import axios                                    from 'aquila-connector/lib/AxiosInstance';
 import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
-import { unsetCookie }                          from '@lib/utils';
+import { cloneObj, convertFilter, unsetCookie } from '@lib/utils';
 
 // GET allergens
 async function getAllergens () {
@@ -44,18 +44,20 @@ export default function Allergen({ limit = 15 }) {
                 // If cookie filter exists, we parse it
                 const cookieFilter = cookie.parse(document.cookie).filter;
                 if (cookieFilter) {
-                    const filter = JSON.parse(cookieFilter);
+                    const filt = JSON.parse(cookieFilter);
 
                     // Updating checked allergens
-                    const arrayChecked = filter.$or[0].allergens.$nin;
-                    let checked        = {};
-                    for (const c of arrayChecked) {
-                        checked[c] = true;
-                    }
-                    setCheckedAllergens(checked);
+                    if (filt.conditions?.allergens) {
+                        const arrayChecked = filt.conditions.allergens.$or[0].allergens.$nin;
+                        let checked        = {};
+                        for (const c of arrayChecked) {
+                            checked[c] = true;
+                        }
+                        setCheckedAllergens(checked);
 
-                    // Opening the allergens block
-                    openBlock(true);
+                        // Opening the allergens block
+                        openBlock(true);
+                    }
                 }
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
@@ -88,56 +90,79 @@ export default function Allergen({ limit = 15 }) {
         }
         setCheckedAllergens(checked);
 
-        // Filter construction
-        let filter = {};
-        if (Object.keys(checked).length > 0) {
-            filter = {
-                $or: [
-                    { allergens: { $nin: Object.keys(checked) } },
-                    { allergens: [] }
-                ]
-            };
+        // If cookie filter exists, we parse it
+        const cookieFilter = cookie.parse(document.cookie).filter;
+        if (cookieFilter) {
+            const filter = JSON.parse(cookieFilter);
+            let sort     = { sortWeight: -1 };
+            if (filter.sort) {
+                sort = JSON.parse(filter.sort);
+            }
+
+            // Filter construction
+            let filterAllergens = {};
+            if (Object.keys(checked).length > 0) {
+                filterAllergens             = {
+                    $or: [
+                        { allergens: { $nin: Object.keys(checked) } },
+                        { allergens: [] }
+                    ]
+                };
+                filter.conditions.allergens = filterAllergens;
+            } else {
+                delete filter.conditions.allergens;
+            }
 
             // Setting filter cookie
             document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
-        } else {
-            unsetCookie('filter');
-        }
 
-        // Updating the products list
-        try {
-            const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter, page: 1, limit } } });
-            setCategoryProducts(products);
+            // Updating the products list
+            try {
+                const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } } });
+                setCategoryProducts(products);
 
-            // Back to page 1
-            setCategoryPage(1);
+                // Back to page 1
+                setCategoryPage(1);
 
-            // Back to page 1... so useless "page" cookie
-            unsetCookie('page');
-        } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+                // Back to page 1... so useless "page" cookie
+                unsetCookie('page');
+            } catch (err) {
+                setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            }
         }
     };
 
     const resetAllergens = async () => {
         setCheckedAllergens([]);
 
-        // Filter construction
-        let filter = {};
-        unsetCookie('filter');
+        // If cookie filter exists, we parse it
+        const cookieFilter = cookie.parse(document.cookie).filter;
+        if (cookieFilter) {
+            const filter = JSON.parse(cookieFilter);
+            let sort     = { sortWeight: -1 };
+            if (filter.sort) {
+                sort = JSON.parse(filter.sort);
+            }
 
-        // Updating the products list
-        try {
-            const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter, page: 1, limit } } });
-            setCategoryProducts(products);
+            // Filter construction
+            delete filter.conditions.allergens;
 
-            // Back to page 1
-            setCategoryPage(1);
+            // Setting filter cookie
+            document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
 
-            // Back to page 1... so useless "page" cookie
-            unsetCookie('page');
-        } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            // Updating the products list
+            try {
+                const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } } });
+                setCategoryProducts(products);
+
+                // Back to page 1
+                setCategoryPage(1);
+
+                // Back to page 1... so useless "page" cookie
+                unsetCookie('page');
+            } catch (err) {
+                setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            }
         }
     };
 

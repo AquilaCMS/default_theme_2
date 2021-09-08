@@ -39,9 +39,12 @@ export async function getServerSideProps({ locale, params, req, res, resolvedUrl
     try {
         const dataCategories = await getCategories(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: { $in: categorySlugs } }, limit: 9999 } });
         categories           = dataCategories.datas;
-
-        product = await getProduct('slug', productSlug, locale);
+        product              = await getProduct('slug', productSlug, locale);
     } catch (err) {
+        return { notFound: true };
+    }
+
+    if (!product) {
         return { notFound: true };
     }
 

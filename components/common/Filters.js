@@ -88,6 +88,11 @@ export default function Filters({ category, limit }) {
         } else {
             filter.priceValues = { min: value[0], max: value[1] };
         }
+
+        // If filter empty (cookie not present)
+        if (!filter.conditions) {
+            filter.conditions = {};
+        }
         filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: value[0], $lte: value[1] } }, { 'price.ati.special': { $gte: value[0], $lte: value[1] } }] };
 
         // Setting filter cookie
@@ -141,6 +146,13 @@ export default function Filters({ category, limit }) {
             conditions.push({ attributes: { $elemMatch: { [`translation.${lang}.value`]: { $in: values }, id: attributeId } } });
         }
 
+        // If filter empty (cookie not present)
+        if (!filter.conditions) {
+            // Price filter must be present
+            filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
+            setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
+        }
+
         filter.conditions.attributes = conditions;
         if (!filter.conditions.attributes.length) {
             delete filter.conditions.attributes;
@@ -191,6 +203,13 @@ export default function Filters({ category, limit }) {
         
         let conditions = [{ pictos: { $elemMatch: { code: { $in: pictos } } } }];
 
+        // If filter empty (cookie not present)
+        if (!filter.conditions) {
+            // Price filter must be present
+            filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
+            setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
+        }
+
         filter.conditions.pictos = conditions;
         if (!pictos.length) {
             delete filter.conditions.pictos;
@@ -220,14 +239,17 @@ export default function Filters({ category, limit }) {
         let filter         = {};
         let sort           = { sortWeight: -1 };
         if (cookieFilter) {
-            filter            = JSON.parse(cookieFilter);
-            filter.conditions = {};
-            delete filter.priceValues;
+            filter = JSON.parse(cookieFilter);
             if (filter.sort) {
                 sort = JSON.parse(filter.sort);
             }
         }
 
+        // Price filter must be present
+        filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
+
+        delete filter.priceValues;
+        
         // Setting filter cookie
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
 

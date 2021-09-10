@@ -30,7 +30,7 @@ export default function Filters({ category, limit }) {
         let filter         = {};
         if (cookieFilter) {
             filter = JSON.parse(cookieFilter);
-            if (Object.entries(filter.conditions).length) {
+            if (filter.conditions && Object.entries(filter.conditions).length) {
                 // Opening the filter block
                 openBlock(true);
             }
@@ -368,29 +368,33 @@ export default function Filters({ category, limit }) {
                             );
                         })
                     }
-                    <div className="filter">
-                        <h6>{t('components/filters:pictogram')}</h6>
-                        <div>
-                            {
-                                category.filters.pictos.map((picto) => {
-                                    return (
-                                        <label className="w-checkbox checkbox-field-allergene" key={picto._id}>
-                                            <input 
-                                                type="checkbox"
-                                                name="newsletter"
-                                                value={`picto|${picto.code}`}
-                                                checked={checkedPictosFilters.includes(picto.code) ? true : false}
-                                                onChange={handlePictoFilterClick}
-                                                style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
-                                            />
-                                            <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene"></div>
-                                            <span className="checkbox-label-allergene w-form-label">{picto.title}</span>
-                                        </label>
-                                    );
-                                })
-                            }
-                        </div>
-                    </div>
+                    {
+                        category.filters.pictos?.length > 0 && (
+                            <div className="filter">
+                                <h6>{t('components/filters:pictogram')}</h6>
+                                <div>
+                                    {
+                                        category.filters.pictos.map((picto) => {
+                                            return (
+                                                <label className="w-checkbox checkbox-field-allergene" key={picto._id}>
+                                                    <input 
+                                                        type="checkbox"
+                                                        name="newsletter"
+                                                        value={`picto|${picto.code}`}
+                                                        checked={checkedPictosFilters.includes(picto.code) ? true : false}
+                                                        onChange={handlePictoFilterClick}
+                                                        style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
+                                                    />
+                                                    <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene"></div>
+                                                    <span className="checkbox-label-allergene w-form-label">{picto.title}</span>
+                                                </label>
+                                            );
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        )
+                    }
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
                     <button type="button" className="log-button-03 w-button" onClick={resetFilters}>{t('components/filters:btnReset')}</button>

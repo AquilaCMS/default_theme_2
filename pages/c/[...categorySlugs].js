@@ -10,6 +10,7 @@ import Filters                                                                  
 import Layout                                                                               from '@components/layouts/Layout';
 import NextSeoCustom                                                                        from '@components/tools/NextSeoCustom';
 import Breadcrumb                                                                           from '@components/navigation/Breadcrumb';
+import CategoryList                                                                         from '@components/category/CategoryList';
 import ProductList                                                                          from '@components/product/ProductList';
 import MenuCategories                                                                       from '@components/navigation/MenuCategories';
 import { dispatcher }                                                                       from '@lib/redux/dispatcher';
@@ -28,7 +29,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     let categories = [];
     for (let slug of categorySlugs) {
         try {
-            const cat = await getCategory(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: slug } } });
+            const cat = await getCategory(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: slug }, populate: ['children'] } });
             categories.push(cat);
         } catch (err) {
             return { notFound: true };
@@ -121,10 +122,12 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         } catch (err) {
             return { notFound: true };
         }
-        priceEnd = {
-            min: Math.floor(Math.min(productsData.priceMin.ati, productsData.specialPriceMin.ati)),
-            max: Math.ceil(Math.max(productsData.priceMax.ati, productsData.specialPriceMax.ati))
-        };
+        if (productsData.count) {
+            priceEnd = {
+                min: Math.floor(Math.min(productsData.priceMin.ati, productsData.specialPriceMin.ati)),
+                max: Math.ceil(Math.max(productsData.priceMax.ati, productsData.specialPriceMax.ati))
+            };
+        }
     }
 
     try {
@@ -148,6 +151,11 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         if (!filter.conditions.price) {
             filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: productsData.priceMin.ati, $lte: productsData.priceMax.ati } }, { 'price.ati.special': { $gte: productsData.specialPriceMin.ati, $lte: productsData.specialPriceMax.ati } }] };
         }
+    } else {
+        priceEnd = {
+            min: 0,
+            max: 0
+        };
     }
     cookiesServerInstance.set('filter', JSON.stringify(filter), { path: '/', httpOnly: false });
 
@@ -188,7 +196,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     return pageProps;
 }
 
-export default function CategoryList({ breadcrumb, category, categorySlugs, limit, origin, error }) {
+export default function Category({ breadcrumb, category, categorySlugs, limit, origin, error }) {
     const [message, setMessage]                     = useState();
     const { categoryPage, setCategoryPage }         = useCategoryPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
@@ -250,57 +258,82 @@ export default function CategoryList({ breadcrumb, category, categorySlugs, limi
             <Breadcrumb items={formatBreadcrumb(breadcrumb)} />
 
             <div className="content-section-carte">
-                <div className="container w-container">
-                    <p className="paragraph-seo" dangerouslySetInnerHTML={{
-                        __html: category.extraText2,
-                    }} />
-                    {
-                        moduleHook('category-top-list', { limit })
-                    }
-                </div>
-                <div className="container-col">
-
-                    <MenuCategories />
-
-                    <div className="tabs w-tabs">
-                        <div id="tabs_content" className="tabs-content w-tab-content">
-                            <div className="div-block-allergenes">
-                                <Filters category={category} limit={limit} />
+                {
+                    category.children?.length > 0 ? (
+                        <>
+                            <div className="container w-container">
+                                <p className="paragraph-seo" dangerouslySetInnerHTML={{
+                                    __html: category.extraText2,
+                                }} />
                             </div>
-                            <div className="tab-pane-wrap w-tab-pane w--tab-active">
-                                <div className="w-dyn-list">
-                                    <ProductList type="data" value={categoryProducts.datas} />
-                                </div>
-                                {
-                                    message && (
-                                        <div className={`w-commerce-commerce${message.type}`}>
-                                            <div>
-                                                {message.message}
+                            <div className="container-col">
+                                <div className="tabs w-tabs">
+                                    <div id="tabs_content" className="tabs-content w-tab-content">
+                                        <div className="tab-pane-wrap w-tab-pane w--tab-active">
+                                            <div className="w-dyn-list">
+                                                <CategoryList categoryList={category.children} />
                                             </div>
                                         </div>
-                                    )
-                                }
-                                {
-                                    pageCount > 1 && (
-                                        <ReactPaginate
-                                            previousLabel={'<'}
-                                            nextLabel={'>'}
-                                            breakLabel={'...'}
-                                            forcePage={categoryPage - 1}
-                                            pageCount={pageCount}
-                                            marginPagesDisplayed={2}
-                                            pageRangeDisplayed={5}
-                                            onPageChange={handlePageClick}
-                                            containerClassName={'w-pagination-wrapper pagination'}
-                                            activeClassName={'active'}
-                                        />
-                                    )
-                                }
-                                
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="container w-container">
+                                <p className="paragraph-seo" dangerouslySetInnerHTML={{
+                                    __html: category.extraText2,
+                                }} />
+                                {
+                                    moduleHook('category-top-list', { limit })
+                                }
+                            </div>
+                            <div className="container-col">
+                                <MenuCategories />
+
+                                <div className="tabs w-tabs">
+                                    <div id="tabs_content" className="tabs-content w-tab-content">
+                                        <div className="div-block-allergenes">
+                                            <Filters category={category} limit={limit} />
+                                        </div>
+                                        <div className="tab-pane-wrap w-tab-pane w--tab-active">
+                                            <div className="w-dyn-list">
+                                                <ProductList type="data" value={categoryProducts.datas} />
+                                            </div>
+                                            {
+                                                message && (
+                                                    <div className={`w-commerce-commerce${message.type}`}>
+                                                        <div>
+                                                            {message.message}
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                            {
+                                                pageCount > 1 && (
+                                                    <ReactPaginate
+                                                        previousLabel={'<'}
+                                                        nextLabel={'>'}
+                                                        breakLabel={'...'}
+                                                        forcePage={categoryPage - 1}
+                                                        pageCount={pageCount}
+                                                        marginPagesDisplayed={2}
+                                                        pageRangeDisplayed={5}
+                                                        onPageChange={handlePageClick}
+                                                        containerClassName={'w-pagination-wrapper pagination'}
+                                                        activeClassName={'active'}
+                                                    />
+                                                )
+                                            }
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )
+                }
+                
                 <div className="container w-container">
                     <p className="paragraph-seo" dangerouslySetInnerHTML={{
                         __html: category.extraText3,

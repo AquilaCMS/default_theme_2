@@ -8,6 +8,7 @@
       "components/blogList",
       "components/bundleProduct",
       "components/cart",
+      "components/category",
       "components/cookiesBanner",
       "components/contact",
       "components/filters",

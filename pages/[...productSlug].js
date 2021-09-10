@@ -96,7 +96,7 @@ export async function getServerSideProps({ locale, params, req, res, resolvedUrl
     return pageProps;
 }
 
-export default function CategoryList({ breadcrumb, origin, product }) {
+export default function Product({ breadcrumb, origin, product }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);

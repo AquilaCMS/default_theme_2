@@ -4,7 +4,7 @@ import cookie                                                        from 'cooki
 import Slider                                                        from 'rc-slider';
 import { getCategoryProducts }                                       from 'aquila-connector/api/category';
 import { useCategoryPage, useCategoryPriceEnd, useCategoryProducts } from '@lib/hooks';
-import { cloneObj, convertFilter, unsetCookie }                      from '@lib/utils';
+import { convertFilter, unsetCookie }                                from '@lib/utils';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range                   = createSliderWithTooltip(Slider.Range);
@@ -100,7 +100,7 @@ export default function Filters({ category, limit }) {
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts({ id: category._id, lang, postBody: { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } } });
+            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
             setCategoryProducts(products);
 
             // Back to page 1
@@ -163,7 +163,7 @@ export default function Filters({ category, limit }) {
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts({ id: category._id, lang, postBody: { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } } });
+            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
             setCategoryProducts(products);
 
             // Back to page 1
@@ -220,7 +220,7 @@ export default function Filters({ category, limit }) {
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts({ id: category._id, lang, postBody: { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } } });
+            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
             setCategoryProducts(products);
 
             // Back to page 1
@@ -260,7 +260,7 @@ export default function Filters({ category, limit }) {
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts({ id: category._id, lang, postBody: { PostBody: { filter: {}, page: 1, limit, sort } } });
+            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
             setCategoryProducts(products);
 
             // Back to page 1
@@ -293,7 +293,7 @@ export default function Filters({ category, limit }) {
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts({ id: category._id, lang, postBody: { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } } });
+            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
             setCategoryProducts(products);
 
             // Back to page 1

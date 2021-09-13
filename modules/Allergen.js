@@ -118,7 +118,7 @@ export default function Allergen({ limit = 15 }) {
 
             // Updating the products list
             try {
-                const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } } });
+                const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
                 setCategoryProducts(products);
 
                 // Back to page 1
@@ -152,7 +152,7 @@ export default function Allergen({ limit = 15 }) {
 
             // Updating the products list
             try {
-                const products = await getCategoryProducts({ slug, id: '', lang, postBody: { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } } });
+                const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
                 setCategoryProducts(products);
 
                 // Back to page 1

@@ -118,7 +118,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     let priceEnd     = { min: -1, max: 9999999 };
     if (filter.conditions && Object.entries(filter.conditions).length) {
         try {
-            productsData = await getCategoryProducts({ id: category._id, postBody: { PostBody: { filter: {}, page: 1, limit: 1 } }, lang: locale });
+            productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: {}, page: 1, limit: 1 } });
         } catch (err) {
             return { notFound: true };
         }
@@ -131,7 +131,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     }
 
     try {
-        productsData = await getCategoryProducts({ id: category._id, postBody: { PostBody: { filter: convertFilter(cloneObj(filter)), page, limit, sort } }, lang: locale });
+        productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: convertFilter(cloneObj(filter)), page, limit, sort } });
     } catch (err) {
         return { notFound: true };
     }
@@ -218,7 +218,7 @@ export default function Category({ breadcrumb, category, categorySlugs, limit, o
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts({ id: category._id, lang, postBody: { PostBody: { filter: convertFilter(filter), page, limit, sort } } });
+            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page, limit, sort } });
             setCategoryProducts(products);
 
             // Updating category page

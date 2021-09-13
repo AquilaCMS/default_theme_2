@@ -67,7 +67,7 @@ export default function StaticPage({ error, origin, staticPage }) {
                 description={staticPage.metaDesc}
                 canonical={`${origin}/${staticPage.slug[lang]}`}
                 lang={lang}
-                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
+                image={`${origin}/medias/Logo.jpg`}
             />
 
             {/* <Breadcrumb /> */}{/*  The Breadcrumb sould be between the title and the text, but its not possible now */}

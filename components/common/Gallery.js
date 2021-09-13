@@ -62,7 +62,7 @@ export default function Gallery({ 'ns-code': nsCode, galleryContent }) {
     
     const array = gallery.datas.map((item, index) => {
         if (item.content) return { content: <Video content={item.content} />, alt: item.alt };
-        return { content: `${process.env.NEXT_PUBLIC_IMG_URL}/images/gallery/max/${item._id}/${item.alt || index}${item.extension}`, alt: item.alt };
+        return { content: `/images/gallery/max/${item._id}/${item.alt || index}${item.extension}`, alt: item.alt };
     });
 
     return (
@@ -90,7 +90,7 @@ export default function Gallery({ 'ns-code': nsCode, galleryContent }) {
                             {
                                 item.content ? 
                                     <img src={`https://img.youtube.com/vi/${item.content}/0.jpg`} height="200" alt={item.alt} />
-                                    : <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/images/gallery/200x200/${item._id}/${item.alt || index}${item.extension}`} alt={item.alt} />
+                                    : <img src={`/images/gallery/200x200/${item._id}/${item.alt || index}${item.extension}`} alt={item.alt} />
                             }
                         </div>
                     ))

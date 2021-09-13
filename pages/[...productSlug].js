@@ -257,9 +257,9 @@ export default function Product({ breadcrumb, origin, product }) {
                             {
                                 isOpen && (
                                     <Lightbox
-                                        mainSrc={`${process.env.NEXT_PUBLIC_IMG_URL}/images/products/max/${product.images[photoIndex]._id}/${product.images[photoIndex].name}`}
-                                        nextSrc={`${process.env.NEXT_PUBLIC_IMG_URL}/images/products/max/${product.images[(photoIndex + 1) % product.images.length]._id}/${product.images[(photoIndex + 1) % product.images.length].name}`}
-                                        prevSrc={`${process.env.NEXT_PUBLIC_IMG_URL}/images/products/max/${product.images[(photoIndex + product.images.length - 1) % product.images.length]._id}/${product.images[(photoIndex + product.images.length - 1) % product.images.length].name}`}
+                                        mainSrc={`/images/products/max/${product.images[photoIndex]._id}/${product.images[photoIndex].name}`}
+                                        nextSrc={`/images/products/max/${product.images[(photoIndex + 1) % product.images.length]._id}/${product.images[(photoIndex + 1) % product.images.length].name}`}
+                                        prevSrc={`/images/products/max/${product.images[(photoIndex + product.images.length - 1) % product.images.length]._id}/${product.images[(photoIndex + product.images.length - 1) % product.images.length].name}`}
                                         imageTitle={product.images[photoIndex].alt}
                                         onCloseRequest={() => setIsOpen(false)}
                                         onMovePrevRequest={() => setPhotoIndex((photoIndex + product.images.length - 1) % product.images.length)}
@@ -272,7 +272,7 @@ export default function Product({ breadcrumb, origin, product }) {
                                     pictos ? pictos.map((picto) => (
                                         <div style={picto.style} key={picto.location + Math.random()}>
                                             {
-                                                picto.pictos && picto.pictos.map((p) => <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/images/picto/64x64-70-0,0,0,0/${p.pictoId}/${p.image}`} alt={p.title} title={p.title} key={p._id} />)
+                                                picto.pictos && picto.pictos.map((p) => <img src={`/images/picto/64x64-70-0,0,0,0/${p.pictoId}/${p.image}`} alt={p.title} title={p.title} key={p._id} />)
                                             }
                                         </div>
                                     )) : ''
@@ -355,7 +355,7 @@ export default function Product({ breadcrumb, origin, product }) {
                                                     return (
                                                         <tr key={allergen._id}>
                                                             <td style={{ padding: '10px' }}>
-                                                                <img src={process.env.NEXT_PUBLIC_IMG_URL + allergen.image} alt={allergen.code} />
+                                                                <img src={allergen.image} alt={allergen.code} />
                                                             </td>
                                                             <td style={{ padding: '10px' }}>{allergen.name}</td>
                                                         </tr>

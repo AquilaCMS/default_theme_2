@@ -28,10 +28,9 @@ export default function BlogList({ list = [] }) {
                         {
                             item.img && 
                             <div className="image-block">
-                                <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/images/blog/578x266/${item._id}/${item.slug[lang]}${item.extension}`} alt={item.title} />
+                                <img src={`/images/blog/578x266/${item._id}/${item.slug[lang]}${item.extension}`} alt={item.title} />
                             </div>
                         }
-                        
                     </div>
                 ))}
             </div>

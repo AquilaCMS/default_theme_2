@@ -244,7 +244,7 @@ export default function Category({ breadcrumb, category, categorySlugs, limit, o
                 description={category.metaDescription}
                 canonical={`${origin}/c/${categorySlugs}`}
                 lang={lang}
-                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
+                image={`${origin}/medias/Logo.jpg`}
             />
 
             <div dangerouslySetInnerHTML={{

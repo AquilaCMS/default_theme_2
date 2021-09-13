@@ -116,7 +116,7 @@ export default function CheckoutPayment() {
                                                 <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
                                                 {
                                                     payment.urlLogo ? (
-                                                        <img src={`${payment.urlLogo.indexOf('/') === 0 ? process.env.NEXT_PUBLIC_IMG_URL : ''}${payment.urlLogo}`} alt={payment.code} style={{ width: '100px' }} />
+                                                        <img src={payment.urlLogo} alt={payment.code} style={{ width: '100px' }} />
                                                     ) : (
                                                         <span className="checkbox-label w-form-label">{payment.name}</span>
                                                     )

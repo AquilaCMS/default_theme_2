@@ -13,7 +13,7 @@ export default function Footer() {
             <div className="section-footer">
                 <div className="columns-3 w-row">
                     <div className="w-col w-col-2 w-col-medium-4">
-                        <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`} loading="lazy" alt={environment?.siteName} />
+                        <img src="/medias/Logo.jpg" loading="lazy" alt={environment?.siteName} />
                     </div>
                     <div className="w-col w-col-2 w-col-medium-4" />
 

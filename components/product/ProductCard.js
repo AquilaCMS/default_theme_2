@@ -117,7 +117,7 @@ export default function ProductCard({ type, value, col = 6 }) {
                 pictos ? pictos.map((picto) => (
                     <div style={picto.style} key={picto.location + Math.random()}>
                         {
-                            picto.pictos && picto.pictos.map((p) => <img src={`${process.env.NEXT_PUBLIC_IMG_URL}/images/picto/32x32-70-0,0,0,0/${p.pictoId}/${p.image}`} alt={p.title} title={p.title} key={p._id} />)
+                            picto.pictos && picto.pictos.map((p) => <img src={`/images/picto/32x32-70-0,0,0,0/${p.pictoId}/${p.image}`} alt={p.title} title={p.title} key={p._id} />)
                         }
                     </div>
                 )) : ''

@@ -44,7 +44,7 @@ export default function Home({ origin, staticPage }) {
                 description={staticPage.metaDesc}
                 canonical={origin}
                 lang={lang}
-                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
+                image={`${origin}/medias/Logo.jpg`}
             />
 
             <BlockCMS content={staticPage.content} />

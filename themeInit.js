@@ -11,7 +11,6 @@ const start = async () => {
     if (global?.envConfig?.environment?.appUrl) {
         const appUrl                    = global.envConfig.environment.appUrl.slice(0, -1);
         process.env.NEXT_PUBLIC_API_URL = `${appUrl}/api`;
-        process.env.NEXT_PUBLIC_IMG_URL = appUrl;
     }
     const app   = next({ dev, dir: pathToTheme });
     let handler = app.getRequestHandler();

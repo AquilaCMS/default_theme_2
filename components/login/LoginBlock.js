@@ -22,8 +22,7 @@ export default function LoginBlock() {
         const email    = e.currentTarget.email.value;
         const password = e.currentTarget.password.value;
         try {
-            const res       = await auth(email, password);
-            document.cookie = 'jwt=' + res.data + '; path=/;';
+            await auth(email, password);
             router.push(redirect);
         } catch (err) {
             setMessageLogin({ type: 'error', message: err.message || t('common:message.unknownError') });

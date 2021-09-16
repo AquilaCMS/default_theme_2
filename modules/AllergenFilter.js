@@ -6,10 +6,10 @@ import { getBlockCMS }                          from 'aquila-connector/api/block
 import { getCategoryProducts }                  from 'aquila-connector/api/category';
 import axios                                    from 'aquila-connector/lib/AxiosInstance';
 import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
-import { cloneObj, convertFilter, unsetCookie } from '@lib/utils';
+import { convertFilter, unsetCookie }           from '@lib/utils';
 
 // GET allergens
-async function getAllergens () {
+async function getAllergens() {
     try {
         const response = await axios.post('v2/allergens', { PostBody: { limit: 100 } });
         return response.data.datas;
@@ -19,7 +19,7 @@ async function getAllergens () {
     }
 }
 
-export default function Allergen({ limit = 15 }) {
+export default function AllergenFilter({ limit = 15 }) {
     const [allergens, setAllergens]               = useState([]);
     const [checkedAllergens, setCheckedAllergens] = useState({});
     const [cmsBlockWarning, setCmsBlockWarning]   = useState('');

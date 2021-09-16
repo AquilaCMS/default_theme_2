@@ -22,7 +22,7 @@ import { getCategories }                               from 'aquila-connector/ap
 import { getProduct }                                  from 'aquila-connector/api/product';
 import { getImage, getMainImage, getTabImageURL }      from 'aquila-connector/api/product/helpersProduct';
 import { useCart, useShowCartSidebar }                 from '@lib/hooks';
-import { setLangAxios, formatBreadcrumb, formatPrice } from '@lib/utils';
+import { setLangAxios, formatBreadcrumb, formatPrice, moduleHook } from '@lib/utils';
 
 import 'lightbox-react/style.css';
 import 'react-responsive-modal/styles.css';
@@ -68,6 +68,9 @@ export async function getServerSideProps({ locale, params, req, res, resolvedUrl
 
     const actions = [
         {
+            type: 'SET_PRODUCT',
+            value: product
+        }, {
             type: 'PUSH_CMSBLOCKS',
             func: getBlocksCMS.bind(this, ['info-bottom-1'], locale)
         }, {
@@ -334,7 +337,7 @@ export default function Product({ breadcrumb, origin, product }) {
                                 <div>{t('components/product:product.tab1')}</div>
                             </a>
                             {
-                                product.allergens?.length > 0 && (
+                                moduleHook('product-tab') !== false && (
                                     <a className={`tab-link-round w-inline-block w-tab-link${tabs === 1 ? ' w--current' : ''}`} onClick={() => setTabs(1)}>
                                         <div>{t('components/product:product.tab2')}</div>
                                     </a>
@@ -347,20 +350,11 @@ export default function Product({ breadcrumb, origin, product }) {
                         <div className="w-tab-content">
                             <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`} dangerouslySetInnerHTML={{ __html: product.description1?.text }} />
                             {
-                                product.allergens?.length > 0 && (
+                                moduleHook('product-tab') !== false && (
                                     <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
                                         <table>
                                             {
-                                                product.allergens.map((allergen) => {
-                                                    return (
-                                                        <tr key={allergen._id}>
-                                                            <td style={{ padding: '10px' }}>
-                                                                <img src={allergen.image} alt={allergen.code} />
-                                                            </td>
-                                                            <td style={{ padding: '10px' }}>{allergen.name}</td>
-                                                        </tr>
-                                                    );
-                                                })
+                                                moduleHook('product-tab')
                                             }    
                                         </table>
                                     </div>

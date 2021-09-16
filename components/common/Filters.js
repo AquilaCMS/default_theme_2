@@ -71,7 +71,7 @@ export default function Filters({ category, limit }) {
         setPriceValue(value);
     };
 
-    const handlePriceFilterAfterChange = async (value) => {
+    const handlePriceFilterAfterChange = (value) => {
         // Get filter from cookie
         const cookieFilter = cookie.parse(document.cookie).filter;
         let filter         = {};
@@ -99,21 +99,10 @@ export default function Filters({ category, limit }) {
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
 
         // Updating the products list
-        try {
-            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
-            setCategoryProducts(products);
-
-            // Back to page 1
-            setCategoryPage(1);
-
-            // Back to page 1... so useless "page" cookie
-            unsetCookie('page');
-        } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-        }
+        updateProductList(category._id, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
     };
 
-    const handleAttributeFilterClick = async (e) => {
+    const handleAttributeFilterClick = (e) => {
         // Get filter from cookie
         const cookieFilter = cookie.parse(document.cookie).filter;
         let filter         = {};
@@ -162,21 +151,10 @@ export default function Filters({ category, limit }) {
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
 
         // Updating the products list
-        try {
-            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
-            setCategoryProducts(products);
-
-            // Back to page 1
-            setCategoryPage(1);
-
-            // Back to page 1... so useless "page" cookie
-            unsetCookie('page');
-        } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-        }
+        updateProductList(category._id, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
     };
 
-    const handlePictoFilterClick = async (e) => {
+    const handlePictoFilterClick = (e) => {
         // Get filter from cookie
         const cookieFilter = cookie.parse(document.cookie).filter;
         let filter         = {};
@@ -219,21 +197,10 @@ export default function Filters({ category, limit }) {
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
 
         // Updating the products list
-        try {
-            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
-            setCategoryProducts(products);
-
-            // Back to page 1
-            setCategoryPage(1);
-
-            // Back to page 1... so useless "page" cookie
-            unsetCookie('page');
-        } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-        }
+        updateProductList(category._id, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
     };
 
-    const resetFilters = async (e) => {
+    const resetFilters = (e) => {
         // Get filter from cookie
         const cookieFilter = cookie.parse(document.cookie).filter;
         let filter         = {};
@@ -259,21 +226,10 @@ export default function Filters({ category, limit }) {
         setCheckedPictosFilters([]);
 
         // Updating the products list
-        try {
-            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
-            setCategoryProducts(products);
-
-            // Back to page 1
-            setCategoryPage(1);
-
-            // Back to page 1... so useless "page" cookie
-            unsetCookie('page');
-        } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-        }
+        updateProductList(category._id, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
     };
 
-    const handleSortChange = async (e) => {
+    const handleSortChange = (e) => {
         // Get filter from cookie
         const cookieFilter = cookie.parse(document.cookie).filter;
         let filter         = {};
@@ -292,8 +248,12 @@ export default function Filters({ category, limit }) {
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
 
         // Updating the products list
+        updateProductList(category._id, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+    };
+
+    const updateProductList = async (categoryId, postBody) => {
         try {
-            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+            const products = await getCategoryProducts('', categoryId, lang, postBody);
             setCategoryProducts(products);
 
             // Back to page 1
@@ -304,7 +264,7 @@ export default function Filters({ category, limit }) {
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
-    };
+    }
 
     const openBlock = (force = undefined) => {
         setOpen(force || !open);

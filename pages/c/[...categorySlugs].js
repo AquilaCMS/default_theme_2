@@ -16,7 +16,7 @@ import MenuCategories                                                           
 import { dispatcher }                                                                       from '@lib/redux/dispatcher';
 import { getBreadcrumb }                                                                    from 'aquila-connector/api/breadcrumb';
 import { getCategory, getCategoryProducts }                                                 from 'aquila-connector/api/category';
-import { useCategoryPage, useCategoryProducts }                                             from '@lib/hooks';
+import { useCategoryPage, useCategoryProducts, useSiteConfig }                              from '@lib/hooks';
 import { setLangAxios, formatBreadcrumb, cloneObj, convertFilter, moduleHook, unsetCookie } from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
@@ -200,6 +200,7 @@ export default function Category({ breadcrumb, category, categorySlugs, limit, o
     const [message, setMessage]                     = useState();
     const { categoryPage, setCategoryPage }         = useCategoryPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
+    const { themeConfig }                           = useSiteConfig();
     const { lang, t }                               = useTranslation();
 
     const handlePageClick = async (data) => {
@@ -293,9 +294,14 @@ export default function Category({ breadcrumb, category, categorySlugs, limit, o
 
                                 <div className="tabs w-tabs">
                                     <div id="tabs_content" className="tabs-content w-tab-content">
-                                        <div className="div-block-allergenes">
-                                            <Filters category={category} limit={limit} />
-                                        </div>
+                                        {
+                                            themeConfig?.values?.find(v => v.key === 'filters')?.value === 'top' && (
+                                                <div className="div-block-allergenes">
+                                                    <Filters category={category} limit={limit} />
+                                                </div>
+                                            )
+                                        }
+                                        
                                         <div className="tab-pane-wrap w-tab-pane w--tab-active">
                                             <div className="w-dyn-list">
                                                 <ProductList type="data" value={categoryProducts.datas} />

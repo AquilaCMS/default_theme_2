@@ -51,7 +51,6 @@
         "605366a34b9ac91f54fcabc7"
       ],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -230,7 +229,6 @@
         "605366a34b9ac91f54fcabc7"
       ],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -394,7 +392,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -568,7 +565,6 @@
         "605368a04b9ac91f54fcabe5"
       ],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -716,7 +712,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -864,7 +859,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -1017,7 +1011,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "BundleProduct",
       "images": [
         {
           "default": true,
@@ -1254,7 +1247,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -1391,7 +1383,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [],
       "type": "simple",
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
@@ -1510,7 +1501,6 @@
       "is_new": false,
       "allergens": [],
       "foodOption": true,
-      "kind": "VirtualProduct",
       "images": [
         {
           "default": true,
@@ -1629,7 +1619,6 @@
       "is_new": false,
       "allergens": [],
       "foodOption": true,
-      "kind": "VirtualProduct",
       "images": [
         {
           "default": true,
@@ -1747,7 +1736,6 @@
       "is_new": false,
       "allergens": [],
       "foodOption": true,
-      "kind": "VirtualProduct",
       "images": [
         {
           "default": true,

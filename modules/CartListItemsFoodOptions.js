@@ -5,7 +5,6 @@ import BlockCMS                                 from '@components/common/BlockCM
 import CartItem                                 from '@components/cart/CartItem';
 import Button                                   from '@components/ui/Button';
 import { getBlockCMS }                          from 'aquila-connector/api/blockcms';
-import { getImage }                             from 'aquila-connector/api/product/helpersProduct';
 import axios                                    from 'aquila-connector/lib/AxiosInstance';
 import { useCart }                              from '@lib/hooks';
 import { formatPrice, moduleHook, unsetCookie } from '@lib/utils';
@@ -128,7 +127,7 @@ export default function CartListItemsFoodOptions() {
                 const linkedProducts = await getLinkedProducts();
                 
                 for (let i in items) {
-                    items[i] = items[i].id.code;
+                    items[i] = items[i].code;
                 }
                 
                 const groups = [];
@@ -151,7 +150,7 @@ export default function CartListItemsFoodOptions() {
                     let productsOffered = 0;
                     for (let i = 0; i < itemsNoFood.length; i++) {
                         for (let j = 0; j < codes.length; j++) {
-                            const value      = itemsNoFood[i].id.attributes.find((a) => a.code === codes[j])?.value ? itemsNoFood[i].id.attributes.find((a) => a.code === codes[j]).value * itemsNoFood[i].quantity : 0;
+                            const value      = itemsNoFood[i].attributes.find((a) => a.code === codes[j])?.value ? itemsNoFood[i].attributes.find((a) => a.code === codes[j]).value * itemsNoFood[i].quantity : 0;
                             productsOffered += value;
                         }
                     }
@@ -190,6 +189,20 @@ export default function CartListItemsFoodOptions() {
                             </div>
 
                             <div className="w-commerce-commercecartfooter">
+                                {
+                                    cart.delivery?.value && (
+                                        <div className="w-commerce-commercecartlineitem cart-line-item">
+                                            <div>{t('components/cart:cartListItem.delivery')}</div>
+                                            <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                        </div>
+                                    )
+                                }
+                                <div className="w-commerce-commercecartlineitem cart-line-item">
+                                    <div>{t('components/cart:cartListItem.total')}</div>
+                                    <div className="w-commerce-commercecartordervalue text-block">
+                                        {cart.priceTotal.ati.toFixed(2)} €
+                                    </div>
+                                </div>
                                 <div>
                                     {
                                         itemsFoodOptions.length > 0 ? (
@@ -225,10 +238,9 @@ export default function CartListItemsFoodOptions() {
                                                     if (!item) {
                                                         return null;
                                                     }
-                                                    const foundImg = item.id.images.find((img) => img.default);
                                                     return (
                                                         <div key={item._id} className="w-commerce-commercecartitem cart-item">
-                                                            <img src={getImage(foundImg, '60x60') || '/images/no-image.svg'} alt="" className="w-commerce-commercecartitemimage" />
+                                                            <img src={`/images/products/60x60/${item.image}/${item.code}.png`} alt="" className="w-commerce-commercecartitemimage" />
                                                             <div className="w-commerce-commercecartiteminfo div-block-4">
                                                                 <div>
                                                                     <div className="w-commerce-commercecartproductname">{item.name}</div>

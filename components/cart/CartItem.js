@@ -47,12 +47,10 @@ export default function CartItem({ item }) {
         }
     };
 
-    const foundImg = item.id.images.find((img) => img.default);
-
     return (
         <>
             <div className="w-commerce-commercecartitem cart-item">
-                <img src={getImage(foundImg, '60x60') || '/images/no-image.svg'} alt="" className="w-commerce-commercecartitemimage" />
+                <img src={`/images/products/60x60/${item.image}/${item.code}.png`} alt="" className="w-commerce-commercecartitemimage" />
                 <div className="w-commerce-commercecartiteminfo div-block-4">
                     <div>
                         <div className="w-commerce-commercecartproductname">{item.name}</div>
@@ -67,7 +65,7 @@ export default function CartItem({ item }) {
                                 {
                                     item.selections.map((section) => (
                                         section.products.map((itemSection) => {
-                                            const diffPrice = item.id.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection._id)?.modifier_price?.ati;
+                                            const diffPrice = item.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection.id)?.modifier_price?.ati;
                                             return (
                                                 <li key={itemSection._id}>{itemSection.name}{diffPrice && diffPrice !== 0 ? <> ({diffPrice > 0 ? '+' : ''}{formatPrice(diffPrice)})</> : null}</li>
                                             );

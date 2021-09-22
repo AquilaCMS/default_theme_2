@@ -15,7 +15,7 @@ export default function CategoryCard({ item }) {
             <div>
                 <Link href={`${asPath}/${item.slug[lang]}`}>
                     <a className="food-image-square w-inline-block">
-                        <img src={item.img ? `/${item.img}` : '/images/no-image.svg'} alt={item.name} className="food-image" loading="lazy" />
+                        <img src={`/images/category/145x145/${item._id}/${item.code}.png`} alt={item.name} className="food-image" loading="lazy" />
                     </a>
                 </Link>
                 <div className="food-card-content">

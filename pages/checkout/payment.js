@@ -1,13 +1,14 @@
 import { useEffect }                                                    from 'react';
 import { useRouter }                                                    from 'next/router';
 import useTranslation                                                   from 'next-translate/useTranslation';
+import parse                                                            from 'html-react-parser';
 import LightLayout                                                      from '@components/layouts/LightLayout';
 import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
 import Button                                                           from '@components/ui/Button';
 import { cartToOrder }                                                  from 'aquila-connector/api/cart';
-import { deferredPayment }                                              from 'aquila-connector/api/payment';
+import { makePayment }                                                  from 'aquila-connector/api/payment';
 import { useState }                                                     from 'react';
-import { useCart, usePaymentMethods }                                   from '@lib/hooks';
+import { useCart, usePaymentMethods, useSiteConfig }                    from '@lib/hooks';
 import { setLangAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                                   from '@lib/redux/dispatcher';
 
@@ -22,12 +23,14 @@ export async function getServerSideProps({ locale, req, res }) {
 }
 
 export default function CheckoutPayment() {
-    const [isLoading, setIsLoading] = useState(false);
-    const router                    = useRouter();
-    const { cart }                  = useCart();
-    const paymentMethods            = usePaymentMethods();
-    const { lang, t }               = useTranslation();
-
+    const [paymentForm, setPaymentForm] = useState('');
+    const [isLoading, setIsLoading]     = useState(false);
+    const router                        = useRouter();
+    const { cart }                      = useCart();
+    const paymentMethods                = usePaymentMethods();
+    const { langs }                     = useSiteConfig();
+    const { lang, t }                   = useTranslation();
+    
     useEffect(() => {
         // Check if the cart is empty
         if (!cart?.items?.length) {
@@ -45,6 +48,12 @@ export default function CheckoutPayment() {
         }
     }, []);
 
+    useEffect(() => {
+        if (paymentForm) {
+            document.getElementById('paymentid').submit();
+        }
+    }, [paymentForm]);
+
     const onSubmitPayment = async (e) => {
         e.preventDefault();
 
@@ -57,17 +66,14 @@ export default function CheckoutPayment() {
             const order = await cartToOrder(cart._id, lang);
 
             // Payment
-            const payment = paymentMethods.find((p) => p.code === payment_code);
-            if (payment.isDeferred === true) {
-                // Deferred payment (check, cash...)
-                await deferredPayment(order.number, payment_code, lang);
-            } else {
-                // Immediat payment (CB...)
-                
+            const returnURL = `/${langs.find(l => l.defaultLanguage).code === lang ? '' : `${lang}/`}checkout/confirmation`;
+            const form      = await makePayment(order.number, payment_code, returnURL, lang);
+            if (form) {
+                setPaymentForm(form);
             }
+
             document.cookie = 'order_id=' + order._id + '; path=/;';
             unsetCookie('cart_id');
-            router.push('/checkout/confirmation');
         } catch (err) {
             console.error(err.message || t('common:message.unknownError'));
         } finally {
@@ -150,6 +156,10 @@ export default function CheckoutPayment() {
                                 isLoading={isLoading}
                                 className="log-button-03 w-button"
                             />
+
+                            <div className="content" hidden>
+                                {parse(paymentForm)}
+                            </div>
                         </form>
                     </div>
                 </div>

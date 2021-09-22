@@ -80,7 +80,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                                     <div className="item-tunnel w-row" key={item._id}>
                                                         <div className="w-col w-col-3">
                                                             <div className="food-image-square-tunnel w-inline-block">
-                                                                <img src={item.image ? `/${item.image}` : '/images/no-image.svg'} alt="" className="food-image" style={{ 'width': '60px' }} />
+                                                                <img src={`/images/products/60x60/${item.image}/${item.code}.png`} alt="" className="food-image" />
                                                             </div>
                                                         </div>
                                                         <div className="w-col w-col-9">

@@ -7,12 +7,12 @@ import { dispatcher }    from '@lib/redux/dispatcher';
 import { getPageStatic } from 'aquila-connector/api/static';
 import { setLangAxios }  from '@lib/utils';
 
-export async function getServerSideProps({ locale, req, res }) {
+export async function getServerSideProps({ locale, query, req, res }) {
     setLangAxios(locale, req, res);
 
     let staticPage = {};
     try {
-        staticPage = await getPageStatic('home', locale);
+        staticPage = await getPageStatic('home', query.preview, locale);
     } catch (err) {
         return { notFound: true };
     }

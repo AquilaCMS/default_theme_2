@@ -11,12 +11,12 @@ import { setLangAxios }  from '@lib/utils';
 // import Breadcrumb   from '@components/navigation/Breadcrumb';
 
 // voir pour le SSG
-export async function getServerSideProps({ locale, params, req, res }) {
+export async function getServerSideProps({ locale, params, query, req, res }) {
     setLangAxios(locale, req, res);
 
     let staticPage = {};
     try {
-        staticPage = await getPageStatic(params.staticSlug, locale);
+        staticPage = await getPageStatic(params.staticSlug, query.preview, locale);
     } catch (err) {
         return { notFound: true };
     }

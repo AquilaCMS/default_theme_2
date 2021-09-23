@@ -27,7 +27,7 @@ import { setLangAxios, formatBreadcrumb, formatPrice, moduleHook } from '@lib/ut
 import 'lightbox-react/style.css';
 import 'react-responsive-modal/styles.css';
 
-export async function getServerSideProps({ locale, params, req, res, resolvedUrl }) {
+export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     setLangAxios(locale, req, res);
 
     const productSlug   = params.productSlug.pop();
@@ -39,7 +39,7 @@ export async function getServerSideProps({ locale, params, req, res, resolvedUrl
     try {
         const dataCategories = await getCategories(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: { $in: categorySlugs } }, limit: 9999 } });
         categories           = dataCategories.datas;
-        product              = await getProduct('slug', productSlug, locale);
+        product              = await getProduct('slug', productSlug, query.preview, locale);
     } catch (err) {
         return { notFound: true };
     }

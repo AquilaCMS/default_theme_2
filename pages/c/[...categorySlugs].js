@@ -29,7 +29,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     let categories = [];
     for (let slug of categorySlugs) {
         try {
-            const cat = await getCategory(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: slug }, populate: ['children'] } });
+            const cat = await getCategory(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: slug } } });
             if (cat) {
                 categories.push(cat);
             }
@@ -116,22 +116,23 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     filter.category = category._id;
 
     // Get products
-    let productsData = {};
-    let priceEnd     = { min: -1, max: 9999999 };
-    if (filter.conditions && Object.entries(filter.conditions).length) {
-        try {
-            productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: {}, page: 1, limit: 1 } });
-        } catch (err) {
-            return { notFound: true };
-        }
-        if (productsData.count) {
-            priceEnd = {
-                min: Math.floor(Math.min(productsData.priceMin.ati, productsData.specialPriceMin.ati)),
-                max: Math.ceil(Math.max(productsData.priceMax.ati, productsData.specialPriceMax.ati))
-            };
-        }
+    let initProductsData = {};
+    let priceEnd         = { min: -1, max: 9999999 };
+    try {
+        initProductsData = await getCategoryProducts('', category._id, locale, { PostBody: { page: 1, limit: 1 } });
+    } catch (err) {
+        return { notFound: true };
+    }
+    if (initProductsData.count) {
+        priceEnd = {
+            min: Math.floor(Math.min(initProductsData.priceMin.ati, initProductsData.specialPriceMin.ati)),
+            max: Math.ceil(Math.max(initProductsData.priceMax.ati, initProductsData.specialPriceMax.ati))
+        };
+    } else {
+        priceEnd = { min: 0, max: 0 };
     }
 
+    let productsData = {};
     try {
         productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: convertFilter(cloneObj(filter)), page, limit, sort } });
     } catch (err) {
@@ -139,13 +140,6 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     }
 
     if (productsData.count) {
-        if (priceEnd.min === -1) {
-            priceEnd = {
-                min: Math.floor(Math.min(productsData.priceMin.ati, productsData.specialPriceMin.ati)),
-                max: Math.ceil(Math.max(productsData.priceMax.ati, productsData.specialPriceMax.ati))
-            };
-        }
-
         // Conditions for filter
         if (!filter.conditions) {
             filter.conditions = {};
@@ -153,11 +147,6 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         if (!filter.conditions.price) {
             filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: productsData.priceMin.ati, $lte: productsData.priceMax.ati } }, { 'price.ati.special': { $gte: productsData.specialPriceMin.ati, $lte: productsData.specialPriceMax.ati } }] };
         }
-    } else {
-        priceEnd = {
-            min: 0,
-            max: 0
-        };
     }
     cookiesServerInstance.set('filter', JSON.stringify(filter), { path: '/', httpOnly: false });
 
@@ -190,15 +179,16 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // URL origin
     const { origin } = absoluteUrl(req);
     
-    pageProps.props.categorySlugs = categorySlugs.join('/');
-    pageProps.props.origin        = origin;
-    pageProps.props.breadcrumb    = breadcrumb;
-    pageProps.props.category      = category;
-    pageProps.props.limit         = limit;
+    pageProps.props.categorySlugs    = categorySlugs.join('/');
+    pageProps.props.origin           = origin;
+    pageProps.props.breadcrumb       = breadcrumb;
+    pageProps.props.category         = category;
+    pageProps.props.initProductsData = initProductsData;
+    pageProps.props.limit            = limit;
     return pageProps;
 }
 
-export default function Category({ breadcrumb, category, categorySlugs, limit, origin, error }) {
+export default function Category({ breadcrumb, category, categorySlugs, initProductsData, limit, origin, error }) {
     const [message, setMessage]                     = useState();
     const { categoryPage, setCategoryPage }         = useCategoryPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
@@ -262,7 +252,7 @@ export default function Category({ breadcrumb, category, categorySlugs, limit, o
 
             <div className="content-section-carte">
                 {
-                    category.children?.length > 0 ? (
+                    initProductsData.count === 0 ? (
                         <>
                             <div className="container w-container">
                                 <p className="paragraph-seo" dangerouslySetInnerHTML={{

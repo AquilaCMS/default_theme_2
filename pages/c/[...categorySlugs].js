@@ -110,6 +110,9 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         if (filter.conditions?.pictos) {
             delete filter.conditions.pictos;
         }
+        if (filter.conditions?.$text) {
+            delete filter.conditions.$text;
+        }
     }
 
     // Category ID for filter
@@ -138,7 +141,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     } catch (err) {
         return { notFound: true };
     }
-
+    
     if (productsData.count) {
         // Conditions for filter
         if (!filter.conditions) {
@@ -224,6 +227,21 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
         }
     };
 
+    const updateProductList = async (postBody) => {
+        try {
+            const products = await getCategoryProducts('', category._id, lang, postBody);
+            setCategoryProducts(products);
+
+            // Back to page 1
+            setCategoryPage(1);
+
+            // Back to page 1... so useless "page" cookie
+            unsetCookie('page');
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
+    }
+
     const pageCount = Math.ceil(categoryProducts.count / limit);
 
     if (error) {
@@ -289,7 +307,7 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
                                         {
                                             themeConfig?.values?.find(v => v.key === 'filters')?.value === 'top' && (
                                                 <div className="div-block-allergenes">
-                                                    <Filters category={category} limit={limit} />
+                                                    <Filters category={category} limit={limit} updateProductList={updateProductList} />
                                                 </div>
                                             )
                                         }

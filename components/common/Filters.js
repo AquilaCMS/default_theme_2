@@ -11,7 +11,7 @@ const Range                   = createSliderWithTooltip(Slider.Range);
 
 import 'rc-slider/assets/index.css';
 
-export default function Filters({ category, limit }) {
+export default function Filters({ category, limit, updateProductList }) {
     const formRef                                                 = useRef();
     const { categoryPriceEnd }                                    = useCategoryPriceEnd();
     const [checkedAttributesFilters, setCheckedAttributesFilters] = useState({});
@@ -99,7 +99,7 @@ export default function Filters({ category, limit }) {
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
 
         // Updating the products list
-        updateProductList(category._id, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
     };
 
     const handleAttributeFilterClick = (e) => {
@@ -151,7 +151,7 @@ export default function Filters({ category, limit }) {
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
 
         // Updating the products list
-        updateProductList(category._id, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
     };
 
     const handlePictoFilterClick = (e) => {
@@ -197,7 +197,7 @@ export default function Filters({ category, limit }) {
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
 
         // Updating the products list
-        updateProductList(category._id, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
     };
 
     const resetFilters = (e) => {
@@ -226,7 +226,7 @@ export default function Filters({ category, limit }) {
         setCheckedPictosFilters([]);
 
         // Updating the products list
-        updateProductList(category._id, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
     };
 
     const handleSortChange = (e) => {
@@ -248,23 +248,8 @@ export default function Filters({ category, limit }) {
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
 
         // Updating the products list
-        updateProductList(category._id, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
     };
-
-    const updateProductList = async (categoryId, postBody) => {
-        try {
-            const products = await getCategoryProducts('', categoryId, lang, postBody);
-            setCategoryProducts(products);
-
-            // Back to page 1
-            setCategoryPage(1);
-
-            // Back to page 1... so useless "page" cookie
-            unsetCookie('page');
-        } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-        }
-    }
 
     const openBlock = (force = undefined) => {
         setOpen(force || !open);
@@ -299,19 +284,21 @@ export default function Filters({ category, limit }) {
                     </div>
                     {
                         category.filters.attributes.map((attribute) => {
+                            const attId = attribute._id || attribute.id_attribut;
+                            if (!category.filters.attributesValues[attId]) return null;
                             return (
-                                <div className="filter" key={attribute._id}>
+                                <div className="filter" key={attId}>
                                     <h6>{attribute.name}</h6>
                                     <div>
                                         {
-                                            category.filters.attributesValues[attribute._id].map((value) => {
+                                            category.filters.attributesValues[attId].map((value) => {
                                                 return (
-                                                    <label className="w-checkbox checkbox-field-allergene" key={attribute._id + value}>
+                                                    <label className="w-checkbox checkbox-field-allergene" key={attId + value}>
                                                         <input 
                                                             type="checkbox"
                                                             name="newsletter"
-                                                            value={`attribute|${attribute._id}|${value}`}
-                                                            checked={checkedAttributesFilters[attribute._id]?.includes(value) ? true : false}
+                                                            value={`attribute|${attId}|${value}`}
+                                                            checked={checkedAttributesFilters[attId]?.includes(value) ? true : false}
                                                             onChange={handleAttributeFilterClick}
                                                             style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
                                                         />

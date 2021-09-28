@@ -1,5 +1,7 @@
 import { useState }                                                                         from 'react';
 import absoluteUrl                                                                          from 'next-absolute-url';
+import Head                                                                                 from 'next/head';
+import { useRouter }                                                                        from 'next/router';
 import getT                                                                                 from 'next-translate/getT';
 import useTranslation                                                                       from 'next-translate/useTranslation';
 import Cookies                                                                              from 'cookies';
@@ -196,6 +198,7 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
     const { categoryPage, setCategoryPage }         = useCategoryPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
     const { themeConfig }                           = useSiteConfig();
+    const router                                    = useRouter();
     const { lang, t }                               = useTranslation();
 
     const handlePageClick = async (data) => {
@@ -221,7 +224,12 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
             setCategoryPage(page);
 
             // Setting category page cookie
-            document.cookie = 'page=' + JSON.stringify({ id: category._id, page }) + '; path=/;';
+            if (page > 1) {
+                document.cookie = 'page=' + JSON.stringify({ id: category._id, page }) + '; path=/;';
+            } else {
+                // Page 1... so useless "page" cookie
+                unsetCookie('page');
+            }
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
@@ -242,6 +250,10 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
         }
     }
 
+    let queryPage = Number(router.query.page);
+    if (!queryPage) {
+        queryPage = 1;
+    }
     const pageCount = Math.ceil(categoryProducts.count / limit);
 
     if (error) {
@@ -253,10 +265,19 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
             <NextSeoCustom
                 title={category.name}
                 description={category.metaDescription}
-                canonical={`${origin}/c/${categorySlugs}`}
+                canonical={`${origin}/c/${categorySlugs}${queryPage > 1 ? `?page=${queryPage}` : ''}`}
                 lang={lang}
                 image={`${origin}/images/medias/max-100/605363104b9ac91f54fcabac/Logo.jpg`}
             />
+
+            <Head>
+                {
+                    queryPage > 1 && <link rel="prev" href={`${origin}/c/${categorySlugs}${queryPage === 2 ? '' : `?page=${queryPage - 1}`}`} />
+                }
+                {
+                    (queryPage >= 1) && queryPage < pageCount && <link rel="next" href={`${origin}/c/${categorySlugs}?page=${queryPage + 1}`} />
+                }
+            </Head>
 
             <div dangerouslySetInnerHTML={{
                 __html: category.extraText,

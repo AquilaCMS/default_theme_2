@@ -10,6 +10,7 @@ import Filters                                                 from '@components
 import Layout                                                  from '@components/layouts/Layout';
 import NextSeoCustom                                           from '@components/tools/NextSeoCustom';
 import ProductList                                             from '@components/product/ProductList';
+import Button                                                  from '@components/ui/Button';
 import { dispatcher }                                          from '@lib/redux/dispatcher';
 import { getProducts }                                         from 'aquila-connector/api/product';
 import { getSiteInfo }                                         from 'aquila-connector/api/site';
@@ -162,6 +163,7 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
 }
 
 export default function Search({ forcePage, infiniteScroll, limit, products, search, error }) {
+    const [isLoading, setIsLoading]                 = useState(false);
     const [message, setMessage]                     = useState();
     const { categoryPage, setCategoryPage }         = useCategoryPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
@@ -208,6 +210,8 @@ export default function Search({ forcePage, infiniteScroll, limit, products, sea
     };
 
     const loadMoreData = async () => {
+        setIsLoading(true);
+
         const page = categoryPage + 1;
 
         // Get filter from cookie
@@ -240,6 +244,8 @@ export default function Search({ forcePage, infiniteScroll, limit, products, sea
             }
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -304,7 +310,14 @@ export default function Search({ forcePage, infiniteScroll, limit, products, sea
                                                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                                                 {
                                                                     infiniteScroll > 1 ? (
-                                                                        <button type="button" className="w-commerce-commerceaddtocartbutton order-button" onClick={loadMoreData}>{t('pages/search:loadMoreData')}</button>
+                                                                        <Button
+                                                                            type="button"
+                                                                            text={t('pages/search:loadMoreData')}
+                                                                            loadingText={t('pages/search:loading')}
+                                                                            isLoading={isLoading}
+                                                                            className="w-commerce-commerceaddtocartbutton order-button"
+                                                                            hookOnClick={loadMoreData}
+                                                                        />
                                                                     ) : (
                                                                         <span>{t('pages/search:loading')}</span>
                                                                     )

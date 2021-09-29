@@ -16,6 +16,7 @@ import Breadcrumb                                                               
 import CategoryList                                                                         from '@components/category/CategoryList';
 import ProductList                                                                          from '@components/product/ProductList';
 import MenuCategories                                                                       from '@components/navigation/MenuCategories';
+import Button                                                                               from '@components/ui/Button';
 import { dispatcher }                                                                       from '@lib/redux/dispatcher';
 import { getBreadcrumb }                                                                    from 'aquila-connector/api/breadcrumb';
 import { getCategory, getCategoryProducts }                                                 from 'aquila-connector/api/category';
@@ -217,6 +218,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
 }
 
 export default function Category({ breadcrumb, category, categorySlugs, forcePage, infiniteScroll, initProductsData, limit, origin, error }) {
+    const [isLoading, setIsLoading]                 = useState(false);
     const [message, setMessage]                     = useState();
     const { categoryPage, setCategoryPage }         = useCategoryPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
@@ -263,6 +265,8 @@ export default function Category({ breadcrumb, category, categorySlugs, forcePag
     };
 
     const loadMoreData = async () => {
+        setIsLoading(true);
+
         const page = categoryPage + 1;
 
         // Get filter from cookie
@@ -295,6 +299,8 @@ export default function Category({ breadcrumb, category, categorySlugs, forcePag
             }
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -408,7 +414,14 @@ export default function Category({ breadcrumb, category, categorySlugs, forcePag
                                                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                                                     {
                                                                         infiniteScroll > 1 ? (
-                                                                            <button type="button" className="w-commerce-commerceaddtocartbutton order-button" onClick={loadMoreData}>{t('pages/category:loadMoreData')}</button>
+                                                                            <Button
+                                                                                type="button"
+                                                                                text={t('pages/category:loadMoreData')}
+                                                                                loadingText={t('pages/category:loading')}
+                                                                                isLoading={isLoading}
+                                                                                className="w-commerce-commerceaddtocartbutton order-button"
+                                                                                hookOnClick={loadMoreData}
+                                                                            />
                                                                         ) : (
                                                                             <span>{t('pages/category:loading')}</span>
                                                                         )

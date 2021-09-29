@@ -386,12 +386,12 @@ anymatch@~3.1.1:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-aquila-connector@^1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/aquila-connector/-/aquila-connector-1.0.11.tgz#e60acc13b2a83a1a48f7891d5855a4928b6e74ef"
-  integrity sha512-PU/6yVL6EhKj5GvSU9Gjs8YZl0n1X51B/iOpKFoiEdmEvBPBC+vj6rVKgkMSvSUx5MRvEC2bYE7h0aejAUiBLQ==
+aquila-connector@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/aquila-connector/-/aquila-connector-1.0.19.tgz#857499fcf7980cf3257a3e3132ab398cc2264c27"
+  integrity sha512-OkB3LsPh7ZhzqFENHJyNRrhkfSVl1uZqfSM4qmaYvmNCfz8b+nmOqb88HwK5G2nGbQkRTWSRpzUdPbhxQBUPnA==
   dependencies:
-    axios "^0.21.1"
+    axios "^0.21.4"
     cookie "^0.4.1"
 
 argparse@^1.0.7:
@@ -497,7 +497,7 @@ axe-core@^4.0.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.3.3.tgz#b55cd8e8ddf659fe89b064680e1c6a4dceab0325"
   integrity sha512-/lqqLAmuIPi79WYfRpy2i8z+x+vxU3zX2uAm0gs1q52qTuKwolOj1P8XbufpXcsydrpKx2yGn2wzAnxCMV86QA==
 
-axios@^0.21.1, axios@^0.21.4:
+axios@^0.21.4:
   version "0.21.4"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.4.tgz#c67b90dc0568e5c1cf2b0b858c43ba28e2eda575"
   integrity sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==
@@ -2853,6 +2853,13 @@ react-geosuggest@^2.14.1:
     classnames "^2.2.6"
     lodash.debounce "^4.0.6"
 
+react-infinite-scroll-component@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroll-component/-/react-infinite-scroll-component-6.1.0.tgz#7e511e7aa0f728ac3e51f64a38a6079ac522407f"
+  integrity sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==
+  dependencies:
+    throttle-debounce "^2.1.0"
+
 react-is@17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
@@ -3446,6 +3453,11 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+
+throttle-debounce@^2.1.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-2.3.0.tgz#fd31865e66502071e411817e241465b3e9c372e2"
+  integrity sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==
 
 timers-browserify@2.0.12, timers-browserify@^2.0.4:
   version "2.0.12"

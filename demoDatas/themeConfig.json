@@ -23,7 +23,7 @@
               },
               {
                 "key" : "infiniteScroll",
-                "value" : 2,
+                "value" : 0,
                 "name" : "Infinite scroll",
                 "description" : "0 = Désactiver | 1 = Activer | 2 = Activer avec bouton",
                 "group" : "Général"

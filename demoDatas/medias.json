@@ -147,6 +147,13 @@
       "_id": "6081b63f49391e1ff81653a4",
       "link": "medias/legal.jpg",
       "name": "legal"
+    },
+    {
+      "group": "",
+      "extension": ".jpg",
+      "_id": "6149abbe1571581268c6f5d8",
+      "link": "medias/no-image.png",
+      "name": "noimage"
     }
   ]
 }

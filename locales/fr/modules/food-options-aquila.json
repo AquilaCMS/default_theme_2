@@ -1,7 +1,8 @@
 {
     "next": "Suivant",
-    "productOffered": "produit offert",
-    "productsOffered": "produits offerts",
+    "nextLoading": "Chargement...",
+    "productOffered": "offert",
+    "productsOffered": "offerts",
     "free": "Offert",
     "back": "Retour",
     "noFoodOptions": "Aucun produit complémentaires"

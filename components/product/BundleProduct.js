@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import useTranslation                            from 'next-translate/useTranslation';
 import Button                                    from '@components/ui/Button';
-import { addToCart }                             from '@lib/aquila-connector/cart';
-import { getImage }                              from '@lib/aquila-connector/product/helpersProduct';
+import { addToCart }                             from 'aquila-connector/api/cart';
+import { getImage }                              from 'aquila-connector/api/product/helpersProduct';
 import { useCart, useShowCartSidebar }           from '@lib/hooks';
 import { formatPrice }                           from '@lib/utils';
 
@@ -136,7 +136,7 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
                                                                         <h6 className="heading-14">{item.id.name}</h6>
                                                                     </div>
                                                                     <div className="form-block-4 w-form">
-                                                                        <div name="email-form-3" data-name="Email Form 3">
+                                                                        <div>
                                                                             {
                                                                                 section.type === 'MULTIPLE' ? (
                                                                                     <label className="w-checkbox checkbox-field-allergene">

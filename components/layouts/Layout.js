@@ -1,4 +1,3 @@
-
 import Header        from '@components/layouts/Header';
 import Footer        from '@components/layouts/Footer';
 import CookiesBanner from '@components/common/CookiesBanner';

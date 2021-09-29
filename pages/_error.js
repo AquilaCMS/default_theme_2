@@ -19,7 +19,6 @@ function Error({ statusCode }) {
             </Head>
             <div className="utility-page-wrap-2">
                 <div className="container flex-vertical">
-                    <img src="/images/food-photographer-david-fedulov-X92WLoaQ1_o-unsplash.jpg" width={500} alt="" className="utility-image" />
                     <h2>{title}</h2>
                     <div>
                         <p className="utility-paragraph">{text}<br />

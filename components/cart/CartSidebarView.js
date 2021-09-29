@@ -4,10 +4,6 @@ import CartListItems  from '@components/cart/CartListItems';
 import { moduleHook } from '@lib/utils';
 
 export default function CartSidebarView({ hideCartSidebar }) {
-    // TODO : essayer de faire l'animation :
-    // - opacité 0 => 1 sur le masque (1er div)
-    // - tranlation de droite à gauche de la sidebar (2ème div)
-
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -34,7 +30,7 @@ export default function CartSidebarView({ hideCartSidebar }) {
                 </div>
                 <div className="w-commerce-commercecartformwrapper">
                     {
-                        moduleHook('cart') || <CartListItems />
+                        moduleHook('cart-list-items') || <CartListItems />
                     }
                 </div>
             </div>

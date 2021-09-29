@@ -4,29 +4,38 @@ import Layout            from '@components/layouts/Layout';
 import NextSeoCustom     from '@components/tools/NextSeoCustom';
 import BlockCMS          from '@components/common/BlockCMS';
 import { dispatcher }    from '@lib/redux/dispatcher';
-import { getPageStatic } from '@lib/aquila-connector/static';
-import { useStaticPage } from '@lib/hooks';
+import { getPageStatic } from 'aquila-connector/api/static';
+import { setLangAxios }  from '@lib/utils';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ locale, query, req, res }) {
+    setLangAxios(locale, req, res);
+
+    let staticPage = {};
+    try {
+        staticPage = await getPageStatic('home', query.preview, locale);
+    } catch (err) {
+        return { notFound: true };
+    }
+
     const actions = [
         {
-            type: 'SET_STATICPAGE',
-            func: getPageStatic.bind(this, 'home')
+            type : 'SET_STATICPAGE',
+            value: staticPage
         }
     ];
 
-    const pageProps = await dispatcher(req, res, actions);
+    const pageProps = await dispatcher(locale, req, res, actions);
 
     // URL origin
-    const { origin }       = absoluteUrl(req);
-    pageProps.props.origin = origin;
+    const { origin }           = absoluteUrl(req);
+    pageProps.props.origin     = origin;
+    pageProps.props.staticPage = staticPage;
 
     return pageProps;
 }
 
-export default function Home({ origin }) {
-    const { lang }   = useTranslation();
-    const staticPage = useStaticPage();
+export default function Home({ origin, staticPage }) {
+    const { lang } = useTranslation();
 
     return (
         <Layout>
@@ -35,7 +44,7 @@ export default function Home({ origin }) {
                 description={staticPage.metaDesc}
                 canonical={origin}
                 lang={lang}
-                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
+                image={`${origin}/images/medias/max-100/605363104b9ac91f54fcabac/Logo.jpg`}
             />
 
             <BlockCMS content={staticPage.content} />

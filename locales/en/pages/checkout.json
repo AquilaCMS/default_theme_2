@@ -1,22 +1,40 @@
 {
   "login": {
     "title": "en-Ma commande - Connexion",
-    "description": "en-TODO",
+    "description": "en-Ma commande - Connexion",
     "titleH1" : "en-Ma commande",
     "step1" : "en-Connexion / Inscription"
   },
-  "clickandcollect" :{
+  "clickandcollect": {
     "title" : "en-Ma commande - Click & Collect",
-    "description" : "en-TODO",
+    "description" : "en-Ma commande - Click & Collect",
     "titleH1" : "en-Ma commande",
     "clickandcollect" : "Click & Collect",
+    "labelPhone" : "en-Téléphone (requis)",
     "next" : "en-SUIVANT",
     "submitError": "en-Veuillez valider un retrait ou une livraison !",
     "submitError2": "en-La date de retrait/livraison est dépassée !"
   },
+  "address": {
+    "title" : "en-Ma commande - Adresse",
+    "description" : "en-Ma commande - Adresse",
+    "titleH1" : "en-Ma commande",
+    "address" : "en-Adresse",
+    "mandatory" : "en-Obligatoire",
+    "titleBilling":"en-Adresse de facturation",
+    "firstname":"en-Prénom",
+    "lastname":"en-Nom",
+    "line1":"en-Adresse",
+    "line2":"en-Adresse 2",
+    "city":"en-Ville",
+    "postal":"en-Code postal",
+    "country":"en-Pays",
+    "next": "en-SUIVANT",
+    "nextLoading": "en-ENREGISTREMENT..."
+  },
   "payment" : {
     "title" : "en-Ma commande - Moyen de paiement",
-    "description" : "en-TODO",
+    "description" : "en-Ma commande - Moyen de paiement",
     "titleH1" : "en-Ma commande",
     "paymentMethod" : "en-Moyen de paiement",
     "previous" : "en-RETOUR",
@@ -25,7 +43,7 @@
   },
   "confirmation" : {
     "title" : "en-Ma commande - Confirmation",
-    "description" : "en-TODO",
+    "description" : "en-Ma commande - Confirmation",
     "titleH1" : "en-Merci pour votre commande !",
     "summary" : "en-Récapitulatif de ma commande",
     "viewOrders" : "en-Voir mes commandes"

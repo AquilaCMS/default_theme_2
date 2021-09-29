@@ -105,12 +105,20 @@
     animation:         animation-hero-image ease 1.5s 1;
 }
 
-
-/*.notDisplay {
-    display: none;
+@keyframes animation-cart {
+    0%   {
+        opacity: 0;
+        transform: translate3d(50px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    }
 }
 
-.displayPanier {
-    display: flex;
-}*/
-
+.w-commerce-commercecartcontainer {
+    -webkit-animation: animation-cart ease 0.75s 1;
+    -moz-animation:    animation-cart ease 0.75s 1;
+    -o-animation:      animation-cart ease 0.75s 1;
+    animation:         animation-cart ease 0.75s 1;
+}

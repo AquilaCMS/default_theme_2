@@ -4,9 +4,9 @@ import useTranslation                               from 'next-translate/useTran
 import DatePicker, { registerLocale }               from 'react-datepicker';
 import fr                                           from 'date-fns/locale/fr';
 import Button                                       from '@components/ui/Button';
-import { setCartAddresses }                         from '@lib/aquila-connector/cart';
-import { getUser }                                  from '@lib/aquila-connector/user';
-import axios                                        from '@lib/axios/AxiosInstance';
+import { setCartAddresses }                         from 'aquila-connector/api/cart';
+import { getUser, setAddressesUser }                from 'aquila-connector/api/user';
+import axios                                        from 'aquila-connector/lib/AxiosInstance';
 import { useCart }                                  from '@lib/hooks';
 import { formatDate, formatTime, getUserIdFromJwt } from '@lib/utils';
 
@@ -362,6 +362,13 @@ export default function ClickAndCollect() {
             const response = await setPointOfSale(body);
             setCart(response.data);
             document.cookie = 'cart_id=' + response.data._id + '; path=/;';
+
+            let user     = false;
+            const idUser = getUserIdFromJwt(document.cookie);
+            if (idUser) {
+                user = await getUser(idUser);
+            }
+
             if (localDeliveryHome) {
                 // Delivery mode :
                 // Address entered by user for cart billing & delivery address
@@ -369,42 +376,39 @@ export default function ClickAndCollect() {
                     setIsLoading(false);
                     return setMessage({ type: 'info', message: t('modules/pointofsale-aquila:submitSuccess') });
                 }
+                const aquilaAddress = toAquilaAddress(address);
+                if (user) {
+                    aquilaAddress.firstname = user.firstname;
+                    aquilaAddress.lastname  = user.lastname;
+                }
+                
                 const addresses = {
-                    billing : toAquilaAddress(address),
-                    delivery: toAquilaAddress(address)
+                    billing : aquilaAddress,
+                    delivery: aquilaAddress
                 };
                 const newCart   = await setCartAddresses(response.data._id, addresses);
                 setCart(newCart);
+
+                if (user && !user.addresses.length) {
+                    await setAddressesUser(user._id, 0, 1, [aquilaAddress, aquilaAddress]);
+                }
             } else {
                 // Withdrawal mode :
                 // User billing address for cart billing address
                 // Point of sale address for cart delivery address
-                const idUser = getUserIdFromJwt(document.cookie);
-                if (idUser) {
-                    const user = await getUser(idUser);
-                    if (user) {
-                        let billing = user.addresses[user.billing_address];
-                        if (!billing) {
-                            billing = {
-                                city          : '',
-                                line1         : '',
-                                line2         : '',
-                                zipcode       : '',
-                                isoCountryCode: ''
-                            };
-                        }
-                        const delivery  = {
-                            city          : localCurrentPOS.address.city,
-                            line1         : localCurrentPOS.address.line1,
-                            line2         : localCurrentPOS.address.line2,
-                            zipcode       : localCurrentPOS.address.zipcode,
-                            isoCountryCode: 'fr'
-                        };
-                        const addresses = { billing, delivery };
-                        const newCart   = await setCartAddresses(response.data._id, addresses);
-                        setCart(newCart);
-                    }
+                let addresses = {};
+                if (user) {
+                    addresses.billing = user.addresses[user.billing_address];
                 }
+                addresses.delivery = {
+                    city          : localCurrentPOS.address.city,
+                    line1         : localCurrentPOS.address.line1,
+                    line2         : localCurrentPOS.address.line2,
+                    zipcode       : localCurrentPOS.address.zipcode,
+                    isoCountryCode: 'fr'
+                };
+                const newCart      = await setCartAddresses(response.data._id, addresses);
+                setCart(newCart);
             }
             setMessage({ type: 'info', message: t('modules/pointofsale-aquila:submitSuccess') });
         } catch (err) {

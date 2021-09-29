@@ -43,7 +43,7 @@ export default function Slider({ 'ns-code': nsCode, sliderContent }) {
         >
             {slider.items.map((item, index) => {
                 const img = <img
-                    src={`${process.env.NEXT_PUBLIC_IMG_URL}/images/slider/max/${item._id}/${item.text || index}${item.extension}`}
+                    src={`/images/slider/max/${item._id}/${item.text || index}${item.extension}`}
                     alt={item.text}
                     title={item.text}
                     loading="lazy"

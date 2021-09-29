@@ -1,9 +1,10 @@
-import { Fragment, useState } from 'react';
-import { useRouter }          from 'next/router';
-import useTranslation         from 'next-translate/useTranslation';
-import Link                   from 'next/link';
-import { useNavMenu }         from '@lib/hooks';
-import { isMobile }           from '@lib/utils';
+import { Fragment, useEffect, useState } from 'react';
+import { useRouter }                     from 'next/router';
+import useTranslation                    from 'next-translate/useTranslation';
+import Link                              from 'next/link';
+import { useNavMenu }                    from '@lib/hooks';
+import { isMobile }                      from '@lib/utils';
+import React                             from 'react';
 
 export default function NavMenu() {
     const [burger, setBurger]                   = useState(false);
@@ -12,6 +13,10 @@ export default function NavMenu() {
     const navMenu                               = useNavMenu();
     const { asPath }                            = useRouter();
     const { lang, t }                           = useTranslation();
+
+    useEffect(() => {
+        setBurger(false);
+    }, [asPath]);
 
     const toggleBurger = () => {
         setBurger(!burger);
@@ -62,9 +67,19 @@ export default function NavMenu() {
                     return (
                         item.children && item.children.length > 0 ? (
                             <div className="nav-link-2 pd w-dropdown" onMouseEnter={() => openSubMenu(item._id, 1)} onMouseLeave={closeSubMenu} key={item._id}>
-                                <div className={`dropdown-pd-toggle w-dropdown-toggle${view.find((v) => v === item._id) ? ' w--open' : ''}`} onClick={() => openSubMenuOnClick(item._id, 1)} >
-                                    <div style={current ? { color: '#ff8946' } : {} }>{item.name}</div>
-                                    <div className="w-icon-dropdown-toggle" />
+                                <div className={`dropdown-pd-toggle w-dropdown-toggle${view.find((v) => v === item._id) ? ' w--open' : ''}`} style={current ? { backgroundColor: '#ff8946' } : {}}>
+                                    <div>
+                                        {
+                                            item.slug ? (
+                                                <Link href={item.action === 'catalog' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : item.url)} key={item._id}>
+                                                    <a className="w-nav-link" style={{ padding: '0px' }} target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item.name}</a>
+                                                </Link>
+                                            ) : (
+                                                <span>{item.name}</span>
+                                            )
+                                        }
+                                    </div>
+                                    <div className="w-icon-dropdown-toggle" onClick={() => openSubMenuOnClick(item._id, 1)} />
                                 </div>
                                 <nav className={`dropdown-pd-list w-clearfix w-dropdown-list${view.find((v) => v === item._id) ? ' w--open' : ''}`}>
                                     <div className="page1">
@@ -73,9 +88,19 @@ export default function NavMenu() {
                                                 return (
                                                     item2.children && item2.children.length > 0 ? (
                                                         <Fragment key={item2._id}>
-                                                            <div className="link-to-page" onClick={() => openSubMenuOnClick(item2._id, 2)}>
-                                                                <div className="text-block-nav">{item2.name}</div>
-                                                                <div className="arrow2 w-icon-dropdown-toggle" />
+                                                            <div className="link-to-page">
+                                                                <div className="text-block-nav">
+                                                                    {
+                                                                        item.slug && item2.slug ? (
+                                                                            <Link href={item2.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : item2.url)}>
+                                                                                <a className="w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item2.name}</a>
+                                                                            </Link>
+                                                                        ) : (
+                                                                            <span key={item2._id}>{item2.name}</span>
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                                <div className="arrow2 w-icon-dropdown-toggle" onClick={() => openSubMenuOnClick(item2._id, 2)} />
                                                             </div>
                                                             <div className={`page-2${view.find((v) => v === item2._id) ? 'page-2-open' : ''}`}>
                                                                 {
@@ -83,9 +108,15 @@ export default function NavMenu() {
                                                                         return (
                                                                             <div className="dropdown-nav-link-2" key={item3._id}>
                                                                                 <div className="icon-3 w-icon-dropdown-toggle" />
-                                                                                <Link href={item3.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}/${item3.slug[lang]}` : `/${item3.pageSlug}`}>
-                                                                                    <a className="dropdown-link-3 w-dropdown-link">{item3.name}</a>
-                                                                                </Link>
+                                                                                {
+                                                                                    item.slug && item2.slug && item3.slug ? (
+                                                                                        <Link href={item3.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}/${item3.slug[lang]}` : (item3.action === 'page' ? `/${item3.pageSlug}` : item3.url)}>
+                                                                                            <a className="dropdown-link-3 w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item3.name}</a>
+                                                                                        </Link>
+                                                                                    ) : (
+                                                                                        <span>{item3.name}</span>
+                                                                                    )
+                                                                                }
                                                                             </div>
                                                                         );
                                                                     })
@@ -93,9 +124,17 @@ export default function NavMenu() {
                                                             </div>
                                                         </Fragment>
                                                     ) : (
-                                                        <Link href={item2.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : `/${item2.pageSlug}`} key={item2._id}>
-                                                            <a className="dropdown-nav-link w-dropdown-link">{item2.name}</a>
-                                                        </Link>
+                                                        <Fragment key={item2._id}>
+                                                            {
+                                                                item2.slug ? (
+                                                                    <Link href={item2.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : item2.url)}>
+                                                                        <a className="dropdown-nav-link w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item2.name}</a>
+                                                                    </Link>
+                                                                ) : (
+                                                                    <span key={item2._id}>{item2.name}</span>
+                                                                )
+                                                            }
+                                                        </Fragment>
                                                     )
                                                 );
                                             })
@@ -104,9 +143,17 @@ export default function NavMenu() {
                                 </nav>
                             </div>
                         ) : (
-                            <Link href={item.action === 'catalog' ? `/c/${item.slug[lang]}` : `/${item.pageSlug}`} key={item._id}>
-                                <a className={`nav-link-2 w-nav-link${current ? ' w--current' : ''}`} >{item.name}</a>
-                            </Link>
+                            <Fragment key={item._id}>
+                                {
+                                    item.slug ? (
+                                        <Link href={item.action === 'catalog' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : item.url)}>
+                                            <a className="nav-link-2 w-nav-link" style={current ? { backgroundColor: '#ff8946' } : {}} target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item.name}</a>
+                                        </Link>
+                                    ) : (
+                                        <span>{item.name}</span>
+                                    )
+                                }
+                            </Fragment>
                         )
                     );
                 }) : null}

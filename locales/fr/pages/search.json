@@ -1,0 +1,5 @@
+{
+    "results" : "{{count}} résultat(s) pour la recherche \"{{search}}\"",
+    "loadMoreData" : "Charger plus de produits...",
+    "loading" : "Chargement..."
+}

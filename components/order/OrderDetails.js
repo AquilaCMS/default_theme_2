@@ -1,12 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
-import useTranslation                  from 'next-translate/useTranslation';
-import { downloadbillOrder }           from '@lib/aquila-connector/order';
-import { formatDate, formatPrice }     from '@lib/utils';
+import { useEffect, useRef, useState }                  from 'react';
+import { Modal }                                        from 'react-responsive-modal';
+import useTranslation                                   from 'next-translate/useTranslation';
+import { useRouter }                                    from 'next/router';
+import Button                                           from '@components/ui/Button';
+import { askCancelOrder, downloadbillOrder, getOrders } from 'aquila-connector/api/order';
+import { formatDate, formatPrice }                      from '@lib/utils';
 
-export default function OrderDetails({ order }) {
-    const [message, setMessage] = useState();
-    const timer                 = useRef();
-    const { lang, t }           = useTranslation();
+export default function OrderDetails({ order, setOrders = undefined }) {
+    const [message, setMessage]     = useState();
+    const [openModal, setOpenModal] = useState();
+    const [isLoading, setIsLoading] = useState(false);
+    const timer                     = useRef();
+    const router                    = useRouter();
+    const { lang, t }               = useTranslation();
 
     useEffect(() => {
         return () => clearTimeout(timer.current);
@@ -28,6 +34,34 @@ export default function OrderDetails({ order }) {
         }
     };
 
+    const cancelOrder = async () => {
+        setIsLoading(true);
+        try {
+            const res = await askCancelOrder(order._id);
+            if (res.code === 'ORDER_ASK_CANCEL_SUCCESS') {
+                if (setOrders) {
+                    const orders = await getOrders(lang);
+                    setOrders(orders);
+                } else {
+                    router.push('/account'); // If we are in the checkout/success page
+                }
+                onCloseModal();
+            }
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const onOpenModal = () => {
+        setOpenModal(true);
+    };
+
+    const onCloseModal = () => {
+        setOpenModal(false);
+    };
+
     return (
         <div className="container-order">
             <div className="columns-tunnel w-row">
@@ -46,7 +80,7 @@ export default function OrderDetails({ order }) {
                                                     <div className="item-tunnel w-row" key={item._id}>
                                                         <div className="w-col w-col-3">
                                                             <div className="food-image-square-tunnel w-inline-block">
-                                                                <img src={item.image ? `${process.env.NEXT_PUBLIC_IMG_URL}/${item.image}` : '/images/no-image.svg'} alt="" className="food-image" style={{ 'width': '60px' }} />
+                                                                <img src={`/images/products/60x60/${item.image}/${item.code}.png`} alt="" className="food-image" />
                                                             </div>
                                                         </div>
                                                         <div className="w-col w-col-9">
@@ -63,7 +97,7 @@ export default function OrderDetails({ order }) {
                                                                         {
                                                                             item.selections.map((section) => (
                                                                                 section.products.map((itemSection) => {
-                                                                                    const diffPrice = item.id.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection._id)?.modifier_price?.ati;
+                                                                                    const diffPrice = item.bundle_sections?.find((bundle_section) => bundle_section.ref === section.bundle_section_ref)?.products?.find((product) => product.id === itemSection.id)?.modifier_price?.ati;
                                                                                     return (
                                                                                         <li key={itemSection._id}>{itemSection.name}{diffPrice && diffPrice !== 0 ? <> ({diffPrice > 0 ? '+' : ''}{formatPrice(diffPrice)})</> : null}</li>
                                                                                     );
@@ -85,64 +119,62 @@ export default function OrderDetails({ order }) {
                         </div>
                     </div>
                     <div className="div-block-tunnel w-form">
-                        <form id="email-form-3" name="email-form-3" data-name="Email Form 3">
-                            <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                <h5>{t('components/orderDetails:deliveryMethod')}</h5>
+                        <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
+                            <h5>{t('components/orderDetails:deliveryMethod')}</h5>
+                        </div>
+                        <div className="block-content-tunnel-space-flex">
+                            <div className="w-col w-col-6">
+                                <label htmlFor="email-2">
+                                    {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
+                                </label>
+                                <p className="label-tunnel">{formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p>
                             </div>
-                            <div className="block-content-tunnel-space-flex">
+                        </div>
+                        <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
+                            <h5>{t('components/orderDetails:yourInformations')}</h5>
+                        </div>
+                        <div className="block-content-tunnel">
+                            <div className="w-row">
                                 <div className="w-col w-col-6">
-                                    <label htmlFor="email-2">
-                                        {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
-                                    </label>
-                                    <p className="label-tunnel">{formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p>
+                                    <label htmlFor="email-3">{t('components/orderDetails:name')}</label>
+                                    <p className="label-tunnel">{order.customer.fullname}</p>
+                                    <label htmlFor="email-3">{t('components/orderDetails:email')}</label>
+                                    <p className="label-tunnel">{order.customer.email}</p>
+                                </div>
+                                <div className="w-col w-col-6">
+                                    <label htmlFor="email-2">{order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawalAddress') : t('components/orderDetails:deliveryAddress')}</label>
+                                    <p className="label-tunnel">
+                                        {order.addresses.delivery.line1}<br />
+                                        {order.addresses.delivery.line2 ? <>{order.addresses.delivery.line2}<br /></> : null}
+                                        {order.addresses.delivery.zipcode}<br />
+                                        {order.addresses.delivery.city}
+                                    </p>
                                 </div>
                             </div>
-                            <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                <h5>{t('components/orderDetails:yourInformations')}</h5>
-                            </div>
-                            <div className="block-content-tunnel">
-                                <div className="w-row">
-                                    <div className="w-col w-col-6">
-                                        <label htmlFor="email-3">{t('components/orderDetails:name')}</label>
-                                        <p className="label-tunnel">{order.customer.fullname}</p>
-                                        <label htmlFor="email-3">{t('components/orderDetails:email')}</label>
-                                        <p className="label-tunnel">{order.customer.email}</p>
-                                    </div>
-                                    <div className="w-col w-col-6">
-                                        <label htmlFor="email-2">{order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawalAddress') : t('components/orderDetails:deliveryAddress')}</label>
-                                        <p className="label-tunnel">
-                                            {order.addresses.delivery.line1}<br />
-                                            {order.addresses.delivery.line2 ? <>{order.addresses.delivery.line2}<br /></> : null}
-                                            {order.addresses.delivery.zipcode}<br />
-                                            {order.addresses.delivery.city}
-                                        </p>
-                                    </div>
+                        </div>
+                        <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
+                            <h5>{t('components/orderDetails:paymentInformations')}</h5>
+                        </div>
+                        <div className="block-content-tunnel">
+                            <div className="w-row">
+                                <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:paymentMethod')}</label>
+                                    <p className="label-tunnel">{order.payment[0].name}</p>
                                 </div>
-                            </div>
-                            <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                                <h5>{t('components/orderDetails:paymentInformations')}</h5>
-                            </div>
-                            <div className="block-content-tunnel">
-                                <div className="w-row">
-                                    <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:paymentMethod')}</label>
-                                        <p className="label-tunnel">{order.payment[0].mode}</p>
-                                    </div>
-                                    {
-                                        order.addresses.billing.line1 && (
-                                            <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:billingAddress')}</label>
-                                                <p className="label-tunnel">
-                                                    {order.addresses.billing.line1}<br />
-                                                    {order.addresses.billing.line2 ? <>{order.addresses.billing.line2}<br /></> : null}
-                                                    {order.addresses.billing.zipcode}<br />
-                                                    {order.addresses.billing.city}
-                                                </p>
-                                            </div>
-                                        )
-                                    }
+                                {
+                                    order.addresses.billing.line1 && (
+                                        <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:billingAddress')}</label>
+                                            <p className="label-tunnel">
+                                                {order.addresses.billing.line1}<br />
+                                                {order.addresses.billing.line2 ? <>{order.addresses.billing.line2}<br /></> : null}
+                                                {order.addresses.billing.zipcode}<br />
+                                                {order.addresses.billing.city}
+                                            </p>
+                                        </div>
+                                    )
+                                }
                                     
-                                </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
                 <div className="column-tunnel-prix w-col w-col-4">
@@ -180,12 +212,39 @@ export default function OrderDetails({ order }) {
                     {
                         order.bills.length > 0 && order.bills.map((bill, index) => (
                             <div key={bill._id} style={{ marginBottom: '20px' }}>
-                                <button type="button" className="w-button" onClick={() => downloadBill(bill, index)}>
+                                <button type="button" className="log-button w-button" onClick={() => downloadBill(bill, index)}>
                                     {t(`components/orderDetails:download${bill.avoir === false ? 'Bill' : 'Asset'}`)}
                                 </button>
                             </div>
                         ))
                     }
+                    {
+                        !['BILLED', 'DELIVERY_PROGRESS', 'DELIVERY_PARTIAL_PROGRESS', 'ASK_CANCEL', 'CANCELED', 'RETURNED'].includes(order.status) && (
+                            <div style={{ marginBottom: '20px' }}>
+                                <button type="button" className="log-button w-button" onClick={onOpenModal}>
+                                    {t('components/orderDetails:cancelOrder')}
+                                </button>
+                            </div>
+                        )
+                    }
+                    <Modal open={openModal} onClose={onCloseModal} center>
+                        <h3>{t('components/orderDetails:modalTitle')}</h3>
+                        <p>{t('components/orderDetails:modalWarning')}</p>
+                        <div>
+                            <Button
+                                type="button"
+                                text={t('components/orderDetails:yes')}
+                                loadingText={t('components/orderDetails:cancelLoading')}
+                                isLoading={isLoading}
+                                className="button w-button"
+                                hookOnClick={cancelOrder}
+                            />
+                            &nbsp;
+                            <button type="button" className="button w-button" onClick={onCloseModal}>
+                                {t('components/orderDetails:no')}
+                            </button>
+                        </div>
+                    </Modal>
                     {
                         message && (
                             <div className={`w-commerce-commerce${message.type}`}>

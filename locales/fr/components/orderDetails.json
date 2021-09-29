@@ -16,5 +16,11 @@
     "subTotal": "Sous Total TTC",
     "total": "Total TTC",
     "downloadBill": "Télécharger la facture",
-    "downloadAsset": "Télécharger l'avoir"
+    "downloadAsset": "Télécharger l'avoir",
+    "cancelOrder": "Annuler la commande",
+    "modalTitle": "Confirmation",
+    "modalWarning": "Êtes-vous certain de vouloir annuler cette commande ?",
+    "yes": "Oui",
+    "no": "Non",
+    "cancelLoading": "Annulation..."
 }

@@ -8,12 +8,15 @@
       "components/blogList",
       "components/bundleProduct",
       "components/cart",
+      "components/category",
       "components/cookiesBanner",
       "components/contact",
+      "components/filters",
       "components/gallery",
       "components/newsletter",
       "components/navigation",
       "components/product",
+      "components/searchBar",
       "components/slider",
       "modules/allergen-aquila",
       "modules/food-options-aquila",
@@ -38,7 +41,13 @@
       "components/login/registerBlock",
       "pages/account/login"
     ],
+    "/c/[...categorySlugs]": [
+      "pages/category"
+    ],
     "/checkout/clickandcollect": [
+      "pages/checkout"
+    ],
+    "/checkout/address": [
       "pages/checkout"
     ],
     "/checkout/confirmation": [
@@ -52,6 +61,12 @@
     ],
     "/checkout/payment": [
       "pages/checkout"
+    ],
+    "/search/[search]": [
+      "pages/search"
+    ],
+    "/checkemailvalid": [
+      "pages/checkemailvalid"
     ],
     "/resetpass": [
       "pages/resetpass"

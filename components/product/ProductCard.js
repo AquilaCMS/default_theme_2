@@ -2,13 +2,14 @@ import { useEffect, useRef, useState }                   from 'react';
 import Link                                              from 'next/link';
 import { useRouter }                                     from 'next/router';
 import useTranslation                                    from 'next-translate/useTranslation';
+import cookie                                            from 'cookie';
 import { Modal }                                         from 'react-responsive-modal';
 import BundleProduct                                     from '@components/product/BundleProduct';
 import Button                                            from '@components/ui/Button';
-import { generateSlug, getImage }                        from '@lib/aquila-connector/product/helpersProduct';
-import { addToCart }                                     from '@lib/aquila-connector/cart';
+import { generateSlug, getImage }                        from 'aquila-connector/api/product/helpersProduct';
+import { addToCart }                                     from 'aquila-connector/api/cart';
 import { useCart, useComponentData, useShowCartSidebar } from '@lib/hooks';
-import { formatPrice }                                   from '@lib/utils';
+import { formatPrice, unsetCookie }                      from '@lib/utils';
 
 import 'react-responsive-modal/styles.css';
 
@@ -17,6 +18,7 @@ export default function ProductCard({ type, value, col = 6 }) {
     const [message, setMessage]     = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const productRef                = useRef();
     const timer                     = useRef();
     const { query }                 = useRouter();
     const { cart, setCart }         = useCart();
@@ -30,6 +32,14 @@ export default function ProductCard({ type, value, col = 6 }) {
     const product = type === 'data' ? value : componentData[`nsProductCard_${type}_${value}`];
 
     useEffect(() => {
+        // Get product ID from cookie
+        const cookieProduct = cookie.parse(document.cookie).product;
+
+        // If product ID matching, scrolling to this product
+        if (cookieProduct === product._id) {
+            productRef.current.scrollIntoView({ behavior: 'smooth' });
+            unsetCookie('product');
+        }
         return () => clearTimeout(timer.current);
     }, []);
 
@@ -79,8 +89,49 @@ export default function ProductCard({ type, value, col = 6 }) {
 
     const onCloseModal = () => setOpenModal(false);
 
+    // Pictos
+    const pictos = [];
+    if (product.pictos) {
+        product.pictos.forEach((picto) => {
+            if (pictos.find((p) => p.location === picto.location) !== undefined) {
+                pictos.find((p) => p.location === picto.location).pictos.push(picto);
+            } else {
+                const cardinals = picto.location.split('_');
+                const style     = { position: 'absolute', top: 0, left: 0, margin: '5px 0 0 15px' };
+                if (cardinals.includes('RIGHT')) {
+                    style.left        = 'inherit';
+                    style.right       = 0;
+                    style.marginRight = '15px';
+                }
+                if (cardinals.includes('BOTTOM')) {
+                    style.top          = 'inherit';
+                    style.bottom       = 0;
+                    style.marginBottom = '5px';
+                }
+                if (cardinals.includes('CENTER')) {
+                    style.left      = '50%';
+                    style.transform = 'translate(-50%, 0)';
+                }
+                if (cardinals.includes('MIDDLE')) {
+                    style.top       = '50%';
+                    style.transform = 'translate(0, -50%)';
+                }
+                pictos.push({ location: picto.location, style, pictos: [picto] });
+            }
+        });
+    }
+
     return (
-        <div role="listitem" className={`menu-item w-dyn-item w-col w-col-${col}`}>
+        <div role="listitem" ref={productRef} className={`menu-item w-dyn-item w-col w-col-${col}`}>
+            {
+                pictos ? pictos.map((picto) => (
+                    <div style={picto.style} key={picto.location + Math.random()}>
+                        {
+                            picto.pictos && picto.pictos.map((p) => <img src={`/images/picto/32x32-70-0,0,0,0/${p.pictoId}/${p.image}`} alt={p.title} title={p.title} key={p._id} />)
+                        }
+                    </div>
+                )) : ''
+            }
             <div className="food-card">
                 <Link href={currentSlug}>
                     <a className="food-image-square w-inline-block">

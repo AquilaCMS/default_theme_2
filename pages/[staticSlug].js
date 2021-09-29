@@ -1,4 +1,3 @@
-
 import absoluteUrl       from 'next-absolute-url';
 import useTranslation    from 'next-translate/useTranslation';
 import ErrorPage         from '@pages/_error';
@@ -6,36 +5,55 @@ import Layout            from '@components/layouts/Layout';
 import NextSeoCustom     from '@components/tools/NextSeoCustom';
 import BlockCMS          from '@components/common/BlockCMS';
 import { dispatcher }    from '@lib/redux/dispatcher';
-import { getPageStatic } from '@lib/aquila-connector/static';
-import { getBlocksCMS }  from '@lib/aquila-connector/blockcms';
-import { useStaticPage } from '@lib/hooks';
+import { getPageStatic } from 'aquila-connector/api/static';
+import { getBlocksCMS }  from 'aquila-connector/api/blockcms';
+import { setLangAxios }  from '@lib/utils';
 // import Breadcrumb   from '@components/navigation/Breadcrumb';
 
 // voir pour le SSG
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ locale, params, query, req, res }) {
+    setLangAxios(locale, req, res);
+
+    let staticPage = {};
+    try {
+        staticPage = await getPageStatic(params.staticSlug, query.preview, locale);
+    } catch (err) {
+        return { notFound: true };
+    }
+
+    // Get URLs for language change
+    const urlsLanguages = [];
+    if (staticPage) {
+        for (const [lang, sl] of Object.entries(staticPage.slug)) {
+            urlsLanguages.push({ lang, url: `/${sl}` });
+        }
+    }
+
     const actions = [
         {
             type: 'PUSH_CMSBLOCKS',
-            func: getBlocksCMS.bind(this, ['bottom-parallax'])
-        },
-        {
-            type: 'SET_STATICPAGE',
-            func: getPageStatic.bind(this, params.staticSlug)
+            func: getBlocksCMS.bind(this, ['bottom-parallax'], locale)
+        }, {
+            type : 'SET_STATICPAGE',
+            value: staticPage
+        }, {
+            type : 'SET_URLS_LANGUAGES',
+            value: urlsLanguages
         }
     ];
 
-    const pageProps = await dispatcher(req, res, actions);
+    const pageProps = await dispatcher(locale, req, res, actions);
 
     // URL origin
-    const { origin }       = absoluteUrl(req);
-    pageProps.props.origin = origin;
+    const { origin }           = absoluteUrl(req);
+    pageProps.props.origin     = origin;
+    pageProps.props.staticPage = staticPage;
 
     return pageProps;
 }
 
-export default function StaticPage({ error, origin }) {
-    const { lang }   = useTranslation();
-    const staticPage = useStaticPage();
+export default function StaticPage({ error, origin, staticPage }) {
+    const { lang } = useTranslation();
 
     if (error || !staticPage._id) {
         return (<ErrorPage statusCode={404} />);
@@ -49,7 +67,7 @@ export default function StaticPage({ error, origin }) {
                 description={staticPage.metaDesc}
                 canonical={`${origin}/${staticPage.slug[lang]}`}
                 lang={lang}
-                image={`${process.env.NEXT_PUBLIC_IMG_URL}/medias/Logo.jpg`}
+                image={`${origin}/images/medias/max-100/605363104b9ac91f54fcabac/Logo.jpg`}
             />
 
             {/* <Breadcrumb /> */}{/*  The Breadcrumb sould be between the title and the text, but its not possible now */}

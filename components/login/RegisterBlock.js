@@ -2,8 +2,8 @@ import { useState }   from 'react';
 import { useRouter }  from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import Button         from '@components/ui/Button';
-import { auth }       from '@lib/aquila-connector/login';
-import { setUser }    from '@lib/aquila-connector/user';
+import { auth }       from 'aquila-connector/api/login';
+import { setUser }    from 'aquila-connector/api/user';
 
 export default function RegisterBlock() {
     const [messageRegister, setMessageRegister] = useState();
@@ -16,6 +16,7 @@ export default function RegisterBlock() {
         e.preventDefault();
         setIsLoading(true);
 
+        // Get form data
         const user = {
             firstname   : e.currentTarget.firstname.value,
             lastname    : e.currentTarget.lastname.value,
@@ -25,8 +26,7 @@ export default function RegisterBlock() {
         };
         try {
             await setUser(user);
-            const res       = await auth(user.email, user.password);
-            document.cookie = 'jwt=' + res.data + '; path=/;';
+            await auth(user.email, user.password);
             router.push(redirect);
         } catch (err) {
             setMessageRegister({ type: 'error', message: err.message || t('common:message.unknownError') });

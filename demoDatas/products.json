@@ -51,7 +51,6 @@
         "605366a34b9ac91f54fcabc7"
       ],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -230,7 +229,6 @@
         "605366a34b9ac91f54fcabc7"
       ],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -394,7 +392,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -499,7 +496,16 @@
         }
       },
       "universe": "burger-burger",
-      "pictos": [],
+      "pictos": [
+        {
+          "_id": "612f4e2b27756b19a49a7d44",
+          "code": "veggie",
+          "image": "veggie.png",
+          "pictoId": "612f47f56253e44490f71bde",
+          "title": "Veggie",
+          "location": "TOP_LEFT"
+        }
+      ],
       "createdAt": "2021-06-22T00:00:00.000Z",
       "updatedAt": "2021-06-22T00:00:00.000Z",
       "allergens": [
@@ -559,7 +565,6 @@
         "605368a04b9ac91f54fcabe5"
       ],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -707,7 +712,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -855,7 +859,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -1008,7 +1011,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "BundleProduct",
       "images": [
         {
           "default": true,
@@ -1245,7 +1247,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [
         {
           "default": true,
@@ -1382,7 +1383,6 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
-      "kind": "SimpleProduct",
       "images": [],
       "type": "simple",
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
@@ -1501,7 +1501,6 @@
       "is_new": false,
       "allergens": [],
       "foodOption": true,
-      "kind": "VirtualProduct",
       "images": [
         {
           "default": true,
@@ -1620,7 +1619,6 @@
       "is_new": false,
       "allergens": [],
       "foodOption": true,
-      "kind": "VirtualProduct",
       "images": [
         {
           "default": true,
@@ -1738,7 +1736,6 @@
       "is_new": false,
       "allergens": [],
       "foodOption": true,
-      "kind": "VirtualProduct",
       "images": [
         {
           "default": true,

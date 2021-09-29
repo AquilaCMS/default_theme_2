@@ -1,9 +1,8 @@
 import { useState }                    from 'react';
 import { useRouter }                   from 'next/router';
-import axios                           from '@lib/axios/AxiosInstance';
 import useTranslation                  from 'next-translate/useTranslation';
 import Button                          from '@components/ui/Button';
-import { auth, sendMailResetPassword } from '@lib/aquila-connector/login';
+import { auth, sendMailResetPassword } from 'aquila-connector/api/login';
 
 export default function LoginBlock() {
     const [step, setStep]                 = useState(0);
@@ -11,7 +10,7 @@ export default function LoginBlock() {
     const [messageReset, setMessageReset] = useState();
     const [isLoading, setIsLoading]       = useState(false);
     const router                          = useRouter();
-    const { t }                           = useTranslation();
+    const { lang, t }                     = useTranslation();
     const redirect                        = router?.query?.redirect || '/account/informations';
 
 
@@ -19,12 +18,11 @@ export default function LoginBlock() {
         e.preventDefault();
         setIsLoading(true);
 
+        // Get form data
         const email    = e.currentTarget.email.value;
         const password = e.currentTarget.password.value;
         try {
-            const res                                      = await auth(email, password);
-            document.cookie                                = 'jwt=' + res.data + '; path=/;';
-            axios.defaults.headers.common['Authorization'] = res.data;
+            await auth(email, password);
             router.push(redirect);
         } catch (err) {
             setMessageLogin({ type: 'error', message: err.message || t('common:message.unknownError') });
@@ -39,7 +37,7 @@ export default function LoginBlock() {
         
         const email = e.currentTarget.email.value;
         try {
-            await sendMailResetPassword(email);
+            await sendMailResetPassword(email, lang);
             setMessageReset({ type: 'info', message: t('components/login/loginBlock:forgot.infoGetMail') });
         } catch (err) {
             setMessageReset({ type: 'error', message: err.message || t('common:message.unknownError') });

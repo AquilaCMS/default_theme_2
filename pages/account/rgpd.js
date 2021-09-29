@@ -1,18 +1,20 @@
-import { useState }                                       from 'react';
-import { useRouter }                                      from 'next/router';
-import useTranslation                                     from 'next-translate/useTranslation';
-import { Modal }                                          from 'react-responsive-modal';
-import AccountLayout                                      from '@components/account/AccountLayout';
-import BlockCMS                                           from '@components/common/BlockCMS';
-import NextSeoCustom                                      from '@components/tools/NextSeoCustom';
-import { getBlocksCMS }                                   from '@lib/aquila-connector/blockcms';
-import { dataUserExport, deleteUser }                     from '@lib/aquila-connector/user';
-import { authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
-import { dispatcher }                                     from '@lib/redux/dispatcher';
+import { useState }                                                     from 'react';
+import { useRouter }                                                    from 'next/router';
+import useTranslation                                                   from 'next-translate/useTranslation';
+import { Modal }                                                        from 'react-responsive-modal';
+import AccountLayout                                                    from '@components/account/AccountLayout';
+import BlockCMS                                                         from '@components/common/BlockCMS';
+import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
+import { getBlocksCMS }                                                 from 'aquila-connector/api/blockcms';
+import { dataUserExport, deleteUser }                                   from 'aquila-connector/api/user';
+import { setLangAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
+import { dispatcher }                                                   from '@lib/redux/dispatcher';
 
 import 'react-responsive-modal/styles.css';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ locale, req, res }) {
+    setLangAxios(locale, req, res);
+    
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/account/login?redirect=' + encodeURI('/account/rgpd'));
@@ -21,11 +23,11 @@ export async function getServerSideProps({ req, res }) {
     const actions = [
         {
             type: 'PUSH_CMSBLOCKS',
-            func: getBlocksCMS.bind(this, ['top-text-rgpd'])
+            func: getBlocksCMS.bind(this, ['top-text-rgpd'], locale)
         }
     ];
 
-    const pageProps      = await dispatcher(req, res, actions);
+    const pageProps      = await dispatcher(locale, req, res, actions);
     pageProps.props.user = user;
     return pageProps;
 }

@@ -2,6 +2,7 @@ import Link           from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import CartItem       from '@components/cart/CartItem';
 import { useCart }    from '@lib/hooks';
+import { moduleHook } from '@lib/utils';
 
 export default function CartListItems() {
     const { cart } = useCart();
@@ -10,15 +11,20 @@ export default function CartListItems() {
     if (cart.items?.length > 0) {
         return (
             <form className="w-commerce-commercecartform">
-
-                {/* TMP : partie rajouté "à la main" à partir du html en ligne */}
                 <div className="w-commerce-commercecartlist" >
                     {cart.items.map((item) => (
                         <CartItem item={item} key={item._id} />
                     ))}
                 </div>
-
                 <div className="w-commerce-commercecartfooter">
+                    {
+                        cart.delivery?.value && (
+                            <div className="w-commerce-commercecartlineitem cart-line-item">
+                                <div>{t('components/cart:cartListItem.delivery')}</div>
+                                <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                            </div>
+                        )
+                    }
                     <div className="w-commerce-commercecartlineitem cart-line-item">
                         <div>{t('components/cart:cartListItem.total')}</div>
                         <div className="w-commerce-commercecartordervalue text-block">
@@ -26,11 +32,12 @@ export default function CartListItems() {
                         </div>
                     </div>
                     <div>
-                        {/* TODO : si form, alors il faut un bouton de validation */}
-                        <Link href="/checkout/clickandcollect">
-                            <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
-                        </Link>
-                        {/* <a href="checkout.html" value="Continue to Checkout" className="w-commerce-commercecartcheckoutbutton checkout-button">Continue to Checkout</a> */}
+                        {
+                            moduleHook('cart-validate-btn') || 
+                                <Link href="/checkout/address">
+                                    <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                                </Link>
+                        }
                     </div>
                 </div>
             </form>

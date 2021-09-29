@@ -1,3 +1,12 @@
+/* FUSION => body l.2608 mon-restaurant.webflow.css */
+body {
+    font-family: Arial, sans-serif;
+}
+/* FUSION => .footer-paragraphe l.5425 mon-restaurant.webflow.css */
+.footer-paragraphe {
+    font-family: Arial, sans-serif;
+}
+
 /* FUSION => .link-footer l.6365 mon-restaurant.webflow.css */
 .link-footer {
     display: block;
@@ -50,8 +59,6 @@
 /* ADD before .slide-2 l.4388 mon-restaurant.webflow.css */
 .slide-1 {
     min-width: 100vw;
-    background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0, 0, 0, 0.51)), to(rgba(0, 0, 0, 0.32))), url('/images/photo.jpeg');
-    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), rgba(0, 0, 0, 0.32)), url('/images/photo.jpeg');
     background-position: 0px 0px, 50% 50%;
     background-size: auto, cover;
     background-repeat: repeat, no-repeat;
@@ -186,11 +193,13 @@ input:disabled, button:disabled { opacity: 0.5; }
     margin-top: 5px;
 }
 /* ADD after .div-block-lang l.6497 mon-restaurant.webflow.css */
-.div-block-lang button {
+.div-block-lang .link-lang {
     background-color: unset;
+    margin: 5px;
+    padding: 5px;
 }
-.div-block-lang button:hover,
-.div-block-lang button.selected {
+.div-block-lang .link-lang:hover,
+.div-block-lang .link-lang.selected {
     background-color: #ff8946;
     color: white;
 }
@@ -207,7 +216,7 @@ input[type='checkbox']:checked + .w-checkbox-input--inputType-custom {
     border-bottom-color: #3898ec;
     border-left-color: #3898ec;
     border-right-color: #3898ec;
-    background-image: url('https://d3e54v103j8qbb.cloudfront.net/static/custom-checkbox-checkmark.589d534424.svg');
+    background-image: url('/images/check.svg');
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;
@@ -367,4 +376,38 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
 */
 .navbar:hover {
     color: unset;
+}
+
+/*
+    FUSION => .button.absolu l.2857 mon-restaurant.webflow.css
+*/
+.button.absolu {
+    right: -25px;
+}
+/*
+    FUSION => .button.absolu l.7534 mon-restaurant.webflow.css
+*/
+@media screen and (max-width: 479px) {
+    .button.absolu {
+        right: auto;
+    }
+}
+
+/* 
+    ADD mon-restaurant.webflow.css
+*/
+.filters-open {
+    max-height: 400px;
+}
+.filters-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+.filter {
+    padding: 5px 20px;
+}
+@media screen and (max-width: 479px) {
+    .filters-open {
+        max-height: 500px;
+    }
 }

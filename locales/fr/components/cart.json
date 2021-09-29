@@ -2,6 +2,7 @@
     "cartListItem": {
         "ordering": "COMMANDER !",
         "orderingLoading": "COMMANDE...",
+        "delivery": "Livraison",
         "total": "Total",
         "empty": "Votre Panier est vide",
         "goToHome": "Découvrir notre Carte"

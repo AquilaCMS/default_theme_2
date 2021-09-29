@@ -1,20 +1,22 @@
-import { useEffect, useState }               from 'react';
-import { useRouter }                         from 'next/router';
-import useTranslation                        from 'next-translate/useTranslation';
-import LightLayout                           from '@components/layouts/LightLayout';
-import NextSeoCustom                         from '@components/tools/NextSeoCustom';
-import ClickAndCollect                       from 'modules/ClickAndCollect';
-import { setUser }                           from '@lib/aquila-connector/user';
-import { useCart }                           from '@lib/hooks';
-import { authProtectedPage, serverRedirect } from '@lib/utils';
-import { dispatcher }                        from '@lib/redux/dispatcher';
+import { useEffect, useState }                             from 'react';
+import { useRouter }                                       from 'next/router';
+import useTranslation                                      from 'next-translate/useTranslation';
+import LightLayout                                         from '@components/layouts/LightLayout';
+import NextSeoCustom                                       from '@components/tools/NextSeoCustom';
+import ClickAndCollect                                     from 'modules/ClickAndCollect';
+import { setUser }                                         from 'aquila-connector/api/user';
+import { useCart }                                         from '@lib/hooks';
+import { setLangAxios, authProtectedPage, serverRedirect } from '@lib/utils';
+import { dispatcher }                                      from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ locale, req, res }) {
+    setLangAxios(locale, req, res);
+
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
         return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));
     }
-    const pageProps      = await dispatcher(req, res);
+    const pageProps      = await dispatcher(locale, req, res);
     pageProps.props.user = user;
     return pageProps;
 }
@@ -35,13 +37,13 @@ export default function CheckoutClickAndCollect({ user }) {
     const nextStep = async (e) => {
         e.preventDefault();
 
-        // Check if the billing address exists
-        if (!cart.addresses || !cart.addresses.billing) {
+        // Check if click & collect is validated
+        if (!cart.orderReceipt?.date) {
             return setMessage({ type: 'error', message: t('pages/checkout:clickandcollect.submitError') });
         }
 
         // Check if the date of receipt is consistent
-        if (cart.orderReceipt?.date) {
+        if (cart.orderReceipt.date) {
             const now         = Date.now() / 1000;
             const receiptDate = new Date(cart.orderReceipt.date).getTime() / 1000;
             if (receiptDate - now <= 0) {
@@ -60,7 +62,7 @@ export default function CheckoutClickAndCollect({ user }) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
 
-        router.push('/checkout/payment');
+        router.push('/checkout/address');
     };
 
     if (!cart?.items?.length) {
@@ -97,10 +99,30 @@ export default function CheckoutClickAndCollect({ user }) {
                         <div className="w-form">
                             <div><label>{t('pages/checkout:clickandcollect.labelPhone')}</label><input type="text" className="w-input" maxLength={256} name="phone_mobile" defaultValue={user.phone_mobile} required /></div>
                         </div>
-
-                        <div className="form-mode-paiement-tunnel">
-                            <button type="submit" className="log-button-03 w-button">{t('pages/checkout:clickandcollect.next')}</button>
+                        <div className="w-commerce-commercecartfooter">
+                            {
+                                cart.delivery?.value && (
+                                    <div className="w-commerce-commercecartlineitem cart-line-item">
+                                        <div>{t('components/cart:cartListItem.delivery')}</div>
+                                        <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                    </div>
+                                )
+                            }
+                            <div className="w-commerce-commercecartlineitem cart-line-item">
+                                <div>{t('components/cart:cartListItem.total')}</div>
+                                <div className="w-commerce-commercecartordervalue text-block">
+                                    {cart.priceTotal.ati.toFixed(2)} €
+                                </div>
+                            </div>
                         </div>
+                        {
+                            cart.orderReceipt?.date && (
+                                <div className="form-mode-paiement-tunnel">
+                                    <button type="submit" className="log-button-03 w-button">{t('pages/checkout:clickandcollect.next')}</button>
+                                </div>
+                            )
+                        }
+                        
                     </form>
                     {
                         message && (

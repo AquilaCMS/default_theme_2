@@ -1,5 +1,5 @@
 import { useState }                                                                         from 'react';
-import InfiniteScroll                                                                       from "react-infinite-scroll-component";
+import InfiniteScroll                                                                       from 'react-infinite-scroll-component';
 import absoluteUrl                                                                          from 'next-absolute-url';
 import Head                                                                                 from 'next/head';
 import { useRouter }                                                                        from 'next/router';
@@ -61,14 +61,14 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
 
     // Enable / Disable infinite scroll
     let infiniteScroll = false;
-    const siteInfo = await getSiteInfo(locale);
+    const siteInfo     = await getSiteInfo(locale);
     if (siteInfo.themeConfig?.values?.find(t => t.key === 'infiniteScroll')) {
         infiniteScroll = siteInfo.themeConfig?.values?.find(t => t.key === 'infiniteScroll')?.value;
     }
 
     // Get limit (count of products per pages)
     const defaultLimit = siteInfo.themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
-    let limit = defaultLimit;
+    let limit          = defaultLimit;
 
     // Get cookie server instance
     const cookiesServerInstance = new Cookies(req, res);
@@ -230,7 +230,7 @@ export default function Category({ breadcrumb, category, categorySlugs, forcePag
         const page = data.selected + 1;
 
         if (forcePage) {
-            return router.push(`/c/${categorySlugs}?page=${page}`)
+            return router.push(`/c/${categorySlugs}?page=${page}`);
         }
 
         // Get filter from cookie
@@ -282,8 +282,8 @@ export default function Category({ breadcrumb, category, categorySlugs, forcePag
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page, limit, sort } });
-            const concatProducts = [...categoryProducts.datas, ...products.datas];
+            const products         = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page, limit, sort } });
+            const concatProducts   = [...categoryProducts.datas, ...products.datas];
             categoryProducts.datas = concatProducts;
             setCategoryProducts(categoryProducts);
 
@@ -317,7 +317,7 @@ export default function Category({ breadcrumb, category, categorySlugs, forcePag
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
-    }
+    };
 
     let queryPage = Number(router.query.page);
     if (!queryPage) {

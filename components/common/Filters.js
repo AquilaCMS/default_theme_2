@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState }                                              from 'react';
-import useTranslation                                                               from 'next-translate/useTranslation';
-import cookie                                                                       from 'cookie';
-import Slider                                                                       from 'rc-slider';
-import { useCategoryPage, useCategoryPriceEnd, useCategoryProducts, useSiteConfig } from '@lib/hooks';
-import { convertFilter }                                                            from '@lib/utils';
+import { useEffect, useRef, useState }        from 'react';
+import useTranslation                         from 'next-translate/useTranslation';
+import cookie                                 from 'cookie';
+import Slider                                 from 'rc-slider';
+import { useCategoryPriceEnd, useSiteConfig } from '@lib/hooks';
+import { convertFilter }                      from '@lib/utils';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range                   = createSliderWithTooltip(Slider.Range);
@@ -18,9 +18,6 @@ export default function Filters({ category, updateProductList }) {
     const [sort, setSort]                                         = useState({ sortWeight: -1 });
     const [priceValue, setPriceValue]                             = useState([categoryPriceEnd.min, categoryPriceEnd.max]);
     const [open, setOpen]                                         = useState(false);
-    const [message, setMessage]                                   = useState();
-    const { setCategoryPage }                                     = useCategoryPage();
-    const { setCategoryProducts }                                 = useCategoryProducts();
     const { themeConfig }                                         = useSiteConfig();
     const { lang, t }                                             = useTranslation();
 
@@ -365,15 +362,6 @@ export default function Filters({ category, updateProductList }) {
                     </select>
                 </div>
             </div>
-            {
-                message && (
-                    <div className={`w-commerce-commerce${message.type}`}>
-                        <div>
-                            {message.message}
-                        </div>
-                    </div>
-                )
-            }
         </form>
     );
 }

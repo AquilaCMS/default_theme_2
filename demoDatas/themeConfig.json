@@ -11,7 +11,7 @@
                 "key" : "filters",
                 "value" : "top",
                 "name" : "Emplacement des filtres",
-                "description" : "Permet d'afficher les filtres des catégories, soit à droite (right) soit à gauche (left) ou caché (none)",
+                "description" : "Permet d'afficher les filtres des catégories : En haut = 'top' | caché = 'none'",
                 "group" : "Général"
               },
               {
@@ -24,8 +24,8 @@
               {
                 "key" : "infiniteScroll",
                 "value" : 0,
-                "name" : "Infinite scroll",
-                "description" : "0 = Désactiver | 1 = Activer | 2 = Activer avec bouton",
+                "name" : "Gestion des pages",
+                "description" : "0 = Normale | 1 = Infinite scroll | 2 = Infinite scroll avec bouton",
                 "group" : "Général"
               }
             ]
@@ -36,7 +36,7 @@
                 "key" : "filters",
                 "value" : "left",
                 "name" : "Filter location",
-                "description" : "Allows you to display category filters, either on the right or on the left or hidden",
+                "description" : "Allows you to display category filters : top = 'top' | none = 'none'",
                 "group" : "General"
               },
               {
@@ -49,8 +49,8 @@
               {
                 "key" : "infiniteScroll",
                 "value" : 0,
-                "name" : "Infinite scroll",
-                "description" : "0 = Unable | 1 = Enable | 2 = Enable with button",
+                "name" : "Pagination",
+                "description" : "0 = Normal | 1 = Infinite scroll | 2 = Infinite scroll with button",
                 "group" : "General"
               }
             ]

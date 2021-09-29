@@ -1,12 +1,12 @@
-import { useEffect, useState }                  from 'react';
-import { useRouter }                            from 'next/router';
-import cookie                                   from 'cookie';
-import useTranslation                           from 'next-translate/useTranslation';
-import { getBlockCMS }                          from 'aquila-connector/api/blockcms';
-import { getCategoryProducts }                  from 'aquila-connector/api/category';
-import axios                                    from 'aquila-connector/lib/AxiosInstance';
-import { useCategoryPage, useCategoryProducts } from '@lib/hooks';
-import { convertFilter, unsetCookie }           from '@lib/utils';
+import { useEffect, useState }                                 from 'react';
+import { useRouter }                                           from 'next/router';
+import cookie                                                  from 'cookie';
+import useTranslation                                          from 'next-translate/useTranslation';
+import { getBlockCMS }                                         from 'aquila-connector/api/blockcms';
+import { getCategoryProducts }                                 from 'aquila-connector/api/category';
+import axios                                                   from 'aquila-connector/lib/AxiosInstance';
+import { useCategoryPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
+import { convertFilter, unsetCookie }                          from '@lib/utils';
 
 // GET allergens
 async function getAllergens() {
@@ -19,7 +19,7 @@ async function getAllergens() {
     }
 }
 
-export default function AllergenFilter({ limit = 15 }) {
+export default function AllergenFilter() {
     const [allergens, setAllergens]               = useState([]);
     const [checkedAllergens, setCheckedAllergens] = useState({});
     const [cmsBlockWarning, setCmsBlockWarning]   = useState('');
@@ -28,6 +28,7 @@ export default function AllergenFilter({ limit = 15 }) {
     const router                                  = useRouter();
     const { setCategoryPage }                     = useCategoryPage();
     const { setCategoryProducts }                 = useCategoryProducts();
+    const { themeConfig }                         = useSiteConfig();
     const { lang, t }                             = useTranslation();
 
     // We determine the slug of the category
@@ -115,6 +116,9 @@ export default function AllergenFilter({ limit = 15 }) {
 
             // Setting filter cookie
             document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
+
+            // Getting Limit
+            const limit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
 
             // Updating the products list
             try {

@@ -1,0 +1,62 @@
+{
+  "collection": "themeConfig",
+  "datas": [
+    {
+      "name" : "default_theme_2",
+      "config" : {
+        "translation" : {
+          "fr" : {
+            "values" : [
+              {
+                "key" : "filters",
+                "value" : "top",
+                "name" : "Emplacement des filtres",
+                "description" : "Permet d'afficher les filtres des catégories, soit à droite (right) soit à gauche (left) ou caché (none)",
+                "group" : "Général"
+              },
+              {
+                "key" : "productsPerPage",
+                "value" : 15,
+                "name" : "Nombre de produit par page",
+                "description" : "Nombre de produit par page",
+                "group" : "Général"
+              },
+              {
+                "key" : "infiniteScroll",
+                "value" : 2,
+                "name" : "Infinite scroll",
+                "description" : "0 = Désactiver | 1 = Activer | 2 = Activer avec bouton",
+                "group" : "Général"
+              }
+            ]
+          },
+          "en" : {
+            "values" : [
+              {
+                "key" : "filters",
+                "value" : "left",
+                "name" : "Filter location",
+                "description" : "Allows you to display category filters, either on the right or on the left or hidden",
+                "group" : "General"
+              },
+              {
+                "key" : "productsPerPage",
+                "value" : 15,
+                "name" : "Number of products per page",
+                "description" : "Number of products per page",
+                "group" : "General"
+              },
+              {
+                "key" : "infiniteScroll",
+                "value" : 0,
+                "name" : "Infinite scroll",
+                "description" : "0 = Unable | 1 = Enable | 2 = Enable with button",
+                "group" : "General"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

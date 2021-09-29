@@ -4,6 +4,7 @@ import absoluteUrl                                     from 'next-absolute-url';
 import { useRouter }                                   from 'next/router';
 import getT                                            from 'next-translate/getT';
 import useTranslation                                  from 'next-translate/useTranslation';
+import Cookies                                         from 'cookies';
 import { Modal }                                       from 'react-responsive-modal';
 import Lightbox                                        from 'lightbox-react';
 import ErrorPage                                       from '@pages/_error';
@@ -65,6 +66,12 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     for (const [lang, sl] of Object.entries(slugsLangs)) {
         urlsLanguages.push({ lang, url: `/${sl.join('/')}` });
     }
+
+    // Get cookie server instance
+    const cookiesServerInstance = new Cookies(req, res);
+    
+    // Set cookie product ID
+    cookiesServerInstance.set('product', product._id, { path: '/', httpOnly: false, maxAge: 3600000 });
 
     const actions = [
         {

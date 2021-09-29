@@ -1,4 +1,5 @@
 import { useState }                                                                         from 'react';
+import InfiniteScroll                                                                       from "react-infinite-scroll-component";
 import absoluteUrl                                                                          from 'next-absolute-url';
 import Head                                                                                 from 'next/head';
 import { useRouter }                                                                        from 'next/router';
@@ -18,6 +19,7 @@ import MenuCategories                                                           
 import { dispatcher }                                                                       from '@lib/redux/dispatcher';
 import { getBreadcrumb }                                                                    from 'aquila-connector/api/breadcrumb';
 import { getCategory, getCategoryProducts }                                                 from 'aquila-connector/api/category';
+import { getSiteInfo }                                                                      from 'aquila-connector/api/site';
 import { useCategoryPage, useCategoryProducts, useSiteConfig }                              from '@lib/hooks';
 import { setLangAxios, formatBreadcrumb, cloneObj, convertFilter, moduleHook, unsetCookie } from '@lib/utils';
 
@@ -56,6 +58,17 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         urlsLanguages.push({ lang, url: `/c/${sl.join('/')}` });
     }
 
+    // Enable / Disable infinite scroll
+    let infiniteScroll = false;
+    const siteInfo = await getSiteInfo(locale);
+    if (siteInfo.themeConfig?.values?.find(t => t.key === 'infiniteScroll')) {
+        infiniteScroll = siteInfo.themeConfig?.values?.find(t => t.key === 'infiniteScroll')?.value;
+    }
+
+    // Get limit (count of products per pages)
+    const defaultLimit = siteInfo.themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+    let limit = defaultLimit;
+
     // Get cookie server instance
     const cookiesServerInstance = new Cookies(req, res);
 
@@ -63,14 +76,18 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Important : the "page" cookie is used to remember the page when you consult a product and want to go back,
     // we can't do it with Redux because it is reinitialized at each change of page unlike the cookie available on the server side.
     let page        = 1;
+    let forcePage   = false;
     const queryPage = Number(query.page);
     // If GET "page" param exists, we take its value first
     if (queryPage) {
         page = queryPage;
         if (page > 1) {
             // Ascertainment : "httpOnly: false" is important otherwise we cannot correctly delete the cookie afterwards
-            cookiesServerInstance.set('page', JSON.stringify({ id: category._id, page }), { path: '/', httpOnly: false });
+            cookiesServerInstance.set('page', JSON.stringify({ id: category._id, page }), { path: '/', httpOnly: false, maxAge: 3600000 });
+        } else {
+            unsetCookie('page', cookiesServerInstance);
         }
+        forcePage = true;
     } else {
         const cookiePage = cookiesServerInstance.get('page');
         // If cookie page exists
@@ -80,14 +97,18 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             // Otherwise, we delete "page" cookie
             if (dataPage.id === category._id) {
                 page = dataPage.page;
+                if (infiniteScroll) {
+                    limit = page * limit;
+                }
             } else {
                 unsetCookie('page', cookiesServerInstance);
             }
         }
     }
-    
-    // Get limit (count of products per pages)
-    const limit = 15;
+    let requestPage = page;
+    if (infiniteScroll && !forcePage && page > 1) {
+        requestPage = 1;
+    }
 
     // Get filter from cookie
     const cookieFilter = cookiesServerInstance.get('filter');
@@ -139,7 +160,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
 
     let productsData = {};
     try {
-        productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: convertFilter(cloneObj(filter)), page, limit, sort } });
+        productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: convertFilter(cloneObj(filter)), page: requestPage, limit, sort } });
     } catch (err) {
         return { notFound: true };
     }
@@ -153,7 +174,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: productsData.priceMin.ati, $lte: productsData.priceMax.ati } }, { 'price.ati.special': { $gte: productsData.specialPriceMin.ati, $lte: productsData.specialPriceMax.ati } }] };
         }
     }
-    cookiesServerInstance.set('filter', JSON.stringify(filter), { path: '/', httpOnly: false });
+    cookiesServerInstance.set('filter', JSON.stringify(filter), { path: '/', httpOnly: false, maxAge: 3600000 });
 
     const actions = [
         {
@@ -189,11 +210,13 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     pageProps.props.breadcrumb       = breadcrumb;
     pageProps.props.category         = category;
     pageProps.props.initProductsData = initProductsData;
-    pageProps.props.limit            = limit;
+    pageProps.props.limit            = defaultLimit;
+    pageProps.props.forcePage        = forcePage;
+    pageProps.props.infiniteScroll   = infiniteScroll;
     return pageProps;
 }
 
-export default function Category({ breadcrumb, category, categorySlugs, initProductsData, limit, origin, error }) {
+export default function Category({ breadcrumb, category, categorySlugs, forcePage, infiniteScroll, initProductsData, limit, origin, error }) {
     const [message, setMessage]                     = useState();
     const { categoryPage, setCategoryPage }         = useCategoryPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
@@ -203,6 +226,10 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
 
     const handlePageClick = async (data) => {
         const page = data.selected + 1;
+
+        if (forcePage) {
+            return router.push(`/c/${categorySlugs}?page=${page}`)
+        }
 
         // Get filter from cookie
         const cookieFilter = cookie.parse(document.cookie).filter;
@@ -225,7 +252,43 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
 
             // Setting category page cookie
             if (page > 1) {
-                document.cookie = 'page=' + JSON.stringify({ id: category._id, page }) + '; path=/;';
+                document.cookie = 'page=' + JSON.stringify({ id: category._id, page }) + '; path=/; max-age=3600;';
+            } else {
+                // Page 1... so useless "page" cookie
+                unsetCookie('page');
+            }
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
+    };
+
+    const loadMoreData = async () => {
+        const page = categoryPage + 1;
+
+        // Get filter from cookie
+        const cookieFilter = cookie.parse(document.cookie).filter;
+        let filter         = {};
+        let sort           = { sortWeight: -1 };
+        if (cookieFilter) {
+            filter = JSON.parse(cookieFilter);
+            if (filter.sort) {
+                sort = JSON.parse(filter.sort);
+            }
+        }
+
+        // Updating the products list
+        try {
+            const products = await getCategoryProducts('', category._id, lang, { PostBody: { filter: convertFilter(filter), page, limit, sort } });
+            const concatProducts = [...categoryProducts.datas, ...products.datas];
+            categoryProducts.datas = concatProducts;
+            setCategoryProducts(categoryProducts);
+
+            // Updating category page
+            setCategoryPage(page);
+
+            // Setting category page cookie
+            if (page > 1) {
+                document.cookie = 'page=' + JSON.stringify({ id: category._id, page }) + '; path=/; max-age=3600;';
             } else {
                 // Page 1... so useless "page" cookie
                 unsetCookie('page');
@@ -317,7 +380,7 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
                                     __html: category.extraText2,
                                 }} />
                                 {
-                                    moduleHook('category-top-list', { limit })
+                                    moduleHook('category-top-list')
                                 }
                             </div>
                             <div className="container-col">
@@ -328,14 +391,37 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
                                         {
                                             themeConfig?.values?.find(v => v.key === 'filters')?.value === 'top' && (
                                                 <div className="div-block-allergenes">
-                                                    <Filters category={category} limit={limit} updateProductList={updateProductList} />
+                                                    <Filters category={category} updateProductList={updateProductList} />
                                                 </div>
                                             )
                                         }
                                         
                                         <div className="tab-pane-wrap w-tab-pane w--tab-active">
                                             <div className="w-dyn-list">
-                                                <ProductList type="data" value={categoryProducts.datas} />
+                                                {
+                                                    infiniteScroll > 0 && !forcePage ? (
+                                                        <InfiniteScroll
+                                                            dataLength={categoryProducts.datas.length}
+                                                            next={infiniteScroll > 1 ? undefined : loadMoreData}
+                                                            hasMore={categoryPage < pageCount}
+                                                            loader={
+                                                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                                    {
+                                                                        infiniteScroll > 1 ? (
+                                                                            <button type="button" className="w-commerce-commerceaddtocartbutton order-button" onClick={loadMoreData}>{t('pages/category:loadMoreData')}</button>
+                                                                        ) : (
+                                                                            <span>{t('pages/category:loading')}</span>
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                            }
+                                                        >
+                                                            <ProductList type="data" value={categoryProducts.datas} />
+                                                        </InfiniteScroll>
+                                                    ) : (
+                                                        <ProductList type="data" value={categoryProducts.datas} />
+                                                    )
+                                                }
                                             </div>
                                             {
                                                 message && (
@@ -347,7 +433,7 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
                                                 )
                                             }
                                             {
-                                                pageCount > 1 && (
+                                                pageCount > 1 && (!infiniteScroll || forcePage) && (
                                                     <ReactPaginate
                                                         previousLabel={'<'}
                                                         nextLabel={'>'}

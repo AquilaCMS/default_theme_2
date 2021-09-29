@@ -1,17 +1,16 @@
-import { useEffect, useRef, useState }                               from 'react';
-import useTranslation                                                from 'next-translate/useTranslation';
-import cookie                                                        from 'cookie';
-import Slider                                                        from 'rc-slider';
-import { getCategoryProducts }                                       from 'aquila-connector/api/category';
-import { useCategoryPage, useCategoryPriceEnd, useCategoryProducts } from '@lib/hooks';
-import { convertFilter, unsetCookie }                                from '@lib/utils';
+import { useEffect, useRef, useState }                                              from 'react';
+import useTranslation                                                               from 'next-translate/useTranslation';
+import cookie                                                                       from 'cookie';
+import Slider                                                                       from 'rc-slider';
+import { useCategoryPage, useCategoryPriceEnd, useCategoryProducts, useSiteConfig } from '@lib/hooks';
+import { convertFilter }                                                            from '@lib/utils';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range                   = createSliderWithTooltip(Slider.Range);
 
 import 'rc-slider/assets/index.css';
 
-export default function Filters({ category, limit, updateProductList }) {
+export default function Filters({ category, updateProductList }) {
     const formRef                                                 = useRef();
     const { categoryPriceEnd }                                    = useCategoryPriceEnd();
     const [checkedAttributesFilters, setCheckedAttributesFilters] = useState({});
@@ -22,7 +21,11 @@ export default function Filters({ category, limit, updateProductList }) {
     const [message, setMessage]                                   = useState();
     const { setCategoryPage }                                     = useCategoryPage();
     const { setCategoryProducts }                                 = useCategoryProducts();
+    const { themeConfig }                                         = useSiteConfig();
     const { lang, t }                                             = useTranslation();
+
+    // Getting Limit for request
+    const limit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
 
     useEffect(() => {
         // Get filter from cookie
@@ -96,7 +99,7 @@ export default function Filters({ category, limit, updateProductList }) {
         filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: value[0], $lte: value[1] } }, { 'price.ati.special': { $gte: value[0], $lte: value[1] } }] };
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
 
         // Updating the products list
         updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -148,7 +151,7 @@ export default function Filters({ category, limit, updateProductList }) {
         }
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
 
         // Updating the products list
         updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -194,7 +197,7 @@ export default function Filters({ category, limit, updateProductList }) {
         }
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
 
         // Updating the products list
         updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -218,7 +221,7 @@ export default function Filters({ category, limit, updateProductList }) {
         delete filter.priceValues;
         
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
 
         // Reset attributes, pictos & price
         setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
@@ -245,7 +248,7 @@ export default function Filters({ category, limit, updateProductList }) {
         filter.sort = JSON.stringify(sort);
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
 
         // Updating the products list
         updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -263,7 +266,7 @@ export default function Filters({ category, limit, updateProductList }) {
             </div>
             <div className={`faq-content${open ? ' filters-open' : ''}`}>
                 <div className="filters-list">
-                    <div className="filter">
+                    <div className="filter" hidden={categoryPriceEnd.min === categoryPriceEnd.max}>
                         <h6>{t('components/filters:price')}</h6>
                         <div style={{ minWidth: '200px' }}>
                             <Range

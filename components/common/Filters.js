@@ -319,7 +319,10 @@ export default function Filters({ category, updateProductList }) {
                         })
                     }
                     {
-                        category.filters.pictos?.length > 0 && (
+                        // TODO to review because:
+                        // Displayed only if there are attribute type filters
+                        // The switch in the back office so that this filter does not appear does not work
+                        /*category.filters.pictos?.length > 0 && (
                             <div className="filter">
                                 <h6>{t('components/filters:pictogram')}</h6>
                                 <div>
@@ -343,7 +346,7 @@ export default function Filters({ category, updateProductList }) {
                                     }
                                 </div>
                             </div>
-                        )
+                        )*/
                     }
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>

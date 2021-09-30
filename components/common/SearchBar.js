@@ -7,9 +7,9 @@ export default function SearchBar() {
 
     const handleSearch = async (e) => {
         e.preventDefault();
-        const search = e.currentTarget.search.value;
+        const search = e.currentTarget.search.value.trim();
         if (search) {
-            router.push(`/search/${search}`);
+            router.push(`/search/${encodeURIComponent(search)}`);
         }
     };
 

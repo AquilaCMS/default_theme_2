@@ -20,7 +20,7 @@ import { setLangAxios, cloneObj, convertFilter, unsetCookie }  from '@lib/utils'
 export async function getServerSideProps({ locale, params, query, req, res }) {
     setLangAxios(locale, req, res);
 
-    const search = params.search || '';
+    const search = decodeURIComponent(params.search) || '';
 
     // Enable / Disable infinite scroll
     let infiniteScroll = false;
@@ -101,7 +101,7 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
     }
 
     // If we change category, we remove the filters except the allergens
-    if (Object.keys(filter).length && filter.category !== 'search') {
+    if (Object.keys(filter).length && filter.category !== 'search-' + search) {
         delete filter.priceValues;
         /*if (filter.conditions?.price) {
             delete filter.conditions.price;
@@ -120,7 +120,7 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
     }
 
     // Category ID for filter
-    filter.category = 'search';
+    filter.category = 'search-' + search;
 
     if (!filter.conditions) {
         filter.conditions = {};

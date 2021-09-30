@@ -74,6 +74,21 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
         requestPage = 1;
     }
 
+    // "Empty" request to retrieve price limits
+    let initProductsData = {};
+    let priceEnd         = { min: 0, max: 0 };
+    try {
+        initProductsData = await getProducts(false, { PostBody: { filter: { $text: { $search: search } }, page: 1, limit: 1 } }, locale);
+    } catch (err) {
+        return { notFound: true };
+    }
+    if (initProductsData.count) {
+        priceEnd = {
+            min: Math.floor(Math.min(initProductsData.min.ati, initProductsData.specialPriceMin.ati)),
+            max: Math.ceil(Math.max(initProductsData.max.ati, initProductsData.specialPriceMax.ati))
+        };
+    }
+
     // Get filter from cookie
     const cookieFilter = cookiesServerInstance.get('filter');
     let filter         = {};
@@ -86,10 +101,10 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
     }
 
     // If we change category, we remove the filters except the allergens
-    if (filter.category !== 'search') {
+    if (Object.keys(filter).length && filter.category !== 'search') {
         delete filter.priceValues;
-        if (filter.conditions?.price) {
-            filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: 0, $lte: 9999999 } }, { 'price.ati.special': { $gte: 0, $lte: 9999999 } }] };
+        /*if (filter.conditions?.price) {
+            delete filter.conditions.price;
         }
         if (filter.conditions?.attributes) {
             delete filter.conditions.attributes;
@@ -97,33 +112,22 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
         if (filter.conditions?.pictos) {
             delete filter.conditions.pictos;
         }
+        // If there are any conditions, price filter must be present (Aquila constraint)
+        if (Object.keys(filter.conditions).length) {
+            filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: initProductsData.min.ati, $lte: initProductsData.max.ati } }, { 'price.ati.special': { $gte: initProductsData.min.ati, $lte: initProductsData.max.ati } }] };
+        }*/
+        delete filter.conditions;
     }
 
     // Category ID for filter
     filter.category = 'search';
-
-    // Get products
-    let initProductsData = {};
-    let priceEnd         = { min: -1, max: 9999999 };
-    try {
-        initProductsData = await getProducts(false, { PostBody: { filter: { $text: { $search: search } }, page: 1, limit: 1 } }, locale);
-    } catch (err) {
-        return { notFound: true };
-    }
-    if (initProductsData.count) {
-        priceEnd = {
-            min: Math.floor(Math.min(initProductsData.min.ati, initProductsData.specialPriceMin.ati)),
-            max: Math.ceil(Math.max(initProductsData.max.ati, initProductsData.specialPriceMax.ati))
-        };
-    } else {
-        priceEnd = { min: 0, max: 0 };
-    }
 
     if (!filter.conditions) {
         filter.conditions = {};
     }
     filter.conditions.$text = { $search: search };
     
+    // Get products
     let productsData = {};
     try {
         productsData = await getProducts(true, { PostBody: { filter: convertFilter(cloneObj(filter)), page: requestPage, limit, sort } }, locale);

@@ -137,7 +137,7 @@ export default function Filters({ category, updateProductList }) {
 
         // If filter empty (cookie not present)
         if (!filter.conditions) {
-            // Price filter must be present
+            // Price filter must be present (Aquila constraint)
             filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
             setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
         }
@@ -212,8 +212,11 @@ export default function Filters({ category, updateProductList }) {
             }
         }
 
-        // Price filter must be present
-        filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
+        
+        if (!filter.conditions) {
+            // Price filter must be present (Aquila constraint)
+            filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
+        }
 
         delete filter.priceValues;
         

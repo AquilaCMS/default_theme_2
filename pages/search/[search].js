@@ -59,7 +59,7 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
             const dataPage = JSON.parse(cookiePage);
             // We take the value only if category ID matches
             // Otherwise, we delete "page" cookie
-            if (dataPage.id === 'search') {
+            if (dataPage.id === 'search-' + search) {
                 page = dataPage.page;
                 if (infiniteScroll) {
                     limit = page * limit;
@@ -179,7 +179,7 @@ export default function Search({ forcePage, infiniteScroll, limit, products, sea
         const page = data.selected + 1;
 
         if (forcePage) {
-            return router.push(`/search/${search}?page=${page}`);
+            return router.push(`/search/${encodeURIComponent(search)}?page=${page}`);
         }
 
         // Get filter from cookie
@@ -203,7 +203,7 @@ export default function Search({ forcePage, infiniteScroll, limit, products, sea
 
             // Setting category page cookie
             if (page > 1) {
-                document.cookie = 'page=' + JSON.stringify({ id: 'search', page }) + '; path=/; max-age=3600;';
+                document.cookie = 'page=' + JSON.stringify({ id: 'search-' + search, page }) + '; path=/; max-age=3600;';
             } else {
                 // Page 1... so useless "page" cookie
                 unsetCookie('page');
@@ -228,6 +228,10 @@ export default function Search({ forcePage, infiniteScroll, limit, products, sea
                 sort = JSON.parse(filter.sort);
             }
         }
+        
+        if (!filter.conditions) {
+            filter.conditions = { $text: { $search: search } };
+        }
 
         // Updating the products list
         try {
@@ -241,7 +245,7 @@ export default function Search({ forcePage, infiniteScroll, limit, products, sea
 
             // Setting category page cookie
             if (page > 1) {
-                document.cookie = 'page=' + JSON.stringify({ id: 'search', page }) + '; path=/; max-age=3600;';
+                document.cookie = 'page=' + JSON.stringify({ id: 'search-' + search, page }) + '; path=/; max-age=3600;';
             } else {
                 // Page 1... so useless "page" cookie
                 unsetCookie('page');
@@ -254,6 +258,10 @@ export default function Search({ forcePage, infiniteScroll, limit, products, sea
     };
 
     const updateProductList = async (postBody) => {
+        if (!postBody.PostBody.filter.$text) {
+            postBody.PostBody.filter.$text = { $search: search };
+        }
+        
         try {
             const products = await getProducts(true, postBody, lang);
             setCategoryProducts(products);

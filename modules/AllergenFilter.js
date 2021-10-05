@@ -1,12 +1,12 @@
-import { useEffect, useState }                                 from 'react';
-import { useRouter }                                           from 'next/router';
-import cookie                                                  from 'cookie';
-import useTranslation                                          from 'next-translate/useTranslation';
-import { getBlockCMS }                                         from 'aquila-connector/api/blockcms';
-import { getCategoryProducts }                                 from 'aquila-connector/api/category';
-import axios                                                   from 'aquila-connector/lib/AxiosInstance';
-import { useCategoryPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
-import { convertFilter, unsetCookie }                          from '@lib/utils';
+import { useEffect, useState }                                                      from 'react';
+import { useRouter }                                                                from 'next/router';
+import cookie                                                                       from 'cookie';
+import useTranslation                                                               from 'next-translate/useTranslation';
+import { getBlockCMS }                                                              from 'aquila-connector/api/blockcms';
+import { getCategoryProducts }                                                      from 'aquila-connector/api/category';
+import axios                                                                        from 'aquila-connector/lib/AxiosInstance';
+import { useCategoryPage, useCategoryProducts, useCategoryPriceEnd, useSiteConfig } from '@lib/hooks';
+import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                   from '@lib/utils';
 
 // GET allergens
 async function getAllergens() {
@@ -28,6 +28,7 @@ export default function AllergenFilter() {
     const router                                  = useRouter();
     const { setCategoryPage }                     = useCategoryPage();
     const { setCategoryProducts }                 = useCategoryProducts();
+    const { categoryPriceEnd }                    = useCategoryPriceEnd();
     const { themeConfig }                         = useSiteConfig();
     const { lang, t }                             = useTranslation();
 
@@ -94,45 +95,44 @@ export default function AllergenFilter() {
         }
         setCheckedAllergens(checked);
 
-        // If cookie filter exists, we parse it
-        const cookieFilter = cookie.parse(document.cookie).filter;
-        if (cookieFilter) {
-            const filter = JSON.parse(cookieFilter);
-            let sort     = { sortWeight: -1 };
-            if (filter.sort) {
-                sort = JSON.parse(filter.sort);
-            }
+        // Getting filter & sort from cookie
+        const { filter, sort } = getFilterAndSortFromCookie();
 
-            // Filter construction
-            let filterAllergens = {};
-            if (Object.keys(checked).length > 0) {
-                filterAllergens             = {
-                    $or: [
-                        { allergens: { $nin: Object.keys(checked) } },
-                        { allergens: [] }
-                    ]
-                };
-                filter.conditions.allergens = filterAllergens;
-            } else {
-                delete filter.conditions.allergens;
-            }
+        // If filter empty (cookie not present)
+        if (!filter.conditions) {
+            // Price filter must be present (Aquila constraint)
+            filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
+        }
 
-            // Setting filter cookie
-            document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
+        // Filter construction
+        let filterAllergens = {};
+        if (Object.keys(checked).length > 0) {
+            filterAllergens             = {
+                $or: [
+                    { allergens: { $nin: Object.keys(checked) } },
+                    { allergens: [] }
+                ]
+            };
+            filter.conditions.allergens = filterAllergens;
+        } else {
+            delete filter.conditions.allergens;
+        }
 
-            // Updating the products list
-            try {
-                const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
-                setCategoryProducts(products);
+        // Setting filter cookie
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
 
-                // Back to page 1
-                setCategoryPage(1);
+        // Updating the products list
+        try {
+            const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+            setCategoryProducts(products);
 
-                // Back to page 1... so useless "page" cookie
-                unsetCookie('page');
-            } catch (err) {
-                setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
-            }
+            // Back to page 1
+            setCategoryPage(1);
+
+            // Back to page 1... so useless "page" cookie
+            unsetCookie('page');
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
     };
 
@@ -145,7 +145,7 @@ export default function AllergenFilter() {
             const filter = JSON.parse(cookieFilter);
             let sort     = { sortWeight: -1 };
             if (filter.sort) {
-                sort = JSON.parse(filter.sort);
+                sort = filter.sort;
             }
 
             // Filter construction

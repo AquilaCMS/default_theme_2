@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState }        from 'react';
-import useTranslation                         from 'next-translate/useTranslation';
-import cookie                                 from 'cookie';
-import Slider                                 from 'rc-slider';
-import { useCategoryPriceEnd, useSiteConfig } from '@lib/hooks';
-import { convertFilter }                      from '@lib/utils';
+import { useEffect, useRef, useState }                                              from 'react';
+import { useRouter }                                                                from 'next/router';
+import useTranslation                                                               from 'next-translate/useTranslation';
+import Slider                                                                       from 'rc-slider';
+import { useCategoryPriceEnd, useCategoryPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
+import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                   from '@lib/utils';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range                   = createSliderWithTooltip(Slider.Range);
 
 import 'rc-slider/assets/index.css';
 
-export default function Filters({ category, updateProductList }) {
+export default function Filters({ filtersData, getProductsList }) {
     const formRef                                                 = useRef();
     const { categoryPriceEnd }                                    = useCategoryPriceEnd();
     const [checkedAttributesFilters, setCheckedAttributesFilters] = useState({});
@@ -18,22 +18,24 @@ export default function Filters({ category, updateProductList }) {
     const [sort, setSort]                                         = useState({ sortWeight: -1 });
     const [priceValue, setPriceValue]                             = useState([categoryPriceEnd.min, categoryPriceEnd.max]);
     const [open, setOpen]                                         = useState(false);
+    const { setCategoryPage }                                     = useCategoryPage();
+    const { setCategoryProducts }                                 = useCategoryProducts();
     const { themeConfig }                                         = useSiteConfig();
+    const router                                                  = useRouter();
     const { lang, t }                                             = useTranslation();
 
     // Getting Limit for request
     const limit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
 
+    // Getting URL page
+    const [url] = router.asPath.split('?');
+
     useEffect(() => {
-        // Get filter from cookie
-        const cookieFilter = cookie.parse(document.cookie).filter;
-        let filter         = {};
-        if (cookieFilter) {
-            filter = JSON.parse(cookieFilter);
-            if (filter.conditions && Object.entries(filter.conditions).length) {
-                // Opening the filter block
-                openBlock(true);
-            }
+        // Getting filter from cookie
+        const { filter } = getFilterAndSortFromCookie();
+        if (filter.conditions && Object.entries(filter.conditions).length) {
+            // Opening the filter block
+            openBlock(true);
         }
 
         // Init price filter
@@ -61,27 +63,18 @@ export default function Filters({ category, updateProductList }) {
 
         // Init sort
         if (filter.sort) {
-            const sort         = JSON.parse(filter.sort);
-            const [key, value] = Object.entries(sort)[0];
+            const [key, value] = Object.entries(filter.sort)[0];
             setSort(`${key}|${value}`);
         }
-    }, [category, categoryPriceEnd]);
+    }, [url]);
 
     const handlePriceFilterChange = async (value) => {
         setPriceValue(value);
     };
 
-    const handlePriceFilterAfterChange = (value) => {
-        // Get filter from cookie
-        const cookieFilter = cookie.parse(document.cookie).filter;
-        let filter         = {};
-        let sort           = { sortWeight: -1 };
-        if (cookieFilter) {
-            filter = JSON.parse(cookieFilter);
-            if (filter.sort) {
-                sort = JSON.parse(filter.sort);
-            }
-        }
+    const handlePriceFilterAfterChange = async (value) => {
+        // Getting filter & sort from cookie
+        const { filter, sort } = getFilterAndSortFromCookie();
 
         if (value[0] === categoryPriceEnd.min && value[1] === categoryPriceEnd.max) {
             delete filter.priceValues;
@@ -98,23 +91,22 @@ export default function Filters({ category, updateProductList }) {
         // Setting filter cookie
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
 
-        // Updating the products list
-        updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        // Getting & updating the products list
+        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        setCategoryProducts(products);
+
+        // Force page 1
+        setCategoryPage(1);
+
+        // Page 1... so useless "page" cookie
+        unsetCookie('page');
     };
 
-    const handleAttributeFilterClick = (e) => {
-        // Get filter from cookie
-        const cookieFilter = cookie.parse(document.cookie).filter;
-        let filter         = {};
-        let sort           = { sortWeight: -1 };
-        if (cookieFilter) {
-            filter = JSON.parse(cookieFilter);
-            if (filter.sort) {
-                sort = JSON.parse(filter.sort);
-            }
-        }
+    const handleAttributeFilterClick = async (e) => {
+        // Getting filter & sort from cookie
+        const { filter, sort } = getFilterAndSortFromCookie();
 
-        // Get checked attributes
+        // Getting checked attributes
         const attributes = {};
         const inputs     = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
         for (const input of inputs) {
@@ -150,23 +142,22 @@ export default function Filters({ category, updateProductList }) {
         // Setting filter cookie
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
 
-        // Updating the products list
-        updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        // Getting & updating the products list
+        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        setCategoryProducts(products);
+
+        // Force page 1
+        setCategoryPage(1);
+
+        // Page 1... so useless "page" cookie
+        unsetCookie('page');
     };
 
-    const handlePictoFilterClick = (e) => {
-        // Get filter from cookie
-        const cookieFilter = cookie.parse(document.cookie).filter;
-        let filter         = {};
-        let sort           = { sortWeight: -1 };
-        if (cookieFilter) {
-            filter = JSON.parse(cookieFilter);
-            if (filter.sort) {
-                sort = JSON.parse(filter.sort);
-            }
-        }
+    const handlePictoFilterClick = async (e) => {
+        // Getting filter & sort from cookie
+        const { filter, sort } = getFilterAndSortFromCookie();
 
-        // Get checked pictos
+        // Getting checked pictos
         let pictos   = [];
         const inputs = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
         for (const input of inputs) {
@@ -196,27 +187,23 @@ export default function Filters({ category, updateProductList }) {
         // Setting filter cookie
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
 
-        // Updating the products list
-        updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        // Getting & updating the products list
+        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        setCategoryProducts(products);
+
+        // Force page 1
+        setCategoryPage(1);
+
+        // Page 1... so useless "page" cookie
+        unsetCookie('page');
     };
 
-    const resetFilters = (e) => {
-        // Get filter from cookie
-        const cookieFilter = cookie.parse(document.cookie).filter;
-        let filter         = {};
-        let sort           = { sortWeight: -1 };
-        if (cookieFilter) {
-            filter = JSON.parse(cookieFilter);
-            if (filter.sort) {
-                sort = JSON.parse(filter.sort);
-            }
-        }
+    const resetFilters = async (e) => {
+        // Getting filter & sort from cookie
+        const { filter, sort } = getFilterAndSortFromCookie();
 
-        
-        if (!filter.conditions) {
-            // Price filter must be present (Aquila constraint)
-            filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
-        }
+        // Price filter must be present (Aquila constraint)
+        filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
 
         delete filter.priceValues;
         
@@ -228,30 +215,38 @@ export default function Filters({ category, updateProductList }) {
         setCheckedAttributesFilters({});
         setCheckedPictosFilters([]);
 
-        // Updating the products list
-        updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        // Getting & updating the products list
+        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        setCategoryProducts(products);
+
+        // Force page 1
+        setCategoryPage(1);
+
+        // Page 1... so useless "page" cookie
+        unsetCookie('page');
     };
 
-    const handleSortChange = (e) => {
-        // Get filter from cookie
-        const cookieFilter = cookie.parse(document.cookie).filter;
-        let filter         = {};
-        if (cookieFilter) {
-            filter = JSON.parse(cookieFilter);
-        }
+    const handleSortChange = async (e) => {
+        // Getting filter from cookie
+        const { filter } = getFilterAndSortFromCookie();
 
         // Setting sort
         setSort(e.target.value);
         const [field, value] = e.target.value.split('|');
-        const sort           = { [field]: parseInt(value) };
-
-        filter.sort = JSON.stringify(sort);
+        filter.sort          = { [field]: parseInt(value) };
 
         // Setting filter cookie
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
 
-        // Updating the products list
-        updateProductList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+        // Getting & updating the products list
+        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort: filter.sort } });
+        setCategoryProducts(products);
+
+        // Force page 1
+        setCategoryPage(1);
+
+        // Page 1... so useless "page" cookie
+        unsetCookie('page');
     };
 
     const openBlock = (force = undefined) => {
@@ -286,15 +281,15 @@ export default function Filters({ category, updateProductList }) {
                         </span>
                     </div>
                     {
-                        category.filters.attributes.map((attribute) => {
+                        filtersData.attributes.map((attribute) => {
                             const attId = attribute._id || attribute.id_attribut;
-                            if (!category.filters.attributesValues[attId]) return null;
+                            if (!filtersData.attributesValues[attId]) return null;
                             return (
                                 <div className="filter" key={attId}>
                                     <h6>{attribute.name}</h6>
                                     <div>
                                         {
-                                            category.filters.attributesValues[attId].map((value) => {
+                                            filtersData.attributesValues[attId].map((value) => {
                                                 return (
                                                     <label className="w-checkbox checkbox-field-allergene" key={attId + value}>
                                                         <input 
@@ -322,12 +317,12 @@ export default function Filters({ category, updateProductList }) {
                         // TODO to review because:
                         // Displayed only if there are attribute type filters
                         // The switch in the back office so that this filter does not appear does not work
-                        /*category.filters.pictos?.length > 0 && (
+                        /*filtersData.pictos?.length > 0 && (
                             <div className="filter">
                                 <h6>{t('components/filters:pictogram')}</h6>
                                 <div>
                                     {
-                                        category.filters.pictos.map((picto) => {
+                                        filtersData.pictos.map((picto) => {
                                             return (
                                                 <label className="w-checkbox checkbox-field-allergene" key={picto._id}>
                                                     <input 

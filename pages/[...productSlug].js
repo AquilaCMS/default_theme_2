@@ -71,7 +71,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     const cookiesServerInstance = new Cookies(req, res);
     
     // Set cookie product ID
-    cookiesServerInstance.set('product', product._id, { path: '/', httpOnly: false, maxAge: 3600000 });
+    cookiesServerInstance.set('product', product._id, { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [
         {

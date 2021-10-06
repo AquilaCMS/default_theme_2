@@ -42,6 +42,11 @@ export default function Pagination({ children, getProductsList }) {
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
+        // If filter empty (cookie not present), reload
+        if (!Object.keys(filter).length) {
+            return router.reload();
+        }
+
         // Updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page, limit, sort } });
         setCategoryProducts(products);
@@ -51,7 +56,7 @@ export default function Pagination({ children, getProductsList }) {
 
         // Setting category page cookie
         if (page > 1) {
-            document.cookie = 'page=' + JSON.stringify({ url, page }) + '; path=/; max-age=3600;';
+            document.cookie = 'page=' + JSON.stringify({ url, page }) + '; path=/; max-age=43200;';
         } else {
             // Page 1... so useless "page" cookie
             unsetCookie('page');
@@ -66,6 +71,11 @@ export default function Pagination({ children, getProductsList }) {
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
+        // If filter empty (cookie not present), reload
+        if (!Object.keys(filter).length) {
+            return router.reload();
+        }
+
         // Updating the products list
         const products         = await getProductsList({ PostBody: { filter: convertFilter(filter), page, limit, sort } });
         categoryProducts.datas = [...categoryProducts.datas, ...products.datas];
@@ -75,7 +85,7 @@ export default function Pagination({ children, getProductsList }) {
         setCategoryPage(page);
 
         // Setting category page cookie
-        document.cookie = 'page=' + JSON.stringify({ url, page }) + '; path=/; max-age=3600;';
+        document.cookie = 'page=' + JSON.stringify({ url, page }) + '; path=/; max-age=43200;';
 
         setIsLoading(false);
     };

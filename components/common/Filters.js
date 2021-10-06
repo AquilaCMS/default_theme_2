@@ -76,20 +76,19 @@ export default function Filters({ filtersData, getProductsList }) {
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
+        // If filter empty (cookie not present), reload
+        if (!Object.keys(filter).length) {
+            return router.reload();
+        }
+
         if (value[0] === categoryPriceEnd.min && value[1] === categoryPriceEnd.max) {
             delete filter.priceValues;
         } else {
             filter.priceValues = { min: value[0], max: value[1] };
         }
 
-        // If filter empty (cookie not present)
-        if (!filter.conditions) {
-            filter.conditions = {};
-        }
-        filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: value[0], $lte: value[1] } }, { 'price.ati.special': { $gte: value[0], $lte: value[1] } }] };
-
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -105,6 +104,11 @@ export default function Filters({ filtersData, getProductsList }) {
     const handleAttributeFilterClick = async (e) => {
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
+
+        // If filter empty (cookie not present), reload
+        if (!Object.keys(filter).length) {
+            return router.reload();
+        }
 
         // Getting checked attributes
         const attributes = {};
@@ -127,20 +131,13 @@ export default function Filters({ filtersData, getProductsList }) {
             conditions.push({ attributes: { $elemMatch: { [`translation.${lang}.value`]: { $in: values }, id: attributeId } } });
         }
 
-        // If filter empty (cookie not present)
-        if (!filter.conditions) {
-            // Price filter must be present (Aquila constraint)
-            filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
-            setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
-        }
-
         filter.conditions.attributes = conditions;
         if (!filter.conditions.attributes.length) {
             delete filter.conditions.attributes;
         }
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -157,6 +154,11 @@ export default function Filters({ filtersData, getProductsList }) {
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
+        // If filter empty (cookie not present), reload
+        if (!Object.keys(filter).length) {
+            return router.reload();
+        }
+
         // Getting checked pictos
         let pictos   = [];
         const inputs = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
@@ -172,20 +174,13 @@ export default function Filters({ filtersData, getProductsList }) {
         
         let conditions = [{ pictos: { $elemMatch: { code: { $in: pictos } } } }];
 
-        // If filter empty (cookie not present)
-        if (!filter.conditions) {
-            // Price filter must be present
-            filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
-            setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
-        }
-
         filter.conditions.pictos = conditions;
         if (!pictos.length) {
             delete filter.conditions.pictos;
         }
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -202,13 +197,18 @@ export default function Filters({ filtersData, getProductsList }) {
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
+        // If filter empty (cookie not present), reload
+        if (!Object.keys(filter).length) {
+            return router.reload();
+        }
+
         // Price filter must be present (Aquila constraint)
         filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
 
         delete filter.priceValues;
         
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
 
         // Reset attributes, pictos & price
         setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
@@ -230,13 +230,18 @@ export default function Filters({ filtersData, getProductsList }) {
         // Getting filter from cookie
         const { filter } = getFilterAndSortFromCookie();
 
+        // If filter empty (cookie not present), reload
+        if (!Object.keys(filter).length) {
+            return router.reload();
+        }
+
         // Setting sort
         setSort(e.target.value);
         const [field, value] = e.target.value.split('|');
         filter.sort          = { [field]: parseInt(value) };
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort: filter.sort } });

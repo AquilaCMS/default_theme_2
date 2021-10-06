@@ -78,7 +78,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         page = queryPage;
         if (page > 1) {
             // Ascertainment : "httpOnly: false" is important otherwise we cannot correctly delete the cookie afterwards
-            cookiesServerInstance.set('page', JSON.stringify({ url, page }), { path: '/', httpOnly: false, maxAge: 3600000 });
+            cookiesServerInstance.set('page', JSON.stringify({ url, page }), { path: '/', httpOnly: false, maxAge: 43200000 });
         } else {
             unsetCookie('page', cookiesServerInstance);
         }
@@ -152,7 +152,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             delete filter.conditions.$text;
         }
         // If there are any conditions, price filter must be present (Aquila constraint)
-        if (Object.keys(filter.conditions).length) {
+        if (filter.conditions && Object.keys(filter.conditions).length) {
             filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: initProductsData.priceMin.ati, $lte: initProductsData.priceMax.ati } }, { 'price.ati.special': { $gte: initProductsData.priceMin.ati, $lte: initProductsData.priceMax.ati } }] };
         }
     }
@@ -177,7 +177,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: productsData.priceMin.ati, $lte: productsData.priceMax.ati } }, { 'price.ati.special': { $gte: productsData.specialPriceMin.ati, $lte: productsData.specialPriceMax.ati } }] };
         }
     }
-    cookiesServerInstance.set('filter', JSON.stringify(filter), { path: '/', httpOnly: false, maxAge: 3600000 });
+    cookiesServerInstance.set('filter', JSON.stringify(filter), { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [
         {

@@ -119,7 +119,7 @@ export default function AllergenFilter() {
         }
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
+        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
 
         // Updating the products list
         try {
@@ -152,7 +152,7 @@ export default function AllergenFilter() {
             delete filter.conditions.allergens;
 
             // Setting filter cookie
-            document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=3600;';
+            document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
 
             // Updating the products list
             try {

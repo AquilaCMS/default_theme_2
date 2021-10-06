@@ -157,10 +157,11 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     const pageProps = await dispatcher(locale, req, res, actions);
     
     pageProps.props.products = productsData;
+    pageProps.props.search   = search;
     return pageProps;
 }
 
-export default function Search({ products, error }) {
+export default function Search({ products, search, error }) {
     const [message, setMessage] = useState();
     const { categoryProducts }  = useCategoryProducts();
     const { themeConfig }       = useSiteConfig();
@@ -205,7 +206,7 @@ export default function Search({ products, error }) {
                                             </div>
                                         )
                                     }
-                                    
+                                    <h6 className="heading-6-center">{t('pages/search:results', { count: categoryProducts.count, search })}</h6>
                                     <Pagination getProductsList={getProductsList}>
                                         <ProductList type="data" value={categoryProducts.datas} />
                                     </Pagination>

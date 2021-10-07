@@ -166,7 +166,7 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
                                                                             }
                                                                         </div>
                                                                         <div className="div-block-prix">
-                                                                            { item.modifier_price?.ati ? <div className="price">{item.modifier_price.ati > 0 ? '+' : ''}{item.modifier_price.ati.toFixed(2)} €</div> : null }
+                                                                            { item.modifier_price?.ati ? <div className="price">{item.modifier_price.ati > 0 ? '+' : ''}{formatPrice(item.modifier_price.ati)}</div> : null }
                                                                         </div>
                                                                     </div>
                                                                 </div>

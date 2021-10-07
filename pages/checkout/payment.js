@@ -1,16 +1,16 @@
-import { useEffect }                                                    from 'react';
-import { useRouter }                                                    from 'next/router';
-import useTranslation                                                   from 'next-translate/useTranslation';
-import parse                                                            from 'html-react-parser';
-import LightLayout                                                      from '@components/layouts/LightLayout';
-import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
-import Button                                                           from '@components/ui/Button';
-import { cartToOrder }                                                  from 'aquila-connector/api/cart';
-import { makePayment }                                                  from 'aquila-connector/api/payment';
-import { useState }                                                     from 'react';
-import { useCart, usePaymentMethods, useSiteConfig }                    from '@lib/hooks';
-import { setLangAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
-import { dispatcher }                                                   from '@lib/redux/dispatcher';
+import { useEffect }                                                                 from 'react';
+import { useRouter }                                                                 from 'next/router';
+import useTranslation                                                                from 'next-translate/useTranslation';
+import parse                                                                         from 'html-react-parser';
+import LightLayout                                                                   from '@components/layouts/LightLayout';
+import NextSeoCustom                                                                 from '@components/tools/NextSeoCustom';
+import Button                                                                        from '@components/ui/Button';
+import { cartToOrder }                                                               from 'aquila-connector/api/cart';
+import { makePayment }                                                               from 'aquila-connector/api/payment';
+import { useState }                                                                  from 'react';
+import { useCart, usePaymentMethods, useSiteConfig }                                 from '@lib/hooks';
+import { setLangAxios, authProtectedPage, formatPrice, serverRedirect, unsetCookie } from '@lib/utils';
+import { dispatcher }                                                                from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
     setLangAxios(locale, req, res);
@@ -137,14 +137,14 @@ export default function CheckoutPayment() {
                                     cart.delivery?.value && (
                                         <div className="w-commerce-commercecartlineitem cart-line-item">
                                             <div>{t('components/cart:cartListItem.delivery')}</div>
-                                            <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                            <div>{formatPrice(cart.delivery.value.ati)}</div>
                                         </div>
                                     )
                                 }
                                 <div className="w-commerce-commercecartlineitem cart-line-item">
                                     <div>{t('components/cart:cartListItem.total')}</div>
                                     <div className="w-commerce-commercecartordervalue text-block">
-                                        {cart.priceTotal.ati.toFixed(2)} €
+                                        {formatPrice(cart.priceTotal.ati)}
                                     </div>
                                 </div>
                             </div>

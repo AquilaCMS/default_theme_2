@@ -1,13 +1,13 @@
-import { useEffect, useState }                             from 'react';
-import { useRouter }                                       from 'next/router';
-import useTranslation                                      from 'next-translate/useTranslation';
-import LightLayout                                         from '@components/layouts/LightLayout';
-import NextSeoCustom                                       from '@components/tools/NextSeoCustom';
-import ClickAndCollect                                     from 'modules/ClickAndCollect';
-import { setUser }                                         from 'aquila-connector/api/user';
-import { useCart }                                         from '@lib/hooks';
-import { setLangAxios, authProtectedPage, serverRedirect } from '@lib/utils';
-import { dispatcher }                                      from '@lib/redux/dispatcher';
+import { useEffect, useState }                                          from 'react';
+import { useRouter }                                                    from 'next/router';
+import useTranslation                                                   from 'next-translate/useTranslation';
+import LightLayout                                                      from '@components/layouts/LightLayout';
+import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
+import ClickAndCollect                                                  from 'modules/ClickAndCollect';
+import { setUser }                                                      from 'aquila-connector/api/user';
+import { useCart }                                                      from '@lib/hooks';
+import { setLangAxios, authProtectedPage, formatPrice, serverRedirect } from '@lib/utils';
+import { dispatcher }                                                   from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
     setLangAxios(locale, req, res);
@@ -104,14 +104,14 @@ export default function CheckoutClickAndCollect({ user }) {
                                 cart.delivery?.value && (
                                     <div className="w-commerce-commercecartlineitem cart-line-item">
                                         <div>{t('components/cart:cartListItem.delivery')}</div>
-                                        <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                        <div>{formatPrice(cart.delivery.value.ati)}</div>
                                     </div>
                                 )
                             }
                             <div className="w-commerce-commercecartlineitem cart-line-item">
                                 <div>{t('components/cart:cartListItem.total')}</div>
                                 <div className="w-commerce-commercecartordervalue text-block">
-                                    {cart.priceTotal.ati.toFixed(2)} €
+                                    {formatPrice(cart.priceTotal.ati)}
                                 </div>
                             </div>
                         </div>

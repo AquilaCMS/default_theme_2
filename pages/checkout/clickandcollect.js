@@ -96,7 +96,7 @@ export default function CheckoutClickAndCollect({ user }) {
 
                     <form onSubmit={nextStep}>
                         <div className="log-label"></div>
-                        <div className="w-form">
+                        <div className="w-form" style={{ width: '40%' }}>
                             <div><label>{t('pages/checkout:clickandcollect.labelPhone')}</label><input type="text" className="w-input" maxLength={256} name="phone_mobile" defaultValue={user.phone_mobile} required /></div>
                         </div>
                         <div className="w-commerce-commercecartfooter">

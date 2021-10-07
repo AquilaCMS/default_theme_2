@@ -260,7 +260,7 @@ export default function Product({ breadcrumb, origin, product }) {
             <Breadcrumb items={formatBreadcrumb(breadcrumb)} />
 
             <div className="content-section-short-product">
-                <button type="button" className="button bottomspace w-button" onClick={previousStep}>{t('components/product:product.return')}</button>
+                <button type="button" className="button bottomspace w-button" onClick={previousStep}>{t('pages/product:return')}</button>
                 <div className="container-product">
                     <div className="w-layout-grid product-grid">
                         <div className="product-image-wrapper">
@@ -313,8 +313,8 @@ export default function Product({ breadcrumb, origin, product }) {
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
                                     <Button 
-                                        text={product.type === 'simple' ? t('components/product:product.addToBasket') : t('components/product:product.compose')}
-                                        loadingText={t('components/product:product.addToCartLoading')}
+                                        text={product.type === 'simple' ? t('pages/product:addToBasket') : t('pages/product:compose')}
+                                        loadingText={t('pages/product:addToCartLoading')}
                                         isLoading={isLoading}
                                         disabled={product.type === 'virtual'} 
                                         className="w-commerce-commerceaddtocartbutton order-button"
@@ -341,32 +341,79 @@ export default function Product({ breadcrumb, origin, product }) {
                     <div className="w-tabs">
                         <div className="tab-menu w-tab-menu">
                             <a className={`tab-link-round w-inline-block w-tab-link${tabs === 0 ? ' w--current' : ''}`} onClick={() => setTabs(0)}>
-                                <div>{t('components/product:product.tab1')}</div>
+                                <div>{t('pages/product:tab1')}</div>
                             </a>
-                            {
-                                moduleHook('product-tab') !== false && (
-                                    <a className={`tab-link-round w-inline-block w-tab-link${tabs === 1 ? ' w--current' : ''}`} onClick={() => setTabs(1)}>
-                                        <div>{t('components/product:product.tab2')}</div>
-                                    </a>
-                                )
-                            }
+                            <a className={`tab-link-round w-inline-block w-tab-link${tabs === 1 ? ' w--current' : ''}`} onClick={() => setTabs(1)}>
+                                <div>{t('pages/product:tab2')}</div>
+                            </a>
                             {/* <a className="tab-link-round w-inline-block w-tab-link w--current">
                                 <div>Reviews (0)</div>
                             </a> */}
                         </div>
                         <div className="w-tab-content">
                             <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`} dangerouslySetInnerHTML={{ __html: product.description1?.text }} />
-                            {
-                                moduleHook('product-tab') !== false && (
-                                    <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
-                                        <table>
-                                            {
-                                                moduleHook('product-tab')
-                                            }    
-                                        </table>
-                                    </div>
-                                )
-                            }
+                            <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
+                                <table>
+                                    {
+                                        product.attributes.map((attribute) => {
+                                            if (attribute.type === 'bool') {
+                                                return (
+                                                    <tr key={attribute._id}>
+                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                        <td style={{ padding: '10px' }}>{t(`pages/product:${attribute.value.toString()}`)}</td>
+                                                    </tr>
+                                                );
+                                            }
+                                            if (attribute.type === 'textfield' || attribute.type === 'textarea') {
+                                                return (
+                                                    <tr key={attribute._id}>
+                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                        <td style={{ padding: '10px' }}>
+                                                            <div dangerouslySetInnerHTML={{ __html: attribute.value }} />
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                            if (attribute.type === 'color') {
+                                                return (
+                                                    <tr key={attribute._id}>
+                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                        <td style={{ padding: '10px' }}>
+                                                            <div style={{
+                                                                width          : '50px',
+                                                                height         : '20px',
+                                                                backgroundColor: attribute.value.toString(),
+                                                                borderRadius   : '5px'
+                                                            }}
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                            if (Array.isArray(attribute.value)) {
+                                                return (
+                                                    <tr key={attribute._id}>
+                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                        <td style={{ padding: '10px' }}>
+                                                            <div dangerouslySetInnerHTML={{ __html: attribute.value.join(', ') }} />
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                            return (
+                                                <tr key={attribute._id}>
+                                                    <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                    <td style={{ padding: '10px' }}>{attribute.value}</td>
+                                                </tr>
+                                            );
+                                        })
+                                    }
+                                </table>
+                                {moduleHook('product-tab') !== false && <hr />}
+                                {
+                                    moduleHook('product-tab')
+                                }
+                            </div>
                             
                         </div>
                     </div>
@@ -377,7 +424,7 @@ export default function Product({ breadcrumb, origin, product }) {
                 <div className="content-section-short">
                     <div className="container">
                         <div className="title-wrap-centre">
-                            <h3 className="header-h4">{t('components/product:product.otherProducts')}</h3>
+                            <h3 className="header-h4">{t('pages/product:otherProducts')}</h3>
                         </div>
 
                         <div className="w-dyn-list">

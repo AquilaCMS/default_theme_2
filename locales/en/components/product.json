@@ -5,15 +5,6 @@
         "addToCartLoading": "en-Ajout...",
         "noProduct": "en-Impossible d'afficher le produit [{{product}}]"
     },
-    "product": {
-        "tab1": "en-Description",
-        "tab2": "en-Informations sur les allergènes",
-        "otherProducts": "en-Produits complémentaires",
-        "return": "en-Retour",
-        "addToBasket": "en-Ajouter au panier",
-        "compose": "en-Composer",
-        "addToCartLoading": "en-Ajout..."
-    },
     "productList": {
         "noProduct": "en-Aucun produit trouvé."
     }

@@ -87,12 +87,16 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         const cookiePage = cookiesServerInstance.get('page');
         // If cookie page exists
         if (cookiePage) {
-            const dataPage = JSON.parse(cookiePage);
-            // We take the value only if category ID matches
-            // Otherwise, we delete "page" cookie
-            if (dataPage.url === url) {
-                page = dataPage.page;
-            } else {
+            try {
+                const dataPage = JSON.parse(cookiePage);
+                // We take the value only if category ID matches
+                // Otherwise, we delete "page" cookie
+                if (dataPage.url === url) {
+                    page = dataPage.page;
+                } else {
+                    unsetCookie('page', cookiesServerInstance);
+                }
+            } catch (err) {
                 unsetCookie('page', cookiesServerInstance);
             }
         }
@@ -130,9 +134,13 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     let filter         = {};
     let sort           = { sortWeight: -1 };
     if (cookieFilter) {
-        filter = JSON.parse(cookieFilter);
-        if (filter.sort) {
-            sort = filter.sort;
+        try {
+            filter = JSON.parse(cookieFilter);
+            if (filter.sort) {
+                sort = filter.sort;
+            }
+        } catch (err) {
+            unsetCookie('filter', cookiesServerInstance);
         }
     }
 
@@ -158,7 +166,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     }
 
     // Detecting bad price data cookie
-    if (filter && filter.conditions.price && initProductsData.count) {
+    if (filter && filter.conditions?.price && initProductsData.count) {
         const filterPriceMin    = filter.conditions.price.$or[0]['price.ati.normal'].$gte;
         const filterPriceMax    = filter.conditions.price.$or[0]['price.ati.normal'].$lte;
         const filterPriceSpeMin = filter.conditions.price.$or[1]['price.ati.special'].$gte;

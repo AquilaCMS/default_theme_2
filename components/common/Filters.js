@@ -111,7 +111,7 @@ export default function Filters({ filtersData, getProductsList }) {
         const { filter, sort } = getFilterAndSortFromCookie();
 
         // If filter empty (cookie not present), reload
-        if (!Object.keys(filter).length) {
+        if (!Object.keys(filter).length || !filter.conditions?.price) {
             return router.reload();
         }
 
@@ -160,7 +160,7 @@ export default function Filters({ filtersData, getProductsList }) {
         const { filter, sort } = getFilterAndSortFromCookie();
 
         // If filter empty (cookie not present), reload
-        if (!Object.keys(filter).length) {
+        if (!Object.keys(filter).length || !filter.conditions?.price) {
             return router.reload();
         }
 

@@ -157,6 +157,34 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         }
     }
 
+    // Detecting bad price data cookie
+    if (filter && filter.conditions.price && initProductsData.count) {
+        const filterPriceMin    = filter.conditions.price.$or[0]['price.ati.normal'].$gte;
+        const filterPriceMax    = filter.conditions.price.$or[0]['price.ati.normal'].$lte;
+        const filterPriceSpeMin = filter.conditions.price.$or[1]['price.ati.special'].$gte;
+        const filterPriceSpeMax = filter.conditions.price.$or[1]['price.ati.special'].$lte;
+
+        // If there is no price filter selected (priceValues) and the min & max don't match the result of the initial query
+        if (!filter.priceValues) {
+            if (filterPriceMin !== initProductsData.priceMin.ati || filterPriceMax !== initProductsData.priceMax.ati || filterPriceSpeMin !== initProductsData.priceMin.ati || filterPriceSpeMax !== initProductsData.priceMax.ati) {
+                filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: initProductsData.priceMin.ati, $lte: initProductsData.priceMax.ati } }, { 'price.ati.special': { $gte: initProductsData.priceMin.ati, $lte: initProductsData.priceMax.ati } }] };
+            }
+        }
+
+        // If there is a price filter selected (priceValues) and the min and max values are outside the limits
+        if (filter.priceValues && (filter.priceValues.min < priceEnd.min || filter.priceValues.max > priceEnd.max)) {
+            if (filter.priceValues.min < priceEnd.min) {
+                filter.priceValues.min  = priceEnd.min;
+                filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: initProductsData.priceMin.ati, $lte: filterPriceMax } }, { 'price.ati.special': { $gte: initProductsData.priceMin.ati, $lte: filterPriceSpeMax } }] };
+            }
+            if (filter.priceValues.max > priceEnd.max) {
+                filter.priceValues.max  = priceEnd.max;
+                filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: filterPriceMin, $lte: initProductsData.priceMax.ati } }, { 'price.ati.special': { $gte: filterPriceSpeMin, $lte: initProductsData.priceMax.ati } }] };
+            }
+        }
+    }
+
+
     // Category ID for filter
     filter.category = category._id;
 

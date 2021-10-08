@@ -87,6 +87,11 @@ export default function Filters({ filtersData, getProductsList }) {
             filter.priceValues = { min: value[0], max: value[1] };
         }
 
+        if (!filter.conditions) {
+            filter.conditions = {};
+        }
+        filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: value[0], $lte: value[1] } }, { 'price.ati.special': { $gte: value[0], $lte: value[1] } }] };
+
         // Setting filter cookie
         document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
 

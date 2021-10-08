@@ -89,7 +89,7 @@ export default function CheckoutClickAndCollect({ user }) {
                 <div className="container-tunnel">
                     <div className="container-step w-container">
                         <h2 className="heading-steps">2</h2>
-                        <h2 className="heading-2-steps">{t('pages/checkout:clickandcollect.clickandcollect')}</h2>
+                        <h2 className="heading-2-steps">{t('pages/checkout:clickandcollect.step2')}</h2>
                     </div>
                     
                     <ClickAndCollect />

@@ -109,7 +109,7 @@ export default function CheckoutPayment() {
                 <div className="container-tunnel">
                     <div className="container-step w-container">
                         <h2 className="heading-steps">4</h2>
-                        <h2 className="heading-2-steps">{t('pages/checkout:payment.paymentMethod')}</h2>
+                        <h2 className="heading-2-steps">{t('pages/checkout:payment.step4')}</h2>
                     </div>
                     <div className="col-log w-row">
                         <form className="form-mode-paiement-tunnel" onSubmit={onSubmitPayment}>

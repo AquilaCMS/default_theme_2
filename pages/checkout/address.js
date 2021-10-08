@@ -98,7 +98,7 @@ export default function CheckoutAddress({ user }) {
                 <div className="container-tunnel">
                     <div className="container-step w-container">
                         <h2 className="heading-steps">3</h2>
-                        <h2 className="heading-2-steps">{t('pages/checkout:address.address')}</h2>
+                        <h2 className="heading-2-steps">{t('pages/checkout:address.step3')}</h2>
                     </div>
                     
                     <form className="form-mode-paiement-tunnel" onSubmit={onSubmitAddress}>

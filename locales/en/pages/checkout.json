@@ -1,4 +1,10 @@
 {
+  "cart": {
+    "title": "en-Ma commande - Panier",
+    "description": "en-Ma commande - Panier",
+    "titleH1" : "en-Mon panier",
+    "ordering" : "en-COMMANDER"
+  },
   "login": {
     "title": "en-Ma commande - Connexion",
     "description": "en-Ma commande - Connexion",
@@ -9,7 +15,7 @@
     "title" : "en-Ma commande - Click & Collect",
     "description" : "en-Ma commande - Click & Collect",
     "titleH1" : "en-Ma commande",
-    "clickandcollect" : "Click & Collect",
+    "step2" : "Click & Collect",
     "labelPhone" : "en-Téléphone (requis)",
     "next" : "en-SUIVANT",
     "submitError": "en-Veuillez valider un retrait ou une livraison !",
@@ -19,7 +25,7 @@
     "title" : "en-Ma commande - Adresse",
     "description" : "en-Ma commande - Adresse",
     "titleH1" : "en-Ma commande",
-    "address" : "en-Adresse",
+    "step3" : "en-Adresse",
     "mandatory" : "en-Obligatoire",
     "titleBilling":"en-Adresse de facturation",
     "firstname":"en-Prénom",
@@ -36,7 +42,7 @@
     "title" : "en-Ma commande - Moyen de paiement",
     "description" : "en-Ma commande - Moyen de paiement",
     "titleH1" : "en-Ma commande",
-    "paymentMethod" : "en-Moyen de paiement",
+    "step4" : "en-Moyen de paiement",
     "previous" : "en-RETOUR",
     "pay" : "en-PAYER",
     "submitLoading" : "en-PAIEMENT..."

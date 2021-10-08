@@ -42,6 +42,9 @@
       "components/login/registerBlock",
       "pages/account/login"
     ],
+    "/checkout/cart": [
+      "pages/checkout"
+    ],
     "/checkout/clickandcollect": [
       "pages/checkout"
     ],

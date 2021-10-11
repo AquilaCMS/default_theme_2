@@ -72,7 +72,7 @@ export default function NavMenu() {
                                         {
                                             item.slug ? (
                                                 <Link href={item.action === 'catalog' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : item.url)} key={item._id}>
-                                                    <a className="w-nav-link" style={{ padding: '0px' }} target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item.name}</a>
+                                                    <a className="w-nav-link" style={{ padding: '0px' }} target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item.name}</a>
                                                 </Link>
                                             ) : (
                                                 <span>{item.name}</span>
@@ -93,7 +93,7 @@ export default function NavMenu() {
                                                                     {
                                                                         item.slug && item2.slug ? (
                                                                             <Link href={item2.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : item2.url)}>
-                                                                                <a className="w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item2.name}</a>
+                                                                                <a className="w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item2.name}</a>
                                                                             </Link>
                                                                         ) : (
                                                                             <span key={item2._id}>{item2.name}</span>
@@ -111,7 +111,7 @@ export default function NavMenu() {
                                                                                 {
                                                                                     item.slug && item2.slug && item3.slug ? (
                                                                                         <Link href={item3.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}/${item3.slug[lang]}` : (item3.action === 'page' ? `/${item3.pageSlug}` : item3.url)}>
-                                                                                            <a className="dropdown-link-3 w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item3.name}</a>
+                                                                                            <a className="dropdown-link-3 w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item3.name}</a>
                                                                                         </Link>
                                                                                     ) : (
                                                                                         <span>{item3.name}</span>
@@ -128,7 +128,7 @@ export default function NavMenu() {
                                                             {
                                                                 item2.slug ? (
                                                                     <Link href={item2.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : item2.url)}>
-                                                                        <a className="dropdown-nav-link w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item2.name}</a>
+                                                                        <a className="dropdown-nav-link w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item2.name}</a>
                                                                     </Link>
                                                                 ) : (
                                                                     <span key={item2._id}>{item2.name}</span>
@@ -147,7 +147,7 @@ export default function NavMenu() {
                                 {
                                     item.slug ? (
                                         <Link href={item.action === 'catalog' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : item.url)}>
-                                            <a className="nav-link-2 w-nav-link" style={current ? { backgroundColor: '#ff8946' } : {}} target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item.name}</a>
+                                            <a className="nav-link-2 w-nav-link" style={current ? { backgroundColor: '#ff8946' } : {}} target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item.name}</a>
                                         </Link>
                                     ) : (
                                         <span>{item.name}</span>

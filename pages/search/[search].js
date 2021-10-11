@@ -117,6 +117,43 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         delete filter.conditions;
     }
 
+    // Detecting bad price data cookie
+    /*if (filter && filter.conditions?.price && initProductsData.count) {
+        const filterPriceMin    = filter.conditions.price.$or[0]['price.ati.normal'].$gte;
+        const filterPriceMax    = filter.conditions.price.$or[0]['price.ati.normal'].$lte;
+        const filterPriceSpeMin = filter.conditions.price.$or[1]['price.ati.special'].$gte;
+        const filterPriceSpeMax = filter.conditions.price.$or[1]['price.ati.special'].$lte;
+
+        // If there is no price filter selected (priceValues) and the min & max in filter price don't match the result of the initial query
+        if (!filter.priceValues) {
+            if (filterPriceMin !== initProductsData.min.ati || filterPriceMax !== initProductsData.max.ati || filterPriceSpeMin !== initProductsData.specialPriceMin.ati || filterPriceSpeMax !== initProductsData.specialPriceMax.ati) {
+                filter.conditions.price = { 
+                    $or: [
+                        { 'price.ati.normal': { $gte: initProductsData.min.ati, $lte: initProductsData.max.ati } },
+                        { 'price.ati.special': { $gte: initProductsData.specialPriceMin.ati, $lte: initProductsData.specialPriceMax.ati } }
+                    ]
+                };
+            }
+        }
+
+        // If there is a price filter selected (priceValues) and the min and max values of priceValues are outside the limits
+        if (filter.priceValues) {
+            if (filter.priceValues.min < priceEnd.min) {
+                filter.priceValues.min                                   = priceEnd.min;
+                filter.conditions.price.$or[0]['price.ati.normal'].$gte  = initProductsData.min.ati;
+                filter.conditions.price.$or[1]['price.ati.special'].$gte = initProductsData.specialPriceMin.ati;
+            }
+            if (filter.priceValues.max > priceEnd.max) {
+                filter.priceValues.max                                   = priceEnd.max;
+                filter.conditions.price.$or[0]['price.ati.normal'].$lte  = initProductsData.max.ati;
+                filter.conditions.price.$or[1]['price.ati.special'].$lte = initProductsData.specialPriceMax.ati;
+            }
+            if (filter.priceValues.min === priceEnd.min && filter.priceValues.max === priceEnd.max) {
+                delete filter.priceValues;
+            }
+        }
+    }*/
+
     // Category ID for filter
     filter.category = 'search-' + search;
 

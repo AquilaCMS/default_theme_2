@@ -1,12 +1,12 @@
-import { useEffect, useState }                                                      from 'react';
-import { useRouter }                                                                from 'next/router';
-import cookie                                                                       from 'cookie';
-import useTranslation                                                               from 'next-translate/useTranslation';
-import { getBlockCMS }                                                              from 'aquila-connector/api/blockcms';
-import { getCategoryProducts }                                                      from 'aquila-connector/api/category';
-import axios                                                                        from 'aquila-connector/lib/AxiosInstance';
-import { useCategoryPage, useCategoryProducts, useCategoryPriceEnd, useSiteConfig } from '@lib/hooks';
-import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                   from '@lib/utils';
+import { useEffect, useState }                                                    from 'react';
+import { useRouter }                                                              from 'next/router';
+import cookie                                                                     from 'cookie';
+import useTranslation                                                             from 'next-translate/useTranslation';
+import { getBlockCMS }                                                            from 'aquila-connector/api/blockcms';
+import { getCategoryProducts }                                                    from 'aquila-connector/api/category';
+import axios                                                                      from 'aquila-connector/lib/AxiosInstance';
+import { useSelectPage, useCategoryProducts, useCategoryPriceEnd, useSiteConfig } from '@lib/hooks';
+import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                 from '@lib/utils';
 
 // GET allergens
 async function getAllergens() {
@@ -26,7 +26,7 @@ export default function AllergenFilter() {
     const [open, setOpen]                         = useState(false);
     const [message, setMessage]                   = useState();
     const router                                  = useRouter();
-    const { setCategoryPage }                     = useCategoryPage();
+    const { setSelectPage }                       = useSelectPage();
     const { setCategoryProducts }                 = useCategoryProducts();
     const { categoryPriceEnd }                    = useCategoryPriceEnd();
     const { themeConfig }                         = useSiteConfig();
@@ -127,7 +127,7 @@ export default function AllergenFilter() {
             setCategoryProducts(products);
 
             // Back to page 1
-            setCategoryPage(1);
+            setSelectPage(1);
 
             // Back to page 1... so useless "page" cookie
             unsetCookie('page');
@@ -160,7 +160,7 @@ export default function AllergenFilter() {
                 setCategoryProducts(products);
 
                 // Back to page 1
-                setCategoryPage(1);
+                setSelectPage(1);
 
                 // Back to page 1... so useless "page" cookie
                 unsetCookie('page');

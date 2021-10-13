@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState }                                              from 'react';
-import { useRouter }                                                                from 'next/router';
-import useTranslation                                                               from 'next-translate/useTranslation';
-import Slider                                                                       from 'rc-slider';
-import { useCategoryPriceEnd, useCategoryPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
-import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                   from '@lib/utils';
+import { useEffect, useRef, useState }                                            from 'react';
+import { useRouter }                                                              from 'next/router';
+import useTranslation                                                             from 'next-translate/useTranslation';
+import Slider                                                                     from 'rc-slider';
+import { useCategoryPriceEnd, useSelectPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
+import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                 from '@lib/utils';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range                   = createSliderWithTooltip(Slider.Range);
@@ -18,7 +18,7 @@ export default function Filters({ filtersData, getProductsList }) {
     const [sort, setSort]                                         = useState({ sortWeight: -1 });
     const [priceValue, setPriceValue]                             = useState([categoryPriceEnd.min, categoryPriceEnd.max]);
     const [open, setOpen]                                         = useState(false);
-    const { setCategoryPage }                                     = useCategoryPage();
+    const { setSelectPage }                                       = useSelectPage();
     const { setCategoryProducts }                                 = useCategoryProducts();
     const { themeConfig }                                         = useSiteConfig();
     const router                                                  = useRouter();
@@ -100,7 +100,7 @@ export default function Filters({ filtersData, getProductsList }) {
         setCategoryProducts(products);
 
         // Force page 1
-        setCategoryPage(1);
+        setSelectPage(1);
 
         // Page 1... so useless "page" cookie
         unsetCookie('page');
@@ -149,7 +149,7 @@ export default function Filters({ filtersData, getProductsList }) {
         setCategoryProducts(products);
 
         // Force page 1
-        setCategoryPage(1);
+        setSelectPage(1);
 
         // Page 1... so useless "page" cookie
         unsetCookie('page');
@@ -192,7 +192,7 @@ export default function Filters({ filtersData, getProductsList }) {
         setCategoryProducts(products);
 
         // Force page 1
-        setCategoryPage(1);
+        setSelectPage(1);
 
         // Page 1... so useless "page" cookie
         unsetCookie('page');
@@ -225,7 +225,7 @@ export default function Filters({ filtersData, getProductsList }) {
         setCategoryProducts(products);
 
         // Force page 1
-        setCategoryPage(1);
+        setSelectPage(1);
 
         // Page 1... so useless "page" cookie
         unsetCookie('page');
@@ -253,7 +253,7 @@ export default function Filters({ filtersData, getProductsList }) {
         setCategoryProducts(products);
 
         // Force page 1
-        setCategoryPage(1);
+        setSelectPage(1);
 
         // Page 1... so useless "page" cookie
         unsetCookie('page');

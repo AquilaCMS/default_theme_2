@@ -3,7 +3,7 @@ import useTranslation                                         from 'next-transla
 import Cookies                                                from 'cookies';
 import Error                                                  from '@pages/_error';
 import Filters                                                from '@components/common/Filters';
-import Pagination                                             from '@components/common/Pagination';
+import Pagination                                             from '@components/category/Pagination';
 import Layout                                                 from '@components/layouts/Layout';
 import NextSeoCustom                                          from '@components/tools/NextSeoCustom';
 import ProductList                                            from '@components/product/ProductList';
@@ -49,12 +49,16 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         const cookiePage = cookiesServerInstance.get('page');
         // If cookie page exists
         if (cookiePage) {
-            const dataPage = JSON.parse(cookiePage);
-            // We take the value only if category ID matches
-            // Otherwise, we delete "page" cookie
-            if (dataPage.url === url) {
-                page = dataPage.page;
-            } else {
+            try {
+                const dataPage = JSON.parse(cookiePage);
+                // We take the value only if category ID matches
+                // Otherwise, we delete "page" cookie
+                if (dataPage.url === url) {
+                    page = dataPage.page;
+                } else {
+                    unsetCookie('page', cookiesServerInstance);
+                }
+            } catch (err) {
                 unsetCookie('page', cookiesServerInstance);
             }
         }
@@ -92,9 +96,13 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     let filter         = {};
     let sort           = { sortWeight: -1 };
     if (cookieFilter) {
-        filter = JSON.parse(cookieFilter);
-        if (filter.sort) {
-            sort = filter.sort;
+        try {
+            filter = JSON.parse(cookieFilter);
+            if (filter.sort) {
+                sort = filter.sort;
+            }
+        } catch (err) {
+            unsetCookie('filter', cookiesServerInstance);
         }
     }
 

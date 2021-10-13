@@ -5,12 +5,12 @@ import ReactPaginate                                              from 'react-pa
 import { useRouter }                                              from 'next/router';
 import useTranslation                                             from 'next-translate/useTranslation';
 import Button                                                     from '@components/ui/Button';
-import { useCategoryPage, useCategoryProducts, useSiteConfig }    from '@lib/hooks';
+import { useSelectPage, useCategoryProducts, useSiteConfig }      from '@lib/hooks';
 import { getFilterAndSortFromCookie, convertFilter, unsetCookie } from '@lib/utils';
 
 export default function Pagination({ children, getProductsList }) {
     const [isLoading, setIsLoading]                 = useState(false);
-    const { categoryPage, setCategoryPage }         = useCategoryPage();
+    const { selectPage, setSelectPage }             = useSelectPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
     const { themeConfig }                           = useSiteConfig();
     const router                                    = useRouter();
@@ -52,7 +52,7 @@ export default function Pagination({ children, getProductsList }) {
         setCategoryProducts(products);
 
         // Updating category page
-        setCategoryPage(page);
+        setSelectPage(page);
 
         // Setting category page cookie
         if (page > 1) {
@@ -66,7 +66,7 @@ export default function Pagination({ children, getProductsList }) {
     const loadMoreData = async () => {
         setIsLoading(true);
 
-        const page = categoryPage + 1;
+        const page = selectPage + 1;
 
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
@@ -82,7 +82,7 @@ export default function Pagination({ children, getProductsList }) {
         setCategoryProducts({ ...categoryProducts });
 
         // Updating category page
-        setCategoryPage(page);
+        setSelectPage(page);
 
         // Setting category page cookie
         document.cookie = 'page=' + JSON.stringify({ url, page }) + '; path=/; max-age=43200;';
@@ -100,7 +100,7 @@ export default function Pagination({ children, getProductsList }) {
                         <InfiniteScroll
                             dataLength={categoryProducts.datas.length}
                             next={paginationMode > 1 ? undefined : loadMoreData}
-                            hasMore={categoryPage < pageCount}
+                            hasMore={selectPage < pageCount}
                             loader={
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     {
@@ -133,7 +133,7 @@ export default function Pagination({ children, getProductsList }) {
                         previousLabel={'<'}
                         nextLabel={'>'}
                         breakLabel={'...'}
-                        forcePage={categoryPage - 1}
+                        forcePage={selectPage - 1}
                         pageCount={pageCount}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={5}

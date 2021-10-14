@@ -44,7 +44,13 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         // Get product from slug
         const postBody = {
             PostBody: {
-                filter: { [`translation.${locale}.slug`]: productSlug }
+                filter   : { [`translation.${locale}.slug`]: productSlug },
+                structure: { allergens: 1 },
+                populate : [
+                    'allergens',
+                    'associated_prds',
+                    'bundle_sections.products.id'
+                ]
             }
         };
         product        = await getProduct(postBody, query.preview, locale);
@@ -203,8 +209,6 @@ export default function Product({ breadcrumb, origin, product }) {
             }
         });
     }
-
-    console.log(product);
 
     return (
 

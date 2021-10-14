@@ -1,29 +1,29 @@
-import { useState }                                                from 'react';
-import { ProductJsonLd }                                           from 'next-seo';
-import absoluteUrl                                                 from 'next-absolute-url';
-import { useRouter }                                               from 'next/router';
-import getT                                                        from 'next-translate/getT';
-import useTranslation                                              from 'next-translate/useTranslation';
-import Cookies                                                     from 'cookies';
-import { Modal }                                                   from 'react-responsive-modal';
-import Lightbox                                                    from 'lightbox-react';
-import ErrorPage                                                   from '@pages/_error';
-import BundleProduct                                               from '@components/product/BundleProduct';
-import Layout                                                      from '@components/layouts/Layout';
-import NextSeoCustom                                               from '@components/tools/NextSeoCustom';
-import Breadcrumb                                                  from '@components/navigation/Breadcrumb';
-import ProductList                                                 from '@components/product/ProductList';
-import BlockCMS                                                    from '@components/common/BlockCMS';
-import Button                                                      from '@components/ui/Button';
-import { dispatcher }                                              from '@lib/redux/dispatcher';
-import { getBlocksCMS }                                            from 'aquila-connector/api/blockcms';
-import { getBreadcrumb }                                           from 'aquila-connector/api/breadcrumb';
-import { addToCart }                                               from 'aquila-connector/api/cart';
-import { getCategories }                                           from 'aquila-connector/api/category';
-import { getProduct }                                              from 'aquila-connector/api/product';
-import { getImage, getMainImage, getTabImageURL }                  from 'aquila-connector/api/product/helpersProduct';
-import { useCart, useShowCartSidebar }                             from '@lib/hooks';
-import { setLangAxios, formatBreadcrumb, formatPrice, moduleHook } from '@lib/utils';
+import { useState }                                                                              from 'react';
+import { ProductJsonLd }                                                                         from 'next-seo';
+import absoluteUrl                                                                               from 'next-absolute-url';
+import { useRouter }                                                                             from 'next/router';
+import getT                                                                                      from 'next-translate/getT';
+import useTranslation                                                                            from 'next-translate/useTranslation';
+import Cookies                                                                                   from 'cookies';
+import { Modal }                                                                                 from 'react-responsive-modal';
+import Lightbox                                                                                  from 'lightbox-react';
+import ErrorPage                                                                                 from '@pages/_error';
+import BundleProduct                                                                             from '@components/product/BundleProduct';
+import Layout                                                                                    from '@components/layouts/Layout';
+import NextSeoCustom                                                                             from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                                                from '@components/navigation/Breadcrumb';
+import ProductList                                                                               from '@components/product/ProductList';
+import BlockCMS                                                                                  from '@components/common/BlockCMS';
+import Button                                                                                    from '@components/ui/Button';
+import { dispatcher }                                                                            from '@lib/redux/dispatcher';
+import { getBlocksCMS }                                                                          from 'aquila-connector/api/blockcms';
+import { getBreadcrumb }                                                                         from 'aquila-connector/api/breadcrumb';
+import { addToCart }                                                                             from 'aquila-connector/api/cart';
+import { getCategories }                                                                         from 'aquila-connector/api/category';
+import { getProduct }                                                                            from 'aquila-connector/api/product';
+import { getImage, getMainImage, getTabImageURL }                                                from 'aquila-connector/api/product/helpersProduct';
+import { useCart, useShowCartSidebar }                                                           from '@lib/hooks';
+import { setLangAxios, formatBreadcrumb, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 
 import 'lightbox-react/style.css';
 import 'react-responsive-modal/styles.css';
@@ -34,13 +34,20 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     const productSlug   = params.productSlug.pop();
     const categorySlugs = params.productSlug;
 
-    // Get category from slug
     let categories = [];
     let product    = {};
     try {
+        // Get category from slug
         const dataCategories = await getCategories(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: { $in: categorySlugs } }, limit: 9999 } });
         categories           = dataCategories.datas;
-        product              = await getProduct('slug', productSlug, query.preview, locale);
+
+        // Get product from slug
+        const postBody = {
+            PostBody: {
+                filter: { [`translation.${locale}.slug`]: productSlug }
+            }
+        };
+        product        = await getProduct(postBody, query.preview, locale);
     } catch (err) {
         return { notFound: true };
     }
@@ -197,6 +204,8 @@ export default function Product({ breadcrumb, origin, product }) {
         });
     }
 
+    console.log(product);
+
     return (
 
         <Layout>
@@ -243,7 +252,7 @@ export default function Product({ breadcrumb, origin, product }) {
                         price        : product.price?.ati?.special ? product.price.ati.special : product.price?.ati.normal,
                         priceCurrency: 'EUR',
                         itemCondition: 'https://schema.org/NewCondition',
-                        availability : 'https://schema.org/InStock',
+                        availability : `https://schema.org/${getAvailability(product.stock)}`,
                         url          : product.canonical
                     }
                 ]}
@@ -320,6 +329,7 @@ export default function Product({ breadcrumb, origin, product }) {
                                         className="w-commerce-commerceaddtocartbutton order-button"
                                     />
                                 </form>
+                                <div style={{ textAlign: 'right' }}>{formatStock(product.stock)}</div>
                                 {
                                     message && (
                                         <div className={`w-commerce-commerce${message.type}`}>

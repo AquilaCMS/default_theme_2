@@ -9,7 +9,7 @@ import Button                                            from '@components/ui/Bu
 import { generateSlug, getImage }                        from 'aquila-connector/api/product/helpersProduct';
 import { addToCart }                                     from 'aquila-connector/api/cart';
 import { useCart, useComponentData, useShowCartSidebar } from '@lib/hooks';
-import { formatPrice, unsetCookie }                      from '@lib/utils';
+import { formatPrice, formatStock, unsetCookie }         from '@lib/utils';
 
 import 'react-responsive-modal/styles.css';
 
@@ -141,7 +141,7 @@ export default function ProductCard({ type, value, col = 6 }) {
                 <div className="food-card-content">
                     <Link href={currentSlug}>
                         <a className="food-title-wrap w-inline-block">
-                            <h6 className="heading-9" >{product.name}</h6>
+                            <h6 className="heading-9">{product.name}</h6>
                             <div className="div-block-prix">
                                 <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
                                 { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
@@ -170,6 +170,9 @@ export default function ProductCard({ type, value, col = 6 }) {
                                 </form>
                             )
                         }
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                        { formatStock(product.stock) }
                     </div>
                 </div>
             </div>

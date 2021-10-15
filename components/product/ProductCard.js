@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState }                   from 'react';
-import Link                                              from 'next/link';
-import { useRouter }                                     from 'next/router';
-import useTranslation                                    from 'next-translate/useTranslation';
-import cookie                                            from 'cookie';
-import { Modal }                                         from 'react-responsive-modal';
-import BundleProduct                                     from '@components/product/BundleProduct';
-import Button                                            from '@components/ui/Button';
-import { generateSlug, getImage }                        from 'aquila-connector/api/product/helpersProduct';
-import { addToCart }                                     from 'aquila-connector/api/cart';
-import { useCart, useComponentData, useShowCartSidebar } from '@lib/hooks';
-import { formatPrice, formatStock, unsetCookie }         from '@lib/utils';
+import { useEffect, useRef, useState }                                  from 'react';
+import Link                                                             from 'next/link';
+import { useRouter }                                                    from 'next/router';
+import useTranslation                                                   from 'next-translate/useTranslation';
+import cookie                                                           from 'cookie';
+import { Modal }                                                        from 'react-responsive-modal';
+import BundleProduct                                                    from '@components/product/BundleProduct';
+import Button                                                           from '@components/ui/Button';
+import { generateSlug, getImage }                                       from 'aquila-connector/api/product/helpersProduct';
+import { addToCart }                                                    from 'aquila-connector/api/cart';
+import { useCart, useComponentData, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
+import { formatPrice, formatStock, unsetCookie }                        from '@lib/utils';
 
 import 'react-responsive-modal/styles.css';
 
@@ -23,6 +23,7 @@ export default function ProductCard({ type, value, col = 6 }) {
     const { query }                 = useRouter();
     const { cart, setCart }         = useCart();
     const { setShowCartSidebar }    = useShowCartSidebar();
+    const { themeConfig }           = useSiteConfig();
     const componentData             = useComponentData();
     const { lang, t }               = useTranslation();
 
@@ -30,6 +31,9 @@ export default function ProductCard({ type, value, col = 6 }) {
     // Live use in code (data in "value" prop => type = "data")
     // Use in CMS block (data in redux store => SET_COMPONENT_DATA => type = "id|code")
     const product = type === 'data' ? value : componentData[`nsProductCard_${type}_${value}`];
+
+    // Getting boolean stock display
+    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCard')?.value || false;
 
     useEffect(() => {
         // Get product ID from cookie
@@ -171,9 +175,13 @@ export default function ProductCard({ type, value, col = 6 }) {
                             )
                         }
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                        { formatStock(product.stock) }
-                    </div>
+                    {
+                        stockDisplay && (
+                            <div style={{ textAlign: 'right' }}>
+                                { formatStock(product.stock) }
+                            </div>
+                        )
+                    }
                 </div>
             </div>
             <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>

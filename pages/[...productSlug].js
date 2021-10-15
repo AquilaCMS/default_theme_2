@@ -22,7 +22,7 @@ import { addToCart }                                                            
 import { getCategories }                                                                         from 'aquila-connector/api/category';
 import { getProduct }                                                                            from 'aquila-connector/api/product';
 import { getImage, getMainImage, getTabImageURL }                                                from 'aquila-connector/api/product/helpersProduct';
-import { useCart, useShowCartSidebar }                                                           from '@lib/hooks';
+import { useCart, useShowCartSidebar, useSiteConfig }                                            from '@lib/hooks';
 import { setLangAxios, formatBreadcrumb, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 
 import 'lightbox-react/style.css';
@@ -128,11 +128,15 @@ export default function Product({ breadcrumb, origin, product }) {
     const [openModal, setOpenModal]   = useState(false);
     const [tabs, setTabs]             = useState(0);
     const { cart, setCart }           = useCart();
+    const { themeConfig }             = useSiteConfig();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
     const router                      = useRouter();
 
     if (!product) return <ErrorPage statusCode={404} />;
+
+    // Getting boolean stock display
+    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value || false;
 
     const coverImageUrl = getMainImage(product.images, '578x578') || '/images/no-image.svg';
 
@@ -257,7 +261,7 @@ export default function Product({ breadcrumb, origin, product }) {
                         priceCurrency: 'EUR',
                         itemCondition: 'https://schema.org/NewCondition',
                         availability : `https://schema.org/${getAvailability(product.stock)}`,
-                        url          : product.canonical
+                        url          : origin + product.canonical
                     }
                 ]}
             />
@@ -333,7 +337,7 @@ export default function Product({ breadcrumb, origin, product }) {
                                         className="w-commerce-commerceaddtocartbutton order-button"
                                     />
                                 </form>
-                                <div style={{ textAlign: 'right' }}>{formatStock(product.stock)}</div>
+                                { stockDisplay && <div style={{ textAlign: 'right' }}>{formatStock(product.stock)}</div> }
                                 {
                                     message && (
                                         <div className={`w-commerce-commerce${message.type}`}>

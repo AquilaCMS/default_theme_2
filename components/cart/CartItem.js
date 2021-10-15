@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import useTranslation                  from 'next-translate/useTranslation';
 import { deleteItem, updateQtyItem }   from 'aquila-connector/api/cart';
-import { getImage }                    from 'aquila-connector/api/product/helpersProduct';
-import { useCart }                     from '@lib/hooks';
+import { useCart, useSiteConfig }      from '@lib/hooks';
 import { formatPrice, formatStock }    from '@lib/utils';
 
 export default function CartItem({ item }) {
@@ -10,7 +9,11 @@ export default function CartItem({ item }) {
     const [message, setMessage] = useState();
     const timer                 = useRef();
     const { cart, setCart }     = useCart();
+    const { themeConfig }       = useSiteConfig();
     const { t }                 = useTranslation();
+
+    // Getting boolean stock display
+    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCart')?.value || false;
 
     useEffect(() => {
         return () => clearTimeout(timer.current);
@@ -58,7 +61,7 @@ export default function CartItem({ item }) {
                             { item.price?.special ? <><del>{formatPrice(item.price.unit.ati)}</del>&nbsp;</> : null }
                             { item.price?.special ? formatPrice(item.price.special.ati) : formatPrice(item.price.unit.ati) }
                         </div>
-                        <div style={{ fontSize: '10px' }}>{formatStock(item.stock)}</div>
+                        { stockDisplay && <div style={{ fontSize: '10px' }}>{formatStock(item.stock)}</div> }
                     </div>
                     {
                         item.selections && item.selections.length > 0 && (

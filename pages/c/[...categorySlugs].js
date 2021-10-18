@@ -34,6 +34,8 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             const cat = await getCategory(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: slug } } });
             if (cat) {
                 categories.push(cat);
+            } else {
+                return { notFound: true };
             }
         } catch (err) {
             return { notFound: true };

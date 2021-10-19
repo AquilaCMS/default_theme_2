@@ -446,7 +446,7 @@ export default function Product({ breadcrumb, origin, product }) {
                         </div>
 
                         <div className="w-dyn-list">
-                            <ProductList type="data" value={product.associated_prds} />
+                            <ProductList type="data" value={product.associated_prds} max={2} />
                         </div>
                     </div>
                 </div>

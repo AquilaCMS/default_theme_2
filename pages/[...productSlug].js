@@ -45,7 +45,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         const postBody = {
             PostBody: {
                 filter   : { [`translation.${locale}.slug`]: productSlug },
-                structure: { allergens: 1 },
+                structure: { allergens: 1, trademark: 1 },
                 populate : [
                     'allergens',
                     'associated_prds',
@@ -228,8 +228,8 @@ export default function Product({ breadcrumb, origin, product }) {
             <ProductJsonLd
                 productName={product.name}
                 images={getTabImageURL(product.images)}
-                description={product?.description2?.text}
-                // brand="TODO"
+                description={product.description2?.text}
+                brand={product.trademark?.name}
                 //     reviews={[
                 //         {
                 //             author: {

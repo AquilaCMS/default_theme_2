@@ -1,25 +1,25 @@
-import { useState }                                                                         from 'react';
-import absoluteUrl                                                                          from 'next-absolute-url';
-import Head                                                                                 from 'next/head';
-import { useRouter }                                                                        from 'next/router';
-import getT                                                                                 from 'next-translate/getT';
-import useTranslation                                                                       from 'next-translate/useTranslation';
-import Cookies                                                                              from 'cookies';
-import Error                                                                                from '@pages/_error';
-import Filters                                                                              from '@components/common/Filters';
-import Pagination                                                                           from '@components/category/Pagination';
-import Layout                                                                               from '@components/layouts/Layout';
-import NextSeoCustom                                                                        from '@components/tools/NextSeoCustom';
-import Breadcrumb                                                                           from '@components/navigation/Breadcrumb';
-import CategoryList                                                                         from '@components/category/CategoryList';
-import ProductList                                                                          from '@components/product/ProductList';
-import MenuCategories                                                                       from '@components/navigation/MenuCategories';
-import { dispatcher }                                                                       from '@lib/redux/dispatcher';
-import { getBreadcrumb }                                                                    from 'aquila-connector/api/breadcrumb';
-import { getCategory, getCategoryProducts }                                                 from 'aquila-connector/api/category';
-import { getSiteInfo }                                                                      from 'aquila-connector/api/site';
-import { useCategoryProducts, useSiteConfig }                                               from '@lib/hooks';
-import { setLangAxios, formatBreadcrumb, cloneObj, convertFilter, moduleHook, unsetCookie } from '@lib/utils';
+import { useState }                                                       from 'react';
+import absoluteUrl                                                        from 'next-absolute-url';
+import Head                                                               from 'next/head';
+import { useRouter }                                                      from 'next/router';
+import getT                                                               from 'next-translate/getT';
+import useTranslation                                                     from 'next-translate/useTranslation';
+import Cookies                                                            from 'cookies';
+import Error                                                              from '@pages/_error';
+import Filters                                                            from '@components/common/Filters';
+import Pagination                                                         from '@components/category/Pagination';
+import Layout                                                             from '@components/layouts/Layout';
+import NextSeoCustom                                                      from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                         from '@components/navigation/Breadcrumb';
+import CategoryList                                                       from '@components/category/CategoryList';
+import ProductList                                                        from '@components/product/ProductList';
+import MenuCategories                                                     from '@components/navigation/MenuCategories';
+import { dispatcher }                                                     from '@lib/redux/dispatcher';
+import { getBreadcrumb }                                                  from 'aquila-connector/api/breadcrumb';
+import { getCategory, getCategoryProducts }                               from 'aquila-connector/api/category';
+import { getSiteInfo }                                                    from 'aquila-connector/api/site';
+import { useCategoryProducts, useSiteConfig }                             from '@lib/hooks';
+import { setLangAxios, cloneObj, convertFilter, moduleHook, unsetCookie } from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     setLangAxios(locale, req, res);
@@ -260,7 +260,6 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // URL origin
     const { origin } = absoluteUrl(req);
     
-    pageProps.props.categorySlugs    = categorySlugs.join('/');
     pageProps.props.origin           = origin;
     pageProps.props.breadcrumb       = breadcrumb;
     pageProps.props.category         = category;
@@ -269,7 +268,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     return pageProps;
 }
 
-export default function Category({ breadcrumb, category, categorySlugs, initProductsData, limit, origin, error }) {
+export default function Category({ breadcrumb, category, initProductsData, limit, origin, error }) {
     const [message, setMessage] = useState();
     const { categoryProducts }  = useCategoryProducts();
     const { themeConfig }       = useSiteConfig();
@@ -294,23 +293,28 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
     if (error) {
         return <Error statusCode={error.code} />;
     }
+
+    let [url] = router.asPath.split('?');
+    if (router.defaultLocale !== lang) {
+        url = `/${lang}${url}`;
+    }
     
     return (
         <Layout>
             <NextSeoCustom
                 title={category.name}
                 description={category.metaDescription}
-                canonical={`${origin}/c/${categorySlugs}${queryPage > 1 ? `?page=${queryPage}` : ''}`}
+                canonical={`${origin}${url}${queryPage > 1 ? `?page=${queryPage}` : ''}`}
                 lang={lang}
                 image={`${origin}/images/medias/max-100/605363104b9ac91f54fcabac/Logo.jpg`}
             />
 
             <Head>
                 {
-                    queryPage > 1 && <link rel="prev" href={`${origin}/c/${categorySlugs}${queryPage === 2 ? '' : `?page=${queryPage - 1}`}`} />
+                    queryPage > 1 && <link rel="prev" href={`${origin}${url}${queryPage === 2 ? '' : `?page=${queryPage - 1}`}`} />
                 }
                 {
-                    (queryPage >= 1) && queryPage < pageCount && <link rel="next" href={`${origin}/c/${categorySlugs}?page=${queryPage + 1}`} />
+                    (queryPage >= 1) && queryPage < pageCount && <link rel="next" href={`${origin}${url}?page=${queryPage + 1}`} />
                 }
             </Head>
 
@@ -322,7 +326,7 @@ export default function Category({ breadcrumb, category, categorySlugs, initProd
                 moduleHook('category-top')
             }
 
-            <Breadcrumb items={formatBreadcrumb(breadcrumb)} />
+            <Breadcrumb items={breadcrumb} origin={origin} />
 
             <div className="content-section-carte">
                 {

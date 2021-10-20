@@ -14,7 +14,7 @@ export default function Layout({ children }) {
     return (
         <>
             <Head>
-                {cmsBlockHead ? parse(cmsBlockHead.content) : null}
+                {cmsBlockHead && cmsBlockHead.content ? parse(cmsBlockHead.content) : null}
             </Head>
 
             <BlockCMS nsCode="top-banner" />

@@ -257,6 +257,10 @@
         "fr": {
           "name": "Menu footer",
           "slug": "menu-footer"
+        },
+        "en": {
+          "name": "Menu footer",
+          "slug": "menu-footer"
         }
       },
       "code": "menu-footer",
@@ -313,7 +317,6 @@
       "isDisplayed": true,
       "action": "page",
       "ancestors": [
-        "605360b64d77e748945f27f3",
         "605360d84d77e748945f27f4"
       ],
       "children": [],
@@ -348,7 +351,6 @@
       "isDisplayed": true,
       "action": "page",
       "ancestors": [
-        "605360b64d77e748945f27f3",
         "605360d84d77e748945f27f4"
       ],
       "children": [],
@@ -358,8 +360,11 @@
       "translation": {
         "fr": {
           "name": "Mentions légales",
-          "slug": "mentions-legales",
           "pageSlug": "mentions-legales"
+        }, 
+        "en" : {
+            "name" : "legal notice", 
+            "pageSlug" : "legal-notice"
         }
       },
       "code": "MentionsLegales",
@@ -378,7 +383,6 @@
       "isDisplayed": true,
       "action": "page",
       "ancestors": [
-        "605360b64d77e748945f27f3",
         "605360d84d77e748945f27f4"
       ],
       "children": [],
@@ -613,6 +617,10 @@
         "fr": {
           "name": "Marketing",
           "slug": "marketing"
+        }, 
+        "en" : {
+            "name" : "Marketing", 
+            "slug" : "marketing"
         }
       },
       "code": "marketing",

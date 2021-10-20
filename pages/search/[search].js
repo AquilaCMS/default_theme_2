@@ -188,7 +188,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
 
     const actions = [
         {
-            type : 'SET_CATEGORY_PAGE',
+            type : 'SET_SELECT_PAGE',
             value: page
         }, {
             type : 'SET_CATEGORY_PRICE_END',

@@ -1,29 +1,29 @@
-import { useState }                                                                              from 'react';
-import { ProductJsonLd }                                                                         from 'next-seo';
-import absoluteUrl                                                                               from 'next-absolute-url';
-import { useRouter }                                                                             from 'next/router';
-import getT                                                                                      from 'next-translate/getT';
-import useTranslation                                                                            from 'next-translate/useTranslation';
-import Cookies                                                                                   from 'cookies';
-import { Modal }                                                                                 from 'react-responsive-modal';
-import Lightbox                                                                                  from 'lightbox-react';
-import ErrorPage                                                                                 from '@pages/_error';
-import BundleProduct                                                                             from '@components/product/BundleProduct';
-import Layout                                                                                    from '@components/layouts/Layout';
-import NextSeoCustom                                                                             from '@components/tools/NextSeoCustom';
-import Breadcrumb                                                                                from '@components/navigation/Breadcrumb';
-import ProductList                                                                               from '@components/product/ProductList';
-import BlockCMS                                                                                  from '@components/common/BlockCMS';
-import Button                                                                                    from '@components/ui/Button';
-import { dispatcher }                                                                            from '@lib/redux/dispatcher';
-import { getBlocksCMS }                                                                          from 'aquila-connector/api/blockcms';
-import { getBreadcrumb }                                                                         from 'aquila-connector/api/breadcrumb';
-import { addToCart }                                                                             from 'aquila-connector/api/cart';
-import { getCategories }                                                                         from 'aquila-connector/api/category';
-import { getProduct }                                                                            from 'aquila-connector/api/product';
-import { getImage, getMainImage, getTabImageURL }                                                from 'aquila-connector/api/product/helpersProduct';
-import { useCart, useShowCartSidebar, useSiteConfig }                                            from '@lib/hooks';
-import { setLangAxios, formatBreadcrumb, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
+import { useState }                                                            from 'react';
+import { ProductJsonLd }                                                       from 'next-seo';
+import absoluteUrl                                                             from 'next-absolute-url';
+import { useRouter }                                                           from 'next/router';
+import getT                                                                    from 'next-translate/getT';
+import useTranslation                                                          from 'next-translate/useTranslation';
+import Cookies                                                                 from 'cookies';
+import { Modal }                                                               from 'react-responsive-modal';
+import Lightbox                                                                from 'lightbox-react';
+import ErrorPage                                                               from '@pages/_error';
+import BundleProduct                                                           from '@components/product/BundleProduct';
+import Layout                                                                  from '@components/layouts/Layout';
+import NextSeoCustom                                                           from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                              from '@components/navigation/Breadcrumb';
+import ProductList                                                             from '@components/product/ProductList';
+import BlockCMS                                                                from '@components/common/BlockCMS';
+import Button                                                                  from '@components/ui/Button';
+import { dispatcher }                                                          from '@lib/redux/dispatcher';
+import { getBlocksCMS }                                                        from 'aquila-connector/api/blockcms';
+import { getBreadcrumb }                                                       from 'aquila-connector/api/breadcrumb';
+import { addToCart }                                                           from 'aquila-connector/api/cart';
+import { getCategories }                                                       from 'aquila-connector/api/category';
+import { getProduct }                                                          from 'aquila-connector/api/product';
+import { getImage, getMainImage, getTabImageURL }                              from 'aquila-connector/api/product/helpersProduct';
+import { useCart, useShowCartSidebar, useSiteConfig }                          from '@lib/hooks';
+import { setLangAxios, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 
 import 'lightbox-react/style.css';
 import 'react-responsive-modal/styles.css';
@@ -274,7 +274,7 @@ export default function Product({ breadcrumb, origin, product }) {
                 </div>
             </div>
 
-            <Breadcrumb items={formatBreadcrumb(breadcrumb)} />
+            <Breadcrumb items={breadcrumb} origin={origin} />
 
             <div className="content-section-short-product">
                 <button type="button" className="button bottomspace w-button" onClick={previousStep}>{t('pages/product:return')}</button>

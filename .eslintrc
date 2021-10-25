@@ -42,7 +42,9 @@
         ],
         "semi":"error",
         "quotes": ["error", "single"],
-        "indent":["error", 4],
+        "indent":["error", 4, {
+            "ignoredNodes": ["TemplateLiteral"]
+          }],
         "key-spacing": ["error", { "align": "colon" }], // Align colon
         "align-assignments/align-assignments": [2, { "requiresOnly": false } ], // Align equal
         "align-import/align-import": "error", // Align import

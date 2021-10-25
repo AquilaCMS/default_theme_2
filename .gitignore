@@ -40,3 +40,5 @@ yarn-error.log*
 # module
 /modules/list_modules.js
 dynamic_langs.js
+
+i18n.json

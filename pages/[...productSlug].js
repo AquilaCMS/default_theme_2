@@ -454,9 +454,13 @@ export default function Product({ breadcrumb, origin, product }) {
 
             <BlockCMS nsCode="info-bottom-1" /> {/* TODO : il faudrait afficher le contenu d'une description de la catégorie rattachée ! */}
 
-            <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
-                <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
-            </Modal>
+            {
+                product.type === 'bundle' && (
+                    <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
+                        <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
+                    </Modal>
+                )
+            }
 
         </Layout>
 

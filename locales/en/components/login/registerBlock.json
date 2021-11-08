@@ -1,10 +1,10 @@
 {
-  "title": "en-Je suis un nouveau client",
-  "firstname": "en-Prénom",
-  "name": "en-Nom",
-  "email": "en-Email",
-  "password": "en-Mot de passe",
-  "phone": "en-Téléphone",
-  "register": "en-JE M'ENREGISTRE",
-  "registerLoading": "en-INSCRIPTION..."
+  "title": "I'm a new client",
+  "firstname": "First Name",
+  "name": "Last Name",
+  "email": "Email",
+  "password": "Password",
+  "phone": "Phone number",
+  "register": "Register",
+  "registerLoading": "Sign in..."
 }

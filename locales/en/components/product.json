@@ -1,11 +1,11 @@
 {
     "productCard": {
-        "addToBasket": "en-Ajouter au panier",
-        "compose": "en-Composer",
-        "addToCartLoading": "en-Ajout...",
-        "noProduct": "en-Impossible d'afficher le produit [{{product}}]"
+        "addToBasket": "Add to cart",
+        "compose": "Compose",
+        "addToCartLoading": "Add...",
+        "noProduct": "Unable to display the product [{{product}}]"
     },
     "productList": {
-        "noProduct": "en-Aucun produit trouvé."
+        "noProduct": "No product found."
     }
 }

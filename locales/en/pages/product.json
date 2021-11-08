@@ -1,9 +1,11 @@
 {
-    "tab1": "en-Description",
-    "tab2": "en-Informations supplémentaires",
-    "otherProducts": "en-Produits complémentaires",
-    "return": "en-Retour",
-    "addToBasket": "en-Ajouter au panier",
-    "compose": "en-Composer",
-    "addToCartLoading": "en-Ajout..."
+    "tab1": "Description",
+    "tab2": "Additional information",
+    "true": "Yes",
+    "false": "No",
+    "otherProducts": "Additional products",
+    "return": "Back",
+    "addToBasket": "Add to cart",
+    "compose": "Compose",
+    "addToCartLoading": "Add..."
 }

@@ -1,11 +1,11 @@
 {
-    "title" : "en-Récupération du mot de passe",
-    "description" : "en-Récupération du mot de passe",
-    "titleH1" : "en-Récupération du mot de passe",
-    "information" : "en-ENTREZ VOTRE NOUVEAU MOT DE PASSE",
-    "password" : "en-Mot de passe",
-    "password2" : "en-Mot de passe (confirmation)",
-    "validate" : "en-Confirmer",
-    "validateLoading" : "en-Enregistrement...",
-    "passNotMatching" : "en-Les mots de passe ne correspondent pas !"
+    "title" : "Password recovery",
+    "description" : "Password recovery",
+    "titleH1" : "Password recovery",
+    "information" : "ENTER YOUR NEW PASSWORD",
+    "password" : "Password",
+    "password2" : "Password (confirmation)",
+    "validate" : "Confirm",
+    "validateLoading" : "Register...",
+    "passNotMatching" : "Passwords do not match !"
 }

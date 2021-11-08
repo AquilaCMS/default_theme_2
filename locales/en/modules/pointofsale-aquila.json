@@ -1,11 +1,11 @@
 {
-    "withDrawal": "en-Retrait",
-    "delivery": "en-Livraison",
-    "selectPOS": "en-Choisir un magasin",
-    "submit": "en-Valider",
-    "submitLoading": "en-Validation...",
-    "submitAddressError": "en-Merci de renseigner une adresse plus précise !",
-    "submitError": "en-Veuillez sélectionner un point de retrait !",
-    "submitError2": "en-L'adresse saisie ne peut être livrée !",
-    "submitSuccess": "en-Informations enregistrées !"
+    "withDrawal": "Pick-up",
+    "delivery": "Delivery",
+    "selectPOS": "Select a shop",
+    "submit": "confirm",
+    "submitLoading": "confirmation...",
+    "submitAddressError": "Please enter a more precise address!",
+    "submitError": "Please select a collection point!",
+    "submitError2": "The address entered cannot be delivered!",
+    "submitSuccess": "Registered information!"
 }

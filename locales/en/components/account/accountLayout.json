@@ -1,9 +1,9 @@
 {
-    "titleH1" : "en-Mon compte",
+    "titleH1" : "My account",
     "navigation": {
-        "myInformations": "en-Mes Informations",
-        "myOrders": "en-Mes commandes",
-        "rgpd": "en-RGPD",
-        "logout": "en-Se déconnecter"
+        "myInformations": "My Information",
+        "myOrders": "My orders",
+        "rgpd": "RGPD",
+        "logout": "Log out"
     }
 }

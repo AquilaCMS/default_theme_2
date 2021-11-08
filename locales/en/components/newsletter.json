@@ -1,4 +1,6 @@
 {
-    "title": "en-S'inscrire à la Newsletter",
-    "submit" : "en-Newsletter"
+    "title": "Subscribe to the Newsletter",
+    "submit": "Newsletter",
+    "submitLoading": "Sign up...",
+    "messageSuccess": "Successful registration !"
 }

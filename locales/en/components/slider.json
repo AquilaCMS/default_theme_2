@@ -1,4 +1,4 @@
 {
-    "noSlider": "en-Impossible de charger le carrousel [{{nsCode}}]",
-    "noItem": "en-Aucun élément dans le carrousel [{{nsCode}}]"
+    "noSlider": "Unable to load the carousel [{{nsCode}}]",
+    "noItem": "No items in the carousel [{{nsCode}}]"
 }

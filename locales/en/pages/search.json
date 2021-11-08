@@ -1,3 +1,3 @@
 {
-    "results" : "en-{{count}} résultat(s) pour la recherche \"{{search}}\""
+    "results" : "{{count}} search result(s) \"{{search}}\""
 }

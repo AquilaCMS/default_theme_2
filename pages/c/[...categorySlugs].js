@@ -6,7 +6,7 @@ import getT                                                               from '
 import useTranslation                                                     from 'next-translate/useTranslation';
 import Cookies                                                            from 'cookies';
 import Error                                                              from '@pages/_error';
-import Filters                                                            from '@components/common/Filters';
+import Filters                                                            from '@components/category/Filters';
 import Pagination                                                         from '@components/category/Pagination';
 import Layout                                                             from '@components/layouts/Layout';
 import NextSeoCustom                                                      from '@components/tools/NextSeoCustom';

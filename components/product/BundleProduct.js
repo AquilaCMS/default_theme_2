@@ -128,7 +128,7 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
                                                             <div className="columns-4 w-row">
                                                                 <div className="w-col w-col-6">
                                                                     <div className="food-image-square-3col">
-                                                                        <img src={getImage(item.id.images[0], '130x130') || '/images/no-image.svg'} alt="" className="food-image" style={{ 'width': '130px' }} />
+                                                                        <img src={getImage(item.id.images[0], '130x130').url || '/images/no-image.svg'} alt={getImage(item.id.images[0], '130x130').alt} className="food-image" style={{ 'width': '130px' }} />
                                                                     </div>
                                                                 </div>
                                                                 <div className="w-col w-col-6">

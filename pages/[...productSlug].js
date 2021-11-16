@@ -138,7 +138,12 @@ export default function Product({ breadcrumb, origin, product }) {
     // Getting boolean stock display
     const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value || false;
 
-    const coverImageUrl = getMainImage(product.images, '578x578') || '/images/no-image.svg';
+    const mainImage   = getMainImage(product.images, '578x578');
+    const images      = getTabImageURL(product.images);
+    const tabImageURL = [];
+    for (let url of images) {
+        tabImageURL.push(origin + url);
+    }
 
     const onChangeQty = (e) => {
         if (!e.target.value) {
@@ -222,12 +227,12 @@ export default function Product({ breadcrumb, origin, product }) {
                 description={product?.description2?.text}
                 canonical={origin + product.canonical}
                 lang={lang}
-                image={coverImageUrl}
+                image={origin + mainImage.url}
             />
 
             <ProductJsonLd
                 productName={product.name}
-                images={getTabImageURL(product.images)}
+                images={tabImageURL}
                 description={product.description2?.text}
                 brand={product.trademark?.name}
                 //     reviews={[
@@ -304,14 +309,14 @@ export default function Product({ breadcrumb, origin, product }) {
                                         </div>
                                     )) : ''
                                 }
-                                <img loading="lazy" src={coverImageUrl} alt={product.name || 'Image produit'} className="product-image" onClick={() => (product.images.length ? openLightBox(product.images.findIndex((img) => img.default)) : false)} />
+                                <img loading="lazy" src={mainImage.url || '/images/no-image.svg'} alt={mainImage.alt || 'Image produit'} className="product-image" onClick={() => (product.images.length ? openLightBox(product.images.findIndex((img) => img.default)) : false)} />
                             </div>
                             <div className="collection-list-wrapper w-dyn-list">
                                 <div role="list" className="collection-list w-clearfix w-dyn-items">
                                     {product.images?.filter(ou => !ou.default).map((item) => (
                                         <div key={item._id} role="listitem" className="collection-item w-dyn-item">
                                             <div className="w-inline-block w-lightbox" style={{ cursor: 'pointer' }} onClick={() => openLightBox(product.images.findIndex((im) => im._id === item._id))}>
-                                                <img loading="lazy" src={getImage(item, '75x75')} alt={item.alt || 'Image produit'} className="more-image" />
+                                                <img loading="lazy" src={getImage(item, '75x75').url} alt={item.alt || 'Image produit'} className="more-image" />
                                             </div>
                                         </div>
                                     ))}

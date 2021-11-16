@@ -6,7 +6,7 @@ import cookie                                                           from 'co
 import { Modal }                                                        from 'react-responsive-modal';
 import BundleProduct                                                    from '@components/product/BundleProduct';
 import Button                                                           from '@components/ui/Button';
-import { generateSlug, getImage }                                       from 'aquila-connector/api/product/helpersProduct';
+import { generateSlug, getMainImage }                                   from 'aquila-connector/api/product/helpersProduct';
 import { addToCart }                                                    from 'aquila-connector/api/cart';
 import { useCart, useComponentData, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
 import { formatPrice, formatStock, unsetCookie }                        from '@lib/utils';
@@ -56,6 +56,8 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
         slug         : product.slug[lang] || '',
         canonical    : product.canonical
     });
+
+    const mainImage = getMainImage(product.images, '250x250');
 
     const onChangeQty = (e) => {
         if (!e.target.value) {
@@ -139,7 +141,7 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
             <div className="food-card">
                 <Link href={currentSlug}>
                     <a className="food-image-square w-inline-block">
-                        <img src={getImage(product.images[0], '250x250') || '/images/no-image.svg'} alt={product.name || 'Image produit'} style={{ 'width': '100%' }} className="food-image" loading="lazy" />
+                        <img src={mainImage.url || '/images/no-image.svg'} alt={mainImage.alt || 'Image produit'} style={{ 'width': '100%' }} className="food-image" loading="lazy" />
                     </a>
                 </Link>
                 <div className="food-card-content">

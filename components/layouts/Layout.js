@@ -5,6 +5,7 @@ import Footer           from '@components/layouts/Footer';
 import CookiesBanner    from '@components/common/CookiesBanner';
 import BlockCMS         from '@components/common/BlockCMS';
 import Languages        from '@components/common/Languages';
+import SearchBar        from '@components/common/SearchBar';
 import { useCmsBlocks } from '@lib/hooks';
 
 export default function Layout({ children }) {
@@ -18,6 +19,8 @@ export default function Layout({ children }) {
             </Head>
 
             <BlockCMS nsCode="top-banner" />
+
+            <SearchBar />
 
             <Languages />
 

@@ -1,13 +1,13 @@
-import { useEffect, useState }                             from 'react';
-import { useRouter }                                       from 'next/router';
-import useTranslation                                      from 'next-translate/useTranslation';
-import LightLayout                                         from '@components/layouts/LightLayout';
-import NextSeoCustom                                       from '@components/tools/NextSeoCustom';
-import ClickAndCollect                                     from 'modules/ClickAndCollect';
-import { setUser }                                         from 'aquila-connector/api/user';
-import { useCart }                                         from '@lib/hooks';
-import { setLangAxios, authProtectedPage, serverRedirect } from '@lib/utils';
-import { dispatcher }                                      from '@lib/redux/dispatcher';
+import { useEffect, useState }                                          from 'react';
+import { useRouter }                                                    from 'next/router';
+import useTranslation                                                   from 'next-translate/useTranslation';
+import LightLayout                                                      from '@components/layouts/LightLayout';
+import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
+import ClickAndCollect                                                  from 'modules/ClickAndCollect';
+import { setUser }                                                      from 'aquila-connector/api/user';
+import { useCart }                                                      from '@lib/hooks';
+import { setLangAxios, authProtectedPage, formatPrice, serverRedirect } from '@lib/utils';
+import { dispatcher }                                                   from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
     setLangAxios(locale, req, res);
@@ -89,14 +89,14 @@ export default function CheckoutClickAndCollect({ user }) {
                 <div className="container-tunnel">
                     <div className="container-step w-container">
                         <h2 className="heading-steps">2</h2>
-                        <h2 className="heading-2-steps">{t('pages/checkout:clickandcollect.clickandcollect')}</h2>
+                        <h2 className="heading-2-steps">{t('pages/checkout:clickandcollect.step2')}</h2>
                     </div>
                     
                     <ClickAndCollect />
 
                     <form onSubmit={nextStep}>
                         <div className="log-label"></div>
-                        <div className="w-form">
+                        <div className="w-form" style={{ width: '40%' }}>
                             <div><label>{t('pages/checkout:clickandcollect.labelPhone')}</label><input type="text" className="w-input" maxLength={256} name="phone_mobile" defaultValue={user.phone_mobile} required /></div>
                         </div>
                         <div className="w-commerce-commercecartfooter">
@@ -104,14 +104,14 @@ export default function CheckoutClickAndCollect({ user }) {
                                 cart.delivery?.value && (
                                     <div className="w-commerce-commercecartlineitem cart-line-item">
                                         <div>{t('components/cart:cartListItem.delivery')}</div>
-                                        <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                        <div>{formatPrice(cart.delivery.value.ati)}</div>
                                     </div>
                                 )
                             }
                             <div className="w-commerce-commercecartlineitem cart-line-item">
                                 <div>{t('components/cart:cartListItem.total')}</div>
                                 <div className="w-commerce-commercecartordervalue text-block">
-                                    {cart.priceTotal.ati.toFixed(2)} €
+                                    {formatPrice(cart.priceTotal.ati)}
                                 </div>
                             </div>
                         </div>

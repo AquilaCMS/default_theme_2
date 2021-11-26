@@ -1,19 +1,19 @@
-import { useEffect, useRef, useState }                   from 'react';
-import Link                                              from 'next/link';
-import { useRouter }                                     from 'next/router';
-import useTranslation                                    from 'next-translate/useTranslation';
-import cookie                                            from 'cookie';
-import { Modal }                                         from 'react-responsive-modal';
-import BundleProduct                                     from '@components/product/BundleProduct';
-import Button                                            from '@components/ui/Button';
-import { generateSlug, getImage }                        from 'aquila-connector/api/product/helpersProduct';
-import { addToCart }                                     from 'aquila-connector/api/cart';
-import { useCart, useComponentData, useShowCartSidebar } from '@lib/hooks';
-import { formatPrice, unsetCookie }                      from '@lib/utils';
+import { useEffect, useRef, useState }                                  from 'react';
+import Link                                                             from 'next/link';
+import { useRouter }                                                    from 'next/router';
+import useTranslation                                                   from 'next-translate/useTranslation';
+import cookie                                                           from 'cookie';
+import { Modal }                                                        from 'react-responsive-modal';
+import BundleProduct                                                    from '@components/product/BundleProduct';
+import Button                                                           from '@components/ui/Button';
+import { generateSlug, getMainImage }                                   from 'aquila-connector/api/product/helpersProduct';
+import { addToCart }                                                    from 'aquila-connector/api/cart';
+import { useCart, useComponentData, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
+import { formatPrice, formatStock, unsetCookie }                        from '@lib/utils';
 
 import 'react-responsive-modal/styles.css';
 
-export default function ProductCard({ type, value, col = 6 }) {
+export default function ProductCard({ type, value, col = 6, hidden = false }) {
     const [qty, setQty]             = useState(1);
     const [message, setMessage]     = useState();
     const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +23,7 @@ export default function ProductCard({ type, value, col = 6 }) {
     const { query }                 = useRouter();
     const { cart, setCart }         = useCart();
     const { setShowCartSidebar }    = useShowCartSidebar();
+    const { themeConfig }           = useSiteConfig();
     const componentData             = useComponentData();
     const { lang, t }               = useTranslation();
 
@@ -30,6 +31,9 @@ export default function ProductCard({ type, value, col = 6 }) {
     // Live use in code (data in "value" prop => type = "data")
     // Use in CMS block (data in redux store => SET_COMPONENT_DATA => type = "id|code")
     const product = type === 'data' ? value : componentData[`nsProductCard_${type}_${value}`];
+
+    // Getting boolean stock display
+    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCard')?.value || false;
 
     useEffect(() => {
         // Get product ID from cookie
@@ -52,6 +56,8 @@ export default function ProductCard({ type, value, col = 6 }) {
         slug         : product.slug[lang] || '',
         canonical    : product.canonical
     });
+
+    const mainImage = getMainImage(product.images, '250x250');
 
     const onChangeQty = (e) => {
         if (!e.target.value) {
@@ -122,7 +128,7 @@ export default function ProductCard({ type, value, col = 6 }) {
     }
 
     return (
-        <div role="listitem" ref={productRef} className={`menu-item w-dyn-item w-col w-col-${col}`}>
+        <div role="listitem" ref={productRef} className={`menu-item w-dyn-item w-col w-col-${col}`} hidden={hidden}>
             {
                 pictos ? pictos.map((picto) => (
                     <div style={picto.style} key={picto.location + Math.random()}>
@@ -135,13 +141,13 @@ export default function ProductCard({ type, value, col = 6 }) {
             <div className="food-card">
                 <Link href={currentSlug}>
                     <a className="food-image-square w-inline-block">
-                        <img src={getImage(product.images[0], '250x250') || '/images/no-image.svg'} alt={product.name || 'Image produit'} style={{ 'width': '100%' }} className="food-image" loading="lazy" />
+                        <img src={mainImage.url || '/images/no-image.svg'} alt={mainImage.alt || 'Image produit'} style={{ 'width': '100%' }} className="food-image" loading="lazy" />
                     </a>
                 </Link>
                 <div className="food-card-content">
                     <Link href={currentSlug}>
                         <a className="food-title-wrap w-inline-block">
-                            <h6 className="heading-9" >{product.name}</h6>
+                            <h6 className="heading-9">{product.name}</h6>
                             <div className="div-block-prix">
                                 <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
                                 { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
@@ -171,11 +177,22 @@ export default function ProductCard({ type, value, col = 6 }) {
                             )
                         }
                     </div>
+                    {
+                        stockDisplay && (
+                            <div style={{ textAlign: 'right' }}>
+                                { formatStock(product.stock) }
+                            </div>
+                        )
+                    }
                 </div>
             </div>
-            <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
-                <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
-            </Modal>
+            {
+                product.type === 'bundle' && (
+                    <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
+                        <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
+                    </Modal>
+                )
+            }
         </div>
 
 

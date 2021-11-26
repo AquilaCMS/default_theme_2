@@ -1,11 +1,19 @@
-import Link              from 'next/link';
-import { useSiteConfig } from '@lib/hooks';
+import Head                            from 'next/head';
+import Link                            from 'next/link';
+import parse                           from 'html-react-parser';
+import { useCmsBlocks, useSiteConfig } from '@lib/hooks';
 
 export default function LightLayout({ children }) {
     const { environment } = useSiteConfig();
+    const cmsBlocks       = useCmsBlocks();
+    const cmsBlockHead    = cmsBlocks.find((b) => b.code === 'head'); // Getting CMS block "Head"
 
     return (
         <>
+            <Head>
+                {cmsBlockHead ? parse(cmsBlockHead.content) : null}
+            </Head>
+
             <div id="Navigation" data-collapse="medium" role="banner" className="navbar w-nav">
                 <div className="navigation-container">
                     <div className="navigation-left">

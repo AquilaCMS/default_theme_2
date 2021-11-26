@@ -70,9 +70,9 @@ export default function NavMenu() {
                                 <div className={`dropdown-pd-toggle w-dropdown-toggle${view.find((v) => v === item._id) ? ' w--open' : ''}`} style={current ? { backgroundColor: '#ff8946' } : {}}>
                                     <div>
                                         {
-                                            item.slug ? (
+                                            item.action !== 'container' && item.slug ? (
                                                 <Link href={item.action === 'catalog' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : item.url)} key={item._id}>
-                                                    <a className="w-nav-link" style={{ padding: '0px' }} target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item.name}</a>
+                                                    <a className="w-nav-link" style={{ padding: '0px' }} target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item.name}</a>
                                                 </Link>
                                             ) : (
                                                 <span>{item.name}</span>
@@ -91,9 +91,9 @@ export default function NavMenu() {
                                                             <div className="link-to-page">
                                                                 <div className="text-block-nav">
                                                                     {
-                                                                        item.slug && item2.slug ? (
+                                                                        item2.action !== 'container' && item.slug && item2.slug ? (
                                                                             <Link href={item2.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : item2.url)}>
-                                                                                <a className="w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item2.name}</a>
+                                                                                <a className="w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item2.name}</a>
                                                                             </Link>
                                                                         ) : (
                                                                             <span key={item2._id}>{item2.name}</span>
@@ -109,9 +109,9 @@ export default function NavMenu() {
                                                                             <div className="dropdown-nav-link-2" key={item3._id}>
                                                                                 <div className="icon-3 w-icon-dropdown-toggle" />
                                                                                 {
-                                                                                    item.slug && item2.slug && item3.slug ? (
+                                                                                    item3.action !== 'container' && item.slug && item2.slug && item3.slug ? (
                                                                                         <Link href={item3.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}/${item3.slug[lang]}` : (item3.action === 'page' ? `/${item3.pageSlug}` : item3.url)}>
-                                                                                            <a className="dropdown-link-3 w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item3.name}</a>
+                                                                                            <a className="dropdown-link-3 w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item3.name}</a>
                                                                                         </Link>
                                                                                     ) : (
                                                                                         <span>{item3.name}</span>
@@ -126,9 +126,9 @@ export default function NavMenu() {
                                                     ) : (
                                                         <Fragment key={item2._id}>
                                                             {
-                                                                item2.slug ? (
+                                                                item2.action !== 'container' && item2.slug ? (
                                                                     <Link href={item2.action === 'catalog' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : item2.url)}>
-                                                                        <a className="dropdown-nav-link w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item2.name}</a>
+                                                                        <a className="dropdown-nav-link w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item2.name}</a>
                                                                     </Link>
                                                                 ) : (
                                                                     <span key={item2._id}>{item2.name}</span>
@@ -145,9 +145,9 @@ export default function NavMenu() {
                         ) : (
                             <Fragment key={item._id}>
                                 {
-                                    item.slug ? (
+                                    item.action !== 'container' && item.slug ? (
                                         <Link href={item.action === 'catalog' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : item.url)}>
-                                            <a className="nav-link-2 w-nav-link" style={current ? { backgroundColor: '#ff8946' } : {}} target={item.url?.indexOf('http') === 0 ? '_blank' : ''}>{item.name}</a>
+                                            <a className="nav-link-2 w-nav-link" style={current ? { backgroundColor: '#ff8946' } : {}} target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item.name}</a>
                                         </Link>
                                     ) : (
                                         <span>{item.name}</span>

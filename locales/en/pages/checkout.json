@@ -1,51 +1,57 @@
 {
+  "cart": {
+    "title": "My order - Cart",
+    "description": "My order - Cart",
+    "titleH1" : "My Cart",
+    "ordering" : "ORDER"
+  },
   "login": {
-    "title": "en-Ma commande - Connexion",
-    "description": "en-Ma commande - Connexion",
-    "titleH1" : "en-Ma commande",
-    "step1" : "en-Connexion / Inscription"
+    "title": "My order - Log In",
+    "description": "My order - Log In",
+    "titleH1" : "My order",
+    "step1" : "Log In / Sign In"
   },
   "clickandcollect": {
-    "title" : "en-Ma commande - Click & Collect",
-    "description" : "en-Ma commande - Click & Collect",
-    "titleH1" : "en-Ma commande",
-    "clickandcollect" : "Click & Collect",
-    "labelPhone" : "en-Téléphone (requis)",
-    "next" : "en-SUIVANT",
-    "submitError": "en-Veuillez valider un retrait ou une livraison !",
-    "submitError2": "en-La date de retrait/livraison est dépassée !"
+    "title" : "My order - Click & Collect",
+    "description" : "My order - Click & Collect",
+    "titleH1" : "My order",
+    "step2" : "Click & Collect",
+    "labelPhone" : "Phone (required)",
+    "next" : "NEXT",
+    "submitError": "Please validate a pickup or a delivery !",
+    "submitError2": "Withdrawal/delivery date has passed !"
   },
   "address": {
-    "title" : "en-Ma commande - Adresse",
-    "description" : "en-Ma commande - Adresse",
-    "titleH1" : "en-Ma commande",
-    "address" : "en-Adresse",
-    "mandatory" : "en-Obligatoire",
-    "titleBilling":"en-Adresse de facturation",
-    "firstname":"en-Prénom",
-    "lastname":"en-Nom",
-    "line1":"en-Adresse",
-    "line2":"en-Adresse 2",
-    "city":"en-Ville",
-    "postal":"en-Code postal",
-    "country":"en-Pays",
-    "next": "en-SUIVANT",
-    "nextLoading": "en-ENREGISTREMENT..."
+    "title" : "My order - Address",
+    "description" : "My order - Address",
+    "titleH1" : "My order",
+    "step3" : "Adress",
+    "mandatory" : "Mandatory",
+    "titleBilling":"Billing address",
+    "firstname":"First Name",
+    "lastname":"Last Name",
+    "line1":"Address",
+    "line2":"Address 2",
+    "city":"City",
+    "postal":"Zip Code",
+    "country":"Country",
+    "next": "Next",
+    "nextLoading": "LOADING..."
   },
   "payment" : {
-    "title" : "en-Ma commande - Moyen de paiement",
-    "description" : "en-Ma commande - Moyen de paiement",
-    "titleH1" : "en-Ma commande",
-    "paymentMethod" : "en-Moyen de paiement",
-    "previous" : "en-RETOUR",
-    "pay" : "en-PAYER",
-    "submitLoading" : "en-PAIEMENT..."
+    "title" : "My order - Payment method",
+    "description" : "My order - Payment method",
+    "titleH1" : "My order",
+    "step4" : "Payment method",
+    "previous" : "BACK",
+    "pay" : "PAY",
+    "submitLoading" : "PAYMENT..."
   },
   "confirmation" : {
-    "title" : "en-Ma commande - Confirmation",
-    "description" : "en-Ma commande - Confirmation",
-    "titleH1" : "en-Merci pour votre commande !",
-    "summary" : "en-Récapitulatif de ma commande",
-    "viewOrders" : "en-Voir mes commandes"
+    "title" : "My order - Confirmation",
+    "description" : "My order - Confirmation",
+    "titleH1" : "Thank you for your order !",
+    "summary" : "Recap of my order",
+    "viewOrders" : "View my orders"
   }
 }

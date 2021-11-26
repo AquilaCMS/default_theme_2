@@ -1,8 +1,8 @@
 {
     "categoryCard": {
-        "noCategory": "en-Impossible d'afficher la catégorie"
+        "noCategory": "Unable to display the category"
     },
     "categoryList": {
-        "noCategory": "en-Aucune catégorie trouvée."
+        "noCategory": "No category found."
     }
 }

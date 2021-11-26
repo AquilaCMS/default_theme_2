@@ -1,14 +1,17 @@
-import { Fragment, useState }                                                              from 'react';
-import useTranslation                                                                      from 'next-translate/useTranslation';
-import AccountLayout                                                                       from '@components/account/AccountLayout';
-import OrderDetails                                                                        from '@components/order/OrderDetails';
-import NextSeoCustom                                                                       from '@components/tools/NextSeoCustom';
-import { getOrders }                                                                       from 'aquila-connector/api/order';
-import { useOrders }                                                                       from '@lib/hooks';
-import { setLangAxios, authProtectedPage, serverRedirect, formatPrice, formatOrderStatus } from '@lib/utils';
-import { dispatcher }                                                                      from '@lib/redux/dispatcher';
+import { Fragment, useEffect, useState }                                                                from 'react';
+import ReactPaginate                                                                                    from 'react-paginate';
+import { useRouter }                                                                                    from 'next/router';
+import useTranslation                                                                                   from 'next-translate/useTranslation';
+import Cookies                                                                                          from 'cookies';
+import AccountLayout                                                                                    from '@components/account/AccountLayout';
+import OrderDetails                                                                                     from '@components/order/OrderDetails';
+import NextSeoCustom                                                                                    from '@components/tools/NextSeoCustom';
+import { getOrders }                                                                                    from 'aquila-connector/api/order';
+import { useSelectPage, useOrders }                                                                     from '@lib/hooks';
+import { setLangAxios, authProtectedPage, serverRedirect, formatPrice, formatOrderStatus, unsetCookie } from '@lib/utils';
+import { dispatcher }                                                                                   from '@lib/redux/dispatcher';
 
-export async function getServerSideProps({ locale, req, res }) {
+export async function getServerSideProps({ locale, req, res, resolvedUrl }) {
     setLangAxios(locale, req, res);
 
     const user = await authProtectedPage(req.headers.cookie);
@@ -16,27 +19,88 @@ export async function getServerSideProps({ locale, req, res }) {
         return serverRedirect('/account/login?redirect=' + encodeURI('/account'));
     }
 
+    // Get cookie server instance
+    const cookiesServerInstance = new Cookies(req, res);
+
+    // Get page from cookie
+    let page         = 1;
+    const [url]      = resolvedUrl.split('?');
+    const cookiePage = cookiesServerInstance.get('page');
+    // If cookie page exists
+    if (cookiePage) {
+        try {
+            const dataPage = JSON.parse(cookiePage);
+            // We take the value only if category ID matches
+            // Otherwise, we delete "page" cookie
+            if (dataPage.url === url) {
+                page = dataPage.page;
+            } else {
+                unsetCookie('page', cookiesServerInstance);
+            }
+        } catch (err) {
+            unsetCookie('page', cookiesServerInstance);
+        }
+    }
+
+    const limit = 15;
+
     const actions = [
         {
+            type : 'SET_SELECT_PAGE',
+            value: page
+        }, {
             type: 'SET_ORDERS',
-            func: getOrders.bind(this, locale)
+            func: getOrders.bind(this, locale, { PostBody: { page, limit } })
         }
     ];
 
-    const pageProps      = await dispatcher(locale, req, res, actions);
-    pageProps.props.user = user;
+    const pageProps       = await dispatcher(locale, req, res, actions);
+    pageProps.props.limit = limit;
+    pageProps.props.user  = user;
     return pageProps;
 }
 
-export default function Account() {
-    const [viewOrders, setViewOrders] = useState([]);
-    const { orders, setOrders }       = useOrders();
-    const { t }                       = useTranslation();
+export default function Account({ limit }) {
+    const [viewOrders, setViewOrders]   = useState([]);
+    const { selectPage, setSelectPage } = useSelectPage();
+    const { orders, setOrders }         = useOrders();
+    const router                        = useRouter();
+    const { lang, t }                   = useTranslation();
+
+    // Getting URL page
+    const [url] = router.asPath.split('?');
+
+    useEffect(() => {
+        return () => unsetCookie('page');
+    }, []);
 
     const onChangeViewOrders = (index) => {
         viewOrders[index] = !viewOrders[index];
         setViewOrders([...viewOrders]);
     };
+
+    const handlePageClick = async (data) => {
+        const page = data.selected + 1;
+
+        setViewOrders([]);
+
+        // Updating the products list
+        const orders = await getOrders(lang, { PostBody: { page, limit } });
+        setOrders(orders);
+
+        // Updating page
+        setSelectPage(page);
+
+        // Setting category page cookie
+        if (page > 1) {
+            document.cookie = 'page=' + JSON.stringify({ url, page }) + '; path=/; max-age=43200;';
+        } else {
+            // Page 1... so useless "page" cookie
+            unsetCookie('page');
+        }
+    };
+
+    const pageCount = Math.ceil(orders.count / limit);
     
     return (
         <AccountLayout active="2">
@@ -52,7 +116,7 @@ export default function Account() {
             <div className="container-order-list">
                 <div className="div-block-order-liste">
                     {
-                        orders.length ? orders.map((order, index) => {
+                        orders.datas.length ? orders.datas.map((order, index) => {
                             return (
                                 <Fragment key={order._id}>
                                     <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
@@ -75,6 +139,22 @@ export default function Account() {
                         }) : <p>Aucune commande</p>
                     }
                 </div>
+                {
+                    pageCount > 1 && (
+                        <ReactPaginate
+                            previousLabel={'<'}
+                            nextLabel={'>'}
+                            breakLabel={'...'}
+                            forcePage={selectPage - 1}
+                            pageCount={pageCount}
+                            marginPagesDisplayed={2}
+                            pageRangeDisplayed={5}
+                            onPageChange={handlePageClick}
+                            containerClassName={'w-pagination-wrapper pagination'}
+                            activeClassName={'active'}
+                        />
+                    )
+                }
             </div>
         </AccountLayout>
     );

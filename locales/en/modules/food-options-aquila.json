@@ -1,9 +1,9 @@
 {
-    "next": "en-Suivant",
-    "nextLoading": "en-Chargement...",
-    "productOffered": "en-offert",
-    "productsOffered": "en-offerts",
-    "free": "en-Offert",
-    "back": "en-Retour",
-    "noFoodOptions": "en-Aucun produit complémentaires"
+    "next": "Next",
+    "nextLoading": "Loading...",
+    "productOffered": "offered",
+    "productsOffered": "offered",
+    "free": "Free",
+    "back": "Back",
+    "noFoodOptions": "No additional products"
 }

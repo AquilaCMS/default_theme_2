@@ -1,5 +1,3 @@
 {
-    "results" : "en-{{count}} résultat(s) pour la recherche \"{{search}}\"",
-    "loadMoreData" : "en-Charger plus de produits...",
-    "loading" : "en-Chargement..."
+    "results" : "{{count}} search result(s) \"{{search}}\""
 }

@@ -1,29 +1,29 @@
-import { useState }                                    from 'react';
-import { ProductJsonLd }                               from 'next-seo';
-import absoluteUrl                                     from 'next-absolute-url';
-import { useRouter }                                   from 'next/router';
-import getT                                            from 'next-translate/getT';
-import useTranslation                                  from 'next-translate/useTranslation';
-import Cookies                                         from 'cookies';
-import { Modal }                                       from 'react-responsive-modal';
-import Lightbox                                        from 'lightbox-react';
-import ErrorPage                                       from '@pages/_error';
-import BundleProduct                                   from '@components/product/BundleProduct';
-import Layout                                          from '@components/layouts/Layout';
-import NextSeoCustom                                   from '@components/tools/NextSeoCustom';
-import Breadcrumb                                      from '@components/navigation/Breadcrumb';
-import ProductList                                     from '@components/product/ProductList';
-import BlockCMS                                        from '@components/common/BlockCMS';
-import Button                                          from '@components/ui/Button';
-import { dispatcher }                                  from '@lib/redux/dispatcher';
-import { getBlocksCMS }                                from 'aquila-connector/api/blockcms';
-import { getBreadcrumb }                               from 'aquila-connector/api/breadcrumb';
-import { addToCart }                                   from 'aquila-connector/api/cart';
-import { getCategories }                               from 'aquila-connector/api/category';
-import { getProduct }                                  from 'aquila-connector/api/product';
-import { getImage, getMainImage, getTabImageURL }      from 'aquila-connector/api/product/helpersProduct';
-import { useCart, useShowCartSidebar }                 from '@lib/hooks';
-import { setLangAxios, formatBreadcrumb, formatPrice, moduleHook } from '@lib/utils';
+import { useState }                                                            from 'react';
+import { ProductJsonLd }                                                       from 'next-seo';
+import absoluteUrl                                                             from 'next-absolute-url';
+import { useRouter }                                                           from 'next/router';
+import getT                                                                    from 'next-translate/getT';
+import useTranslation                                                          from 'next-translate/useTranslation';
+import Cookies                                                                 from 'cookies';
+import { Modal }                                                               from 'react-responsive-modal';
+import Lightbox                                                                from 'lightbox-react';
+import ErrorPage                                                               from '@pages/_error';
+import BundleProduct                                                           from '@components/product/BundleProduct';
+import Layout                                                                  from '@components/layouts/Layout';
+import NextSeoCustom                                                           from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                              from '@components/navigation/Breadcrumb';
+import ProductList                                                             from '@components/product/ProductList';
+import BlockCMS                                                                from '@components/common/BlockCMS';
+import Button                                                                  from '@components/ui/Button';
+import { dispatcher }                                                          from '@lib/redux/dispatcher';
+import { getBlocksCMS }                                                        from 'aquila-connector/api/blockcms';
+import { getBreadcrumb }                                                       from 'aquila-connector/api/breadcrumb';
+import { addToCart }                                                           from 'aquila-connector/api/cart';
+import { getCategories }                                                       from 'aquila-connector/api/category';
+import { getProduct }                                                          from 'aquila-connector/api/product';
+import { getImage, getMainImage, getTabImageURL }                              from 'aquila-connector/api/product/helpersProduct';
+import { useCart, useShowCartSidebar, useSiteConfig }                          from '@lib/hooks';
+import { setLangAxios, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 
 import 'lightbox-react/style.css';
 import 'react-responsive-modal/styles.css';
@@ -34,13 +34,26 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     const productSlug   = params.productSlug.pop();
     const categorySlugs = params.productSlug;
 
-    // Get category from slug
     let categories = [];
     let product    = {};
     try {
+        // Get category from slug
         const dataCategories = await getCategories(locale, { PostBody: { filter: { [`translation.${locale}.slug`]: { $in: categorySlugs } }, limit: 9999 } });
         categories           = dataCategories.datas;
-        product              = await getProduct('slug', productSlug, query.preview, locale);
+
+        // Get product from slug
+        const postBody = {
+            PostBody: {
+                filter   : { [`translation.${locale}.slug`]: productSlug },
+                structure: { allergens: 1, trademark: 1 },
+                populate : [
+                    'allergens',
+                    'associated_prds',
+                    'bundle_sections.products.id'
+                ]
+            }
+        };
+        product        = await getProduct(postBody, query.preview, locale);
     } catch (err) {
         return { notFound: true };
     }
@@ -71,11 +84,11 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     const cookiesServerInstance = new Cookies(req, res);
     
     // Set cookie product ID
-    cookiesServerInstance.set('product', product._id, { path: '/', httpOnly: false, maxAge: 3600000 });
+    cookiesServerInstance.set('product', product._id, { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [
         {
-            type: 'SET_PRODUCT',
+            type : 'SET_PRODUCT',
             value: product
         }, {
             type: 'PUSH_CMSBLOCKS',
@@ -115,13 +128,22 @@ export default function Product({ breadcrumb, origin, product }) {
     const [openModal, setOpenModal]   = useState(false);
     const [tabs, setTabs]             = useState(0);
     const { cart, setCart }           = useCart();
+    const { themeConfig }             = useSiteConfig();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
     const router                      = useRouter();
 
     if (!product) return <ErrorPage statusCode={404} />;
 
-    const coverImageUrl = getMainImage(product.images, '578x578') || '/images/no-image.svg';
+    // Getting boolean stock display
+    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value || false;
+
+    const mainImage   = getMainImage(product.images, '578x578');
+    const images      = getTabImageURL(product.images);
+    const tabImageURL = [];
+    for (let url of images) {
+        tabImageURL.push(origin + url);
+    }
 
     const onChangeQty = (e) => {
         if (!e.target.value) {
@@ -205,14 +227,14 @@ export default function Product({ breadcrumb, origin, product }) {
                 description={product?.description2?.text}
                 canonical={origin + product.canonical}
                 lang={lang}
-                image={coverImageUrl}
+                image={origin + mainImage.url}
             />
 
             <ProductJsonLd
                 productName={product.name}
-                images={getTabImageURL(product.images)}
-                description={product?.description2?.text}
-                // brand="TODO"
+                images={tabImageURL}
+                description={product.description2?.text}
+                brand={product.trademark?.name}
                 //     reviews={[
                 //         {
                 //             author: {
@@ -243,8 +265,8 @@ export default function Product({ breadcrumb, origin, product }) {
                         price        : product.price?.ati?.special ? product.price.ati.special : product.price?.ati.normal,
                         priceCurrency: 'EUR',
                         itemCondition: 'https://schema.org/NewCondition',
-                        availability : 'https://schema.org/InStock',
-                        url          : product.canonical
+                        availability : `https://schema.org/${getAvailability(product.stock)}`,
+                        url          : origin + product.canonical
                     }
                 ]}
             />
@@ -257,10 +279,10 @@ export default function Product({ breadcrumb, origin, product }) {
                 </div>
             </div>
 
-            <Breadcrumb items={formatBreadcrumb(breadcrumb)} />
+            <Breadcrumb items={breadcrumb} origin={origin} />
 
             <div className="content-section-short-product">
-                <button type="button" className="button bottomspace w-button" onClick={previousStep}>{t('components/product:product.return')}</button>
+                <button type="button" className="button bottomspace w-button" onClick={previousStep}>{t('pages/product:return')}</button>
                 <div className="container-product">
                     <div className="w-layout-grid product-grid">
                         <div className="product-image-wrapper">
@@ -287,14 +309,14 @@ export default function Product({ breadcrumb, origin, product }) {
                                         </div>
                                     )) : ''
                                 }
-                                <img loading="lazy" src={coverImageUrl} alt={product.name || 'Image produit'} className="product-image" onClick={() => (product.images.length ? openLightBox(product.images.findIndex((img) => img.default)) : false)} />
+                                <img loading="lazy" src={mainImage.url || '/images/no-image.svg'} alt={mainImage.alt || 'Image produit'} className="product-image" onClick={() => (product.images.length ? openLightBox(product.images.findIndex((img) => img.default)) : false)} />
                             </div>
                             <div className="collection-list-wrapper w-dyn-list">
                                 <div role="list" className="collection-list w-clearfix w-dyn-items">
                                     {product.images?.filter(ou => !ou.default).map((item) => (
                                         <div key={item._id} role="listitem" className="collection-item w-dyn-item">
                                             <div className="w-inline-block w-lightbox" style={{ cursor: 'pointer' }} onClick={() => openLightBox(product.images.findIndex((im) => im._id === item._id))}>
-                                                <img loading="lazy" src={getImage(item, '75x75')} alt={item.alt || 'Image produit'} className="more-image" />
+                                                <img loading="lazy" src={getImage(item, '75x75').url} alt={item.alt || 'Image produit'} className="more-image" />
                                             </div>
                                         </div>
                                     ))}
@@ -313,13 +335,14 @@ export default function Product({ breadcrumb, origin, product }) {
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
                                     <Button 
-                                        text={product.type === 'simple' ? t('components/product:product.addToBasket') : t('components/product:product.compose')}
-                                        loadingText={t('components/product:product.addToCartLoading')}
+                                        text={product.type === 'simple' ? t('pages/product:addToBasket') : t('pages/product:compose')}
+                                        loadingText={t('pages/product:addToCartLoading')}
                                         isLoading={isLoading}
                                         disabled={product.type === 'virtual'} 
                                         className="w-commerce-commerceaddtocartbutton order-button"
                                     />
                                 </form>
+                                { stockDisplay && <div style={{ textAlign: 'right' }}>{formatStock(product.stock)}</div> }
                                 {
                                     message && (
                                         <div className={`w-commerce-commerce${message.type}`}>
@@ -341,32 +364,79 @@ export default function Product({ breadcrumb, origin, product }) {
                     <div className="w-tabs">
                         <div className="tab-menu w-tab-menu">
                             <a className={`tab-link-round w-inline-block w-tab-link${tabs === 0 ? ' w--current' : ''}`} onClick={() => setTabs(0)}>
-                                <div>{t('components/product:product.tab1')}</div>
+                                <div>{t('pages/product:tab1')}</div>
                             </a>
-                            {
-                                moduleHook('product-tab') !== false && (
-                                    <a className={`tab-link-round w-inline-block w-tab-link${tabs === 1 ? ' w--current' : ''}`} onClick={() => setTabs(1)}>
-                                        <div>{t('components/product:product.tab2')}</div>
-                                    </a>
-                                )
-                            }
+                            <a className={`tab-link-round w-inline-block w-tab-link${tabs === 1 ? ' w--current' : ''}`} onClick={() => setTabs(1)}>
+                                <div>{t('pages/product:tab2')}</div>
+                            </a>
                             {/* <a className="tab-link-round w-inline-block w-tab-link w--current">
                                 <div>Reviews (0)</div>
                             </a> */}
                         </div>
                         <div className="w-tab-content">
                             <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`} dangerouslySetInnerHTML={{ __html: product.description1?.text }} />
-                            {
-                                moduleHook('product-tab') !== false && (
-                                    <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
-                                        <table>
-                                            {
-                                                moduleHook('product-tab')
-                                            }    
-                                        </table>
-                                    </div>
-                                )
-                            }
+                            <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
+                                <table>
+                                    {
+                                        product.attributes.map((attribute) => {
+                                            if (attribute.type === 'bool') {
+                                                return (
+                                                    <tr key={attribute._id}>
+                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                        <td style={{ padding: '10px' }}>{t(`pages/product:${attribute.value.toString()}`)}</td>
+                                                    </tr>
+                                                );
+                                            }
+                                            if (attribute.type === 'textfield' || attribute.type === 'textarea') {
+                                                return (
+                                                    <tr key={attribute._id}>
+                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                        <td style={{ padding: '10px' }}>
+                                                            <div dangerouslySetInnerHTML={{ __html: attribute.value }} />
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                            if (attribute.type === 'color') {
+                                                return (
+                                                    <tr key={attribute._id}>
+                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                        <td style={{ padding: '10px' }}>
+                                                            <div style={{
+                                                                width          : '50px',
+                                                                height         : '20px',
+                                                                backgroundColor: attribute.value.toString(),
+                                                                borderRadius   : '5px'
+                                                            }}
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                            if (Array.isArray(attribute.value)) {
+                                                return (
+                                                    <tr key={attribute._id}>
+                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                        <td style={{ padding: '10px' }}>
+                                                            <div dangerouslySetInnerHTML={{ __html: attribute.value.join(', ') }} />
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                            return (
+                                                <tr key={attribute._id}>
+                                                    <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                    <td style={{ padding: '10px' }}>{attribute.value}</td>
+                                                </tr>
+                                            );
+                                        })
+                                    }
+                                </table>
+                                {moduleHook('product-tab') !== false && <hr />}
+                                {
+                                    moduleHook('product-tab')
+                                }
+                            </div>
                             
                         </div>
                     </div>
@@ -377,11 +447,11 @@ export default function Product({ breadcrumb, origin, product }) {
                 <div className="content-section-short">
                     <div className="container">
                         <div className="title-wrap-centre">
-                            <h3 className="header-h4">{t('components/product:product.otherProducts')}</h3>
+                            <h3 className="header-h4">{t('pages/product:otherProducts')}</h3>
                         </div>
 
                         <div className="w-dyn-list">
-                            <ProductList type="data" value={product.associated_prds} />
+                            <ProductList type="data" value={product.associated_prds} max={2} />
                         </div>
                     </div>
                 </div>
@@ -389,9 +459,13 @@ export default function Product({ breadcrumb, origin, product }) {
 
             <BlockCMS nsCode="info-bottom-1" /> {/* TODO : il faudrait afficher le contenu d'une description de la catégorie rattachée ! */}
 
-            <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
-                <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
-            </Modal>
+            {
+                product.type === 'bundle' && (
+                    <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
+                        <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
+                    </Modal>
+                )
+            }
 
         </Layout>
 

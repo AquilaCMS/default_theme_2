@@ -1,13 +1,13 @@
 {
     "cartListItem": {
-        "ordering": "en-COMMANDER !",
-        "orderingLoading": "en-COMMANDE...",
-        "delivery": "en-Livraison",
-        "total": "en-Total",
-        "empty": "en-Votre Panier est vide",
-        "goToHome": "en-Découvrir notre Carte"
+        "ordering": "Order!",
+        "orderingLoading": "Order...",
+        "delivery": "Delivery",
+        "total": "Total",
+        "empty": "Your cart is empty",
+        "goToHome": "Discover our menu"
     },
     "cartSideBarView": {
-        "title": "en-Panier"
+        "title": "Cart"
     }
 }

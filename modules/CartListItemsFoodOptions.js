@@ -193,14 +193,14 @@ export default function CartListItemsFoodOptions() {
                                     cart.delivery?.value && (
                                         <div className="w-commerce-commercecartlineitem cart-line-item">
                                             <div>{t('components/cart:cartListItem.delivery')}</div>
-                                            <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                            <div>{formatPrice(cart.delivery.value.ati)}</div>
                                         </div>
                                     )
                                 }
                                 <div className="w-commerce-commercecartlineitem cart-line-item">
                                     <div>{t('components/cart:cartListItem.total')}</div>
                                     <div className="w-commerce-commercecartordervalue text-block">
-                                        {cart.priceTotal.ati.toFixed(2)} €
+                                        {formatPrice(cart.priceTotal.ati)}
                                     </div>
                                 </div>
                                 <div>
@@ -260,7 +260,7 @@ export default function CartListItemsFoodOptions() {
                                     )
                                 }
                                 <div style={{ display: 'flex', justifyContent: 'flex-end', color: 'grey' }}>
-                                    Supplément : {itemsFoodOptions?.length > 0 ? itemsFoodOptions.map((i) => i.price.total.ati).reduce((a, b) => a + b).toFixed(2) : 0} €
+                                    Supplément : {itemsFoodOptions?.length > 0 ? formatPrice(itemsFoodOptions.map((i) => i.price.total.ati).reduce((a, b) => a + b)) : '0 €'}
                                 </div>
                                 {
                                     message && (
@@ -278,14 +278,14 @@ export default function CartListItemsFoodOptions() {
                                     cart.delivery?.value && (
                                         <div className="w-commerce-commercecartlineitem cart-line-item">
                                             <div>{t('components/cart:cartListItem.delivery')}</div>
-                                            <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                            <div>{formatPrice(cart.delivery.value.ati)}</div>
                                         </div>
                                     )
                                 }
                                 <div className="w-commerce-commercecartlineitem cart-line-item">
                                     <div>{t('components/cart:cartListItem.total')}</div>
                                     <div className="w-commerce-commercecartordervalue text-block">
-                                        {cart.priceTotal.ati.toFixed(2)} €
+                                        {formatPrice(cart.priceTotal.ati)}
                                     </div>
                                 </div>
                                 <div>

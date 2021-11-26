@@ -1,14 +1,14 @@
 {
-  "title": "en-Protection des données",
-  "titleNav" : "en-Protection des données",
-  "buttonExportData": "en-Exporter mes données",
-  "labelExportData": "en-Récupérer toutes les données vous concernant",
-  "buttonAnonymizedData": "en-Anonymiser mes données",
-  "labelAnonymizedData": "en-Anonymise toutes les informations vous conernant (attention votre compte ne sera plus disponible suite à cette action)",
-  "buttonRemoveAccount": "en-Supprimer mon compte",
-  "labelRemoveAccount": "en-Supprime définitivement votre compte",
-  "modalTitle": "en-Confirmation",
-  "modalWarning": "en-Êtes-vous certain de vouloir effectuer cette action ?",
-  "yes": "en-Oui",
-  "no": "en-Non"
+  "title": "Data protection",
+  "titleNav" : "Data protection",
+  "buttonExportData": "Export my data",
+  "labelExportData": "Recover all your data",
+  "buttonAnonymizedData": "Anonymize my data",
+  "labelAnonymizedData": "Anonymize all information about you (your account will no longer be available after this action)",
+  "buttonRemoveAccount": "Delete my account",
+  "labelRemoveAccount": "Permanently deletes your account",
+  "modalTitle": "Confirmation",
+  "modalWarning": "Are you sure you want to perform this action ?",
+  "yes": "Yes",
+  "no": "No"
 }

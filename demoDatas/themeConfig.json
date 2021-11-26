@@ -27,6 +27,27 @@
                 "name" : "Gestion des pages",
                 "description" : "0 = Normale | 1 = Infinite scroll | 2 = Infinite scroll avec bouton",
                 "group" : "Général"
+              },
+              {
+                "key" : "displayStockCard",
+                "value" : false,
+                "name" : "Disponibilité dans les encarts produit",
+                "description" : "Affiche ou non la disponibilité dans les encarts produit (page catégorie, page recherche)",
+                "group" : "Général"
+              },
+              {
+                "key" : "displayStockProduct",
+                "value" : false,
+                "name" : "Disponibilité dans les pages produit",
+                "description" : "Affiche ou non la disponibilité dans les pages produit",
+                "group" : "Général"
+              },
+              {
+                "key" : "displayStockCart",
+                "value" : false,
+                "name" : "Disponibilité dans le panier",
+                "description" : "Affiche ou non la disponibilité dans le panier",
+                "group" : "Général"
               }
             ]
           },
@@ -51,6 +72,27 @@
                 "value" : 0,
                 "name" : "Pagination",
                 "description" : "0 = Normal | 1 = Infinite scroll | 2 = Infinite scroll with button",
+                "group" : "General"
+              },
+              {
+                "key" : "displayStockCard",
+                "value" : true,
+                "name" : "Availability in product card",
+                "description" : "Display or not the availability in the products card (category page, search page)",
+                "group" : "General"
+              },
+              {
+                "key" : "displayStockProduct",
+                "value" : true,
+                "name" : "Availability in product pages",
+                "description" : "Display or not the availability in the product pages",
+                "group" : "General"
+              },
+              {
+                "key" : "displayStockCart",
+                "value" : true,
+                "name" : "Availability in cart",
+                "description" : "Display or not the availability in the cart",
                 "group" : "General"
               }
             ]

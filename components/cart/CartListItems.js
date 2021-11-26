@@ -1,8 +1,8 @@
-import Link           from 'next/link';
-import useTranslation from 'next-translate/useTranslation';
-import CartItem       from '@components/cart/CartItem';
-import { useCart }    from '@lib/hooks';
-import { moduleHook } from '@lib/utils';
+import Link                        from 'next/link';
+import useTranslation              from 'next-translate/useTranslation';
+import CartItem                    from '@components/cart/CartItem';
+import { useCart }                 from '@lib/hooks';
+import { formatPrice, moduleHook } from '@lib/utils';
 
 export default function CartListItems() {
     const { cart } = useCart();
@@ -21,14 +21,14 @@ export default function CartListItems() {
                         cart.delivery?.value && (
                             <div className="w-commerce-commercecartlineitem cart-line-item">
                                 <div>{t('components/cart:cartListItem.delivery')}</div>
-                                <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                <div>{formatPrice(cart.delivery.value.ati)}</div>
                             </div>
                         )
                     }
                     <div className="w-commerce-commercecartlineitem cart-line-item">
                         <div>{t('components/cart:cartListItem.total')}</div>
                         <div className="w-commerce-commercecartordervalue text-block">
-                            {cart.priceTotal.ati.toFixed(2)} €
+                            {formatPrice(cart.priceTotal.ati)}
                         </div>
                     </div>
                     <div>

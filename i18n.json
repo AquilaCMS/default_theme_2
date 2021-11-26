@@ -15,6 +15,7 @@
       "components/gallery",
       "components/newsletter",
       "components/navigation",
+      "components/pagination",
       "components/product",
       "components/searchBar",
       "components/slider",
@@ -41,8 +42,8 @@
       "components/login/registerBlock",
       "pages/account/login"
     ],
-    "/c/[...categorySlugs]": [
-      "pages/category"
+    "/checkout/cart": [
+      "pages/checkout"
     ],
     "/checkout/clickandcollect": [
       "pages/checkout"
@@ -64,6 +65,9 @@
     ],
     "/search/[search]": [
       "pages/search"
+    ],
+    "/[...productSlug]": [
+      "pages/product"
     ],
     "/checkemailvalid": [
       "pages/checkemailvalid"

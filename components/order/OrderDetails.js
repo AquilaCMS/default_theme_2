@@ -4,6 +4,7 @@ import useTranslation                                   from 'next-translate/use
 import { useRouter }                                    from 'next/router';
 import Button                                           from '@components/ui/Button';
 import { askCancelOrder, downloadbillOrder, getOrders } from 'aquila-connector/api/order';
+import { useSelectPage }                                from '@lib/hooks';
 import { formatDate, formatPrice }                      from '@lib/utils';
 
 export default function OrderDetails({ order, setOrders = undefined }) {
@@ -11,6 +12,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
     const [openModal, setOpenModal] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const timer                     = useRef();
+    const { selectPage }            = useSelectPage();
     const router                    = useRouter();
     const { lang, t }               = useTranslation();
 
@@ -40,7 +42,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
             const res = await askCancelOrder(order._id);
             if (res.code === 'ORDER_ASK_CANCEL_SUCCESS') {
                 if (setOrders) {
-                    const orders = await getOrders(lang);
+                    const orders = await getOrders(lang, { PostBody: { page: selectPage, limit: 15 } });
                     setOrders(orders);
                 } else {
                     router.push('/account'); // If we are in the checkout/success page

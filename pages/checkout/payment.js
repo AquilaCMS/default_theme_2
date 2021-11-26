@@ -1,16 +1,16 @@
-import { useEffect }                                                    from 'react';
-import { useRouter }                                                    from 'next/router';
-import useTranslation                                                   from 'next-translate/useTranslation';
-import parse                                                            from 'html-react-parser';
-import LightLayout                                                      from '@components/layouts/LightLayout';
-import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
-import Button                                                           from '@components/ui/Button';
-import { cartToOrder }                                                  from 'aquila-connector/api/cart';
-import { makePayment }                                                  from 'aquila-connector/api/payment';
-import { useState }                                                     from 'react';
-import { useCart, usePaymentMethods, useSiteConfig }                    from '@lib/hooks';
-import { setLangAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
-import { dispatcher }                                                   from '@lib/redux/dispatcher';
+import { useEffect }                                                                 from 'react';
+import { useRouter }                                                                 from 'next/router';
+import useTranslation                                                                from 'next-translate/useTranslation';
+import parse                                                                         from 'html-react-parser';
+import LightLayout                                                                   from '@components/layouts/LightLayout';
+import NextSeoCustom                                                                 from '@components/tools/NextSeoCustom';
+import Button                                                                        from '@components/ui/Button';
+import { cartToOrder }                                                               from 'aquila-connector/api/cart';
+import { makePayment }                                                               from 'aquila-connector/api/payment';
+import { useState }                                                                  from 'react';
+import { useCart, usePaymentMethods, useSiteConfig }                                 from '@lib/hooks';
+import { setLangAxios, authProtectedPage, formatPrice, serverRedirect, unsetCookie } from '@lib/utils';
+import { dispatcher }                                                                from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
     setLangAxios(locale, req, res);
@@ -25,6 +25,7 @@ export async function getServerSideProps({ locale, req, res }) {
 export default function CheckoutPayment() {
     const [paymentForm, setPaymentForm] = useState('');
     const [isLoading, setIsLoading]     = useState(false);
+    const [message, setMessage]         = useState();
     const router                        = useRouter();
     const { cart }                      = useCart();
     const paymentMethods                = usePaymentMethods();
@@ -60,7 +61,9 @@ export default function CheckoutPayment() {
         setIsLoading(true);
         try {
             const payment_code = e.currentTarget.payment.value;
-            if (!payment_code) return setIsLoading(false);
+            if (!payment_code) {
+                return setIsLoading(false);
+            }
 
             // Cart to order
             const order = await cartToOrder(cart._id, lang);
@@ -75,7 +78,7 @@ export default function CheckoutPayment() {
             document.cookie = 'order_id=' + order._id + '; path=/;';
             unsetCookie('cart_id');
         } catch (err) {
-            console.error(err.message || t('common:message.unknownError'));
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         } finally {
             setIsLoading(false);
         }
@@ -109,7 +112,7 @@ export default function CheckoutPayment() {
                 <div className="container-tunnel">
                     <div className="container-step w-container">
                         <h2 className="heading-steps">4</h2>
-                        <h2 className="heading-2-steps">{t('pages/checkout:payment.paymentMethod')}</h2>
+                        <h2 className="heading-2-steps">{t('pages/checkout:payment.step4')}</h2>
                     </div>
                     <div className="col-log w-row">
                         <form className="form-mode-paiement-tunnel" onSubmit={onSubmitPayment}>
@@ -118,7 +121,7 @@ export default function CheckoutPayment() {
                                     paymentMethods && paymentMethods.map((payment) => (
                                         <div key={payment._id} className="column-center w-col w-col-6">
                                             <label className="checkbox-click-collect w-radio">
-                                                <input type="radio" name="payment" value={payment.code} required="" style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
+                                                <input type="radio" name="payment" value={payment.code} required style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
                                                 <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
                                                 {
                                                     payment.urlLogo ? (
@@ -137,14 +140,14 @@ export default function CheckoutPayment() {
                                     cart.delivery?.value && (
                                         <div className="w-commerce-commercecartlineitem cart-line-item">
                                             <div>{t('components/cart:cartListItem.delivery')}</div>
-                                            <div>{cart.delivery.value.ati.toFixed(2)} €</div>
+                                            <div>{formatPrice(cart.delivery.value.ati)}</div>
                                         </div>
                                     )
                                 }
                                 <div className="w-commerce-commercecartlineitem cart-line-item">
                                     <div>{t('components/cart:cartListItem.total')}</div>
                                     <div className="w-commerce-commercecartordervalue text-block">
-                                        {cart.priceTotal.ati.toFixed(2)} €
+                                        {formatPrice(cart.priceTotal.ati)}
                                     </div>
                                 </div>
                             </div>
@@ -162,6 +165,15 @@ export default function CheckoutPayment() {
                             </div>
                         </form>
                     </div>
+                    {
+                        message && (
+                            <div className={`w-commerce-commerce${message.type}`}>
+                                <div>
+                                    {message.message}
+                                </div>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </LightLayout>

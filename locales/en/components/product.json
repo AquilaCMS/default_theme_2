@@ -1,20 +1,11 @@
 {
     "productCard": {
-        "addToBasket": "en-Ajouter au panier",
-        "compose": "en-Composer",
-        "addToCartLoading": "en-Ajout...",
-        "noProduct": "en-Impossible d'afficher le produit [{{product}}]"
-    },
-    "product": {
-        "tab1": "en-Description",
-        "tab2": "en-Informations sur les allergènes",
-        "otherProducts": "en-Produits complémentaires",
-        "return": "en-Retour",
-        "addToBasket": "en-Ajouter au panier",
-        "compose": "en-Composer",
-        "addToCartLoading": "en-Ajout..."
+        "addToBasket": "Add to cart",
+        "compose": "Compose",
+        "addToCartLoading": "Add...",
+        "noProduct": "Unable to display the product [{{product}}]"
     },
     "productList": {
-        "noProduct": "en-Aucun produit trouvé."
+        "noProduct": "No product found."
     }
 }

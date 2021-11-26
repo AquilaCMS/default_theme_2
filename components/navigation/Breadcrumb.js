@@ -1,19 +1,40 @@
 import Link                 from 'next/link';
+import { useRouter }        from 'next/router';
+import useTranslation       from 'next-translate/useTranslation';
 import { BreadcrumbJsonLd } from 'next-seo';
 
-export default function Breadcrumb({ items }) {
-    if(items?.length > 0) {
+export default function Breadcrumb({ items, origin }) {
+    const router   = useRouter();
+    const { lang } = useTranslation();
+
+    if (items?.length > 0) {
+        const breadcrumbForJsonLd = [];
+        for (let index in items) {
+            let url = items[index].link;
+            if (router.defaultLocale !== lang) {
+                if (url === '/') {
+                    url = `/${lang}`;
+                } else {
+                    url = `/${lang}${url}`;
+                }
+            }
+            breadcrumbForJsonLd.push({
+                position: Number(index) + 1,
+                name    : items[index].text,
+                item    : `${origin}${url}`
+            });
+        }
+
         return (
             <div className="container-ariane w-container">
-                {items.map((itemChild, index) => {
+                {items.map((item, index) => {
                     return (
-                        itemChild?.item && 
-                            <Link href={itemChild.item} key={index}>
-                                <a className="link-ariane-2">&gt; {itemChild.name}</a>
-                            </Link>
+                        <Link href={item.link} key={index}>
+                            <a className="link-ariane-2">&gt; {item.text}</a>
+                        </Link>
                     );
                 })}
-                <BreadcrumbJsonLd itemListElements={items} />
+                <BreadcrumbJsonLd itemListElements={breadcrumbForJsonLd} />
             </div>
         );
     }

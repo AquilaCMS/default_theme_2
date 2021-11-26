@@ -1,23 +1,23 @@
-import { useEffect }                                                                 from 'react';
-import { useRouter }                                                                 from 'next/router';
-import useTranslation                                                                from 'next-translate/useTranslation';
-import parse                                                                         from 'html-react-parser';
-import LightLayout                                                                   from '@components/layouts/LightLayout';
-import NextSeoCustom                                                                 from '@components/tools/NextSeoCustom';
-import Button                                                                        from '@components/ui/Button';
-import { cartToOrder }                                                               from 'aquila-connector/api/cart';
-import { makePayment }                                                               from 'aquila-connector/api/payment';
-import { useState }                                                                  from 'react';
-import { useCart, usePaymentMethods, useSiteConfig }                                 from '@lib/hooks';
-import { setLangAxios, authProtectedPage, formatPrice, serverRedirect, unsetCookie } from '@lib/utils';
-import { dispatcher }                                                                from '@lib/redux/dispatcher';
+import { useEffect }                                                                             from 'react';
+import { useRouter }                                                                             from 'next/router';
+import useTranslation                                                                            from 'next-translate/useTranslation';
+import parse                                                                                     from 'html-react-parser';
+import LightLayout                                                                               from '@components/layouts/LightLayout';
+import NextSeoCustom                                                                             from '@components/tools/NextSeoCustom';
+import Button                                                                                    from '@components/ui/Button';
+import { cartToOrder }                                                                           from 'aquila-connector/api/cart';
+import { makePayment }                                                                           from 'aquila-connector/api/payment';
+import { useState }                                                                              from 'react';
+import { useCart, usePaymentMethods, useSiteConfig }                                             from '@lib/hooks';
+import { setLangAxios, authProtectedPage, formatPrice, serverRedirect, moduleHook, unsetCookie } from '@lib/utils';
+import { dispatcher }                                                                            from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
     setLangAxios(locale, req, res);
 
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
-        return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));
+        return serverRedirect('/checkout/login?redirect=' + encodeURI(moduleHook('cart-validate-btn') ? '/checkout/clickandcollect' : '/checkout/address'));
     }
     return dispatcher(locale, req, res);
 }
@@ -38,9 +38,13 @@ export default function CheckoutPayment() {
             return router.push('/');
         }
 
-        // Check if click & collect is validated
-        if (!cart.orderReceipt?.date) {
-            return router.push('/checkout/clickandcollect');
+        // Check if a date is validated
+        if (moduleHook('cart-validate-btn')) {
+            if (!cart.orderReceipt?.date) {
+                return router.push('/checkout/clickandcollect');
+            }
+        } else if (!cart.delivery?.method) { 
+            return router.push('/checkout/delivery');
         }
 
         // Check if the billing address exists
@@ -88,7 +92,7 @@ export default function CheckoutPayment() {
         router.back();
     };
 
-    if (!cart?.items?.length || !cart.orderReceipt?.date || !cart.addresses || !cart.addresses.billing) {
+    if (!cart?.items?.length || (moduleHook('cart-validate-btn') && !cart.orderReceipt?.date) || (!moduleHook('cart-validate-btn') && !cart.delivery?.method) || !cart.addresses || !cart.addresses.billing) {
         return null;
     }
 

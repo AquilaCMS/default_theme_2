@@ -7,7 +7,7 @@ import { Modal }                                                        from 're
 import BundleProduct                                                    from '@components/product/BundleProduct';
 import Button                                                           from '@components/ui/Button';
 import { generateSlug, getMainImage }                                   from 'aquila-connector/api/product/helpersProduct';
-import { addToCart }                                                    from 'aquila-connector/api/cart';
+import { addToCart, setCartShipment }                                   from 'aquila-connector/api/cart';
 import { useCart, useComponentData, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
 import { formatPrice, formatStock, unsetCookie }                        from '@lib/utils';
 
@@ -75,6 +75,12 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
         e.preventDefault();
         setIsLoading(true);
         try {
+            // Deletion of the cart delivery
+            if (cart.delivery?.method) {
+                await setCartShipment(cart._id, {}, '', true);
+            }
+
+            // Adding bundle product to cart
             const newCart   = await addToCart(cart._id, product, qty);
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
             setCart(newCart);

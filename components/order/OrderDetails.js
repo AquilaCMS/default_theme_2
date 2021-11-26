@@ -129,7 +129,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                 <label htmlFor="email-2">
                                     {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
                                 </label>
-                                <p className="label-tunnel">{formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p>
+                                <p className="label-tunnel">{order.orderReceipt.method === 'withdrawal' ? formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' }) : order.delivery?.name}</p>
                             </div>
                         </div>
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">

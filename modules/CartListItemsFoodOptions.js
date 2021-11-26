@@ -5,6 +5,7 @@ import BlockCMS                                 from '@components/common/BlockCM
 import CartItem                                 from '@components/cart/CartItem';
 import Button                                   from '@components/ui/Button';
 import { getBlockCMS }                          from 'aquila-connector/api/blockcms';
+import { setCartShipment }                      from 'aquila-connector/api/cart';
 import axios                                    from 'aquila-connector/lib/AxiosInstance';
 import { useCart }                              from '@lib/hooks';
 import { formatPrice, moduleHook, unsetCookie } from '@lib/utils';
@@ -104,8 +105,13 @@ export default function CartListItemsFoodOptions() {
             quantity = 0;
         }
         
-        // Update quantity
         try {
+            // Deletion of the cart delivery
+            if (cart.delivery?.method) {
+                await setCartShipment(cart._id, {}, '', true);
+            }
+
+            // Update quantity
             const newCart = await updateQtyItem(cart._id, item._id, item.id._id, quantity);
             setCart(newCart);
         } catch (err) {
@@ -216,9 +222,11 @@ export default function CartListItemsFoodOptions() {
                                                 style={{ width: '100%' }}
                                             />
                                         ) : (
-                                            <Link href="/checkout/clickandcollect">
-                                                <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
-                                            </Link>
+                                            moduleHook('cart-validate-btn') || (
+                                                <Link href="/checkout/address">
+                                                    <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                                                </Link>
+                                            )
                                         )
                                     }
                                 </div>

@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import useTranslation                  from 'next-translate/useTranslation';
-import { deleteItem, updateQtyItem }   from 'aquila-connector/api/cart';
-import { useCart, useSiteConfig }      from '@lib/hooks';
-import { formatPrice, formatStock }    from '@lib/utils';
+import { useEffect, useRef, useState }                from 'react';
+import useTranslation                                 from 'next-translate/useTranslation';
+import { deleteItem, updateQtyItem, setCartShipment } from 'aquila-connector/api/cart';
+import { useCart, useSiteConfig }                     from '@lib/hooks';
+import { formatPrice, formatStock }                   from '@lib/utils';
 
 export default function CartItem({ item }) {
     const [qty, setQty]         = useState(item.quantity);
@@ -28,6 +28,12 @@ export default function CartItem({ item }) {
             onDeleteItem();
         } else {
             try {
+                // Deletion of the cart delivery
+                if (cart.delivery?.method) {
+                    await setCartShipment(cart._id, {}, '', true);
+                }
+
+                // Update quantity
                 const newCart = await updateQtyItem(cart._id, item._id, quantity);
                 setQty(quantity);
                 setCart(newCart);
@@ -41,6 +47,12 @@ export default function CartItem({ item }) {
     
     const onDeleteItem = async () => {
         try {
+            // Deletion of the cart delivery
+            if (cart.delivery?.method) {
+                await setCartShipment(cart._id, {}, '', true);
+            }
+
+            // Product deletion
             const newCart = await deleteItem(cart._id, item._id);
             setCart(newCart);
         } catch (err) {

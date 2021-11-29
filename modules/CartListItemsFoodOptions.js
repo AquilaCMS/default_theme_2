@@ -196,7 +196,7 @@ export default function CartListItemsFoodOptions() {
 
                             <div className="w-commerce-commercecartfooter">
                                 {
-                                    cart.delivery?.value && (
+                                    cart.delivery?.method && cart.delivery?.value && (
                                         <div className="w-commerce-commercecartlineitem cart-line-item">
                                             <div>{t('components/cart:cartListItem.delivery')}</div>
                                             <div>{formatPrice(cart.delivery.value.ati)}</div>
@@ -283,7 +283,7 @@ export default function CartListItemsFoodOptions() {
 
                             <div className="w-commerce-commercecartfooter">
                                 {
-                                    cart.delivery?.value && (
+                                    cart.delivery?.method && cart.delivery?.value && (
                                         <div className="w-commerce-commercecartlineitem cart-line-item">
                                             <div>{t('components/cart:cartListItem.delivery')}</div>
                                             <div>{formatPrice(cart.delivery.value.ati)}</div>

@@ -41,12 +41,8 @@ export default function OrderDetails({ order, setOrders = undefined }) {
         try {
             const res = await askCancelOrder(order._id);
             if (res.code === 'ORDER_ASK_CANCEL_SUCCESS') {
-                if (setOrders) {
-                    const orders = await getOrders(lang, { PostBody: { page: selectPage, limit: 15 } });
-                    setOrders(orders);
-                } else {
-                    router.push('/account'); // If we are in the checkout/success page
-                }
+                const orders = await getOrders(lang, { PostBody: { page: selectPage, limit: 15 } });
+                setOrders(orders);
                 onCloseModal();
             }
         } catch (err) {
@@ -129,7 +125,14 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                 <label htmlFor="email-2">
                                     {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
                                 </label>
-                                <p className="label-tunnel">{order.orderReceipt.method === 'withdrawal' ? formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' }) : order.delivery?.name}</p>
+                                <p className="label-tunnel">
+                                    {order.orderReceipt.method === 'withdrawal' ? (
+                                        formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+                                    ) : (
+                                        <>{order.delivery?.name}<br />{t('components/orderDetails:estimatedDelivery')} :<br/>{formatDate(order.delivery.date, lang)}</>
+                                    )
+                                    }
+                                </p>
                             </div>
                         </div>
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
@@ -221,7 +224,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                         ))
                     }
                     {
-                        !['BILLED', 'DELIVERY_PROGRESS', 'DELIVERY_PARTIAL_PROGRESS', 'ASK_CANCEL', 'CANCELED', 'RETURNED'].includes(order.status) && (
+                        setOrders && !['BILLED', 'DELIVERY_PROGRESS', 'DELIVERY_PARTIAL_PROGRESS', 'ASK_CANCEL', 'CANCELED', 'RETURNED'].includes(order.status) && (
                             <div style={{ marginBottom: '20px' }}>
                                 <button type="button" className="log-button w-button" onClick={onOpenModal}>
                                     {t('components/orderDetails:cancelOrder')}

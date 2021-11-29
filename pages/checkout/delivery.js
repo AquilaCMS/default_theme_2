@@ -1,13 +1,13 @@
-import { useEffect, useState }                                                      from 'react';
-import { useRouter }                                                                from 'next/router';
-import useTranslation                                                               from 'next-translate/useTranslation';
-import Button                                                                       from '@components/ui/Button';
-import LightLayout                                                                  from '@components/layouts/LightLayout';
-import NextSeoCustom                                                                from '@components/tools/NextSeoCustom';
-import { getShipmentCart, setCartShipment }                                         from 'aquila-connector/api/cart';
-import { useCart }                                                                  from '@lib/hooks';
-import { setLangAxios, authProtectedPage, serverRedirect, moduleHook, formatPrice } from '@lib/utils';
-import { dispatcher }                                                               from '@lib/redux/dispatcher';
+import { useEffect, useState }                                                                  from 'react';
+import { useRouter }                                                                            from 'next/router';
+import useTranslation                                                                           from 'next-translate/useTranslation';
+import Button                                                                                   from '@components/ui/Button';
+import LightLayout                                                                              from '@components/layouts/LightLayout';
+import NextSeoCustom                                                                            from '@components/tools/NextSeoCustom';
+import { getShipmentCart, setCartShipment }                                                     from 'aquila-connector/api/cart';
+import { useCart }                                                                              from '@lib/hooks';
+import { setLangAxios, authProtectedPage, serverRedirect, moduleHook, formatDate, formatPrice } from '@lib/utils';
+import { dispatcher }                                                                           from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
     setLangAxios(locale, req, res);
@@ -24,12 +24,14 @@ export async function getServerSideProps({ locale, req, res }) {
 }
 
 export default function CheckoutDelivery() {
-    const [shipments, setShipments] = useState([]);
-    const [message, setMessage]     = useState();
-    const [isLoading, setIsLoading] = useState(false);
-    const router                    = useRouter();
-    const { cart, setCart }         = useCart();
-    const { lang, t }               = useTranslation();
+    const [shipments, setShipments]         = useState([]);
+    const { cart, setCart }                 = useCart();
+    const [deliveryValue, setDeliveryValue] = useState(0);
+    const [total, setTotal]                 = useState(cart.priceTotal.ati);
+    const [message, setMessage]             = useState();
+    const [isLoading, setIsLoading]         = useState(false);
+    const router                            = useRouter();
+    const { lang, t }                       = useTranslation();
     
     useEffect(() => {
         // Check if the cart is empty
@@ -41,12 +43,30 @@ export default function CheckoutDelivery() {
             try {
                 const res = await getShipmentCart({ _id: cart._id }, null, {}, lang);
                 setShipments(res.datas);
+                if (res.datas.length > 0) {
+                    if (cart.delivery?.method && cart.delivery?.value?.ati) {
+                        return setDeliveryValue(cart.delivery.value.ati);
+                    }
+                    const defaultPrice = res.datas[0].price;
+                    setDeliveryValue(defaultPrice);
+                    setTotal(cart.priceTotal.ati + res.datas[0].price);
+                }
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
             }
         };
         fetchData();
     }, []);
+
+    const calculateDelivery = (id) => {
+        const ship = shipments.find((s) => s._id === id);
+        setDeliveryValue(ship.price);
+        if (cart.delivery?.method && cart.delivery?.value?.ati) {
+            setTotal((cart.priceTotal.ati - cart.delivery.value.ati) + ship.price);
+        } else {
+            setTotal(cart.priceTotal.ati + ship.price);
+        }
+    };
 
     const onSubmitDelivery = async (e) => {
         e.preventDefault();
@@ -102,10 +122,10 @@ export default function CheckoutDelivery() {
                     <form className="form-mode-paiement-tunnel" onSubmit={onSubmitDelivery}>
                         <div className="columns-picker-paiement-tunnel delivery">
                             {
-                                shipments.length ? shipments.map((ship) => (
+                                shipments.length ? shipments.map((ship, index) => (
                                     <div key={ship._id} className="column-center w-col w-col-12" style={{ justifyContent: 'unset', marginTop: '10px' }}>
                                         <label className="checkbox-click-collect w-radio">
-                                            <input type="radio" name="shipment" value={ship._id} defaultChecked={ship._id === cart.delivery?.method} required style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
+                                            <input type="radio" name="shipment" value={ship._id} defaultChecked={ship._id === cart.delivery?.method || index === 0} onClick={(e) => calculateDelivery(e.target.value)} required style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
                                             <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
                                             <div className="labels">
                                                 {
@@ -117,7 +137,9 @@ export default function CheckoutDelivery() {
                                                     ) : (
                                                         <span className="checkbox-label w-form-label">{ship.name}</span>
                                                     )
+                                                    
                                                 }
+                                                <span>&nbsp;({formatDate(ship.dateDelivery, lang, { year: 'numeric', month: 'numeric', day: 'numeric' })})</span>
                                                 <div className="price">{ship.price > 0 ? formatPrice(ship.price) : 'GRATUIT'}</div>
                                             </div>
                                         </label>
@@ -127,30 +149,31 @@ export default function CheckoutDelivery() {
                         </div>
 
                         <div className="w-commerce-commercecartfooter" style={{ width: '100%' }}>
-                            {
-                                cart.delivery?.value && (
-                                    <div className="w-commerce-commercecartlineitem cart-line-item">
-                                        <div>{t('components/cart:cartListItem.delivery')}</div>
-                                        <div>{formatPrice(cart.delivery.value.ati)}</div>
-                                    </div>
-                                )
-                            }
+                            <div className="w-commerce-commercecartlineitem cart-line-item">
+                                <div>{t('components/cart:cartListItem.delivery')}</div>
+                                <div>{formatPrice(deliveryValue)}</div>
+                            </div>
                             <div className="w-commerce-commercecartlineitem cart-line-item">
                                 <div>{t('components/cart:cartListItem.total')}</div>
                                 <div className="w-commerce-commercecartordervalue text-block">
-                                    {formatPrice(cart.priceTotal.ati)}
+                                    {formatPrice(total)}
                                 </div>
                             </div>
                         </div>
 
                         <button type="button" className="log-button-03 w-button" onClick={previousStep}>{t('pages/checkout:delivery.previous')}</button>
                         &nbsp;
-                        <Button 
-                            text={t('pages/checkout:delivery.next')}
-                            loadingText={t('pages/checkout:delivery.nextLoading')}
-                            isLoading={isLoading}
-                            className="log-button-03 w-button"
-                        />
+                        {
+                            shipments.length > 0 && (
+                                <Button 
+                                    text={t('pages/checkout:delivery.next')}
+                                    loadingText={t('pages/checkout:delivery.nextLoading')}
+                                    isLoading={isLoading}
+                                    className="log-button-03 w-button"
+                                />
+                            )
+                        }
+                        
                     </form>
                     {
                         message && (

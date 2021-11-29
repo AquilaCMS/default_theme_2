@@ -7,6 +7,7 @@
     "deliveryMethod": "Delivery method",
     "withdrawal": "Pick-up",
     "delivery": "Delivery",
+    "estimatedDelivery": "Estimated date of delivery",
     "paymentInformations": "Payment Information",
     "paymentMethod": "Payment method",
     "billingAddress": "Billing address",

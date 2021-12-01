@@ -20,9 +20,10 @@ export default function Layout({ children }) {
 
             <BlockCMS nsCode="top-banner" />
 
+            <Languages />
+
             <SearchBar />
 
-            <Languages />
 
             <Header />
 

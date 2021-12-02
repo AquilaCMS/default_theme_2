@@ -51,6 +51,9 @@
     "/checkout/address": [
       "pages/checkout"
     ],
+    "/checkout/delivery": [
+      "pages/checkout"
+    ],
     "/checkout/confirmation": [
       "components/orderDetails",
       "pages/checkout"

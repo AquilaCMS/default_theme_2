@@ -18,7 +18,7 @@ import Button                                                                  f
 import { dispatcher }                                                          from '@lib/redux/dispatcher';
 import { getBlocksCMS }                                                        from 'aquila-connector/api/blockcms';
 import { getBreadcrumb }                                                       from 'aquila-connector/api/breadcrumb';
-import { addToCart }                                                           from 'aquila-connector/api/cart';
+import { addToCart, setCartShipment }                                          from 'aquila-connector/api/cart';
 import { getCategories }                                                       from 'aquila-connector/api/category';
 import { getProduct }                                                          from 'aquila-connector/api/product';
 import { getImage, getMainImage, getTabImageURL }                              from 'aquila-connector/api/product/helpersProduct';
@@ -162,6 +162,13 @@ export default function Product({ breadcrumb, origin, product }) {
         setIsLoading(true);
         try {
             setMessage();
+
+            // Deletion of the cart delivery
+            if (cart.delivery?.method) {
+                await setCartShipment(cart._id, {}, '', true);
+            }
+
+            // Adding product to cart
             const newCart   = await addToCart(cart._id, product, qty);
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
             setCart(newCart);

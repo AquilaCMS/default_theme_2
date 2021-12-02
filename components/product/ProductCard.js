@@ -33,7 +33,7 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
     const product = type === 'data' ? value : componentData[`nsProductCard_${type}_${value}`];
 
     // Getting boolean stock display
-    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCard')?.value || false;
+    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCard')?.value !== undefined ? themeConfig?.values?.find(t => t.key === 'displayStockCard')?.value : false;
 
     useEffect(() => {
         // Get product ID from cookie

@@ -429,10 +429,10 @@ anymatch@~3.1.1:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-aquila-connector@^1.0.28:
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/aquila-connector/-/aquila-connector-1.0.28.tgz#01371d56b294c38de659f98ff4378972f845971f"
-  integrity sha512-UevCiECpaVlTlx/MvicS30oevqkVYk/p7iAYYvWZlEnKAyXG5gRvvTSXIbtJqotg7nfcuWJKpGfUjQUPmgZ+PQ==
+aquila-connector@^1.0.29:
+  version "1.0.29"
+  resolved "https://registry.yarnpkg.com/aquila-connector/-/aquila-connector-1.0.29.tgz#b8fa0d76223586dfdaa7619f029113a21a9d3311"
+  integrity sha512-KS9tG3Jq8km7RCU/lKcobrdkfCfnCCLLRiXzB8SgV94uGVQfGTM3O3Z1GoLJG5zg3HpTX+A3krEOGyXFGIGh3g==
   dependencies:
     axios "^0.21.4"
     cookie "^0.4.1"

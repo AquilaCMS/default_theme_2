@@ -136,7 +136,7 @@ export default function Product({ breadcrumb, origin, product }) {
     if (!product) return <ErrorPage statusCode={404} />;
 
     // Getting boolean stock display
-    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value || false;
+    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value !== undefined ? themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value : false;
 
     const mainImage   = getMainImage(product.images, '578x578');
     const images      = getTabImageURL(product.images);

@@ -48,6 +48,13 @@
                 "name" : "Disponibilité dans le panier",
                 "description" : "Affiche ou non la disponibilité dans le panier",
                 "group" : "Général"
+              },
+              {
+                "key" : "displaySearchBar",
+                "value" : true,
+                "name" : "Afficher la barre de recherche",
+                "description" : "Affiche ou non la barre de recherche",
+                "group" : "Général"
               }
             ]
           },
@@ -93,6 +100,13 @@
                 "value" : true,
                 "name" : "Availability in cart",
                 "description" : "Display or not the availability in the cart",
+                "group" : "General"
+              },
+              {
+                "key" : "displaySearchBar",
+                "value" : true,
+                "name" : "Display search bar",
+                "description" : "Display or not the search bar",
                 "group" : "General"
               }
             ]

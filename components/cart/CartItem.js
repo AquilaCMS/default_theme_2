@@ -13,7 +13,7 @@ export default function CartItem({ item }) {
     const { t }                 = useTranslation();
 
     // Getting boolean stock display
-    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCart')?.value || false;
+    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCart')?.value !== undefined ? themeConfig?.values?.find(t => t.key === 'displayStockCart')?.value : false;
 
     useEffect(() => {
         return () => clearTimeout(timer.current);

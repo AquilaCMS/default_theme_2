@@ -386,6 +386,7 @@ export default function Product({ breadcrumb, origin, product }) {
                                 <table>
                                     {
                                         product.attributes.map((attribute) => {
+                                            if (!attribute.value) { return; }
                                             if (attribute.type === 'bool') {
                                                 return (
                                                     <tr key={attribute._id}>

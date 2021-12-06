@@ -76,7 +76,7 @@ export default function CheckoutPayment() {
             const returnURL = `/${langs.find(l => l.defaultLanguage).code === lang ? '' : `${lang}/`}checkout/confirmation`;
             const form      = await makePayment(order.number, payment_code, returnURL, lang);
             if (form) {
-                if (form.statut && form.statut !== 200) {
+                if (form?.status && form.status !== 200) {
                     return setMessage({ type: 'error', message: form.message || t('common:message.unknownError') });
                 } else {
                     setPaymentForm(form);

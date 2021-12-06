@@ -296,9 +296,9 @@ export default function Product({ breadcrumb, origin, product }) {
                             {
                                 isOpen && (
                                     <Lightbox
-                                        mainSrc={`/images/products/max/${product.images[photoIndex]._id}/${product.images[photoIndex].name}`}
-                                        nextSrc={`/images/products/max/${product.images[(photoIndex + 1) % product.images.length]._id}/${product.images[(photoIndex + 1) % product.images.length].name}`}
-                                        prevSrc={`/images/products/max/${product.images[(photoIndex + product.images.length - 1) % product.images.length]._id}/${product.images[(photoIndex + product.images.length - 1) % product.images.length].name}`}
+                                        mainSrc={`/images/products/max/${product.images[photoIndex]._id}/${product.images[photoIndex].title}${product.images[photoIndex].extension}`}
+                                        nextSrc={`/images/products/max/${product.images[(photoIndex + 1) % product.images.length]._id}/${product.images[(photoIndex + 1) % product.images.length].title}${product.images[(photoIndex + 1) % product.images.length].extension}`}
+                                        prevSrc={`/images/products/max/${product.images[(photoIndex + product.images.length - 1) % product.images.length]._id}/${product.images[(photoIndex + product.images.length - 1) % product.images.length].title}${product.images[(photoIndex + product.images.length - 1) % product.images.length].extension}`}
                                         imageTitle={product.images[photoIndex].alt}
                                         onCloseRequest={() => setIsOpen(false)}
                                         onMovePrevRequest={() => setPhotoIndex((photoIndex + product.images.length - 1) % product.images.length)}

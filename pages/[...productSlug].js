@@ -385,7 +385,7 @@ export default function Product({ breadcrumb, origin, product }) {
                             <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
                                 <table>
                                     {
-                                        product.attributes.map((attribute) => {
+                                        product.attributes.sort((a, b) => a.position - b.position).map((attribute) => {
                                             if (!attribute.value) { return; }
                                             if (attribute.type === 'bool') {
                                                 return (

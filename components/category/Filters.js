@@ -15,7 +15,7 @@ export default function Filters({ filtersData, getProductsList }) {
     const { categoryPriceEnd }                                    = useCategoryPriceEnd();
     const [checkedAttributesFilters, setCheckedAttributesFilters] = useState({});
     const [checkedPictosFilters, setCheckedPictosFilters]         = useState([]);
-    const [sort, setSort]                                         = useState({ sortWeight: -1 });
+    const [sort, setSort]                                         = useState('sortWeight|-1');
     const [priceValue, setPriceValue]                             = useState([categoryPriceEnd.min, categoryPriceEnd.max]);
     const [open, setOpen]                                         = useState(false);
     const { setSelectPage }                                       = useSelectPage();
@@ -299,7 +299,7 @@ export default function Filters({ filtersData, getProductsList }) {
                                     <h6>{attribute.name}</h6>
                                     <div>
                                         {
-                                            filtersData.attributesValues[attId].map((value) => {
+                                            filtersData.attributesValues[attId].sort().map((value) => {
                                                 return (
                                                     <label className="w-checkbox checkbox-field-allergene" key={attId + value}>
                                                         <input 

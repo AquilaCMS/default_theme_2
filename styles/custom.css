@@ -25,17 +25,6 @@ body {
     max-height: 500px;
 }
 
-/* FUSION => .faq-content l.3490 mon-restaurant.webflow.css */
-.faq-content {
-    max-height: 0px;
-    transition: max-height 0.5s;
-}
-
-/* ADD */
-.faq-question-open {
-    max-height: 400px;
-}
-
 /* FUSION => .lien_alergenes l.5066 mon-restaurant.webflow.css */
 .lien_alergenes {
     cursor: pointer;
@@ -396,8 +385,12 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
 /* 
     ADD mon-restaurant.webflow.css
 */
+.faq-content {
+    display: none;
+}
+.faq-question-open,
 .filters-open {
-    max-height: 400px;
+    display: block;
 }
 .filters-list {
     display: flex;
@@ -405,11 +398,6 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
 }
 .filter {
     padding: 5px 20px;
-}
-@media screen and (max-width: 479px) {
-    .filters-open {
-        max-height: 500px;
-    }
 }
 
 /*

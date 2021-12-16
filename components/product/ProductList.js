@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import crypto                  from 'crypto';
-import useTranslation          from 'next-translate/useTranslation';
-import ProductCard             from '@components/product/ProductCard';
-import { useComponentData }    from '@lib/hooks';
-import { isMobile }            from '@lib/utils';
+import { useEffect, useRef, useState } from 'react';
+import crypto                          from 'crypto';
+import useTranslation                  from 'next-translate/useTranslation';
+import ProductCard                     from '@components/product/ProductCard';
+import { useComponentData }            from '@lib/hooks';
+import { isMobile }                    from '@lib/utils';
 
-export default function ProductList({ type, value, max = undefined }) {
+export default function ProductList({ type, value, max = undefined, autoplay = true, delayAutoplay = 5000 }) {
+    const interval                        = useRef();
     const [currentIndex, setCurrentIndex] = useState(1);
     const [maxItems, setMaxItems]         = useState(max);
     const componentData                   = useComponentData();
@@ -23,11 +24,17 @@ export default function ProductList({ type, value, max = undefined }) {
     let productList = [];
     if (type === 'data') {
         productList = value;
-    }
-    else {
+    } else {
         const hash  = crypto.createHash('md5').update(`${type}_${value}`).digest('hex');
         productList = componentData[`nsProductList_${hash}`];
     }
+
+    useEffect(() => {
+        if (maxItems && (productList.length > maxItems || maxItems === 99) && autoplay) {
+            interval.current = setInterval(slideNext, delayAutoplay);
+            return () => clearInterval(interval.current);
+        }
+    }, []);
 
     if (!productList?.length) {
         return (
@@ -37,12 +44,24 @@ export default function ProductList({ type, value, max = undefined }) {
         );
     }
 
+    const productListStopAutoplay = () => {
+        if (interval.current) {
+            clearInterval(interval.current);
+        }
+    };
+
+    const productListAutoplay = () => {
+        if (autoplay) {
+            interval.current = setInterval(slideNext, delayAutoplay);
+        }
+    };
+
     const slidePrev = () => {
-        setCurrentIndex(currentIndex - 1 > 0 ? currentIndex - 1 : Math.ceil(productList.length / maxItems));
+        setCurrentIndex(prevCurrentIndex => prevCurrentIndex - 1 > 0 ? prevCurrentIndex - 1 : Math.ceil(productList.length / maxItems));
     };
 
     const slideNext = () => {
-        setCurrentIndex(currentIndex + 1 <= Math.ceil(productList.length / maxItems) ? currentIndex + 1 : 1);
+        setCurrentIndex(prevCurrentIndex => prevCurrentIndex + 1 <= Math.ceil(productList.length / maxItems) ? prevCurrentIndex + 1 : 1);
     };
 
     // If maxItems is defined and the size of the product list is larger than maxItems => slider mode
@@ -66,7 +85,7 @@ export default function ProductList({ type, value, max = undefined }) {
 
         return (
             <>
-                <div role="list" className="order-collection w-dyn-items w-row" style={{ paddingLeft: '60px', paddingRight: '60px' }}>
+                <div role="list" className="order-collection w-dyn-items w-row" style={{ paddingLeft: '60px', paddingRight: '60px' }} onMouseEnter={productListStopAutoplay} onMouseLeave={productListAutoplay}>
                     {
                         productsDisplayed.map((item) => (
                             <ProductCard key={item._id} type="data" value={item} />

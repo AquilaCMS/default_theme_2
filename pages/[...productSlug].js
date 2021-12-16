@@ -296,9 +296,9 @@ export default function Product({ breadcrumb, origin, product }) {
                             {
                                 isOpen && (
                                     <Lightbox
-                                        mainSrc={`/images/products/max/${product.images[photoIndex]._id}/${product.images[photoIndex].title}${product.images[photoIndex].extension}`}
-                                        nextSrc={`/images/products/max/${product.images[(photoIndex + 1) % product.images.length]._id}/${product.images[(photoIndex + 1) % product.images.length].title}${product.images[(photoIndex + 1) % product.images.length].extension}`}
-                                        prevSrc={`/images/products/max/${product.images[(photoIndex + product.images.length - 1) % product.images.length]._id}/${product.images[(photoIndex + product.images.length - 1) % product.images.length].title}${product.images[(photoIndex + product.images.length - 1) % product.images.length].extension}`}
+                                        mainSrc={getImage(product.images[photoIndex], 'max').url}
+                                        nextSrc={getImage(product.images[(photoIndex + 1) % product.images.length], 'max').url}
+                                        prevSrc={getImage(product.images[(photoIndex + product.images.length - 1) % product.images.length], 'max').url}
                                         imageTitle={product.images[photoIndex].alt}
                                         onCloseRequest={() => setIsOpen(false)}
                                         onMovePrevRequest={() => setPhotoIndex((photoIndex + product.images.length - 1) % product.images.length)}
@@ -384,61 +384,63 @@ export default function Product({ breadcrumb, origin, product }) {
                             <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`} dangerouslySetInnerHTML={{ __html: product.description1?.text }} />
                             <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
                                 <table>
-                                    {
-                                        product.attributes.sort((a, b) => a.position - b.position).map((attribute) => {
-                                            if (!attribute.value) { return; }
-                                            if (attribute.type === 'bool') {
+                                    <tbody>
+                                        {
+                                            product.attributes.sort((a, b) => a.position - b.position).map((attribute) => {
+                                                if (!attribute.value) { return; }
+                                                if (attribute.type === 'bool') {
+                                                    return (
+                                                        <tr key={attribute._id}>
+                                                            <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                            <td style={{ padding: '10px' }}>{t(`pages/product:${attribute.value.toString()}`)}</td>
+                                                        </tr>
+                                                    );
+                                                }
+                                                if (attribute.type === 'textfield' || attribute.type === 'textarea') {
+                                                    return (
+                                                        <tr key={attribute._id}>
+                                                            <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                            <td style={{ padding: '10px' }}>
+                                                                <div dangerouslySetInnerHTML={{ __html: attribute.value }} />
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }
+                                                if (attribute.type === 'color') {
+                                                    return (
+                                                        <tr key={attribute._id}>
+                                                            <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                            <td style={{ padding: '10px' }}>
+                                                                <div style={{
+                                                                    width          : '50px',
+                                                                    height         : '20px',
+                                                                    backgroundColor: attribute.value.toString(),
+                                                                    borderRadius   : '5px'
+                                                                }}
+                                                                />
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }
+                                                if (Array.isArray(attribute.value)) {
+                                                    return (
+                                                        <tr key={attribute._id}>
+                                                            <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                            <td style={{ padding: '10px' }}>
+                                                                <div dangerouslySetInnerHTML={{ __html: attribute.value.join(', ') }} />
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }
                                                 return (
                                                     <tr key={attribute._id}>
                                                         <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                        <td style={{ padding: '10px' }}>{t(`pages/product:${attribute.value.toString()}`)}</td>
+                                                        <td style={{ padding: '10px' }}>{attribute.value}</td>
                                                     </tr>
                                                 );
-                                            }
-                                            if (attribute.type === 'textfield' || attribute.type === 'textarea') {
-                                                return (
-                                                    <tr key={attribute._id}>
-                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                        <td style={{ padding: '10px' }}>
-                                                            <div dangerouslySetInnerHTML={{ __html: attribute.value }} />
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            }
-                                            if (attribute.type === 'color') {
-                                                return (
-                                                    <tr key={attribute._id}>
-                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                        <td style={{ padding: '10px' }}>
-                                                            <div style={{
-                                                                width          : '50px',
-                                                                height         : '20px',
-                                                                backgroundColor: attribute.value.toString(),
-                                                                borderRadius   : '5px'
-                                                            }}
-                                                            />
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            }
-                                            if (Array.isArray(attribute.value)) {
-                                                return (
-                                                    <tr key={attribute._id}>
-                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                        <td style={{ padding: '10px' }}>
-                                                            <div dangerouslySetInnerHTML={{ __html: attribute.value.join(', ') }} />
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            }
-                                            return (
-                                                <tr key={attribute._id}>
-                                                    <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                    <td style={{ padding: '10px' }}>{attribute.value}</td>
-                                                </tr>
-                                            );
-                                        })
-                                    }
+                                            })
+                                        }
+                                    </tbody>
                                 </table>
                                 {moduleHook('product-tab') !== false && <hr />}
                                 {

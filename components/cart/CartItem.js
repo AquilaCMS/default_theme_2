@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState }                from 'react';
 import useTranslation                                 from 'next-translate/useTranslation';
 import { deleteItem, updateQtyItem, setCartShipment } from 'aquila-connector/api/cart';
+import { getImage }                                   from 'aquila-connector/api/product/helpersProduct';
 import { useCart, useSiteConfig }                     from '@lib/hooks';
 import { formatPrice, formatStock }                   from '@lib/utils';
 
@@ -65,7 +66,7 @@ export default function CartItem({ item }) {
     return (
         <>
             <div className="w-commerce-commercecartitem cart-item">
-                <img src={`/images/products/60x60/${item.image}/${item.code}.png`} alt="" className="w-commerce-commercecartitemimage" />
+                <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60').url} alt={item.code} className="w-commerce-commercecartitemimage" />
                 <div className="w-commerce-commercecartiteminfo div-block-4">
                     <div>
                         <div className="w-commerce-commercecartproductname">{item.name}</div>

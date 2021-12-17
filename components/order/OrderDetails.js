@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState }                  from 'react';
 import { Modal }                                        from 'react-responsive-modal';
 import useTranslation                                   from 'next-translate/useTranslation';
-import { useRouter }                                    from 'next/router';
 import Button                                           from '@components/ui/Button';
 import { askCancelOrder, downloadbillOrder, getOrders } from 'aquila-connector/api/order';
+import { getImage }                                     from 'aquila-connector/api/product/helpersProduct';
 import { useSelectPage }                                from '@lib/hooks';
 import { formatDate, formatPrice }                      from '@lib/utils';
 
@@ -13,7 +13,6 @@ export default function OrderDetails({ order, setOrders = undefined }) {
     const [isLoading, setIsLoading] = useState(false);
     const timer                     = useRef();
     const { selectPage }            = useSelectPage();
-    const router                    = useRouter();
     const { lang, t }               = useTranslation();
 
     useEffect(() => {
@@ -78,7 +77,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                                     <div className="item-tunnel w-row" key={item._id}>
                                                         <div className="w-col w-col-3">
                                                             <div className="food-image-square-tunnel w-inline-block">
-                                                                <img src={`/images/products/60x60/${item.image}/${item.code}.png`} alt="" className="food-image" />
+                                                                <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60').url} alt={item.code} className="food-image" />
                                                             </div>
                                                         </div>
                                                         <div className="w-col w-col-9">

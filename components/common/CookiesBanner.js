@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter }           from 'next/router';
 import useTranslation          from 'next-translate/useTranslation';
 import cookie                  from 'cookie';
-import { getBlockCMS }         from 'aquila-connector/api/blockcms';
+import { getBlockCMS }         from '@aquilacms/aquila-connector/api/blockcms';
 import { useCookieNotice }     from '@lib/hooks';
 
 export default function CookiesBanner() {

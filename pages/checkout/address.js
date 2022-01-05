@@ -4,8 +4,8 @@ import useTranslation                                                  from 'nex
 import Button                                                          from '@components/ui/Button';
 import LightLayout                                                     from '@components/layouts/LightLayout';
 import NextSeoCustom                                                   from '@components/tools/NextSeoCustom';
-import { setCartAddresses }                                            from 'aquila-connector/api/cart';
-import { setAddressesUser }                                            from 'aquila-connector/api/user';
+import { setCartAddresses }                                            from '@aquilacms/aquila-connector/api/cart';
+import { setAddressesUser }                                            from '@aquilacms/aquila-connector/api/user';
 import { useCart }                                                     from '@lib/hooks';
 import { setLangAxios, authProtectedPage, serverRedirect, moduleHook } from '@lib/utils';
 import { dispatcher }                                                  from '@lib/redux/dispatcher';

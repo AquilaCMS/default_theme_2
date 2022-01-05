@@ -5,8 +5,8 @@ import Layout            from '@components/layouts/Layout';
 import NextSeoCustom     from '@components/tools/NextSeoCustom';
 import BlockCMS          from '@components/common/BlockCMS';
 import { dispatcher }    from '@lib/redux/dispatcher';
-import { getPageStatic } from 'aquila-connector/api/static';
-import { getBlocksCMS }  from 'aquila-connector/api/blockcms';
+import { getPageStatic } from '@aquilacms/aquila-connector/api/static';
+import { getBlocksCMS }  from '@aquilacms/aquila-connector/api/blockcms';
 import { setLangAxios }  from '@lib/utils';
 // import Breadcrumb   from '@components/navigation/Breadcrumb';
 

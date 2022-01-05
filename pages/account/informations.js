@@ -3,8 +3,8 @@ import useTranslation                                      from 'next-translate/
 import AccountLayout                                       from '@components/account/AccountLayout';
 import Button                                              from '@components/ui/Button';
 import NextSeoCustom                                       from '@components/tools/NextSeoCustom';
-import { getNewsletter, setNewsletter }                    from 'aquila-connector/api/newsletter';
-import { setUser, setAddressesUser }                       from 'aquila-connector/api/user';
+import { getNewsletter, setNewsletter }                    from '@aquilacms/aquila-connector/api/newsletter';
+import { setUser, setAddressesUser }                       from '@aquilacms/aquila-connector/api/user';
 import { setLangAxios, authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                                      from '@lib/redux/dispatcher';
 

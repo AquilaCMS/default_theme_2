@@ -8,8 +8,8 @@ import Layout                                                 from '@components/
 import NextSeoCustom                                          from '@components/tools/NextSeoCustom';
 import ProductList                                            from '@components/product/ProductList';
 import { dispatcher }                                         from '@lib/redux/dispatcher';
-import { getProducts }                                        from 'aquila-connector/api/product';
-import { getSiteInfo }                                        from 'aquila-connector/api/site';
+import { getProducts }                                        from '@aquilacms/aquila-connector/api/product';
+import { getSiteInfo }                                        from '@aquilacms/aquila-connector/api/site';
 import { useCategoryProducts, useSiteConfig }                 from '@lib/hooks';
 import { setLangAxios, cloneObj, convertFilter, unsetCookie } from '@lib/utils';
 

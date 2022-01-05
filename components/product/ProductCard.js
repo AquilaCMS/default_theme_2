@@ -6,8 +6,8 @@ import cookie                                                           from 'co
 import { Modal }                                                        from 'react-responsive-modal';
 import BundleProduct                                                    from '@components/product/BundleProduct';
 import Button                                                           from '@components/ui/Button';
-import { generateSlug, getMainImage }                                   from 'aquila-connector/api/product/helpersProduct';
-import { addToCart, setCartShipment }                                   from 'aquila-connector/api/cart';
+import { generateSlug, getMainImage }                                   from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import { addToCart, setCartShipment }                                   from '@aquilacms/aquila-connector/api/cart';
 import { useCart, useComponentData, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
 import { formatPrice, formatStock, unsetCookie }                        from '@lib/utils';
 

@@ -2,8 +2,8 @@ import { useEffect, useRef, useState }                  from 'react';
 import { Modal }                                        from 'react-responsive-modal';
 import useTranslation                                   from 'next-translate/useTranslation';
 import Button                                           from '@components/ui/Button';
-import { askCancelOrder, downloadbillOrder, getOrders } from 'aquila-connector/api/order';
-import { getImage }                                     from 'aquila-connector/api/product/helpersProduct';
+import { askCancelOrder, downloadbillOrder, getOrders } from '@aquilacms/aquila-connector/api/order';
+import { getImage }                                     from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { useSelectPage }                                from '@lib/hooks';
 import { formatDate, formatPrice }                      from '@lib/utils';
 

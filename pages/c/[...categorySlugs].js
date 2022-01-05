@@ -15,9 +15,9 @@ import CategoryList                                                       from '
 import ProductList                                                        from '@components/product/ProductList';
 import MenuCategories                                                     from '@components/navigation/MenuCategories';
 import { dispatcher }                                                     from '@lib/redux/dispatcher';
-import { getBreadcrumb }                                                  from 'aquila-connector/api/breadcrumb';
-import { getCategory, getCategoryProducts }                               from 'aquila-connector/api/category';
-import { getSiteInfo }                                                    from 'aquila-connector/api/site';
+import { getBreadcrumb }                                                  from '@aquilacms/aquila-connector/api/breadcrumb';
+import { getCategory, getCategoryProducts }                               from '@aquilacms/aquila-connector/api/category';
+import { getSiteInfo }                                                    from '@aquilacms/aquila-connector/api/site';
 import { useCategoryProducts, useSiteConfig }                             from '@lib/hooks';
 import { setLangAxios, cloneObj, convertFilter, moduleHook, unsetCookie } from '@lib/utils';
 

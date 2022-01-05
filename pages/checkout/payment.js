@@ -5,8 +5,8 @@ import parse                                                                    
 import LightLayout                                                                               from '@components/layouts/LightLayout';
 import NextSeoCustom                                                                             from '@components/tools/NextSeoCustom';
 import Button                                                                                    from '@components/ui/Button';
-import { cartToOrder }                                                                           from 'aquila-connector/api/cart';
-import { makePayment }                                                                           from 'aquila-connector/api/payment';
+import { cartToOrder }                                                                           from '@aquilacms/aquila-connector/api/cart';
+import { makePayment }                                                                           from '@aquilacms/aquila-connector/api/payment';
 import { useState }                                                                              from 'react';
 import { useCart, usePaymentMethods, useSiteConfig }                                             from '@lib/hooks';
 import { setLangAxios, authProtectedPage, formatPrice, serverRedirect, moduleHook, unsetCookie } from '@lib/utils';

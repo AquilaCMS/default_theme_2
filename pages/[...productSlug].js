@@ -16,12 +16,12 @@ import ProductList                                                             f
 import BlockCMS                                                                from '@components/common/BlockCMS';
 import Button                                                                  from '@components/ui/Button';
 import { dispatcher }                                                          from '@lib/redux/dispatcher';
-import { getBlocksCMS }                                                        from 'aquila-connector/api/blockcms';
-import { getBreadcrumb }                                                       from 'aquila-connector/api/breadcrumb';
-import { addToCart, setCartShipment }                                          from 'aquila-connector/api/cart';
-import { getCategories }                                                       from 'aquila-connector/api/category';
-import { getProduct }                                                          from 'aquila-connector/api/product';
-import { getImage, getMainImage, getTabImageURL }                              from 'aquila-connector/api/product/helpersProduct';
+import { getBlocksCMS }                                                        from '@aquilacms/aquila-connector/api/blockcms';
+import { getBreadcrumb }                                                       from '@aquilacms/aquila-connector/api/breadcrumb';
+import { addToCart, setCartShipment }                                          from '@aquilacms/aquila-connector/api/cart';
+import { getCategories }                                                       from '@aquilacms/aquila-connector/api/category';
+import { getProduct }                                                          from '@aquilacms/aquila-connector/api/product';
+import { getImage, getMainImage, getTabImageURL }                              from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { useCart, useShowCartSidebar, useSiteConfig }                          from '@lib/hooks';
 import { setLangAxios, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 

@@ -2,9 +2,9 @@ import { useEffect, useState }                                                  
 import { useRouter }                                                              from 'next/router';
 import cookie                                                                     from 'cookie';
 import useTranslation                                                             from 'next-translate/useTranslation';
-import { getBlockCMS }                                                            from 'aquila-connector/api/blockcms';
-import { getCategoryProducts }                                                    from 'aquila-connector/api/category';
-import axios                                                                      from 'aquila-connector/lib/AxiosInstance';
+import { getBlockCMS }                                                            from '@aquilacms/aquila-connector/api/blockcms';
+import { getCategoryProducts }                                                    from '@aquilacms/aquila-connector/api/category';
+import axios                                                                      from '@aquilacms/aquila-connector/lib/AxiosInstance';
 import { useSelectPage, useCategoryProducts, useCategoryPriceEnd, useSiteConfig } from '@lib/hooks';
 import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                 from '@lib/utils';
 

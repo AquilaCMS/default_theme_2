@@ -2,6 +2,14 @@
 # yarn lockfile v1
 
 
+"@aquilacms/aquila-connector@^1.0.30":
+  version "1.0.30"
+  resolved "https://registry.yarnpkg.com/@aquilacms/aquila-connector/-/aquila-connector-1.0.30.tgz#ba6efff10be57be434715ca9293787fd3b77af6d"
+  integrity sha512-+9oHUUVPjen8UO/851z7tolgadE829qqh2GSqYK+L/9dHJ4rnGSUKXFt/3KxaCnSqY+dZ84E5mDc4oPqYJKHjg==
+  dependencies:
+    axios "^0.21.4"
+    cookie "^0.4.1"
+
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
@@ -428,14 +436,6 @@ anymatch@~3.1.1:
   dependencies:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
-
-aquila-connector@^1.0.29:
-  version "1.0.29"
-  resolved "https://registry.yarnpkg.com/aquila-connector/-/aquila-connector-1.0.29.tgz#b8fa0d76223586dfdaa7619f029113a21a9d3311"
-  integrity sha512-KS9tG3Jq8km7RCU/lKcobrdkfCfnCCLLRiXzB8SgV94uGVQfGTM3O3Z1GoLJG5zg3HpTX+A3krEOGyXFGIGh3g==
-  dependencies:
-    axios "^0.21.4"
-    cookie "^0.4.1"
 
 argparse@^1.0.7:
   version "1.0.10"
@@ -1509,9 +1509,9 @@ flatted@^3.1.0:
   integrity sha512-JaTY/wtrcSyvXJl4IMFHPKyFur1sE9AUqc0QnhOaJ0CxHtAoIV8pYDzeEfAaNEtGkOfq4gr3LBFmdXW5mOQFnA==
 
 follow-redirects@^1.14.0:
-  version "1.14.5"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.5.tgz#f09a5848981d3c772b5392309778523f8d85c381"
-  integrity sha512-wtphSXy7d4/OR+MvIFbCVBDzZ5520qV8XfPklSN5QtxuMUJZ+b0Wnst1e1lCDocfzuCkHqj8k0FpZqO+UIaKNA==
+  version "1.14.6"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.6.tgz#8cfb281bbc035b3c067d6cd975b0f6ade6e855cd"
+  integrity sha512-fhUl5EwSJbbl8AR+uYL2KQDxLkdSjZGR36xy46AO7cOMTrCMON6Sa28FmAnC2tRTDbd/Uuzz3aJBv7EBN7JH8A==
 
 foreach@^2.0.5:
   version "2.0.5"

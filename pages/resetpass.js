@@ -4,7 +4,7 @@ import useTranslation                   from 'next-translate/useTranslation';
 import Layout                           from '@components/layouts/Layout';
 import Button                           from '@components/ui/Button';
 import NextSeoCustom                    from '@components/tools/NextSeoCustom';
-import { resetPassword }                from 'aquila-connector/api/user';
+import { resetPassword }                from '@aquilacms/aquila-connector/api/user';
 import { setLangAxios, serverRedirect } from '@lib/utils';
 import { dispatcher }                   from '@lib/redux/dispatcher';
 

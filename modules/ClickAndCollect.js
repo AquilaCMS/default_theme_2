@@ -5,9 +5,9 @@ import useTranslation                               from 'next-translate/useTran
 import DatePicker, { registerLocale }               from 'react-datepicker';
 import fr                                           from 'date-fns/locale/fr';
 import Button                                       from '@components/ui/Button';
-import { setCartAddresses }                         from 'aquila-connector/api/cart';
-import { getUser, setAddressesUser }                from 'aquila-connector/api/user';
-import axios                                        from 'aquila-connector/lib/AxiosInstance';
+import { setCartAddresses }                         from '@aquilacms/aquila-connector/api/cart';
+import { getUser, setAddressesUser }                from '@aquilacms/aquila-connector/api/user';
+import axios                                        from '@aquilacms/aquila-connector/lib/AxiosInstance';
 import { useCart }                                  from '@lib/hooks';
 import { formatDate, formatTime, getUserIdFromJwt } from '@lib/utils';
 

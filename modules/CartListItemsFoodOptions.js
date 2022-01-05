@@ -4,10 +4,10 @@ import useTranslation                           from 'next-translate/useTranslat
 import BlockCMS                                 from '@components/common/BlockCMS';
 import CartItem                                 from '@components/cart/CartItem';
 import Button                                   from '@components/ui/Button';
-import { getBlockCMS }                          from 'aquila-connector/api/blockcms';
-import { setCartShipment }                      from 'aquila-connector/api/cart';
-import { getImage }                             from 'aquila-connector/api/product/helpersProduct';
-import axios                                    from 'aquila-connector/lib/AxiosInstance';
+import { getBlockCMS }                          from '@aquilacms/aquila-connector/api/blockcms';
+import { setCartShipment }                      from '@aquilacms/aquila-connector/api/cart';
+import { getImage }                             from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import axios                                    from '@aquilacms/aquila-connector/lib/AxiosInstance';
 import { useCart }                              from '@lib/hooks';
 import { formatPrice, moduleHook, unsetCookie } from '@lib/utils';
 

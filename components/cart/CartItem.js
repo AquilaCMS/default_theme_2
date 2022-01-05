@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState }                from 'react';
 import useTranslation                                 from 'next-translate/useTranslation';
-import { deleteItem, updateQtyItem, setCartShipment } from 'aquila-connector/api/cart';
-import { getImage }                                   from 'aquila-connector/api/product/helpersProduct';
+import { deleteItem, updateQtyItem, setCartShipment } from '@aquilacms/aquila-connector/api/cart';
+import { getImage }                                   from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { useCart, useSiteConfig }                     from '@lib/hooks';
 import { formatPrice, formatStock }                   from '@lib/utils';
 

@@ -1,12 +1,13 @@
 import { useEffect, useState }                      from 'react';
 import Geosuggest                                   from 'react-geosuggest';
+import Script                                       from 'next/script';
 import useTranslation                               from 'next-translate/useTranslation';
 import DatePicker, { registerLocale }               from 'react-datepicker';
 import fr                                           from 'date-fns/locale/fr';
 import Button                                       from '@components/ui/Button';
-import { setCartAddresses }                         from 'aquila-connector/api/cart';
-import { getUser, setAddressesUser }                from 'aquila-connector/api/user';
-import axios                                        from 'aquila-connector/lib/AxiosInstance';
+import { setCartAddresses }                         from '@aquilacms/aquila-connector/api/cart';
+import { getUser, setAddressesUser }                from '@aquilacms/aquila-connector/api/user';
+import axios                                        from '@aquilacms/aquila-connector/lib/AxiosInstance';
 import { useCart }                                  from '@lib/hooks';
 import { formatDate, formatTime, getUserIdFromJwt } from '@lib/utils';
 
@@ -125,7 +126,7 @@ function toAquilaAddress(address) {
 }
 
 // GET API key for Google Maps 
-/*async function getAPIKeyGMaps() {
+async function getAPIKeyGMaps() {
     try {
         const response = await axios.get('pointOfSale/getKey');
         return response.data.api_key_google_map;
@@ -133,7 +134,7 @@ function toAquilaAddress(address) {
         console.error('pointsOfSale.getAPIKeyGMaps');
         throw new Error(err?.response?.data?.message);
     }
-}*/
+}
 
 // GET points of sale
 async function getPointsOfSale() {
@@ -169,7 +170,7 @@ async function setPointOfSale(body) {
 }
 
 export default function ClickAndCollect() {
-    //const [apiKey, setApiKey]                 = useState('');
+    const [apiKey, setApiKey]                 = useState('');
     const [hasWithdrawal, setHasWithdrawal]   = useState(0);
     const [hasDelivery, setHasDelivery]       = useState(0);
     const [deliveryHome, setDeliveryHome]     = useState(0);
@@ -190,8 +191,8 @@ export default function ClickAndCollect() {
         const fetchData = async () => {
             try {
                 // Get API key for Google Maps
-                /*const APIKeyGM = await getAPIKeyGMaps();
-                setApiKey(APIKeyGM);*/
+                const APIKeyGM = await getAPIKeyGMaps();
+                setApiKey(APIKeyGM);
 
                 // Get points of sale
                 const data     = await getPointsOfSale();
@@ -419,7 +420,8 @@ export default function ClickAndCollect() {
     };
 
     return (
-        <>  
+        <>
+            { apiKey && <Script id="script-googleapis" src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`} />}
             <div className="section-picker">
                 <div className="container w-container">
                     <div className="w-form">

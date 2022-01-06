@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import useTranslation                  from 'next-translate/useTranslation';
-import { deleteItem, updateQtyItem }   from 'aquila-connector/api/cart';
-import { useCart, useSiteConfig }      from '@lib/hooks';
-import { formatPrice, formatStock }    from '@lib/utils';
+import { useEffect, useRef, useState }                from 'react';
+import useTranslation                                 from 'next-translate/useTranslation';
+import { deleteItem, updateQtyItem, setCartShipment } from '@aquilacms/aquila-connector/api/cart';
+import { getImage }                                   from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import { useCart, useSiteConfig }                     from '@lib/hooks';
+import { formatPrice, formatStock }                   from '@lib/utils';
 
 export default function CartItem({ item }) {
     const [qty, setQty]         = useState(item.quantity);
@@ -13,7 +14,7 @@ export default function CartItem({ item }) {
     const { t }                 = useTranslation();
 
     // Getting boolean stock display
-    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCart')?.value || false;
+    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCart')?.value !== undefined ? themeConfig?.values?.find(t => t.key === 'displayStockCart')?.value : false;
 
     useEffect(() => {
         return () => clearTimeout(timer.current);
@@ -28,6 +29,12 @@ export default function CartItem({ item }) {
             onDeleteItem();
         } else {
             try {
+                // Deletion of the cart delivery
+                if (cart.delivery?.method) {
+                    await setCartShipment(cart._id, {}, '', true);
+                }
+
+                // Update quantity
                 const newCart = await updateQtyItem(cart._id, item._id, quantity);
                 setQty(quantity);
                 setCart(newCart);
@@ -41,6 +48,12 @@ export default function CartItem({ item }) {
     
     const onDeleteItem = async () => {
         try {
+            // Deletion of the cart delivery
+            if (cart.delivery?.method) {
+                await setCartShipment(cart._id, {}, '', true);
+            }
+
+            // Product deletion
             const newCart = await deleteItem(cart._id, item._id);
             setCart(newCart);
         } catch (err) {
@@ -53,7 +66,7 @@ export default function CartItem({ item }) {
     return (
         <>
             <div className="w-commerce-commercecartitem cart-item">
-                <img src={`/images/products/60x60/${item.image}/${item.code}.png`} alt="" className="w-commerce-commercecartitemimage" />
+                <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60').url} alt={item.code} className="w-commerce-commercecartitemimage" />
                 <div className="w-commerce-commercecartiteminfo div-block-4">
                     <div>
                         <div className="w-commerce-commercecartproductname">{item.name}</div>

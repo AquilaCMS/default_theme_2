@@ -25,17 +25,6 @@ body {
     max-height: 500px;
 }
 
-/* FUSION => .faq-content l.3490 mon-restaurant.webflow.css */
-.faq-content {
-    max-height: 0px;
-    transition: max-height 0.5s;
-}
-
-/* ADD */
-.faq-question-open {
-    max-height: 400px;
-}
-
 /* FUSION => .lien_alergenes l.5066 mon-restaurant.webflow.css */
 .lien_alergenes {
     cursor: pointer;
@@ -396,8 +385,12 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
 /* 
     ADD mon-restaurant.webflow.css
 */
+.faq-content {
+    display: none;
+}
+.faq-question-open,
 .filters-open {
-    max-height: 400px;
+    display: block;
 }
 .filters-list {
     display: flex;
@@ -406,8 +399,35 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
 .filter {
     padding: 5px 20px;
 }
+
+/*
+    ADD mon-restaurant.webflow.css
+*/
+.columns-picker-paiement-tunnel.delivery {
+    flex-direction: column;
+    justify-content: left;
+}
+.columns-picker-paiement-tunnel.delivery .checkbox-click-collect,
+.columns-picker-paiement-tunnel.delivery .labels {
+    width: 100%;
+}
+.columns-picker-paiement-tunnel.delivery .labels {
+    display: flex;
+}
+.columns-picker-paiement-tunnel.delivery .price {
+    width: 100%;
+    text-align: right;
+    font-weight: bold;
+}
 @media screen and (max-width: 479px) {
-    .filters-open {
-        max-height: 500px;
+    .columns-picker-paiement-tunnel.delivery .labels {
+        flex-direction: column;
+    }
+    .columns-picker-paiement-tunnel.delivery .checkbox-click-collect {
+        width: initial;
+    }
+    .columns-picker-paiement-tunnel.delivery .price {
+        width: initial;
+        text-align: left;
     }
 }

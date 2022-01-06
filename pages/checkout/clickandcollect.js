@@ -4,7 +4,7 @@ import useTranslation                                                   from 'ne
 import LightLayout                                                      from '@components/layouts/LightLayout';
 import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
 import ClickAndCollect                                                  from 'modules/ClickAndCollect';
-import { setUser }                                                      from 'aquila-connector/api/user';
+import { setUser }                                                      from '@aquilacms/aquila-connector/api/user';
 import { useCart }                                                      from '@lib/hooks';
 import { setLangAxios, authProtectedPage, formatPrice, serverRedirect } from '@lib/utils';
 import { dispatcher }                                                   from '@lib/redux/dispatcher';

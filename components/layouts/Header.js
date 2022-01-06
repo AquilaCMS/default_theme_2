@@ -22,7 +22,7 @@ export default function Header() {
                 <div className="navigation-left">
                     <Link href='/'>
                         <a aria-current="page" className="brand w-nav-brand w--current">
-                            <img src="/images/medias/max-100/605363104b9ac91f54fcabac/Logo.jpg" alt={environment?.siteName} />
+                            <img src="/images/medias/max-100/605363104b9ac91f54fcabac/Logo.jpg" alt={environment?.siteName} style={{ maxHeight: '124px' }} />
                         </a>
                     </Link>
                     

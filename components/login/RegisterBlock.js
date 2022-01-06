@@ -2,8 +2,8 @@ import { useState }   from 'react';
 import { useRouter }  from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import Button         from '@components/ui/Button';
-import { auth }       from 'aquila-connector/api/login';
-import { setUser }    from 'aquila-connector/api/user';
+import { auth }       from '@aquilacms/aquila-connector/api/login';
+import { setUser }    from '@aquilacms/aquila-connector/api/user';
 
 export default function RegisterBlock() {
     const [messageRegister, setMessageRegister] = useState();

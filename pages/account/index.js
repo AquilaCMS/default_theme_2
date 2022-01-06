@@ -6,7 +6,7 @@ import Cookies                                                                  
 import AccountLayout                                                                                    from '@components/account/AccountLayout';
 import OrderDetails                                                                                     from '@components/order/OrderDetails';
 import NextSeoCustom                                                                                    from '@components/tools/NextSeoCustom';
-import { getOrders }                                                                                    from 'aquila-connector/api/order';
+import { getOrders }                                                                                    from '@aquilacms/aquila-connector/api/order';
 import { useSelectPage, useOrders }                                                                     from '@lib/hooks';
 import { setLangAxios, authProtectedPage, serverRedirect, formatPrice, formatOrderStatus, unsetCookie } from '@lib/utils';
 import { dispatcher }                                                                                   from '@lib/redux/dispatcher';

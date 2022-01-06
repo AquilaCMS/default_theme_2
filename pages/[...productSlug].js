@@ -16,12 +16,12 @@ import ProductList                                                             f
 import BlockCMS                                                                from '@components/common/BlockCMS';
 import Button                                                                  from '@components/ui/Button';
 import { dispatcher }                                                          from '@lib/redux/dispatcher';
-import { getBlocksCMS }                                                        from 'aquila-connector/api/blockcms';
-import { getBreadcrumb }                                                       from 'aquila-connector/api/breadcrumb';
-import { addToCart }                                                           from 'aquila-connector/api/cart';
-import { getCategories }                                                       from 'aquila-connector/api/category';
-import { getProduct }                                                          from 'aquila-connector/api/product';
-import { getImage, getMainImage, getTabImageURL }                              from 'aquila-connector/api/product/helpersProduct';
+import { getBlocksCMS }                                                        from '@aquilacms/aquila-connector/api/blockcms';
+import { getBreadcrumb }                                                       from '@aquilacms/aquila-connector/api/breadcrumb';
+import { addToCart, setCartShipment }                                          from '@aquilacms/aquila-connector/api/cart';
+import { getCategories }                                                       from '@aquilacms/aquila-connector/api/category';
+import { getProduct }                                                          from '@aquilacms/aquila-connector/api/product';
+import { getImage, getMainImage, getTabImageURL }                              from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { useCart, useShowCartSidebar, useSiteConfig }                          from '@lib/hooks';
 import { setLangAxios, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 
@@ -119,6 +119,24 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     return pageProps;
 }
 
+const Video = ({ content }) => (
+    <iframe
+        width="560"
+        height="315"
+        src={`https://www.youtube.com/embed/${content}`}
+        style={{
+            maxWidth : '100%',
+            position : 'absolute',
+            left     : 0,
+            right    : 0,
+            margin   : 'auto',
+            top      : '50%',
+            transform: 'translateY(-50%)',
+        }}
+        title={content}
+    />
+);
+
 export default function Product({ breadcrumb, origin, product }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
@@ -136,9 +154,9 @@ export default function Product({ breadcrumb, origin, product }) {
     if (!product) return <ErrorPage statusCode={404} />;
 
     // Getting boolean stock display
-    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value || false;
+    const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value !== undefined ? themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value : false;
 
-    const mainImage   = getMainImage(product.images, '578x578');
+    const mainImage   = getMainImage(product.images.filter((i) => !i.content), '578x578');
     const images      = getTabImageURL(product.images);
     const tabImageURL = [];
     for (let url of images) {
@@ -162,6 +180,13 @@ export default function Product({ breadcrumb, origin, product }) {
         setIsLoading(true);
         try {
             setMessage();
+
+            // Deletion of the cart delivery
+            if (cart.delivery?.method) {
+                await setCartShipment(cart._id, {}, '', true);
+            }
+
+            // Adding product to cart
             const newCart   = await addToCart(cart._id, product, qty);
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
             setCart(newCart);
@@ -218,6 +243,11 @@ export default function Product({ breadcrumb, origin, product }) {
             }
         });
     }
+
+    const lightboxImages = product.images.map((item) => {
+        if (item.content) return { content: <Video content={item.content} />, alt: item.alt };
+        return { content: getImage(item, 'max').url, alt: item.alt };
+    });
 
     return (
 
@@ -289,10 +319,10 @@ export default function Product({ breadcrumb, origin, product }) {
                             {
                                 isOpen && (
                                     <Lightbox
-                                        mainSrc={`/images/products/max/${product.images[photoIndex]._id}/${product.images[photoIndex].name}`}
-                                        nextSrc={`/images/products/max/${product.images[(photoIndex + 1) % product.images.length]._id}/${product.images[(photoIndex + 1) % product.images.length].name}`}
-                                        prevSrc={`/images/products/max/${product.images[(photoIndex + product.images.length - 1) % product.images.length]._id}/${product.images[(photoIndex + product.images.length - 1) % product.images.length].name}`}
-                                        imageTitle={product.images[photoIndex].alt}
+                                        mainSrc={lightboxImages[photoIndex].content}
+                                        nextSrc={lightboxImages[(photoIndex + 1) % product.images.length].content}
+                                        prevSrc={lightboxImages[(photoIndex + product.images.length - 1) % product.images.length].content}
+                                        imageTitle={lightboxImages[photoIndex].alt}
                                         onCloseRequest={() => setIsOpen(false)}
                                         onMovePrevRequest={() => setPhotoIndex((photoIndex + product.images.length - 1) % product.images.length)}
                                         onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % product.images.length)}
@@ -309,14 +339,17 @@ export default function Product({ breadcrumb, origin, product }) {
                                         </div>
                                     )) : ''
                                 }
-                                <img loading="lazy" src={mainImage.url || '/images/no-image.svg'} alt={mainImage.alt || 'Image produit'} className="product-image" onClick={() => (product.images.length ? openLightBox(product.images.findIndex((img) => img.default)) : false)} />
+                                <img loading="lazy" src={mainImage.url || '/images/no-image.svg'} alt={mainImage.alt || 'Image produit'} className="product-image" onClick={() => (product.images.length && mainImage.url ? openLightBox(product.images.findIndex((img) => img.default)) : false)} />
                             </div>
                             <div className="collection-list-wrapper w-dyn-list">
                                 <div role="list" className="collection-list w-clearfix w-dyn-items">
                                     {product.images?.filter(ou => !ou.default).map((item) => (
                                         <div key={item._id} role="listitem" className="collection-item w-dyn-item">
                                             <div className="w-inline-block w-lightbox" style={{ cursor: 'pointer' }} onClick={() => openLightBox(product.images.findIndex((im) => im._id === item._id))}>
-                                                <img loading="lazy" src={getImage(item, '75x75').url} alt={item.alt || 'Image produit'} className="more-image" />
+                                                {
+                                                    item.content ? <img src={`https://img.youtube.com/vi/${item.content}/0.jpg`} alt={item.alt} className="more-image" />
+                                                        : <img loading="lazy" src={getImage(item, '75x75').url} alt={item.alt || 'Image produit'} className="more-image" />
+                                                }
                                             </div>
                                         </div>
                                     ))}
@@ -377,60 +410,63 @@ export default function Product({ breadcrumb, origin, product }) {
                             <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`} dangerouslySetInnerHTML={{ __html: product.description1?.text }} />
                             <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
                                 <table>
-                                    {
-                                        product.attributes.map((attribute) => {
-                                            if (attribute.type === 'bool') {
+                                    <tbody>
+                                        {
+                                            product.attributes.sort((a, b) => a.position - b.position).map((attribute) => {
+                                                if (!attribute.value) { return; }
+                                                if (attribute.type === 'bool') {
+                                                    return (
+                                                        <tr key={attribute._id}>
+                                                            <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                            <td style={{ padding: '10px' }}>{t(`pages/product:${attribute.value.toString()}`)}</td>
+                                                        </tr>
+                                                    );
+                                                }
+                                                if (attribute.type === 'textfield' || attribute.type === 'textarea') {
+                                                    return (
+                                                        <tr key={attribute._id}>
+                                                            <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                            <td style={{ padding: '10px' }}>
+                                                                <div dangerouslySetInnerHTML={{ __html: attribute.value }} />
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }
+                                                if (attribute.type === 'color') {
+                                                    return (
+                                                        <tr key={attribute._id}>
+                                                            <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                            <td style={{ padding: '10px' }}>
+                                                                <div style={{
+                                                                    width          : '50px',
+                                                                    height         : '20px',
+                                                                    backgroundColor: attribute.value.toString(),
+                                                                    borderRadius   : '5px'
+                                                                }}
+                                                                />
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }
+                                                if (Array.isArray(attribute.value)) {
+                                                    return (
+                                                        <tr key={attribute._id}>
+                                                            <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
+                                                            <td style={{ padding: '10px' }}>
+                                                                <div dangerouslySetInnerHTML={{ __html: attribute.value.join(', ') }} />
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }
                                                 return (
                                                     <tr key={attribute._id}>
                                                         <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                        <td style={{ padding: '10px' }}>{t(`pages/product:${attribute.value.toString()}`)}</td>
+                                                        <td style={{ padding: '10px' }}>{attribute.value}</td>
                                                     </tr>
                                                 );
-                                            }
-                                            if (attribute.type === 'textfield' || attribute.type === 'textarea') {
-                                                return (
-                                                    <tr key={attribute._id}>
-                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                        <td style={{ padding: '10px' }}>
-                                                            <div dangerouslySetInnerHTML={{ __html: attribute.value }} />
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            }
-                                            if (attribute.type === 'color') {
-                                                return (
-                                                    <tr key={attribute._id}>
-                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                        <td style={{ padding: '10px' }}>
-                                                            <div style={{
-                                                                width          : '50px',
-                                                                height         : '20px',
-                                                                backgroundColor: attribute.value.toString(),
-                                                                borderRadius   : '5px'
-                                                            }}
-                                                            />
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            }
-                                            if (Array.isArray(attribute.value)) {
-                                                return (
-                                                    <tr key={attribute._id}>
-                                                        <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                        <td style={{ padding: '10px' }}>
-                                                            <div dangerouslySetInnerHTML={{ __html: attribute.value.join(', ') }} />
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            }
-                                            return (
-                                                <tr key={attribute._id}>
-                                                    <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                    <td style={{ padding: '10px' }}>{attribute.value}</td>
-                                                </tr>
-                                            );
-                                        })
-                                    }
+                                            })
+                                        }
+                                    </tbody>
                                 </table>
                                 {moduleHook('product-tab') !== false && <hr />}
                                 {

@@ -5,8 +5,8 @@ import { Modal }                                                        from 're
 import AccountLayout                                                    from '@components/account/AccountLayout';
 import BlockCMS                                                         from '@components/common/BlockCMS';
 import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
-import { getBlocksCMS }                                                 from 'aquila-connector/api/blockcms';
-import { dataUserExport, deleteUser }                                   from 'aquila-connector/api/user';
+import { getBlocksCMS }                                                 from '@aquilacms/aquila-connector/api/blockcms';
+import { dataUserExport, deleteUser }                                   from '@aquilacms/aquila-connector/api/user';
 import { setLangAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                                   from '@lib/redux/dispatcher';
 

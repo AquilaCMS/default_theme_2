@@ -2,7 +2,7 @@ import Link           from 'next/link';
 import { useRouter }  from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import Layout         from '@components/layouts/Layout';
-import { logout }     from 'aquila-connector/api/login';
+import { logout }     from '@aquilacms/aquila-connector/api/login';
 
 export default function AccountLayout({ children, active }) {
     const router = useRouter();

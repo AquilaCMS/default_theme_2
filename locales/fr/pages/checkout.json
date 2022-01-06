@@ -28,6 +28,7 @@
     "step3" : "Adresse",
     "mandatory" : "Obligatoire",
     "titleBilling":"Adresse de facturation",
+    "titleDelivery":"Adresse de livraison",
     "firstname":"Prénom",
     "lastname":"Nom",
     "line1":"Adresse",
@@ -35,8 +36,18 @@
     "city":"Ville",
     "postal":"Code postal",
     "country":"Pays",
+    "sameAddress": "Même adresse de facturation",
     "next": "SUIVANT",
     "nextLoading": "ENREGISTREMENT..."
+  },
+  "delivery" : {
+    "title" : "Ma commande - Mode de livraison",
+    "description" : "Ma commande - Mode de livraison",
+    "titleH1" : "Ma commande",
+    "step3" : "Mode de livraison",
+    "previous" : "RETOUR",
+    "next" : "SUIVANT",
+    "nextLoading" : "ENREGISTREMENT..."
   },
   "payment" : {
     "title" : "Ma commande - Moyen de paiement",

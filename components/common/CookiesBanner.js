@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useRouter }           from 'next/router';
 import useTranslation          from 'next-translate/useTranslation';
 import cookie                  from 'cookie';
-import { getBlockCMS }         from 'aquila-connector/api/blockcms';
+import { getBlockCMS }         from '@aquilacms/aquila-connector/api/blockcms';
+import { useCookieNotice }     from '@lib/hooks';
 
 export default function CookiesBanner() {
     const [show, setShow]         = useState(false);
+    const { setCookieNotice }     = useCookieNotice();
     const router                  = useRouter();
     const { lang, t }             = useTranslation();
     const [txtLegal, setTxtLegal] = useState(t('components/cookiesBanner:defaultTxt'));
@@ -28,12 +30,14 @@ export default function CookiesBanner() {
 
     const acceptCookie = () => {
         document.cookie = 'cookie_notice=true; path=/;';
+        setCookieNotice('true');
         setShow(false);
         router.reload();
     };
 
     const denyCookie = () => {
         document.cookie = 'cookie_notice=deny; path=/;';
+        setCookieNotice('deny');
         setShow(false);
     };
 

@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import useTranslation                            from 'next-translate/useTranslation';
 import Button                                    from '@components/ui/Button';
-import { addToCart }                             from 'aquila-connector/api/cart';
-import { getImage }                              from 'aquila-connector/api/product/helpersProduct';
+import { addToCart, setCartShipment }            from '@aquilacms/aquila-connector/api/cart';
+import { getImage }                              from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { useCart, useShowCartSidebar }           from '@lib/hooks';
 import { formatPrice }                           from '@lib/utils';
 
@@ -81,8 +81,13 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
             selections.push({ bundle_section_ref: index, products: selectionsBundle[index] });
         }
 
-        // Adding bundle product to cart
         try {
+            // Deletion of the cart delivery
+            if (cart.delivery?.method) {
+                await setCartShipment(cart._id, {}, '', true);
+            }
+
+            // Adding bundle product to cart
             const newCart   = await addToCart(cart._id, product, qty, selections);
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
             onCloseModal();

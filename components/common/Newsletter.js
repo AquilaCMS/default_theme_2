@@ -1,7 +1,7 @@
 import { useState }      from 'react';
 import useTranslation    from 'next-translate/useTranslation';
 import Button            from '@components/ui/Button';
-import { setNewsletter } from 'aquila-connector/api/newsletter';
+import { setNewsletter } from '@aquilacms/aquila-connector/api/newsletter';
 
 export default function Newsletter() {
     const [message, setMessage]     = useState();

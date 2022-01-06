@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState }                  from 'react';
 import { Modal }                                        from 'react-responsive-modal';
 import useTranslation                                   from 'next-translate/useTranslation';
-import { useRouter }                                    from 'next/router';
 import Button                                           from '@components/ui/Button';
-import { askCancelOrder, downloadbillOrder, getOrders } from 'aquila-connector/api/order';
+import { askCancelOrder, downloadbillOrder, getOrders } from '@aquilacms/aquila-connector/api/order';
+import { getImage }                                     from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { useSelectPage }                                from '@lib/hooks';
 import { formatDate, formatPrice }                      from '@lib/utils';
 
@@ -13,7 +13,6 @@ export default function OrderDetails({ order, setOrders = undefined }) {
     const [isLoading, setIsLoading] = useState(false);
     const timer                     = useRef();
     const { selectPage }            = useSelectPage();
-    const router                    = useRouter();
     const { lang, t }               = useTranslation();
 
     useEffect(() => {
@@ -41,12 +40,8 @@ export default function OrderDetails({ order, setOrders = undefined }) {
         try {
             const res = await askCancelOrder(order._id);
             if (res.code === 'ORDER_ASK_CANCEL_SUCCESS') {
-                if (setOrders) {
-                    const orders = await getOrders(lang, { PostBody: { page: selectPage, limit: 15 } });
-                    setOrders(orders);
-                } else {
-                    router.push('/account'); // If we are in the checkout/success page
-                }
+                const orders = await getOrders(lang, { PostBody: { page: selectPage, limit: 15 } });
+                setOrders(orders);
                 onCloseModal();
             }
         } catch (err) {
@@ -82,7 +77,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                                     <div className="item-tunnel w-row" key={item._id}>
                                                         <div className="w-col w-col-3">
                                                             <div className="food-image-square-tunnel w-inline-block">
-                                                                <img src={`/images/products/60x60/${item.image}/${item.code}.png`} alt="" className="food-image" />
+                                                                <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60').url} alt={item.code} className="food-image" />
                                                             </div>
                                                         </div>
                                                         <div className="w-col w-col-9">
@@ -129,7 +124,14 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                 <label htmlFor="email-2">
                                     {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
                                 </label>
-                                <p className="label-tunnel">{formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p>
+                                <p className="label-tunnel">
+                                    {order.orderReceipt.method === 'withdrawal' ? (
+                                        formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+                                    ) : (
+                                        <>{order.delivery?.name}<br />{t('components/orderDetails:estimatedDelivery')} :<br/>{formatDate(order.delivery.date, lang)}</>
+                                    )
+                                    }
+                                </p>
                             </div>
                         </div>
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
@@ -221,7 +223,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                         ))
                     }
                     {
-                        !['BILLED', 'DELIVERY_PROGRESS', 'DELIVERY_PARTIAL_PROGRESS', 'ASK_CANCEL', 'CANCELED', 'RETURNED'].includes(order.status) && (
+                        setOrders && !['BILLED', 'DELIVERY_PROGRESS', 'DELIVERY_PARTIAL_PROGRESS', 'ASK_CANCEL', 'CANCELED', 'RETURNED'].includes(order.status) && (
                             <div style={{ marginBottom: '20px' }}>
                                 <button type="button" className="log-button w-button" onClick={onOpenModal}>
                                     {t('components/orderDetails:cancelOrder')}

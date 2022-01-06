@@ -6,7 +6,7 @@ import cookie                                                           from 'co
 import Layout                                                           from '@components/layouts/Layout';
 import OrderDetails                                                     from '@components/order/OrderDetails';
 import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
-import { getOrderById }                                                 from 'aquila-connector/api/order';
+import { getOrderById }                                                 from '@aquilacms/aquila-connector/api/order';
 import { setLangAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                                   from '@lib/redux/dispatcher';
 

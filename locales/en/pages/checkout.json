@@ -28,6 +28,7 @@
     "step3" : "Adress",
     "mandatory" : "Mandatory",
     "titleBilling":"Billing address",
+    "titleDelivery":"Delivery address",
     "firstname":"First Name",
     "lastname":"Last Name",
     "line1":"Address",
@@ -35,8 +36,18 @@
     "city":"City",
     "postal":"Zip Code",
     "country":"Country",
-    "next": "Next",
+    "sameAddress": "Same billing address",
+    "next": "NEXT",
     "nextLoading": "LOADING..."
+  },
+  "delivery" : {
+    "title" : "My order - Delivery method",
+    "description" : "My order - Delivery method",
+    "titleH1" : "My order",
+    "step3" : "Delivery method",
+    "previous" : "BACK",
+    "next" : "NEXT",
+    "nextLoading" : "LOADING..."
   },
   "payment" : {
     "title" : "My order - Payment method",

@@ -4,8 +4,10 @@ import useTranslation                           from 'next-translate/useTranslat
 import BlockCMS                                 from '@components/common/BlockCMS';
 import CartItem                                 from '@components/cart/CartItem';
 import Button                                   from '@components/ui/Button';
-import { getBlockCMS }                          from 'aquila-connector/api/blockcms';
-import axios                                    from 'aquila-connector/lib/AxiosInstance';
+import { getBlockCMS }                          from '@aquilacms/aquila-connector/api/blockcms';
+import { setCartShipment }                      from '@aquilacms/aquila-connector/api/cart';
+import { getImage }                             from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import axios                                    from '@aquilacms/aquila-connector/lib/AxiosInstance';
 import { useCart }                              from '@lib/hooks';
 import { formatPrice, moduleHook, unsetCookie } from '@lib/utils';
 
@@ -104,8 +106,13 @@ export default function CartListItemsFoodOptions() {
             quantity = 0;
         }
         
-        // Update quantity
         try {
+            // Deletion of the cart delivery
+            if (cart.delivery?.method) {
+                await setCartShipment(cart._id, {}, '', true);
+            }
+
+            // Update quantity
             const newCart = await updateQtyItem(cart._id, item._id, item.id._id, quantity);
             setCart(newCart);
         } catch (err) {
@@ -190,7 +197,7 @@ export default function CartListItemsFoodOptions() {
 
                             <div className="w-commerce-commercecartfooter">
                                 {
-                                    cart.delivery?.value && (
+                                    cart.delivery?.method && cart.delivery?.value && (
                                         <div className="w-commerce-commercecartlineitem cart-line-item">
                                             <div>{t('components/cart:cartListItem.delivery')}</div>
                                             <div>{formatPrice(cart.delivery.value.ati)}</div>
@@ -216,9 +223,11 @@ export default function CartListItemsFoodOptions() {
                                                 style={{ width: '100%' }}
                                             />
                                         ) : (
-                                            <Link href="/checkout/clickandcollect">
-                                                <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
-                                            </Link>
+                                            moduleHook('cart-validate-btn') || (
+                                                <Link href="/checkout/address">
+                                                    <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                                                </Link>
+                                            )
                                         )
                                     }
                                 </div>
@@ -240,7 +249,7 @@ export default function CartListItemsFoodOptions() {
                                                     }
                                                     return (
                                                         <div key={item._id} className="w-commerce-commercecartitem cart-item">
-                                                            <img src={`/images/products/60x60/${item.image}/${item.code}.png`} alt="" className="w-commerce-commercecartitemimage" />
+                                                            <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60').url} alt={item.code} className="w-commerce-commercecartitemimage" />
                                                             <div className="w-commerce-commercecartiteminfo div-block-4">
                                                                 <div>
                                                                     <div className="w-commerce-commercecartproductname">{item.name}</div>
@@ -275,7 +284,7 @@ export default function CartListItemsFoodOptions() {
 
                             <div className="w-commerce-commercecartfooter">
                                 {
-                                    cart.delivery?.value && (
+                                    cart.delivery?.method && cart.delivery?.value && (
                                         <div className="w-commerce-commercecartlineitem cart-line-item">
                                             <div>{t('components/cart:cartListItem.delivery')}</div>
                                             <div>{formatPrice(cart.delivery.value.ati)}</div>

@@ -244,7 +244,7 @@ export default function Product({ breadcrumb, origin, product }) {
         });
     }
 
-    const lightboxImages = product.images.map((item) => {
+    const lightboxImages = product.images.sort((a, b) => a.position - b.position).map((item) => {
         if (item.content) return { content: <Video content={item.content} />, alt: item.alt };
         return { content: getImage(item, 'max').url, alt: item.alt };
     });

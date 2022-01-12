@@ -344,7 +344,7 @@ export default function Product({ breadcrumb, origin, product }) {
                             <div className="collection-list-wrapper w-dyn-list">
                                 <div role="list" className="collection-list w-clearfix w-dyn-items">
                                     {product.images?.filter(ou => !ou.default).map((item) => (
-                                        <div key={item._id} role="listitem" className="collection-item w-dyn-item">
+                                        <div key={item._id} role="listitem" className="collection-item w-dyn-item" style={{ display: 'flex', alignItems: 'center' }}>
                                             <div className="w-inline-block w-lightbox" style={{ cursor: 'pointer' }} onClick={() => openLightBox(product.images.findIndex((im) => im._id === item._id))}>
                                                 {
                                                     item.content ? <img src={`https://img.youtube.com/vi/${item.content}/0.jpg`} alt={item.alt} className="more-image" />

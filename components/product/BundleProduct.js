@@ -21,8 +21,10 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
         setPriceBundle(price);
 
         const selections = {};
-        for (const section of product.bundle_sections) {
-            selections[section.ref] = [];
+        if (product.bundle_sections) {
+            for (const section of product.bundle_sections) {
+                selections[section.ref] = [];
+            }
         }
         setSelectionsBundle(selections);
     }, []);
@@ -99,6 +101,12 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
             setIsLoading(false);
         }
     };
+
+    if (!product.bundle_sections?.length) {
+        return (
+            <div>{t('components/bundleProduct:noProduct')}</div>
+        );
+    }
 
     return (
         <form ref={formRef} onSubmit={onAddToCart}>

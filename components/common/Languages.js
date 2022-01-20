@@ -1,28 +1,30 @@
-import Link                                from 'next/link';
-import useTranslation                      from 'next-translate/useTranslation';
-import setLanguage                         from 'next-translate/setLanguage';
-import { useSiteConfig, useUrlsLanguages } from '@lib/hooks';
+import Link                 from 'next/link';
+import useTranslation       from 'next-translate/useTranslation';
+import setLanguage          from 'next-translate/setLanguage';
+import { useUrlsLanguages } from '@lib/hooks';
+import i18n                 from '/i18n.json';
 
 export default function Languages() {
-    const { langs } = useSiteConfig();
-    const urls      = useUrlsLanguages();
-    const { lang }  = useTranslation();
+    const urls     = useUrlsLanguages();
+    const { lang } = useTranslation();
+
+    const langs = i18n.locales;
 
     return (
         <div className="div-block-lang">
             {
-                langs?.map((lng) => {
-                    if (lng.code === lang) {
-                        return <span className={`link-lang${lang === lng.code ? ' selected' : ''}`} key={lng.code}>{lng.code.toUpperCase()}</span>;
+                langs?.map((code) => {
+                    if (code === lang) {
+                        return <span className={`link-lang${lang === code ? ' selected' : ''}`} key={code}>{code.toUpperCase()}</span>;
                     }
                     if (!urls.length) {
                         return (
-                            <button type="button" className={`link-lang${lang === lng.code ? ' selected' : ''}`} key={lng.code} onClick={async () => await setLanguage(lng.code)}>{lng.code.toUpperCase()}</button>
+                            <button type="button" className={`link-lang${lang === code ? ' selected' : ''}`} key={code} onClick={async () => await setLanguage(code)}>{code.toUpperCase()}</button>
                         );
                     }
                     return (
-                        <Link href={urls.find(u => u.lang === lng.code)?.url || '/'} locale={lng.code} key={lng.code}>
-                            <a className={`link-lang${lang === lng.code ? ' selected' : ''}`}>{lng.code.toUpperCase()}</a>
+                        <Link href={urls.find(u => u.lang === code)?.url || '/'} locale={code} key={code}>
+                            <a className={`link-lang${lang === code ? ' selected' : ''}`}>{code.toUpperCase()}</a>
                         </Link>
                     );
                 })

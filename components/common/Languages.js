@@ -10,6 +10,10 @@ export default function Languages() {
 
     const langs = i18n.locales;
 
+    if (!langs || langs.length < 2) {
+        return null;
+    }
+
     return (
         <div className="div-block-lang">
             {

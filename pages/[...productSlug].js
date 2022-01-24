@@ -244,7 +244,7 @@ export default function Product({ breadcrumb, origin, product }) {
         });
     }
 
-    const lightboxImages = product.images.map((item) => {
+    const lightboxImages = product.images.sort((a, b) => a.position - b.position).map((item) => {
         if (item.content) return { content: <Video content={item.content} />, alt: item.alt };
         return { content: getImage(item, 'max').url, alt: item.alt };
     });
@@ -344,7 +344,7 @@ export default function Product({ breadcrumb, origin, product }) {
                             <div className="collection-list-wrapper w-dyn-list">
                                 <div role="list" className="collection-list w-clearfix w-dyn-items">
                                     {product.images?.filter(ou => !ou.default).map((item) => (
-                                        <div key={item._id} role="listitem" className="collection-item w-dyn-item">
+                                        <div key={item._id} role="listitem" className="collection-item w-dyn-item" style={{ display: 'flex', alignItems: 'center' }}>
                                             <div className="w-inline-block w-lightbox" style={{ cursor: 'pointer' }} onClick={() => openLightBox(product.images.findIndex((im) => im._id === item._id))}>
                                                 {
                                                     item.content ? <img src={`https://img.youtube.com/vi/${item.content}/0.jpg`} alt={item.alt} className="more-image" />

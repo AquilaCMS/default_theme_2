@@ -263,12 +263,8 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
     Bundle content
 */
 .bundle-content {
-    display: flex;
     overflow: hidden;
     width: 1130px;
-    margin-top: -2px;
-    flex-direction: column;
-    align-items: center;
     max-width: unset !important;
 }
 @media screen and (max-width: 1024px) {

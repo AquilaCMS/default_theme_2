@@ -11,6 +11,7 @@ import { useState }                                                             
 import { useCart, usePaymentMethods, useSiteConfig }                                             from '@lib/hooks';
 import { setLangAxios, authProtectedPage, formatPrice, serverRedirect, moduleHook, unsetCookie } from '@lib/utils';
 import { dispatcher }                                                                            from '@lib/redux/dispatcher';
+import i18n                                                                                      from '/i18n.json';
 
 export async function getServerSideProps({ locale, req, res }) {
     setLangAxios(locale, req, res);
@@ -31,6 +32,10 @@ export default function CheckoutPayment() {
     const paymentMethods                = usePaymentMethods();
     const { langs }                     = useSiteConfig();
     const { lang, t }                   = useTranslation();
+
+    const defaultLanguage = i18n.defaultLocale;
+
+    console.log(`/${defaultLanguage === lang ? '' : `${lang}/`}checkout/confirmation`);
     
     useEffect(() => {
         // Check if the cart is empty
@@ -73,7 +78,7 @@ export default function CheckoutPayment() {
             const order = await cartToOrder(cart._id, lang);
 
             // Payment
-            const returnURL = `/${langs.find(l => l.defaultLanguage).code === lang ? '' : `${lang}/`}checkout/confirmation`;
+            const returnURL = `/${defaultLanguage === lang ? '' : `${lang}/`}checkout/confirmation`;
             const form      = await makePayment(order.number, payment_code, returnURL, lang);
             if (form) {
                 if (form?.status && form.status !== 200) {

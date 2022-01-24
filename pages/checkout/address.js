@@ -35,7 +35,18 @@ export default function CheckoutAddress({ user }) {
         if (!cart?.items?.length) {
             router.push('/');
         }
-    }, []);
+        const billingAddress  = user.addresses[user.billing_address];
+        const deliveryAddress = user.addresses[user.delivery_address];
+        if (billingAddress) {
+            delete billingAddress['_id'];
+        }
+        if (deliveryAddress){
+            delete deliveryAddress['_id'];
+        }
+        if (JSON.stringify(billingAddress) === JSON.stringify(deliveryAddress)) { 
+            setSameAddress(true);
+        }
+    },[]);
 
     const onSubmitAddress = async (e) => {
         e.preventDefault();

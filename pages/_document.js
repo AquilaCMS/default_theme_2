@@ -14,7 +14,6 @@ export default class MyDocument extends Document {
         return (
             <Html lang={this.props.locale}>
                 <Head>
-                    <GTMScripts cookieNotice={this.props.cookieNotice} script="header" />
                     <FbpScripts cookieNotice={this.props.cookieNotice} />
                     
                     <meta name="powered-by" content="AquilaCMS" />
@@ -22,7 +21,7 @@ export default class MyDocument extends Document {
                     <Favicon />
                 </Head>
                 <body>
-                    <GTMScripts cookieNotice={this.props.cookieNotice} script="body" />
+                    <GTMScripts cookieNotice={this.props.cookieNotice} />
                     <Main />
                     <NextScript />
                 </body>

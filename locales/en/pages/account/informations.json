@@ -10,11 +10,12 @@
   "firstname":"first name",
   "lastname":"last name",
   "newsletter":"I subscribe to the newsletter",
-  "line1":"Adress",
-  "line2":"Adress 2",
+  "line1":"Address",
+  "line2":"Address 2",
   "city":"City",
   "postal":"Zip code",
   "country":"Country",
+  "sameAddress": "Same billing address",
   "save" : "Save",
   "saveLoading" : "Saving..."
 }

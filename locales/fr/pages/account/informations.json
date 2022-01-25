@@ -15,6 +15,7 @@
   "city":"Ville",
   "postal":"Code postal",
   "country":"Pays",
+  "sameAddress": "Même adresse de facturation",
   "save" : "ENREGISTRER",
   "saveLoading" : "ENREGISTREMENT..."
 }

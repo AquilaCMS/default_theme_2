@@ -21,12 +21,25 @@ export async function getServerSideProps({ locale, req, res }) {
 }
 
 export default function Account({ user }) {
+    const [sameAddress, setSameAddress]         = useState(false);
     const [optinNewsletter, setOptinNewsletter] = useState(false);
     const [message, setMessage]                 = useState();
     const [isLoading, setIsLoading]             = useState(false);
     const { t }                                 = useTranslation();
 
     useEffect(() => {
+        const billingAddress  = user.addresses[user.billing_address];
+        const deliveryAddress = user.addresses[user.delivery_address];
+        if (billingAddress) {
+            delete billingAddress['_id'];
+        }
+        if (deliveryAddress){
+            delete deliveryAddress['_id'];
+        }
+        if (JSON.stringify(billingAddress) === JSON.stringify(deliveryAddress)) { 
+            setSameAddress(true);
+        }
+        
         const fetchData = async () => {
             try {
                 const res = await getNewsletter(user.email);
@@ -54,8 +67,20 @@ export default function Account({ user }) {
             delivery_address: 1
         };
 
-        const addresses = [
-            {
+        let addresses       = [];
+        let deliveryAddress = {
+            firstname     : e.currentTarget.delivery_address_firstname.value,
+            lastname      : e.currentTarget.delivery_address_lastname.value,
+            line1         : e.currentTarget.delivery_address_line1.value,
+            line2         : e.currentTarget.delivery_address_line2.value,
+            city          : e.currentTarget.delivery_address_city.value,
+            zipcode       : e.currentTarget.delivery_address_zipcode.value,
+            isoCountryCode: e.currentTarget.delivery_address_isoCountryCode.value
+        };
+        if (sameAddress) {
+            addresses = [deliveryAddress, deliveryAddress];
+        } else {
+            const billingAddress = {
                 firstname     : e.currentTarget.billing_address_firstname.value,
                 lastname      : e.currentTarget.billing_address_lastname.value,
                 line1         : e.currentTarget.billing_address_line1.value,
@@ -63,17 +88,9 @@ export default function Account({ user }) {
                 city          : e.currentTarget.billing_address_city.value,
                 zipcode       : e.currentTarget.billing_address_zipcode.value,
                 isoCountryCode: e.currentTarget.billing_address_isoCountryCode.value
-            },
-            {
-                firstname     : e.currentTarget.delivery_address_firstname.value,
-                lastname      : e.currentTarget.delivery_address_lastname.value,
-                line1         : e.currentTarget.delivery_address_line1.value,
-                line2         : e.currentTarget.delivery_address_line2.value,
-                city          : e.currentTarget.delivery_address_city.value,
-                zipcode       : e.currentTarget.delivery_address_zipcode.value,
-                isoCountryCode: e.currentTarget.delivery_address_isoCountryCode.value
-            }
-        ];
+            };
+            addresses            = [billingAddress, deliveryAddress];
+        }
 
         try {
             // Set user
@@ -184,42 +201,64 @@ export default function Account({ user }) {
                             <select name="delivery_address_isoCountryCode" className="w-commerce-commercecheckoutshippingcountryselector dropdown">
                                 <option value="FR">France</option>
                             </select>
+                            <br />
+                            <div className="w-commerce-commercecheckoutrow">
+                                <div className="w-commerce-commercecheckoutcolumn">
+                                    <label className="w-checkbox checkbox-field-allergene">
+                                        <input 
+                                            type="checkbox"
+                                            name="sameAddress"
+                                            checked={sameAddress}
+                                            onChange={(e) => setSameAddress(e.target.checked)}
+                                            style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
+                                        />
+                                        <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene"></div>
+                                        <span className="checkbox-label-allergene w-form-label">{t('pages/account/informations:sameAddress')}</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                            <h5>{t('pages/account/informations:titleBilling')}</h5>
-                            <label className="required">* {t('pages/account/informations:mandatory')}</label>
-                        </div>
-                        <div className="block-content-tunnel">
-                            <div className="w-commerce-commercecheckoutrow">
-                                <div className="w-commerce-commercecheckoutcolumn">
-                                    <label>{t('pages/account/informations:firstname')} *</label>
-                                    <input type="text" className="input-field w-input" name="billing_address_firstname" defaultValue={user.addresses[user.billing_address]?.firstname} maxLength={256} required />
-                                </div>
-                                <div className="w-commerce-commercecheckoutcolumn">
-                                    <label>{t('pages/account/informations:lastname')} *</label>
-                                    <input type="text" className="input-field w-input" name="billing_address_lastname" defaultValue={user.addresses[user.billing_address]?.lastname} maxLength={256} required />
-                                </div>
-                            </div>
-                            <label className="field-label">{t('pages/account/informations:line1')} *</label>
-                            <input type="text" className="input-field w-input" name="billing_address_line1" defaultValue={user.addresses[user.billing_address]?.line1} maxLength={256} required />
-                            <label className="field-label">{t('pages/account/informations:line2')}</label>
-                            <input type="text" className="input-field w-input" name="billing_address_line2" defaultValue={user.addresses[user.billing_address]?.line2} maxLength={256} />
-                            <div className="w-commerce-commercecheckoutrow">
-                                <div className="w-commerce-commercecheckoutcolumn">
-                                    <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:city')} *</label>
-                                    <input type="text" className="w-commerce-commercecheckoutshippingcity input-field" name="billing_address_city" defaultValue={user.addresses[user.billing_address]?.city} required />
-                                </div>
-                                <div className="w-commerce-commercecheckoutcolumn">
-                                    <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:postal')} *</label>
-                                    <input type="text" className="w-commerce-commercecheckoutshippingzippostalcode input-field" name="billing_address_zipcode" defaultValue={user.addresses[user.billing_address]?.zipcode} required />
-                                </div>
-                            </div>
-                            <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:country')} *</label>
-                            <select className="w-commerce-commercecheckoutshippingcountryselector dropdown" name="billing_address_isoCountryCode">
-                                <option value="FR">France</option>
-                            </select>
-                        </div>
+                        {
+                            sameAddress === false && (
+                                <>
+                                    <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
+                                        <h5>{t('pages/account/informations:titleBilling')}</h5>
+                                        <label className="required">* {t('pages/account/informations:mandatory')}</label>
+                                    </div>
+                                    <div className="block-content-tunnel">
+                                        <div className="w-commerce-commercecheckoutrow">
+                                            <div className="w-commerce-commercecheckoutcolumn">
+                                                <label>{t('pages/account/informations:firstname')} *</label>
+                                                <input type="text" className="input-field w-input" name="billing_address_firstname" defaultValue={user.addresses[user.billing_address]?.firstname} maxLength={256} required />
+                                            </div>
+                                            <div className="w-commerce-commercecheckoutcolumn">
+                                                <label>{t('pages/account/informations:lastname')} *</label>
+                                                <input type="text" className="input-field w-input" name="billing_address_lastname" defaultValue={user.addresses[user.billing_address]?.lastname} maxLength={256} required />
+                                            </div>
+                                        </div>
+                                        <label className="field-label">{t('pages/account/informations:line1')} *</label>
+                                        <input type="text" className="input-field w-input" name="billing_address_line1" defaultValue={user.addresses[user.billing_address]?.line1} maxLength={256} required />
+                                        <label className="field-label">{t('pages/account/informations:line2')}</label>
+                                        <input type="text" className="input-field w-input" name="billing_address_line2" defaultValue={user.addresses[user.billing_address]?.line2} maxLength={256} />
+                                        <div className="w-commerce-commercecheckoutrow">
+                                            <div className="w-commerce-commercecheckoutcolumn">
+                                                <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:city')} *</label>
+                                                <input type="text" className="w-commerce-commercecheckoutshippingcity input-field" name="billing_address_city" defaultValue={user.addresses[user.billing_address]?.city} required />
+                                            </div>
+                                            <div className="w-commerce-commercecheckoutcolumn">
+                                                <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:postal')} *</label>
+                                                <input type="text" className="w-commerce-commercecheckoutshippingzippostalcode input-field" name="billing_address_zipcode" defaultValue={user.addresses[user.billing_address]?.zipcode} required />
+                                            </div>
+                                        </div>
+                                        <label className="w-commerce-commercecheckoutlabel field-label">{t('pages/account/informations:country')} *</label>
+                                        <select className="w-commerce-commercecheckoutshippingcountryselector dropdown" name="billing_address_isoCountryCode">
+                                            <option value="FR">France</option>
+                                        </select>
+                                    </div>
+                                </>
+                            )
+                        }
                         
                         <Button 
                             text={t('pages/account/informations:save')}

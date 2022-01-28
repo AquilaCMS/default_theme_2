@@ -73,8 +73,11 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             slugsLangs[lang].push(sl);
         }
     }
+    
     for (const [lang, sl] of Object.entries(product.slug)) {
-        slugsLangs[lang].push(sl);
+        if (slugsLangs[lang]) {
+            slugsLangs[lang].push(sl);
+        }
     }
     for (const [lang, sl] of Object.entries(slugsLangs)) {
         urlsLanguages.push({ lang, url: `/${sl.join('/')}` });

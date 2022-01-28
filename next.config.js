@@ -8,6 +8,10 @@ module.exports      = nextTranslate({
                     {
                         key  : 'Powered-by',
                         value: 'AquilaCMS',
+                    },
+                    {
+                        key  : 'Cache-Control',
+                        value: 'no-store',
                     }
                 ],
             },

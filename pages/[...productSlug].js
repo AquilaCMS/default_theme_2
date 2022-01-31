@@ -371,10 +371,10 @@ export default function Product({ breadcrumb, origin, product }) {
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
                                     <Button 
-                                        text={product.type === 'simple' ? t('pages/product:addToBasket') : t('pages/product:compose')}
+                                        text={product.type === 'bundle' ? t('pages/product:compose') : t('pages/product:addToBasket')}
                                         loadingText={t('pages/product:addToCartLoading')}
                                         isLoading={isLoading}
-                                        disabled={product.type === 'virtual'} 
+                                        disabled={product.type === 'virtual' || (product.type !== 'virtual' && product.type !== 'simple' && product.type !== 'bundle')} 
                                         className="w-commerce-commerceaddtocartbutton order-button"
                                     />
                                 </form>

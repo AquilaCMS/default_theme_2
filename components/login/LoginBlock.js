@@ -1,6 +1,7 @@
 import { useState }                    from 'react';
 import { useRouter }                   from 'next/router';
 import useTranslation                  from 'next-translate/useTranslation';
+import ModuleGoogleLoginButton         from '/modules/ModuleGoogleLoginButton';
 import Button                          from '@components/ui/Button';
 import { auth, sendMailResetPassword } from '@aquilacms/aquila-connector/api/login';
 
@@ -78,6 +79,8 @@ export default function LoginBlock() {
                         }
                 
                         <Button text={t('components/login/loginBlock:signin')} loadingText={t('components/login/loginBlock:signinLoading')} isLoading={isLoading} className="log-button w-button" />
+                    
+                        <ModuleGoogleLoginButton />
                     </form>
                 )
             }

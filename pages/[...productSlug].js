@@ -73,8 +73,11 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             slugsLangs[lang].push(sl);
         }
     }
+    
     for (const [lang, sl] of Object.entries(product.slug)) {
-        slugsLangs[lang].push(sl);
+        if (slugsLangs[lang]) {
+            slugsLangs[lang].push(sl);
+        }
     }
     for (const [lang, sl] of Object.entries(slugsLangs)) {
         urlsLanguages.push({ lang, url: `/${sl.join('/')}` });
@@ -244,7 +247,7 @@ export default function Product({ breadcrumb, origin, product }) {
         });
     }
 
-    const lightboxImages = product.images.map((item) => {
+    const lightboxImages = product.images.sort((a, b) => a.position - b.position).map((item) => {
         if (item.content) return { content: <Video content={item.content} />, alt: item.alt };
         return { content: getImage(item, 'max').url, alt: item.alt };
     });
@@ -344,7 +347,7 @@ export default function Product({ breadcrumb, origin, product }) {
                             <div className="collection-list-wrapper w-dyn-list">
                                 <div role="list" className="collection-list w-clearfix w-dyn-items">
                                     {product.images?.filter(ou => !ou.default).map((item) => (
-                                        <div key={item._id} role="listitem" className="collection-item w-dyn-item">
+                                        <div key={item._id} role="listitem" className="collection-item w-dyn-item" style={{ display: 'flex', alignItems: 'center' }}>
                                             <div className="w-inline-block w-lightbox" style={{ cursor: 'pointer' }} onClick={() => openLightBox(product.images.findIndex((im) => im._id === item._id))}>
                                                 {
                                                     item.content ? <img src={`https://img.youtube.com/vi/${item.content}/0.jpg`} alt={item.alt} className="more-image" />
@@ -368,10 +371,10 @@ export default function Product({ breadcrumb, origin, product }) {
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
                                     <Button 
-                                        text={product.type === 'simple' ? t('pages/product:addToBasket') : t('pages/product:compose')}
+                                        text={product.type === 'bundle' ? t('pages/product:compose') : t('pages/product:addToBasket')}
                                         loadingText={t('pages/product:addToCartLoading')}
                                         isLoading={isLoading}
-                                        disabled={product.type === 'virtual'} 
+                                        disabled={product.type === 'virtual' || (product.type !== 'virtual' && product.type !== 'simple' && product.type !== 'bundle')} 
                                         className="w-commerce-commerceaddtocartbutton order-button"
                                     />
                                 </form>

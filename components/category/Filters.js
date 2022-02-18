@@ -367,6 +367,7 @@ export default function Filters({ filtersData, getProductsList }) {
                         <option value="price.ati.normal|1">{t('components/filters:price')} -</option>
                         <option value="price.ati.normal|-1">{t('components/filters:price')} +</option>
                         <option value="is_new|-1">{t('components/filters:novelty')}</option>
+                        <option value="stats.sells|-1">{t('components/filters:sells')}</option>
                     </select>
                 </div>
             </div>

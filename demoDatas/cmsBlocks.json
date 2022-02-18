@@ -2,11 +2,431 @@
   "collection": "cmsBlocks",
   "datas": [
     {
+      "group": null,
+      "active": true,
+      "_id": "60584f6a6ddc5445a0d40c02",
+      "translation": {
+        "fr": {
+          "description": "Index : info 1",
+          "html": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"image-block\"><img src=\"{{Image1}}\" sizes=\"94vw\" alt=\"{{Image1 alt}}\" loading=\"lazy\" /></div>\n<div class=\"content-block\">\n<h2 class=\"heading-3\">{{Titre 1}} <span class=\"text-span-4\">{{Titre 2}}</span><br />{{Titre 3}}<br /><span class=\"text-span-3\">{{Titre 4}}</span></h2>\n<p>{{Text}}</p>\n<a href=\"{{Lien}}\" class=\"button button-space w-button\">{{Text du lien}}</a></div>\n</div>\n</div>\n</div>",
+          "content": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a5fc49391e1ff8165381/home-bottom-faq.png\" sizes=\"94vw\" alt=\"faq\" loading=\"lazy\" /></div>\n<div class=\"content-block\">\n<h2 class=\"heading-3\">Commandez <span class=\"text-span-4\">dégustez</span><br />grâce à la<br /><span class=\"text-span-3\">Commande Rapide</span></h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"/\" class=\"button button-space w-button\">Découvrez comment commander</a></div>\n</div>\n</div>\n</div>",
+          "variables": [
+            {
+              "label": "Image1",
+              "value": "/images/medias/max-90/6081a5fc49391e1ff8165381/home-bottom-faq.png"
+            },
+            {
+              "label": "Image1 alt",
+              "value": "faq"
+            },
+            {
+              "label": "Titre 1",
+              "value": "Commandez"
+            },
+            {
+              "label": "Titre 2",
+              "value": "dégustez"
+            },
+            {
+              "label": "Titre 3",
+              "value": "grâce à la"
+            },
+            {
+              "label": "Titre 4",
+              "value": "Commande Rapide"
+            },
+            {
+              "label": "Text",
+              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
+            },
+            {
+              "label": "Lien",
+              "value": "/"
+            },
+            {
+              "label": "Text du lien",
+              "value": "Découvrez comment commander"
+            }
+          ]
+        },
+        "en": {
+          "html": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"image-block\"><img src=\"{{Image1}}\" sizes=\"94vw\" alt=\"{{Alt Image1}}\" loading=\"lazy\" /></div>\n<div class=\"content-block\">\n<h2 class=\"heading-3\">{{Title 1}} <span class=\"text-span-4\">{{Title 2}}</span><br />{{Title 3}}<br /><span class=\"text-span-3\">{{Title 4}}</span></h2>\n<p>{{Text}}</p>\n<a href=\"{{Link}}\" class=\"button button-space w-button\">{{Link of text}}</a></div>\n</div>\n</div>\n</div>",
+          "variables": [
+            {
+              "label": "Image1",
+              "value": "/images/medias/max-90/6081a5fc49391e1ff8165381/home-bottom-faq.png"
+            },
+            {
+              "label": "Alt Image1",
+              "value": "faq"
+            },
+            {
+              "label": "Title 1",
+              "value": "Order &"
+            },
+            {
+              "label": "Title 2",
+              "value": "enjoy"
+            },
+            {
+              "label": "Title 3",
+              "value": "with the"
+            },
+            {
+              "label": "Title 4",
+              "value": "Quick Order"
+            },
+            {
+              "label": "Text",
+              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
+            },
+            {
+              "label": "Link",
+              "value": "/"
+            },
+            {
+              "label": "Link of text",
+              "value": "Find out how to order"
+            }
+          ],
+          "content": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a5fc49391e1ff8165381/home-bottom-faq.png\" sizes=\"94vw\" alt=\"faq\" loading=\"lazy\" /></div>\n<div class=\"content-block\">\n<h2 class=\"heading-3\">Order & <span class=\"text-span-4\">enjoy</span><br />with the<br /><span class=\"text-span-3\">Quick Order</span></h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"/\" class=\"button button-space w-button\">Find out how to order</a></div>\n</div>\n</div>\n</div>",
+          "description": "Index : info 1"
+        }
+      },
+      "code": "home-bottom-faq"
+    },
+    {
+      "group": null,
+      "active": true,
+      "_id": "60584f7d6ddc5445a0d40c03",
+      "translation": {
+        "fr": {
+          "description": "home : Mise en avant 1",
+          "html": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading\"><span class=\"text-span-2\">{{Titre 1}}<br />{{Titre 2}} </span>{{Titre 3}}</h2>\n<p>{{Texte 1}}</p>\n<a href=\"{{Lien 1}}\" class=\"button button-space w-button\">{{Texte lien 1}}</a></div>\n<div class=\"image-block\"><img src=\"{{Image}}\" alt=\"{{Image alt}}\" class=\"image\" loading=\"lazy\" /> <a href=\"{{Lien 2}}\" class=\"button absolu w-button\">{{Texte lien 2}}</a></div>\n</div>\n</div>\n</div>",
+          "variables": [
+            {
+              "label": "Titre 1",
+              "value": "Nos offres"
+            },
+            {
+              "label": "Titre 2",
+              "value": "et"
+            },
+            {
+              "label": "Titre 3",
+              "value": "produit frais !"
+            },
+            {
+              "label": "Texte 1",
+              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
+            },
+            {
+              "label": "Lien 1",
+              "value": "/"
+            },
+            {
+              "label": "Texte lien 1",
+              "value": "Commander !"
+            },
+            {
+              "label": "Image",
+              "value": "/images/medias/max-90/6081a3e649391e1ff816537d/home-promote-product1.jpeg"
+            },
+            {
+              "label": "Image alt",
+              "value": "alt1"
+            },
+            {
+              "label": "Lien 2",
+              "value": "/"
+            },
+            {
+              "label": "Texte lien 2",
+              "value": "Click&amp;Collect"
+            }
+          ],
+          "content": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading\"><span class=\"text-span-2\">Nos offres<br />et </span>produit frais !</h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"/\" class=\"button button-space w-button\">Commander !</a></div>\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a3e649391e1ff816537d/home-promote-product1.jpeg\" alt=\"alt1\" class=\"image\" loading=\"lazy\" /> <a href=\"/\" class=\"button absolu w-button\">Click&amp;Collect</a></div>\n</div>\n</div>\n</div>"
+        },
+        "en": {
+          "description": "home : Highlight 1",
+          "html": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading\"><span class=\"text-span-2\">{{Title 1}}<br />{{Title 2}} </span>{{Title 3}}</h2>\n<p>{{Text 1}}</p>\n<a href=\"{{Link 1}}\" class=\"button button-space w-button\">{{Link text 1}}</a></div>\n<div class=\"image-block\"><img src=\"{{Image}}\" alt=\"{{Alt Image}}\" class=\"image\" loading=\"lazy\" /> <a href=\"{{Link 2}}\" class=\"button absolu w-button\">{{Link Text 2}}</a></div>\n</div>\n</div>\n</div>",
+          "content": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading\"><span class=\"text-span-2\">Our offers<br />and </span>fresh products!</h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"/\" class=\"button button-space w-button\">Order!</a></div>\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a3e649391e1ff816537d/home-promote-product1.jpeg\" alt=\"alt1\" class=\"image\" loading=\"lazy\" /> <a href=\"/\" class=\"button absolu w-button\">Click&amp;Collect</a></div>\n</div>\n</div>\n</div>",
+          "variables": [
+            {
+              "label": "Title 1",
+              "value": "Our offers"
+            },
+            {
+              "label": "Title 2",
+              "value": "and"
+            },
+            {
+              "label": "Title 3",
+              "value": "fresh products!"
+            },
+            {
+              "label": "Text 1",
+              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
+            },
+            {
+              "label": "Link 1",
+              "value": "/"
+            },
+            {
+              "label": "Link text 1",
+              "value": "Order!"
+            },
+            {
+              "label": "Image",
+              "value": "/images/medias/max-90/6081a3e649391e1ff816537d/home-promote-product1.jpeg"
+            },
+            {
+              "label": "Alt Image",
+              "value": "alt1"
+            },
+            {
+              "label": "Link 2",
+              "value": "/"
+            },
+            {
+              "label": "Link Text 2",
+              "value": "Click&amp;Collect"
+            }
+          ]
+        }
+      },
+      "code": "home-promote-product-1"
+    },
+    {
+      "group": "Module",
+      "active": true,
+      "_id": "607eadf6dc79b23614400109",
+      "code": "cms_allergens",
+      "translation": {
+        "fr": {
+          "html": "Passez obligatoirement une commande unique en cas d'allergie afin que les produits soient isolés",
+          "variables": [],
+          "content": "Passez obligatoirement une commande unique en cas d'allergie afin que les produits soient isolés",
+          "description": "Texte d'information allergènes"
+        },
+        "en": {
+          "description": "Allergen information text",
+          "html": "Place a single order in case of allergy so that the products are isolated",
+          "variables": [],
+          "content": "Place a single order in case of allergy so that the products are isolated"
+        }
+      }
+    },
+    {
+      "group": "Bandeau",
+      "active": true,
+      "_id": "6063825e767fbe362c869f8b",
+      "translation": {
+        "fr": {
+          "description": "Bandeau - home - 1",
+          "html": "<div class=\"slide-1 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('{{Image de fond}}');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h1 class=\"hero-h1\">{{Titre 1}} <span class=\"text-span\">{{Titre 2}}</span> {{Titre 3}}</h1>\n<p class=\"hero-paragraph\">{{Texte}}</p>\n<div class=\"button-wrapper\"><a href=\"{{Lien}}\" class=\"button w-button\">{{Texte du bouton}}</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"{{Image URL}}\" alt=\"{{Image alt}}\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>",
+          "variables": [
+            {
+              "label": "Image de fond",
+              "value": "/images/medias/max-90/60819c4d49391e1ff8165377/home-info-slider1.jpg"
+            },
+            {
+              "label": "Titre 1",
+              "value": "Découvrez nos Menus"
+            },
+            {
+              "label": "Titre 2",
+              "value": "à Emporter"
+            },
+            {
+              "label": "Titre 3",
+              "value": "!"
+            },
+            {
+              "label": "Texte",
+              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500 !"
+            },
+            {
+              "label": "Lien",
+              "value": "/"
+            },
+            {
+              "label": "Texte du bouton",
+              "value": "Commander !"
+            },
+            {
+              "label": "Image URL",
+              "value": "/images/medias/max-90/6081a1f449391e1ff816537a/home-info-slider1-content1.png"
+            },
+            {
+              "label": "Image alt",
+              "value": "Nos menus"
+            }
+          ],
+          "content": "<div class=\"slide-1 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/medias/max-90/60819c4d49391e1ff8165377/home-info-slider1.jpg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h1 class=\"hero-h1\">Découvrez nos Menus <span class=\"text-span\">à Emporter</span> !</h1>\n<p class=\"hero-paragraph\">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500 !</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">Commander !</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/medias/max-90/6081a1f449391e1ff816537a/home-info-slider1-content1.png\" alt=\"Nos menus\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
+        },
+        "en": {
+          "html": "<div class=\"slide-1 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('{{Background image}}');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h1 class=\"hero-h1\">{{Title 1}} <span class=\"text-span\">{{Title 2}}</span> {{Title 3}}</h1>\n<p class=\"hero-paragraph\">{{Text}}</p>\n<div class=\"button-wrapper\"><a href=\"{{Link}}\" class=\"button w-button\">{{Link of button}}</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"{{URL Image}}\" alt=\"{{Alt Image}}\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>",
+          "variables": [
+            {
+              "label": "Background image",
+              "value": "/images/medias/max-90/60819c4d49391e1ff8165377/home-info-slider1.jpg"
+            },
+            {
+              "label": "Title 1",
+              "value": "Discover our Menus"
+            },
+            {
+              "label": "Title 2",
+              "value": "To Take Away"
+            },
+            {
+              "label": "Title 3",
+              "value": "!"
+            },
+            {
+              "label": "Text",
+              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500 !"
+            },
+            {
+              "label": "Link",
+              "value": "/"
+            },
+            {
+              "label": "Link of button",
+              "value": "Order!"
+            },
+            {
+              "label": "URL Image",
+              "value": "/images/medias/max-90/6081a1f449391e1ff816537a/home-info-slider1-content1.png"
+            },
+            {
+              "label": "Alt Image",
+              "value": "Our menus"
+            }
+          ],
+          "content": "<div class=\"slide-1 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/medias/max-90/60819c4d49391e1ff8165377/home-info-slider1.jpg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h1 class=\"hero-h1\">Discover our Menus <span class=\"text-span\">To Take Away</span> !</h1>\n<p class=\"hero-paragraph\">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500 !</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">Order!</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/medias/max-90/6081a1f449391e1ff816537a/home-info-slider1-content1.png\" alt=\"Our menus\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
+        }
+      },
+      "code": "Slide-Home-1"
+    },
+    {
+      "group": "Module",
+      "active": true,
+      "_id": "612c91d2ebf4774d90ceb44d",
+      "translation": {
+        "fr": {
+          "description": "Information FoodOption",
+          "html": "Nous vous proposons des produits complémentaires pour agrémenter votre repas.",
+          "variables": [],
+          "content": "Nous vous proposons des produits complémentaires pour agrémenter votre repas."
+        },
+        "en": {
+          "html": "We offer complementary products to enhance your meal.",
+          "variables": [],
+          "content": "We offer complementary products to enhance your meal."
+        }
+      },
+      "code": "foodoption-info"
+    },
+    {
+      "group": "Bandeau",
+      "active": true,
+      "_id": "60638609767fbe362c869f8d",
+      "translation": {
+        "fr": {
+          "description": "Bandeau - home - 3",
+          "html": "<div class=\"slide-3 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('{{ImageBackground}}');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h2 class=\"hero-h1\">{{Titre 1}} <span class=\"text-span\">{{Titre 2}}</span> {{Titre 3}}</h2>\n<p class=\"hero-paragraph\">{{Texte}}</p>\n<div class=\"button-wrapper\"><a href=\"{{Lien}}\" class=\"button w-button\">{{Texte du bouton}}</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"{{Image URL}}\" alt=\"{{Image alt}}\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>",
+          "variables": [
+            {
+              "label": "ImageBackground",
+              "value": "/images/medias/max-90/60819f2e49391e1ff8165379/home-info-slider3.jpg"
+            },
+            {
+              "label": "Titre 1",
+              "value": "Coktail & Drink"
+            },
+            {
+              "label": "Titre 2",
+              "value": "à Emporter"
+            },
+            {
+              "label": "Titre 3",
+              "value": "!"
+            },
+            {
+              "label": "Texte",
+              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 150"
+            },
+            {
+              "label": "Lien",
+              "value": "/"
+            },
+            {
+              "label": "Texte du bouton",
+              "value": "Commander !"
+            },
+            {
+              "label": "Image URL",
+              "value": "/images/medias/max-90/6081a31e49391e1ff816537c/home-info-slider3-content.jpeg"
+            },
+            {
+              "label": "Image alt",
+              "value": "Coktail & Drink"
+            }
+          ],
+          "content": "<div class=\"slide-3 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/medias/max-90/60819f2e49391e1ff8165379/home-info-slider3.jpg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h2 class=\"hero-h1\">Coktail & Drink <span class=\"text-span\">à Emporter</span> !</h2>\n<p class=\"hero-paragraph\">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 150</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">Commander !</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/medias/max-90/6081a31e49391e1ff816537c/home-info-slider3-content.jpeg\" alt=\"Coktail & Drink\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
+        },
+        "en": {
+          "html": "<div class=\"slide-3 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('{{ImageBackground}}');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h2 class=\"hero-h1\">{{Title 1}} <span class=\"text-span\">{{Title 2}}</span> {{Title 3}}</h2>\n<p class=\"hero-paragraph\">{{Text}}</p>\n<div class=\"button-wrapper\"><a href=\"{{Link}}\" class=\"button w-button\">{{Button text}}</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"{{Image URL}}\" alt=\"{{Image alt}}\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>",
+          "variables": [
+            {
+              "label": "ImageBackground",
+              "value": "/images/medias/max-90/60819f2e49391e1ff8165379/home-info-slider3.jpg"
+            },
+            {
+              "label": "Title 1",
+              "value": "Coktail & Drink"
+            },
+            {
+              "label": "Title 2",
+              "value": "to take away"
+            },
+            {
+              "label": "Title 3",
+              "value": "!"
+            },
+            {
+              "label": "Text",
+              "value": "en - dummy text ever since the 150"
+            },
+            {
+              "label": "Link",
+              "value": "/"
+            },
+            {
+              "label": "Button text",
+              "value": "Order!"
+            },
+            {
+              "label": "Image URL",
+              "value": "/images/medias/max-90/6081a31e49391e1ff816537c/home-info-slider3-content.jpeg"
+            },
+            {
+              "label": "Image alt",
+              "value": "Coktail & Drink"
+            }
+          ],
+          "content": "<div class=\"slide-3 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/medias/max-90/60819f2e49391e1ff8165379/home-info-slider3.jpg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h2 class=\"hero-h1\">Coktail & Drink <span class=\"text-span\">to take away</span> !</h2>\n<p class=\"hero-paragraph\">en - dummy text ever since the 150</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">Order!</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/medias/max-90/6081a31e49391e1ff816537c/home-info-slider3-content.jpeg\" alt=\"Coktail & Drink\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
+        }
+      },
+      "code": "Slide-Home-3"
+    },
+    {
       "group": "Aquila",
       "active": false,
       "_id": "5e29a422286b512918a391bb",
       "code": "invoice",
-      "active" : "false",
       "translation": {
         "fr": {
           "description": "invoice",
@@ -276,53 +696,6 @@
     {
       "group": null,
       "active": true,
-      "_id": "60584ec06ddc5445a0d40bff",
-      "translation": {
-        "fr": {
-          "description": "Sur toutes les pages : en haut",
-          "html": "<div id=\"Banner\" class=\"banner\">\n<div class=\"banner-wrap\">\n<div class=\"notice-text\">{{Texte}} <a href=\"{{Lien}}\" class=\"white-link\">{{Text du lien}}</a></div>\n</div>\n</div>",
-          "content": "<div id=\"Banner\" class=\"banner\">\n<div class=\"banner-wrap\">\n<div class=\"notice-text\">Nous sommes ouvert pour du Click &amp; Collect - <a href=\"/\" class=\"white-link\">Commandez maintenant</a></div>\n</div>\n</div>",
-          "variables": [
-            {
-              "label": "Texte",
-              "value": "Nous sommes ouvert pour du Click &amp; Collect -"
-            },
-            {
-              "label": "Lien",
-              "value": "/"
-            },
-            {
-              "label": "Text du lien",
-              "value": "Commandez maintenant"
-            }
-          ]
-        },
-        "en": {
-          "description": "On all pages: top",
-          "html": "<div id=\"Banner\" class=\"banner\">\n<div class=\"banner-wrap\">\n<div class=\"notice-text\">{{Text}} <a href=\"{{Link}}\" class=\"white-link\">{{Text of link}}</a></div>\n</div>\n</div>",
-          "content": "<div id=\"Banner\" class=\"banner\">\n<div class=\"banner-wrap\">\n<div class=\"notice-text\">We are open for Click &amp; Collect - <a href=\"/\" class=\"white-link\">Order now</a></div>\n</div>\n</div>",
-          "variables": [
-            {
-              "label": "Text",
-              "value": "We are open for Click &amp; Collect -"
-            },
-            {
-              "label": "Link",
-              "value": "/"
-            },
-            {
-              "label": "Text of link",
-              "value": "Order now"
-            }
-          ]
-        }
-      },
-      "code": "top-banner",
-      "active" : "true"
-    },
-    {
-      "group": null,
-      "active": true,
       "_id": "60584f336ddc5445a0d40c00",
       "translation": {
         "fr": {
@@ -396,301 +769,7 @@
           "description": "Home and product : Bottom"
         }
       },
-      "code": "info-bottom-1",
-      "active" : "true"
-    },
-    {
-      "group": null,
-      "active": true,
-      "_id": "60584f536ddc5445a0d40c01",
-      "translation": {
-        "fr": {
-          "description": "Index : info 2",
-          "html": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading-4\">{{Titre 1}}<br />et <span class=\"text-span-6\">{{Titre 2}}</span><br />{{Titre 3}}<br /><span class=\"text-span-5\">{{Titre 4}}</span></h2>\n<p>{{Text}}</p>\n<a href=\"{{Lien}}\" class=\"button button-space w-button\">{{Titre bouton}}</a></div>\n<div class=\"image-block\"><img src=\"{{Image}}\" alt=\"{{Image alt}}\" loading=\"lazy\" /></div>\n</div>\n</div>\n</div>",
-          "variables": [
-            {
-              "label": "Titre 1",
-              "value": "Contactez nous"
-            },
-            {
-              "label": "Titre 2",
-              "value": "récupérez"
-            },
-            {
-              "label": "Titre 3",
-              "value": "votre commande"
-            },
-            {
-              "label": "Titre 4",
-              "value": "quand vous voulez"
-            },
-            {
-              "label": "Text",
-              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
-            },
-            {
-              "label": "Lien",
-              "value": "tel:00000000"
-            },
-            {
-              "label": "Titre bouton",
-              "value": "Tél. : +33 0 00 00 00"
-            },
-            {
-              "label": "Image",
-              "value": "/images/medias/max-90/6081a6ab49391e1ff8165382/home-bottom-call.png"
-            },
-            {
-              "label": "Image alt",
-              "value": "Click and collect"
-            }
-          ],
-          "content": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading-4\">Contactez nous<br />et <span class=\"text-span-6\">récupérez</span><br />votre commande<br /><span class=\"text-span-5\">quand vous voulez</span></h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"tel:00000000\" class=\"button button-space w-button\">Tél. : +33 0 00 00 00</a></div>\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a6ab49391e1ff8165382/home-bottom-call.png\" alt=\"Click and collect\" loading=\"lazy\" /></div>\n</div>\n</div>\n</div>"
-        },
-        "en": {
-          "description": "home-bottom-call",
-          "html": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading-4\">{{Title 1}}<br />and <span class=\"text-span-6\">{{Title 2}}</span><br />{{Title 3}}<br /><span class=\"text-span-5\">{{Title 4}}</span></h2>\n<p>{{Text}}</p>\n<a href=\"{{Link}}\" class=\"button button-space w-button\">{{Bouton title}}</a></div>\n<div class=\"image-block\"><img src=\"{{Image}}\" alt=\"{{Alt Image}}\" loading=\"lazy\" /></div>\n</div>\n</div>\n</div>",
-          "variables": [
-            {
-              "label": "Title 1",
-              "value": "Contact-us"
-            },
-            {
-              "label": "Title 2",
-              "value": "Collect your"
-            },
-            {
-              "label": "Title 3",
-              "value": "order whenever"
-            },
-            {
-              "label": "Title 4",
-              "value": "you want"
-            },
-            {
-              "label": "Text",
-              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
-            },
-            {
-              "label": "Link",
-              "value": "tel:00000000"
-            },
-            {
-              "label": "Bouton title",
-              "value": "Tél. : +33 0 00 00 00"
-            },
-            {
-              "label": "Image",
-              "value": "/images/medias/max-90/6081a6ab49391e1ff8165382/home-bottom-call.png"
-            },
-            {
-              "label": "Alt Image",
-              "value": "Click and collect"
-            }
-          ],
-          "content": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading-4\">Contact-us<br />and <span class=\"text-span-6\">Collect your</span><br />order whenever<br /><span class=\"text-span-5\">you want</span></h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"tel:00000000\" class=\"button button-space w-button\">Tél. : +33 0 00 00 00</a></div>\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a6ab49391e1ff8165382/home-bottom-call.png\" alt=\"Click and collect\" loading=\"lazy\" /></div>\n</div>\n</div>\n</div>"
-        }
-      },
-      "code": "home-bottom-call",
-      "active" : "true"
-    },
-    {
-      "group": null,
-      "active": true,
-      "_id": "60584f6a6ddc5445a0d40c02",
-      "translation": {
-        "fr": {
-          "description": "Index : info 1",
-          "html": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"image-block\"><img src=\"{{Image1}}\" sizes=\"94vw\" alt=\"{{Image1 alt}}\" loading=\"lazy\" /></div>\n<div class=\"content-block\">\n<h2 class=\"heading-3\">{{Titre 1}} <span class=\"text-span-4\">{{Titre 2}}</span><br />{{Titre 3}}<br /><span class=\"text-span-3\">{{Titre 4}}</span></h2>\n<p>{{Text}}</p>\n<a href=\"{{Lien}}\" class=\"button button-space w-button\">{{Text du lien}}</a></div>\n</div>\n</div>\n</div>",
-          "content": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a5fc49391e1ff8165381/home-bottom-faq.png\" sizes=\"94vw\" alt=\"faq\" loading=\"lazy\" /></div>\n<div class=\"content-block\">\n<h2 class=\"heading-3\">Commandez <span class=\"text-span-4\">dégustez</span><br />grâce à la<br /><span class=\"text-span-3\">Commande Rapide</span></h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"/\" class=\"button button-space w-button\">Découvrez comment commander</a></div>\n</div>\n</div>\n</div>",
-          "variables": [
-            {
-              "label": "Image1",
-              "value": "/images/medias/max-90/6081a5fc49391e1ff8165381/home-bottom-faq.png"
-            },
-            {
-              "label": "Image1 alt",
-              "value": "faq"
-            },
-            {
-              "label": "Titre 1",
-              "value": "Commandez"
-            },
-            {
-              "label": "Titre 2",
-              "value": "dégustez"
-            },
-            {
-              "label": "Titre 3",
-              "value": "grâce à la"
-            },
-            {
-              "label": "Titre 4",
-              "value": "Commande Rapide"
-            },
-            {
-              "label": "Text",
-              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
-            },
-            {
-              "label": "Lien",
-              "value": "/"
-            },
-            {
-              "label": "Text du lien",
-              "value": "Découvrez comment commander"
-            }
-          ]
-        },
-        "en": {
-          "html": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"image-block\"><img src=\"{{Image1}}\" sizes=\"94vw\" alt=\"{{Alt Image1}}\" loading=\"lazy\" /></div>\n<div class=\"content-block\">\n<h2 class=\"heading-3\">{{Title 1}} <span class=\"text-span-4\">{{Title 2}}</span><br />{{Title 3}}<br /><span class=\"text-span-3\">{{Title 4}}</span></h2>\n<p>{{Text}}</p>\n<a href=\"{{Link}}\" class=\"button button-space w-button\">{{Link of text}}</a></div>\n</div>\n</div>\n</div>",
-          "variables": [
-            {
-              "label": "Image1",
-              "value": "/images/medias/max-90/6081a5fc49391e1ff8165381/home-bottom-faq.png"
-            },
-            {
-              "label": "Alt Image1",
-              "value": "faq"
-            },
-            {
-              "label": "Title 1",
-              "value": "Order &"
-            },
-            {
-              "label": "Title 2",
-              "value": "enjoy"
-            },
-            {
-              "label": "Title 3",
-              "value": "with the"
-            },
-            {
-              "label": "Title 4",
-              "value": "Quick Order"
-            },
-            {
-              "label": "Text",
-              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
-            },
-            {
-              "label": "Link",
-              "value": "/"
-            },
-            {
-              "label": "Link of text",
-              "value": "Find out how to order"
-            }
-          ],
-          "content": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a5fc49391e1ff8165381/home-bottom-faq.png\" sizes=\"94vw\" alt=\"faq\" loading=\"lazy\" /></div>\n<div class=\"content-block\">\n<h2 class=\"heading-3\">Order & <span class=\"text-span-4\">enjoy</span><br />with the<br /><span class=\"text-span-3\">Quick Order</span></h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"/\" class=\"button button-space w-button\">Find out how to order</a></div>\n</div>\n</div>\n</div>",
-          "description": "Index : info 1"
-        }
-      },
-      "code": "home-bottom-faq",
-      "active" : "true"
-    },
-    {
-      "group": null,
-      "active": true,
-      "_id": "60584f7d6ddc5445a0d40c03",
-      "translation": {
-        "fr": {
-          "description": "home : Mise en avant 1",
-          "html": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading\"><span class=\"text-span-2\">{{Titre 1}}<br />{{Titre 2}} </span>{{Titre 3}}</h2>\n<p>{{Texte 1}}</p>\n<a href=\"{{Lien 1}}\" class=\"button button-space w-button\">{{Texte lien 1}}</a></div>\n<div class=\"image-block\"><img src=\"{{Image}}\" alt=\"{{Image alt}}\" class=\"image\" loading=\"lazy\" /> <a href=\"{{Lien 2}}\" class=\"button absolu w-button\">{{Texte lien 2}}</a></div>\n</div>\n</div>\n</div>",
-          "variables": [
-            {
-              "label": "Titre 1",
-              "value": "Nos offres"
-            },
-            {
-              "label": "Titre 2",
-              "value": "et"
-            },
-            {
-              "label": "Titre 3",
-              "value": "produit frais !"
-            },
-            {
-              "label": "Texte 1",
-              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
-            },
-            {
-              "label": "Lien 1",
-              "value": "/"
-            },
-            {
-              "label": "Texte lien 1",
-              "value": "Commander !"
-            },
-            {
-              "label": "Image",
-              "value": "/images/medias/max-90/6081a3e649391e1ff816537d/home-promote-product1.jpeg"
-            },
-            {
-              "label": "Image alt",
-              "value": "alt1"
-            },
-            {
-              "label": "Lien 2",
-              "value": "/"
-            },
-            {
-              "label": "Texte lien 2",
-              "value": "Click&amp;Collect"
-            }
-          ],
-          "content": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading\"><span class=\"text-span-2\">Nos offres<br />et </span>produit frais !</h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"/\" class=\"button button-space w-button\">Commander !</a></div>\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a3e649391e1ff816537d/home-promote-product1.jpeg\" alt=\"alt1\" class=\"image\" loading=\"lazy\" /> <a href=\"/\" class=\"button absolu w-button\">Click&amp;Collect</a></div>\n</div>\n</div>\n</div>"
-        },
-        "en": {
-          "description": "home : Highlight 1",
-          "html": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading\"><span class=\"text-span-2\">{{Title 1}}<br />{{Title 2}} </span>{{Title 3}}</h2>\n<p>{{Text 1}}</p>\n<a href=\"{{Link 1}}\" class=\"button button-space w-button\">{{Link text 1}}</a></div>\n<div class=\"image-block\"><img src=\"{{Image}}\" alt=\"{{Alt Image}}\" class=\"image\" loading=\"lazy\" /> <a href=\"{{Link 2}}\" class=\"button absolu w-button\">{{Link Text 2}}</a></div>\n</div>\n</div>\n</div>",
-          "content": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading\"><span class=\"text-span-2\">Our offers<br />and </span>fresh products!</h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"/\" class=\"button button-space w-button\">Order!</a></div>\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a3e649391e1ff816537d/home-promote-product1.jpeg\" alt=\"alt1\" class=\"image\" loading=\"lazy\" /> <a href=\"/\" class=\"button absolu w-button\">Click&amp;Collect</a></div>\n</div>\n</div>\n</div>",
-          "variables": [
-            {
-              "label": "Title 1",
-              "value": "Our offers"
-            },
-            {
-              "label": "Title 2",
-              "value": "and"
-            },
-            {
-              "label": "Title 3",
-              "value": "fresh products!"
-            },
-            {
-              "label": "Text 1",
-              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
-            },
-            {
-              "label": "Link 1",
-              "value": "/"
-            },
-            {
-              "label": "Link text 1",
-              "value": "Order!"
-            },
-            {
-              "label": "Image",
-              "value": "/images/medias/max-90/6081a3e649391e1ff816537d/home-promote-product1.jpeg"
-            },
-            {
-              "label": "Alt Image",
-              "value": "alt1"
-            },
-            {
-              "label": "Link 2",
-              "value": "/"
-            },
-            {
-              "label": "Link Text 2",
-              "value": "Click&amp;Collect"
-            }
-          ]
-        }
-      },
-      "code": "home-promote-product-1",
-      "active" : "true"
+      "code": "info-bottom-1"
     },
     {
       "group": null,
@@ -825,9 +904,9 @@
       "_id": "60590994edf93036d81d5202",
       "translation": {
         "fr": {
-          "html": "<div class=\"cta-full-image\" style=\"background-image: radial-gradient(circle farthest-corner at 50% 50%, rgba(0, 0, 0, 0.67), rgba(25, 26, 27, 0.19)), url('{{Image de fond}}');\">\n<div class=\"container\">\n<div class=\"w-layout-grid grid-3\">\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Valeur 1}}</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Titre 1}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Valeur 2}}</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Titre 2}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Valeur 3}}</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Titre 3}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Valeur 4}}</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Titre 4}}</div>\n</div>\n</div>\n</div>\n</div>",
+          "html": "<div class=\"cta-full-image\" style=\"background-image: radial-gradient(circle farthest-corner at 50% 50%, rgba(0, 0, 0, 0.67), rgba(25, 26, 27, 0.19)), url('{{Image de fond}}');\">\n<div class=\"container\">\n<div class=\"w-layout-grid grid-3\">\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Valeur 1}}</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Titre 1}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Valeur 2}}</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Titre 2}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Valeur 3}}</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Titre 3}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Valeur 4}}</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Titre 4}}</div>\n</div>\n</div>\n</div>\n</div>",
           "description": "Page static : en dessous",
-          "content": "<div class=\"cta-full-image\" style=\"background-image: radial-gradient(circle farthest-corner at 50% 50%, rgba(0, 0, 0, 0.67), rgba(25, 26, 27, 0.19)), url('/images/medias/max-90/6081ae2e49391e1ff81653a2/bottom-parallax.jpeg');\">\n<div class=\"container\">\n<div class=\"w-layout-grid grid-3\">\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">7</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Spécialité</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">26</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Nombre de plat</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">3</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Restaurants</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">❤</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Pour vous</div>\n</div>\n</div>\n</div>\n</div>",
+          "content": "<div class=\"cta-full-image\" style=\"background-image: radial-gradient(circle farthest-corner at 50% 50%, rgba(0, 0, 0, 0.67), rgba(25, 26, 27, 0.19)), url('/images/medias/max-90/6081ae2e49391e1ff81653a2/bottom-parallax.jpeg');\">\n<div class=\"container\">\n<div class=\"w-layout-grid grid-3\">\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">7</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Spécialités</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">26</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Nombre de plats</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">3</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Restaurants</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">❤</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Pour vous</div>\n</div>\n</div>\n</div>\n</div>",
           "variables": [
             {
               "label": "Image de fond",
@@ -839,7 +918,7 @@
             },
             {
               "label": "Titre 1",
-              "value": "Spécialité"
+              "value": "Spécialités"
             },
             {
               "label": "Valeur 2",
@@ -847,7 +926,7 @@
             },
             {
               "label": "Titre 2",
-              "value": "Nombre de plat"
+              "value": "Nombre de plats"
             },
             {
               "label": "Valeur 3",
@@ -868,7 +947,7 @@
           ]
         },
         "en": {
-          "html": "<div class=\"cta-full-image\" style=\"background-image: radial-gradient(circle farthest-corner at 50% 50%, rgba(0, 0, 0, 0.67), rgba(25, 26, 27, 0.19)), url('{{Background image}}');\">\n<div class=\"container\">\n<div class=\"w-layout-grid grid-3\">\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Value 1}}</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Title 1}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Value 2}}</h2>\n<img src=\"images/wave-blue.svg\" alt=\" wave=\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Title 2}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Value 3}}</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Title 3}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Value 4}}</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Title 4}}</div>\n</div>\n</div>\n</div>\n</div>",
+          "html": "<div class=\"cta-full-image\" style=\"background-image: radial-gradient(circle farthest-corner at 50% 50%, rgba(0, 0, 0, 0.67), rgba(25, 26, 27, 0.19)), url('{{Background image}}');\">\n<div class=\"container\">\n<div class=\"w-layout-grid grid-3\">\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Value 1}}</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Title 1}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Value 2}}</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Title 2}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Value 3}}</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Title 3}}</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">{{Value 4}}</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">{{Title 4}}</div>\n</div>\n</div>\n</div>\n</div>",
           "variables": [
             {
               "label": "Background image",
@@ -880,7 +959,7 @@
             },
             {
               "label": "Title 1",
-              "value": "Specialty"
+              "value": "Specialties"
             },
             {
               "label": "Value 2",
@@ -896,7 +975,7 @@
             },
             {
               "label": "Title 3",
-              "value": "Restaurents"
+              "value": "Restaurants"
             },
             {
               "label": "Value 4",
@@ -907,106 +986,11 @@
               "value": "For U"
             }
           ],
-          "content": "<div class=\"cta-full-image\" style=\"background-image: radial-gradient(circle farthest-corner at 50% 50%, rgba(0, 0, 0, 0.67), rgba(25, 26, 27, 0.19)), url('/images/medias/max-90/6081ae2e49391e1ff81653a2/bottom-parallax.jpeg');\">\n<div class=\"container\">\n<div class=\"w-layout-grid grid-3\">\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">7</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Specialty</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">26</h2>\n<img src=\"images/wave-blue.svg\" alt=\" wave=\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Number of plates</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">3</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Restaurents</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">❤</h2>\n<img src=\"images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">For U</div>\n</div>\n</div>\n</div>\n</div>",
+          "content": "<div class=\"cta-full-image\" style=\"background-image: radial-gradient(circle farthest-corner at 50% 50%, rgba(0, 0, 0, 0.67), rgba(25, 26, 27, 0.19)), url('/images/medias/max-90/6081ae2e49391e1ff81653a2/bottom-parallax.jpeg');\">\n<div class=\"container\">\n<div class=\"w-layout-grid grid-3\">\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">7</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Specialties</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">26</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Number of plates</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">3</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">Restaurants</div>\n</div>\n<div class=\"statistic-block\">\n<h2 class=\"statistic\">❤</h2>\n<img src=\"/images/wave-blue.svg\" alt=\"wave\" class=\"wave\" loading=\"lazy\" />\n<div class=\"text-block-82\">For U</div>\n</div>\n</div>\n</div>\n</div>",
           "description": "Static page: Bottom"
         }
       },
-      "code": "bottom-parallax",
-      "active" : "true"
-    },
-    {
-      "group": "Bandeau",
-      "active": true,
-      "_id": "6063825e767fbe362c869f8b",
-      "translation": {
-        "fr": {
-          "description": "Bandeau - home - 1",
-          "html": "<div class=\"slide-1 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('{{Image de fond}}');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h1 class=\"hero-h1\">{{Titre 1}} <span class=\"text-span\">{{Titre 2}}</span> {{Titre 3}}</h1>\n<p class=\"hero-paragraph\">{{Texte}}</p>\n<div class=\"button-wrapper\"><a href=\"{{Lien}}\" class=\"button w-button\">{{Texte du bouton}}</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"{{Image URL}}\" alt=\"{{Image alt}}\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>",
-          "variables": [
-            {
-              "label": "Image de fond",
-              "value": "/images/medias/max-90/60819c4d49391e1ff8165377/home-info-slider1.jpg"
-            },
-            {
-              "label": "Titre 1",
-              "value": "Découvrez nos Menus"
-            },
-            {
-              "label": "Titre 2",
-              "value": "à Emporter"
-            },
-            {
-              "label": "Titre 3",
-              "value": "!"
-            },
-            {
-              "label": "Texte",
-              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500 !"
-            },
-            {
-              "label": "Lien",
-              "value": "/"
-            },
-            {
-              "label": "Texte du bouton",
-              "value": "Commander !"
-            },
-            {
-              "label": "Image URL",
-              "value": "/images/medias/max-90/6081a1f449391e1ff816537a/home-info-slider1-content1.png"
-            },
-            {
-              "label": "Image alt",
-              "value": "Nos menus"
-            }
-          ],
-          "content": "<div class=\"slide-1 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/medias/max-90/60819c4d49391e1ff8165377/home-info-slider1.jpg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h1 class=\"hero-h1\">Découvrez nos Menus <span class=\"text-span\">à Emporter</span> !</h1>\n<p class=\"hero-paragraph\">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500 !</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">Commander !</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/medias/max-90/6081a1f449391e1ff816537a/home-info-slider1-content1.png\" alt=\"Nos menus\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
-        },
-        "en": {
-          "html": "<div class=\"slide-1 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('{{Background image}}');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h1 class=\"hero-h1\">{{Title 1}} <span class=\"text-span\">{{Title 2}}</span> {{Title 3}}</h1>\n<p class=\"hero-paragraph\">{{Text}}</p>\n<div class=\"button-wrapper\"><a href=\"{{Link}}\" class=\"button w-button\">{{Link of button}}</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"{{URL Image}}\" alt=\"{{Alt Image}}\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>",
-          "variables": [
-            {
-              "label": "Background image",
-              "value": "/images/medias/max-90/60819c4d49391e1ff8165377/home-info-slider1.jpg"
-            },
-            {
-              "label": "Title 1",
-              "value": "Discover our Menus"
-            },
-            {
-              "label": "Title 2",
-              "value": "To Take Away"
-            },
-            {
-              "label": "Title 3",
-              "value": "!"
-            },
-            {
-              "label": "Text",
-              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500 !"
-            },
-            {
-              "label": "Link",
-              "value": "/"
-            },
-            {
-              "label": "Link of button",
-              "value": "Order!"
-            },
-            {
-              "label": "URL Image",
-              "value": "/images/medias/max-90/6081a1f449391e1ff816537a/home-info-slider1-content1.png"
-            },
-            {
-              "label": "Alt Image",
-              "value": "Our menus"
-            }
-          ],
-          "content": "<div class=\"slide-1 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/medias/max-90/60819c4d49391e1ff8165377/home-info-slider1.jpg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h1 class=\"hero-h1\">Discover our Menus <span class=\"text-span\">To Take Away</span> !</h1>\n<p class=\"hero-paragraph\">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500 !</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">Order!</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/medias/max-90/6081a1f449391e1ff816537a/home-info-slider1-content1.png\" alt=\"Our menus\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
-        }
-      },
-      "code": "Slide-Home-1",
-      "active" : "true"
+      "code": "bottom-parallax"
     },
     {
       "group": "Bandeau",
@@ -1104,98 +1088,182 @@
       "active" : "true"
     },
     {
-      "group": "Bandeau",
+      "group": null,
       "active": true,
-      "_id": "60638609767fbe362c869f8d",
+      "_id": "607daf2db33c8e623487b5d2",
       "translation": {
         "fr": {
-          "description": "Bandeau - home - 3",
-          "html": "<div class=\"slide-3 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('{{ImageBackground}}');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h2 class=\"hero-h1\">{{Titre 1}} <span class=\"text-span\">{{Titre 2}}</span> {{Titre 3}}</h2>\n<p class=\"hero-paragraph\">{{Texte}}</p>\n<div class=\"button-wrapper\"><a href=\"{{Lien}}\" class=\"button w-button\">{{Texte du bouton}}</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"{{Image URL}}\" alt=\"{{Image alt}}\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>",
+          "html": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">{{Titre}}</h2>\n<p>{{Information}}<br /><br /></p>\n</div>\n<ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>",
           "variables": [
             {
-              "label": "ImageBackground",
-              "value": "/images/medias/max-90/60819f2e49391e1ff8165379/home-info-slider3.jpg"
+              "label": "Titre",
+              "value": "Découvrez notre carte"
             },
             {
-              "label": "Titre 1",
-              "value": "Coktail & Drink"
+              "label": "Information",
+              "value": "Choisissez dans notre carte et offres du jour,<br />Et récupéré votre commande"
+            }
+          ],
+          "content": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">Découvrez notre carte</h2>\n<p>Choisissez dans notre carte et offres du jour,<br />Et récupéré votre commande<br /><br /></p>\n</div>\n<ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>",
+          "description": "Présentation des produits mise en avant"
+        },
+        "en": {
+          "html": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">{{Title}}</h2>\n<p>{{Information}}</p>\n</div><ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>",
+          "variables": [
+            {
+              "label": "Title",
+              "value": "Discover our menu"
             },
             {
-              "label": "Titre 2",
-              "value": "à Emporter"
-            },
-            {
-              "label": "Titre 3",
-              "value": "!"
-            },
+              "label": "Information",
+              "value": "Choose from our menu and offers of the day,<br/>And pick up your order"
+            }
+          ],
+          "description": "Presentation of the products put forward",
+          "content": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">Discover our menu</h2>\n<p>Choose from our menu and offers of the day,<br/>And pick up your order</p>\n</div><ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>"
+        }
+      },
+      "code": "home-product-listing"
+    },
+    {
+      "group": null,
+      "active": true,
+      "_id": "60584ec06ddc5445a0d40bff",
+      "translation": {
+        "fr": {
+          "description": "Sur toutes les pages : en haut",
+          "html": "<div id=\"Banner\" class=\"banner\">\n<div class=\"banner-wrap\">\n<div class=\"notice-text\">{{Texte}} <a href=\"{{Lien}}\" class=\"white-link\">{{Text du lien}}</a></div>\n</div>\n</div>",
+          "content": "<div id=\"Banner\" class=\"banner\">\n<div class=\"banner-wrap\">\n<div class=\"notice-text\">Nous sommes ouvert pour du Click &amp; Collect - <a href=\"/\" class=\"white-link\">Commandez maintenant</a></div>\n</div>\n</div>",
+          "variables": [
             {
               "label": "Texte",
-              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 150"
+              "value": "Nous sommes ouvert pour du Click &amp; Collect -"
             },
             {
               "label": "Lien",
               "value": "/"
             },
             {
-              "label": "Texte du bouton",
-              "value": "Commander !"
-            },
-            {
-              "label": "Image URL",
-              "value": "/images/medias/max-90/6081a31e49391e1ff816537c/home-info-slider3-content.jpeg"
-            },
-            {
-              "label": "Image alt",
-              "value": "Coktail & Drink"
+              "label": "Text du lien",
+              "value": "Commandez maintenant"
             }
-          ],
-          "content": "<div class=\"slide-3 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/medias/max-90/60819f2e49391e1ff8165379/home-info-slider3.jpg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h2 class=\"hero-h1\">Coktail & Drink <span class=\"text-span\">à Emporter</span> !</h2>\n<p class=\"hero-paragraph\">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 150</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">Commander !</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/medias/max-90/6081a31e49391e1ff816537c/home-info-slider3-content.jpeg\" alt=\"Coktail & Drink\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
+          ]
         },
         "en": {
-          "html": "<div class=\"slide-3 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('{{ImageBackground}}');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h2 class=\"hero-h1\">{{Title 1}} <span class=\"text-span\">{{Title 2}}</span> {{Title 3}}</h2>\n<p class=\"hero-paragraph\">{{Text}}</p>\n<div class=\"button-wrapper\"><a href=\"{{Link}}\" class=\"button w-button\">{{Button text}}</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"{{Image URL}}\" alt=\"{{Image alt}}\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>",
+          "description": "On all pages: top",
+          "html": "<div id=\"Banner\" class=\"banner\">\n<div class=\"banner-wrap\">\n<div class=\"notice-text\">{{Text}} <a href=\"{{Link}}\" class=\"white-link\">{{Text of link}}</a></div>\n</div>\n</div>",
+          "content": "<div id=\"Banner\" class=\"banner\">\n<div class=\"banner-wrap\">\n<div class=\"notice-text\">We are open for Click &amp; Collect - <a href=\"/\" class=\"white-link\">Order now</a></div>\n</div>\n</div>",
           "variables": [
             {
-              "label": "ImageBackground",
-              "value": "/images/medias/max-90/60819f2e49391e1ff8165379/home-info-slider3.jpg"
-            },
-            {
-              "label": "Title 1",
-              "value": "Coktail & Drink"
-            },
-            {
-              "label": "Title 2",
-              "value": "to take away"
-            },
-            {
-              "label": "Title 3",
-              "value": "!"
-            },
-            {
               "label": "Text",
-              "value": "en - dummy text ever since the 150"
+              "value": "We are open for Click &amp; Collect -"
             },
             {
               "label": "Link",
               "value": "/"
             },
             {
-              "label": "Button text",
-              "value": "Order!"
+              "label": "Text of link",
+              "value": "Order now"
+            }
+          ]
+        }
+      },
+      "code": "top-banner"
+    },
+    {
+      "group": null,
+      "active": true,
+      "_id": "60584f536ddc5445a0d40c01",
+      "translation": {
+        "fr": {
+          "description": "Index : info 2",
+          "html": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading-4\">{{Titre 1}}<br />et <span class=\"text-span-6\">{{Titre 2}}</span><br />{{Titre 3}}<br /><span class=\"text-span-5\">{{Titre 4}}</span></h2>\n<p>{{Text}}</p>\n<a href=\"{{Lien}}\" class=\"button button-space w-button\">{{Titre bouton}}</a></div>\n<div class=\"image-block\"><img src=\"{{Image}}\" alt=\"{{Image alt}}\" loading=\"lazy\" /></div>\n</div>\n</div>\n</div>",
+          "variables": [
+            {
+              "label": "Titre 1",
+              "value": "Contactez nous"
             },
             {
-              "label": "Image URL",
-              "value": "/images/medias/max-90/6081a31e49391e1ff816537c/home-info-slider3-content.jpeg"
+              "label": "Titre 2",
+              "value": "récupérez"
+            },
+            {
+              "label": "Titre 3",
+              "value": "votre commande"
+            },
+            {
+              "label": "Titre 4",
+              "value": "quand vous voulez"
+            },
+            {
+              "label": "Text",
+              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
+            },
+            {
+              "label": "Lien",
+              "value": "tel:00000000"
+            },
+            {
+              "label": "Titre bouton",
+              "value": "Tél. : +33 0 00 00 00"
+            },
+            {
+              "label": "Image",
+              "value": "/images/medias/max-90/6081a6ab49391e1ff8165382/home-bottom-call.png"
             },
             {
               "label": "Image alt",
-              "value": "Coktail & Drink"
+              "value": "Click and collect"
             }
           ],
-          "content": "<div class=\"slide-3 w-slide\" style=\"background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.51), transparent), url('/images/medias/max-90/60819f2e49391e1ff8165379/home-info-slider3.jpg');\">\n<div class=\"container-flex\">\n<div class=\"hero-content\">\n<h2 class=\"hero-h1\">Coktail & Drink <span class=\"text-span\">to take away</span> !</h2>\n<p class=\"hero-paragraph\">en - dummy text ever since the 150</p>\n<div class=\"button-wrapper\"><a href=\"/\" class=\"button w-button\">Order!</a></div>\n</div>\n<div class=\"hero-image-wrap\"><img src=\"/images/medias/max-90/6081a31e49391e1ff816537c/home-info-slider3-content.jpeg\" alt=\"Coktail & Drink\" sizes=\"(max-width: 991px) 100vw, 50vw\" class=\"hero-image\" /></div>\n</div>\n</div>"
+          "content": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading-4\">Contactez nous<br />et <span class=\"text-span-6\">récupérez</span><br />votre commande<br /><span class=\"text-span-5\">quand vous voulez</span></h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"tel:00000000\" class=\"button button-space w-button\">Tél. : +33 0 00 00 00</a></div>\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a6ab49391e1ff8165382/home-bottom-call.png\" alt=\"Click and collect\" loading=\"lazy\" /></div>\n</div>\n</div>\n</div>"
+        },
+        "en": {
+          "description": "home-bottom-call",
+          "html": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading-4\">{{Title 1}}<br />and <span class=\"text-span-6\">{{Title 2}}</span><br />{{Title 3}}<br /><span class=\"text-span-5\">{{Title 4}}</span></h2>\n<p>{{Text}}</p>\n<a href=\"{{Link}}\" class=\"button button-space w-button\">{{Bouton title}}</a></div>\n<div class=\"image-block\"><img src=\"{{Image}}\" alt=\"{{Alt Image}}\" loading=\"lazy\" /></div>\n</div>\n</div>\n</div>",
+          "variables": [
+            {
+              "label": "Title 1",
+              "value": "Contact-us"
+            },
+            {
+              "label": "Title 2",
+              "value": "Collect your"
+            },
+            {
+              "label": "Title 3",
+              "value": "order whenever"
+            },
+            {
+              "label": "Title 4",
+              "value": "you want"
+            },
+            {
+              "label": "Text",
+              "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500."
+            },
+            {
+              "label": "Link",
+              "value": "tel:00000000"
+            },
+            {
+              "label": "Bouton title",
+              "value": "Tel. : +33 0 00 00 00"
+            },
+            {
+              "label": "Image",
+              "value": "/images/medias/max-90/6081a6ab49391e1ff8165382/home-bottom-call.png"
+            },
+            {
+              "label": "Alt Image",
+              "value": "Click and collect"
+            }
+          ],
+          "content": "<div class=\"content-section-bg\">\n<div class=\"container\">\n<div class=\"w-layout-grid content-grid\">\n<div class=\"content-block bg-text\">\n<h2 class=\"heading-4\">Contact-us<br />and <span class=\"text-span-6\">Collect your</span><br />order whenever<br /><span class=\"text-span-5\">you want</span></h2>\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</p>\n<a href=\"tel:00000000\" class=\"button button-space w-button\">Tel. : +33 0 00 00 00</a></div>\n<div class=\"image-block\"><img src=\"/images/medias/max-90/6081a6ab49391e1ff8165382/home-bottom-call.png\" alt=\"Click and collect\" loading=\"lazy\" /></div>\n</div>\n</div>\n</div>"
         }
       },
-      "code": "Slide-Home-3",
-      "active" : "true"
+      "code": "home-bottom-call"
     },
     {
       "group": "Legal",
@@ -1245,84 +1313,6 @@
       "active" : "true"
     },
     {
-      "group": null,
-      "active": true,
-      "_id": "607daf2db33c8e623487b5d2",
-      "translation": {
-        "fr": {
-          "html": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">{{Titre}}</h2>\n<p>{{Information}}<br /><br /></p>\n</div>\n<ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>",
-          "variables": [
-            {
-              "label": "Titre",
-              "value": "Découvrez notre carte"
-            },
-            {
-              "label": "Information",
-              "value": "Choisissez dans notre carte et offres du jour,<br />Et récupéré votre commande"
-            }
-          ],
-          "content": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">Découvrez notre carte</h2>\n<p>Choisissez dans notre carte et offres du jour,<br />Et récupéré votre commande<br /><br /></p>\n</div>\n<ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>",
-          "description": "Présentation des produits mise en avant"
-        },
-        "en": {
-          "html": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">{{Title}}</h2>\n<p>{{Information}}</p>\n</div><ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>",
-          "variables": [
-            {
-              "label": "Title",
-              "value": "Discover our menu"
-            },
-            {
-              "label": "Information",
-              "value": "Choose from our menu and offers of the day,<br/>And pick up your order"
-            }
-          ],
-          "description": "Presentation of the products put forward",
-          "content": "<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">Discover our menu</h2>\n<p>Choose from our menu and offers of the day,<br/>And pick up your order</p>\n</div>\n<ns-product-card-list value=\"promote\" type=\"category\"></ns-product-card-list>"
-        }
-      },
-      "code": "home-product-listing"
-    },
-    {
-      "group": "Module",
-      "active": true,
-      "_id": "607eadf6dc79b23614400109",
-      "code": "cms_allergens",
-      "active" : "true",
-      "translation": {
-        "fr": {
-          "html": "Passez obligatoirement une commande unique en cas d'allergie afin que les produits soient isolés",
-          "variables": [],
-          "content": "Passez obligatoirement une commande unique en cas d'allergie afin que les produits soient isolés",
-          "description": "Texte d'information allergènes"
-        },
-        "en": {
-          "description": "Allergen information text",
-          "html": "Place a single order in case of allergy so that the products are isolated",
-          "variables": [],
-          "content": "Place a single order in case of allergy so that the products are isolated"
-        }
-      }
-    },
-    {
-      "group": "Module",
-      "active": true,
-      "_id": "612c91d2ebf4774d90ceb44d",
-      "translation": {
-        "fr": {
-          "description": "Information FoodOption",
-          "html": "Nous vous proposons des produits complémentaires pour agrémenter votre repas.",
-          "variables": [],
-          "content": "Nous vous proposons des produits complémentaires pour agrémenter votre repas."
-        },
-        "en": {
-          "html": "We offer complementary products to enhance your meal.",
-          "variables": [],
-          "content": "We offer complementary products to enhance your meal."
-        }
-      },
-      "code": "foodoption-info"
-    },
-    {
       "group": "Legal",
       "active": true,
       "_id": "612c91d2ebf4774d90ceb44e",
@@ -1341,6 +1331,20 @@
         }
       },
       "code": "top-text-rgpd"
+    },
+    {
+      "group": "",
+      "active": false,
+      "_id": "61af289e1b52003b2337cab2",
+      "code": "foodoptions-info",
+      "translation": {
+        "en": {
+          "description": "foodoptions-info"
+        },
+        "fr": {
+          "description": "foodoptions-info"
+        }
+      }
     }
   ]
 }

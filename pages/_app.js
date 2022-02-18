@@ -5,12 +5,12 @@ import GoogleTagManager from '@components/tools/GoogleTagManager';
 import FacebookPixel    from '@components/tools/FacebookPixel';
 import { useStore }     from '@lib/redux/store';
 
-import '@styles/globals.css';
 import '@styles/normalize.css';
 import '@styles/webflow.css';
 import '@styles/mon-restaurant.webflow.css';
-import '@styles/custom.css';
+import '@styles/globals.css';
 import '@styles/animations.css';
+import '@styles/custom.css';
 
 function AquilaTheme({ Component, pageProps }) {
     const store = useStore(pageProps.initialReduxState);

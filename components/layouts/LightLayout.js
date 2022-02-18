@@ -11,7 +11,7 @@ export default function LightLayout({ children }) {
     return (
         <>
             <Head>
-                {cmsBlockHead ? parse(cmsBlockHead.content) : null}
+                {cmsBlockHead?.content ? parse(cmsBlockHead.content) : null}
             </Head>
 
             <div id="Navigation" data-collapse="medium" role="banner" className="navbar w-nav">

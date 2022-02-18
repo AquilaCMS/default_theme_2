@@ -36,7 +36,11 @@ yarn-error.log*
 
 # aquila
 /_original_html
+i18n.json
 
 # module
 /modules/list_modules.js
 dynamic_langs.js
+
+# style
+/styles/custom.css

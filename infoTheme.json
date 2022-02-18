@@ -1,3 +1,4 @@
 {
-    "type": "custom"
+    "type": "custom",
+    "moduleComponentType": "no-installation"
 }

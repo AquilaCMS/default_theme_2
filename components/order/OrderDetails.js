@@ -162,7 +162,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                         <div className="block-content-tunnel">
                             <div className="w-row">
                                 <div className="w-col w-col-6"><label htmlFor="email-2">{t('components/orderDetails:paymentMethod')}</label>
-                                    <p className="label-tunnel">{order.payment[0].name}</p>
+                                    <p className="label-tunnel">{order.payment[0] ? order.payment[0].name : 'N/A'}</p>
                                 </div>
                                 {
                                     order.addresses.billing.line1 && (

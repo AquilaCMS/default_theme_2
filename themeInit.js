@@ -9,9 +9,6 @@ const themeName   = path.basename(__dirname);
 const pathToTheme = path.join(global.appRoot, 'themes', themeName, '/');
 
 const start = async () => {
-
-    createCustomCSSIfNotExists();
-
     if (global?.envConfig?.environment?.appUrl) {
         const appUrl                    = global.envConfig.environment.appUrl.slice(0, -1);
         process.env.NEXT_PUBLIC_API_URL = `${appUrl}/api`;
@@ -27,6 +24,7 @@ const start = async () => {
 
 
 const build = async () => {
+    await createCustomCSSIfNotExists();
     await packageManager.execCmd('npx next build', pathToTheme);
 };
 

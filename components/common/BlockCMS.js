@@ -10,6 +10,7 @@ import Newsletter                               from '@components/common/Newslet
 import ProductCard                              from '@components/product/ProductCard';
 import ProductList                              from '@components/product/ProductList';
 import Slider                                   from '@components/common/Slider';
+import SimpleMap                                from '@components/map/Map';
 import { useCmsBlocks, useComponentData }       from '@lib/hooks';
 
 export default function BlockCMS({ nsCode, content = '', displayerror = false, recursion = 0 }) {
@@ -37,7 +38,8 @@ export default function BlockCMS({ nsCode, content = '', displayerror = false, r
         'ns-newsletter'       : <Newsletter />,
         'ns-product-card'     : <ProductCard col="12" />,
         'ns-product-card-list': <ProductList />,
-        'ns-slider'           : <Slider />
+        'ns-slider'           : <Slider />,
+        'ns-simplemap'        : <SimpleMap />
     };
 
     const options = {

@@ -2,6 +2,23 @@
   "collection": "rules",
   "datas": [
     {
+      "_id": "6054ad326153ac1a34d43350",
+      "owner_type": "category",
+      "owner_id": "6054a7c86153ac1a34d4334c",
+      "conditions": [
+        {
+          "_id": "6054ad326153ac1a34d43351",
+          "target": "universe",
+          "type": "select",
+          "value": "autre-autre",
+          "operator": "eq"
+        }
+      ],
+      "other_rules": [],
+      "operand": "OU",
+      "effects": []
+    },
+    {
       "_id": "605369a84b9ac91f54fcabf7",
       "owner_type": "category",
       "owner_id": "605360a24d77e748945f27f2",
@@ -62,23 +79,6 @@
           "target": "universe",
           "type": "select",
           "value": "burger-burger",
-          "operator": "eq"
-        }
-      ],
-      "other_rules": [],
-      "operand": "OU",
-      "effects": []
-    },
-    {
-      "_id": "6054ad326153ac1a34d43350",
-      "owner_type": "category",
-      "owner_id": "6054a7c86153ac1a34d4334c",
-      "conditions": [
-        {
-          "_id": "6054ad326153ac1a34d43351",
-          "target": "universe",
-          "type": "select",
-          "value": "autre-autre",
           "operator": "eq"
         }
       ],

@@ -444,3 +444,11 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
       text-align: left;
   }
 }
+.marker {
+  position: absolute;
+  width:90px;
+  height: 90px;
+  border-radius: 100%;
+  user-select: none;
+  transform: translate(-50%, -50%);
+  }

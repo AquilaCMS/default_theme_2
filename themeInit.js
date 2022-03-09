@@ -16,6 +16,8 @@ const start = async () => {
     const app   = next({ dev, dir: pathToTheme });
     let handler = app.getRequestHandler();
 
+    createCustomCSSIfNotExists();
+    
     console.log('next build start...');
     await app.prepare();
     console.log('next build finish');
@@ -29,6 +31,7 @@ const build = async () => {
 };
 
 const createCustomCSSIfNotExists = async () => {
+    console.log('createCustomCSSIfNotExists');
     // Create file if not exists
     const customCssPath = path.join(pathToTheme, 'styles', 'custom.css');
     if (!fs.existsSync(customCssPath)) {

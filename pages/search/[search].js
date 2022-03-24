@@ -199,14 +199,12 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         }
     ];
 
-    const pageProps = await dispatcher(locale, req, res, actions);
-    
-    pageProps.props.products = productsData;
-    pageProps.props.search   = search;
+    const pageProps        = await dispatcher(locale, req, res, actions);
+    pageProps.props.search = search;
     return pageProps;
 }
 
-export default function Search({ products, search, error }) {
+export default function Search({ search, error }) {
     const [message, setMessage] = useState();
     const { categoryProducts }  = useCategoryProducts();
     const { themeConfig }       = useSiteConfig();
@@ -247,7 +245,7 @@ export default function Search({ products, search, error }) {
                                     {
                                         themeConfig?.values?.find(v => v.key === 'filters')?.value === 'top' && (
                                             <div className="div-block-allergenes">
-                                                <Filters filtersData={products.filters} getProductsList={getProductsList} />
+                                                <Filters filtersData={categoryProducts.filters} getProductsList={getProductsList} />
                                             </div>
                                         )
                                     }

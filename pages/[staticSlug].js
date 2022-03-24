@@ -7,6 +7,7 @@ import BlockCMS          from '@components/common/BlockCMS';
 import { dispatcher }    from '@lib/redux/dispatcher';
 import { getPageStatic } from '@aquilacms/aquila-connector/api/static';
 import { getBlocksCMS }  from '@aquilacms/aquila-connector/api/blockcms';
+import { useStaticPage } from '@lib/hooks';
 import { setLangAxios }  from '@lib/utils';
 // import Breadcrumb   from '@components/navigation/Breadcrumb';
 
@@ -45,15 +46,14 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
     const pageProps = await dispatcher(locale, req, res, actions);
 
     // URL origin
-    const { origin }           = absoluteUrl(req);
-    pageProps.props.origin     = origin;
-    pageProps.props.staticPage = staticPage;
-
+    const { origin }       = absoluteUrl(req);
+    pageProps.props.origin = origin;
     return pageProps;
 }
 
-export default function StaticPage({ error, origin, staticPage }) {
-    const { lang } = useTranslation();
+export default function StaticPage({ error, origin }) {
+    const { staticPage } = useStaticPage();
+    const { lang }       = useTranslation();
 
     if (error || !staticPage._id) {
         return (<ErrorPage statusCode={404} />);

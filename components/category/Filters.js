@@ -271,25 +271,29 @@ export default function Filters({ filtersData, getProductsList }) {
             </div>
             <div className={`faq-content${open ? ' filters-open' : ''}`}>
                 <div className="filters-list">
-                    <div className="filter" hidden={categoryPriceEnd.min === categoryPriceEnd.max}>
-                        <h6>{t('components/filters:price')}</h6>
-                        <div style={{ minWidth: '200px' }}>
-                            <Range
-                                min={categoryPriceEnd.min}
-                                max={categoryPriceEnd.max}
-                                tipFormatter={value => `${value}€`}
-                                value={[priceValue[0], priceValue[1]]}
-                                onChange={handlePriceFilterChange}
-                                onAfterChange={handlePriceFilterAfterChange}
-                            />
-                        </div>
-                        <span style={{ float: 'left' }}>
-                            {categoryPriceEnd.min} €
-                        </span>
-                        <span style={{ float: 'right' }}>
-                            {categoryPriceEnd.max} €
-                        </span>
-                    </div>
+                    {
+                        categoryPriceEnd.min !== categoryPriceEnd.max && (
+                            <div className="filter">
+                                <h6>{t('components/filters:price')}</h6>
+                                <div style={{ minWidth: '200px' }}>
+                                    <Range
+                                        min={categoryPriceEnd.min}
+                                        max={categoryPriceEnd.max}
+                                        tipFormatter={value => `${value}€`}
+                                        value={[priceValue[0], priceValue[1]]}
+                                        onChange={handlePriceFilterChange}
+                                        onAfterChange={handlePriceFilterAfterChange}
+                                    />
+                                </div>
+                                <span style={{ float: 'left' }}>
+                                    {categoryPriceEnd.min} €
+                                </span>
+                                <span style={{ float: 'right' }}>
+                                    {categoryPriceEnd.max} €
+                                </span>
+                            </div>
+                        )
+                    }
                     {
                         filtersData.attributes.map((attribute) => {
                             const attId = attribute._id || attribute.id_attribut;

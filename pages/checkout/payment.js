@@ -34,8 +34,6 @@ export default function CheckoutPayment() {
     const { lang, t }                   = useTranslation();
 
     const defaultLanguage = i18n.defaultLocale;
-
-    console.log(`/${defaultLanguage === lang ? '' : `${lang}/`}checkout/confirmation`);
     
     useEffect(() => {
         // Check if the cart is empty
@@ -175,7 +173,7 @@ export default function CheckoutPayment() {
                                 className="log-button-03 w-button"
                             />
 
-                            <div className="content" hidden>
+                            <div className="content" style={{ display: 'none' }}>
                                 {parse(paymentForm)}
                             </div>
                         </form>

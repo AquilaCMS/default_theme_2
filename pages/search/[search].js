@@ -84,6 +84,12 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     } catch (err) {
         return { notFound: true };
     }
+    if (initProductsData.specialPriceMin.ati === null) {
+        initProductsData.specialPriceMin.ati = initProductsData.min.ati;
+    }
+    if (initProductsData.specialPriceMax.ati === null) {
+        initProductsData.specialPriceMax.ati = initProductsData.max.ati;
+    }
     if (initProductsData.count) {
         priceEnd = {
             min: Math.floor(Math.min(initProductsData.min.ati, initProductsData.specialPriceMin.ati)),
@@ -177,7 +183,12 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     } catch (err) {
         return { notFound: true };
     }
-
+    if (productsData.specialPriceMin.ati === null) {
+        productsData.specialPriceMin.ati = productsData.min.ati;
+    }
+    if (productsData.specialPriceMax.ati === null) {
+        productsData.specialPriceMax.ati = productsData.max.ati;
+    }
     if (productsData.count) {
         // Conditions for filter
         if (!filter.conditions.price) {

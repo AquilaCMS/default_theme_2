@@ -57,37 +57,39 @@ export default function Account({ user }) {
         e.preventDefault();
         setIsLoading(true);
 
+        const postForm = e.currentTarget;
+
         // Get form data
         const updateUser = {
             _id             : user._id,
-            firstname       : e.currentTarget.firstname.value,
-            lastname        : e.currentTarget.lastname.value,
-            phone_mobile    : e.currentTarget.phone_mobile.value,
+            firstname       : postForm.firstname.value,
+            lastname        : postForm.lastname.value,
+            phone_mobile    : postForm.phone_mobile.value,
             billing_address : 0,
             delivery_address: 1
         };
 
         let addresses       = [];
         let deliveryAddress = {
-            firstname     : e.currentTarget.delivery_address_firstname.value,
-            lastname      : e.currentTarget.delivery_address_lastname.value,
-            line1         : e.currentTarget.delivery_address_line1.value,
-            line2         : e.currentTarget.delivery_address_line2.value,
-            city          : e.currentTarget.delivery_address_city.value,
-            zipcode       : e.currentTarget.delivery_address_zipcode.value,
-            isoCountryCode: e.currentTarget.delivery_address_isoCountryCode.value
+            firstname     : postForm.delivery_address_firstname.value,
+            lastname      : postForm.delivery_address_lastname.value,
+            line1         : postForm.delivery_address_line1.value,
+            line2         : postForm.delivery_address_line2.value,
+            city          : postForm.delivery_address_city.value,
+            zipcode       : postForm.delivery_address_zipcode.value,
+            isoCountryCode: postForm.delivery_address_isoCountryCode.value
         };
         if (sameAddress) {
             addresses = [deliveryAddress, deliveryAddress];
         } else {
             const billingAddress = {
-                firstname     : e.currentTarget.billing_address_firstname.value,
-                lastname      : e.currentTarget.billing_address_lastname.value,
-                line1         : e.currentTarget.billing_address_line1.value,
-                line2         : e.currentTarget.billing_address_line2.value,
-                city          : e.currentTarget.billing_address_city.value,
-                zipcode       : e.currentTarget.billing_address_zipcode.value,
-                isoCountryCode: e.currentTarget.billing_address_isoCountryCode.value
+                firstname     : postForm.billing_address_firstname.value,
+                lastname      : postForm.billing_address_lastname.value,
+                line1         : postForm.billing_address_line1.value,
+                line2         : postForm.billing_address_line2.value,
+                city          : postForm.billing_address_city.value,
+                zipcode       : postForm.billing_address_zipcode.value,
+                isoCountryCode: postForm.billing_address_isoCountryCode.value
             };
             addresses            = [billingAddress, deliveryAddress];
         }

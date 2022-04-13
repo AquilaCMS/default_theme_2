@@ -66,14 +66,16 @@ export default function CheckoutPayment() {
 
     const onSubmitPayment = async (e) => {
         e.preventDefault();
-
         setIsLoading(true);
-        try {
-            const payment_code = e.currentTarget.payment.value;
-            if (!payment_code) {
-                return setIsLoading(false);
-            }
 
+        const postForm = e.currentTarget;
+
+        const payment_code = postForm.payment.value;
+        if (!payment_code) {
+            return setIsLoading(false);
+        }
+
+        try {
             // Cart to order
             const order = await cartToOrder(cart._id, lang);
 

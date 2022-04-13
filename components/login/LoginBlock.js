@@ -18,9 +18,11 @@ export default function LoginBlock() {
         e.preventDefault();
         setIsLoading(true);
 
+        const postForm = e.currentTarget;
+
         // Get form data
-        const email    = e.currentTarget.email.value;
-        const password = e.currentTarget.password.value;
+        const email    = postForm.email.value;
+        const password = postForm.password.value;
         try {
             await auth(email, password);
             router.push(redirect);
@@ -34,8 +36,10 @@ export default function LoginBlock() {
     const handleResetSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+
+        const postForm = e.currentTarget;
         
-        const email = e.currentTarget.email.value;
+        const email = postForm.email.value;
         try {
             await sendMailResetPassword(email, lang);
             setMessageReset({ type: 'info', message: t('components/login/loginBlock:forgot.infoGetMail') });

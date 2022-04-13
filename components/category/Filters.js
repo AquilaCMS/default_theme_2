@@ -93,7 +93,7 @@ export default function Filters({ filtersData, getProductsList }) {
         filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: value[0], $lte: value[1] } }, { 'price.ati.special': { $gte: value[0], $lte: value[1] } }] };
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
+        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -142,7 +142,7 @@ export default function Filters({ filtersData, getProductsList }) {
         }
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
+        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -185,7 +185,7 @@ export default function Filters({ filtersData, getProductsList }) {
         }
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
+        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -213,7 +213,7 @@ export default function Filters({ filtersData, getProductsList }) {
         delete filter.priceValues;
         
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
+        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
 
         // Reset attributes, pictos & price
         setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
@@ -246,7 +246,7 @@ export default function Filters({ filtersData, getProductsList }) {
         filter.sort          = { [field]: parseInt(value) };
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
+        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort: filter.sort } });

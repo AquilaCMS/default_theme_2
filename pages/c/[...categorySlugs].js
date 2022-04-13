@@ -132,7 +132,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     }
 
     // Get filter from cookie
-    const cookieFilter = cookiesServerInstance.get('filter');
+    const cookieFilter = decodeURIComponent(cookiesServerInstance.get('filter'));
     let filter         = {};
     let sort           = { sortWeight: -1 };
     if (cookieFilter) {
@@ -229,7 +229,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: productsData.priceMin.ati, $lte: productsData.priceMax.ati } }, { 'price.ati.special': { $gte: productsData.specialPriceMin.ati, $lte: productsData.specialPriceMax.ati } }] };
         }
     }
-    cookiesServerInstance.set('filter', JSON.stringify(filter), { path: '/', httpOnly: false, maxAge: 43200000 });
+    cookiesServerInstance.set('filter', encodeURIComponent(JSON.stringify(filter)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [
         {

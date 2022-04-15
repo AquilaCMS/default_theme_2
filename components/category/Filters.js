@@ -207,9 +207,16 @@ export default function Filters({ filtersData, getProductsList }) {
             return router.reload();
         }
 
-        // Price filter must be present (Aquila constraint)
-        filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
+        if (!filter.conditions) {
+            filter.conditions = {};
+        }
+        if (filter.conditions.attributes) {
+            delete filter.conditions.attributes;
+            delete filter.conditions.pictos;
+        }
 
+        // Price filter must be present (Aquila constraint)
+        filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] };
         delete filter.priceValues;
         
         // Setting filter cookie

@@ -41,7 +41,9 @@ const createCustomCSSIfNotExists = () => {
 const createDotEnvIfNotExists = () => {
     console.log('createDotEnvIfNotExists');
     let appUrl = 'http://localhost:3010';
-    if (global?.envConfig?.environment?.appUrl) {
+    if (global?.envConfig) {
+        const globalEnvConfig = global.envConfig.replace(/#/g, '"');
+        global.envConfig    = JSON.parse(globalEnvConfig);
         appUrl = global.envConfig.environment.appUrl.slice(0, -1);
     }
     const nextApiValue = `${appUrl}/api`;

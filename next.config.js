@@ -21,6 +21,7 @@ module.exports      = nextTranslate({
     eslint: {
         ignoreDuringBuilds: true,
     },
+    optimizeFonts: false,
     /*async rewrites () {
         return [
             {

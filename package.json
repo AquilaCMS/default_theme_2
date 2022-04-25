@@ -21,7 +21,7 @@
     "next-absolute-url": "^1.2.2",
     "next-seo": "^4.26.0",
     "next-translate": "^1.0.7",
-    "rc-slider": "^9.7.2",
+    "rc-slider": "^10.0.0",
     "react": "18.0.0",
     "react-datepicker": "^4.2.1",
     "react-dom": "18.0.0",

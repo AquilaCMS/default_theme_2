@@ -5,9 +5,6 @@ import Slider                                                                   
 import { useCategoryPriceEnd, useSelectPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
 import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                 from '@lib/utils';
 
-const createSliderWithTooltip = Slider.createSliderWithTooltip;
-const Range                   = createSliderWithTooltip(Slider.Range);
-
 import 'rc-slider/assets/index.css';
 
 export default function Filters({ filtersData, getProductsList }) {
@@ -283,7 +280,8 @@ export default function Filters({ filtersData, getProductsList }) {
                             <div className="filter">
                                 <h6>{t('components/filters:price')}</h6>
                                 <div style={{ minWidth: '200px' }}>
-                                    <Range
+                                    <Slider
+                                        range
                                         min={categoryPriceEnd.min}
                                         max={categoryPriceEnd.max}
                                         tipFormatter={value => `${value}€`}

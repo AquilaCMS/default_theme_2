@@ -5,9 +5,6 @@ import Slider                                                                   
 import { useCategoryPriceEnd, useSelectPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
 import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                 from '@lib/utils';
 
-const createSliderWithTooltip = Slider.createSliderWithTooltip;
-const Range                   = createSliderWithTooltip(Slider.Range);
-
 import 'rc-slider/assets/index.css';
 
 export default function Filters({ filtersData, getProductsList }) {
@@ -93,7 +90,7 @@ export default function Filters({ filtersData, getProductsList }) {
         filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: value[0], $lte: value[1] } }, { 'price.ati.special': { $gte: value[0], $lte: value[1] } }] };
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
+        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -142,7 +139,7 @@ export default function Filters({ filtersData, getProductsList }) {
         }
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
+        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -185,7 +182,7 @@ export default function Filters({ filtersData, getProductsList }) {
         }
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
+        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
@@ -207,13 +204,20 @@ export default function Filters({ filtersData, getProductsList }) {
             return router.reload();
         }
 
-        // Price filter must be present (Aquila constraint)
-        filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
+        if (!filter.conditions) {
+            filter.conditions = {};
+        }
+        if (filter.conditions.attributes) {
+            delete filter.conditions.attributes;
+            delete filter.conditions.pictos;
+        }
 
+        // Price filter must be present (Aquila constraint)
+        filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] };
         delete filter.priceValues;
         
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
+        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
 
         // Reset attributes, pictos & price
         setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
@@ -246,7 +250,7 @@ export default function Filters({ filtersData, getProductsList }) {
         filter.sort          = { [field]: parseInt(value) };
 
         // Setting filter cookie
-        document.cookie = 'filter=' + JSON.stringify(filter) + '; path=/; max-age=43200;';
+        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
 
         // Getting & updating the products list
         const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort: filter.sort } });
@@ -271,25 +275,30 @@ export default function Filters({ filtersData, getProductsList }) {
             </div>
             <div className={`faq-content${open ? ' filters-open' : ''}`}>
                 <div className="filters-list">
-                    <div className="filter" hidden={categoryPriceEnd.min === categoryPriceEnd.max}>
-                        <h6>{t('components/filters:price')}</h6>
-                        <div style={{ minWidth: '200px' }}>
-                            <Range
-                                min={categoryPriceEnd.min}
-                                max={categoryPriceEnd.max}
-                                tipFormatter={value => `${value}€`}
-                                value={[priceValue[0], priceValue[1]]}
-                                onChange={handlePriceFilterChange}
-                                onAfterChange={handlePriceFilterAfterChange}
-                            />
-                        </div>
-                        <span style={{ float: 'left' }}>
-                            {categoryPriceEnd.min} €
-                        </span>
-                        <span style={{ float: 'right' }}>
-                            {categoryPriceEnd.max} €
-                        </span>
-                    </div>
+                    {
+                        categoryPriceEnd.min !== categoryPriceEnd.max && (
+                            <div className="filter">
+                                <h6>{t('components/filters:price')}</h6>
+                                <div style={{ minWidth: '200px' }}>
+                                    <Slider
+                                        range
+                                        min={categoryPriceEnd.min}
+                                        max={categoryPriceEnd.max}
+                                        tipFormatter={value => `${value}€`}
+                                        value={[priceValue[0], priceValue[1]]}
+                                        onChange={handlePriceFilterChange}
+                                        onAfterChange={handlePriceFilterAfterChange}
+                                    />
+                                </div>
+                                <span style={{ float: 'left' }}>
+                                    {categoryPriceEnd.min} €
+                                </span>
+                                <span style={{ float: 'right' }}>
+                                    {categoryPriceEnd.max} €
+                                </span>
+                            </div>
+                        )
+                    }
                     {
                         filtersData.attributes.map((attribute) => {
                             const attId = attribute._id || attribute.id_attribut;
@@ -368,6 +377,7 @@ export default function Filters({ filtersData, getProductsList }) {
                         <option value="price.ati.normal|-1">{t('components/filters:price')} +</option>
                         <option value="is_new|-1">{t('components/filters:novelty')}</option>
                         <option value="stats.sells|-1">{t('components/filters:sells')}</option>
+                        <option value="stats.views|-1" >{t('components/filters:mostViewed')}</option>
                     </select>
                 </div>
             </div>

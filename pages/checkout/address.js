@@ -52,42 +52,44 @@ export default function CheckoutAddress({ user }) {
         e.preventDefault();
         setIsLoading(true);
 
+        const postForm = e.currentTarget;
+
         // Get form data
         let addresses = [];
         if (moduleHook('cart-validate-btn')) {
             addresses = [
                 {
-                    firstname     : e.currentTarget.billing_address_firstname.value,
-                    lastname      : e.currentTarget.billing_address_lastname.value,
-                    line1         : e.currentTarget.billing_address_line1.value,
-                    line2         : e.currentTarget.billing_address_line2.value,
-                    city          : e.currentTarget.billing_address_city.value,
-                    zipcode       : e.currentTarget.billing_address_zipcode.value,
-                    isoCountryCode: e.currentTarget.billing_address_isoCountryCode.value
+                    firstname     : postForm.billing_address_firstname.value,
+                    lastname      : postForm.billing_address_lastname.value,
+                    line1         : postForm.billing_address_line1.value,
+                    line2         : postForm.billing_address_line2.value,
+                    city          : postForm.billing_address_city.value,
+                    zipcode       : postForm.billing_address_zipcode.value,
+                    isoCountryCode: postForm.billing_address_isoCountryCode.value
                 }
             ];
             addresses.push(user.addresses[user.delivery_address] ? user.addresses[user.delivery_address] : {});
         } else {
             const deliveryAddress = {
-                firstname     : e.currentTarget.delivery_address_firstname.value,
-                lastname      : e.currentTarget.delivery_address_lastname.value,
-                line1         : e.currentTarget.delivery_address_line1.value,
-                line2         : e.currentTarget.delivery_address_line2.value,
-                city          : e.currentTarget.delivery_address_city.value,
-                zipcode       : e.currentTarget.delivery_address_zipcode.value,
-                isoCountryCode: e.currentTarget.delivery_address_isoCountryCode.value
+                firstname     : postForm.delivery_address_firstname.value,
+                lastname      : postForm.delivery_address_lastname.value,
+                line1         : postForm.delivery_address_line1.value,
+                line2         : postForm.delivery_address_line2.value,
+                city          : postForm.delivery_address_city.value,
+                zipcode       : postForm.delivery_address_zipcode.value,
+                isoCountryCode: postForm.delivery_address_isoCountryCode.value
             };
             if (sameAddress) {
                 addresses = [deliveryAddress, deliveryAddress];
             } else {
                 const billingAddress = {
-                    firstname     : e.currentTarget.billing_address_firstname.value,
-                    lastname      : e.currentTarget.billing_address_lastname.value,
-                    line1         : e.currentTarget.billing_address_line1.value,
-                    line2         : e.currentTarget.billing_address_line2.value,
-                    city          : e.currentTarget.billing_address_city.value,
-                    zipcode       : e.currentTarget.billing_address_zipcode.value,
-                    isoCountryCode: e.currentTarget.billing_address_isoCountryCode.value
+                    firstname     : postForm.billing_address_firstname.value,
+                    lastname      : postForm.billing_address_lastname.value,
+                    line1         : postForm.billing_address_line1.value,
+                    line2         : postForm.billing_address_line2.value,
+                    city          : postForm.billing_address_city.value,
+                    zipcode       : postForm.billing_address_zipcode.value,
+                    isoCountryCode: postForm.billing_address_isoCountryCode.value
                 };
                 addresses            = [billingAddress, deliveryAddress];
             }

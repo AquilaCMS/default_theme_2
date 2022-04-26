@@ -16,13 +16,15 @@ export default function RegisterBlock() {
         e.preventDefault();
         setIsLoading(true);
 
+        const postForm = e.currentTarget;
+
         // Get form data
         const user = {
-            firstname   : e.currentTarget.firstname.value,
-            lastname    : e.currentTarget.lastname.value,
-            email       : e.currentTarget.email.value,
-            password    : e.currentTarget.password.value,
-            phone_mobile: e.currentTarget.phone_mobile.value
+            firstname   : postForm.firstname.value,
+            lastname    : postForm.lastname.value,
+            email       : postForm.email.value,
+            password    : postForm.password.value,
+            phone_mobile: postForm.phone_mobile.value
         };
         try {
             await setUser(user);

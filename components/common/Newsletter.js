@@ -11,7 +11,10 @@ export default function Newsletter() {
     const handleNLSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        const email = e.currentTarget.email.value;
+
+        const postForm = e.currentTarget;
+
+        const email = postForm.email.value;
         try {
             await setNewsletter(email);
             setMessage({ type: 'info', message: t('components/newsletter:messageSuccess') });

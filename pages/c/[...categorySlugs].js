@@ -124,6 +124,12 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     } catch (err) {
         return { notFound: true };
     }
+    if (initProductsData.specialPriceMin.ati === null) {
+        initProductsData.specialPriceMin.ati = initProductsData.priceMin.ati;
+    }
+    if (initProductsData.specialPriceMax.ati === null) {
+        initProductsData.specialPriceMax.ati = initProductsData.priceMax.ati;
+    }
     if (initProductsData.count) {
         priceEnd = {
             min: Math.floor(Math.min(initProductsData.priceMin.ati, initProductsData.specialPriceMin.ati)),
@@ -132,7 +138,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     }
 
     // Get filter from cookie
-    const cookieFilter = cookiesServerInstance.get('filter');
+    const cookieFilter = decodeURIComponent(cookiesServerInstance.get('filter'));
     let filter         = {};
     let sort           = { sortWeight: -1 };
     if (cookieFilter) {
@@ -219,7 +225,12 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     } catch (err) {
         return { notFound: true };
     }
-    
+    if (productsData.specialPriceMin.ati === null) {
+        productsData.specialPriceMin.ati = productsData.priceMin.ati;
+    }
+    if (productsData.specialPriceMax.ati === null) {
+        productsData.specialPriceMax.ati = productsData.priceMax.ati;
+    }
     if (productsData.count) {
         // Conditions for filter
         if (!filter.conditions) {
@@ -229,7 +240,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: productsData.priceMin.ati, $lte: productsData.priceMax.ati } }, { 'price.ati.special': { $gte: productsData.specialPriceMin.ati, $lte: productsData.specialPriceMax.ati } }] };
         }
     }
-    cookiesServerInstance.set('filter', JSON.stringify(filter), { path: '/', httpOnly: false, maxAge: 43200000 });
+    cookiesServerInstance.set('filter', encodeURIComponent(JSON.stringify(filter)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [
         {

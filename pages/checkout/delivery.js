@@ -72,7 +72,9 @@ export default function CheckoutDelivery() {
         e.preventDefault();
         setIsLoading(true);
 
-        const shipmentId = e.currentTarget.shipment.value;
+        const postForm = e.currentTarget;
+
+        const shipmentId = postForm.shipment.value;
         const ship       = shipments.find((s) => s._id === shipmentId);
 
         try {

@@ -34,8 +34,6 @@ export default function CheckoutPayment() {
     const { lang, t }                   = useTranslation();
 
     const defaultLanguage = i18n.defaultLocale;
-
-    console.log(`/${defaultLanguage === lang ? '' : `${lang}/`}checkout/confirmation`);
     
     useEffect(() => {
         // Check if the cart is empty
@@ -66,14 +64,16 @@ export default function CheckoutPayment() {
 
     const onSubmitPayment = async (e) => {
         e.preventDefault();
-
         setIsLoading(true);
-        try {
-            const payment_code = e.currentTarget.payment.value;
-            if (!payment_code) {
-                return setIsLoading(false);
-            }
 
+        const postForm = e.currentTarget;
+
+        const payment_code = postForm.payment.value;
+        if (!payment_code) {
+            return setIsLoading(false);
+        }
+
+        try {
             // Cart to order
             const order = await cartToOrder(cart._id, lang);
 
@@ -173,7 +173,7 @@ export default function CheckoutPayment() {
                                 className="log-button-03 w-button"
                             />
 
-                            <div className="content" hidden>
+                            <div className="content" style={{ display: 'none' }}>
                                 {parse(paymentForm)}
                             </div>
                         </form>

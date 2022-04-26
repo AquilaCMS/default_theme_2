@@ -128,7 +128,7 @@ export default function Account({ limit }) {
                                             <img src="/images/Plus.svg" alt="" className={`plus-2${viewOrders[index] ? ' plus-2-active' : ''}`} />
                                         </div>
                                     </div>
-                                    <div className="section-detail-order" hidden={!viewOrders[index]}>
+                                    <div className="section-detail-order" style={{ display: !viewOrders[index] ? 'none' : 'block' }}>
                                         <div className="container-tunnel-02">
                                             <h2 className="heading-5 center">{t('pages/account/index:orderSummary')} : #{order.number}</h2>
                                         </div>

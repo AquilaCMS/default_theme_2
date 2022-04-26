@@ -2,6 +2,12 @@ import Head           from 'next/head';
 import Link           from 'next/link';
 import Layout         from '@components/layouts/Layout';
 import useTranslation from 'next-translate/useTranslation';
+import { dispatcher } from '@lib/redux/dispatcher';
+
+export async function getStaticProps({ locale }) {
+    const pageProps = await dispatcher(locale);
+    return pageProps;
+}
 
 export default function Custom404() {
     const { t } = useTranslation();

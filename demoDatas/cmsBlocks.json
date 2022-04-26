@@ -218,6 +218,25 @@
       }
     },
     {
+      "group": "Module",
+      "active": true,
+      "_id": "612c91d2ebf4774d90ceb44d",
+      "translation": {
+        "fr": {
+          "description": "Information FoodOption",
+          "html": "Nous vous proposons des produits complémentaires pour agrémenter votre repas.",
+          "variables": [],
+          "content": "Nous vous proposons des produits complémentaires pour agrémenter votre repas."
+        },
+        "en": {
+          "html": "We offer complementary products to enhance your meal.",
+          "variables": [],
+          "content": "We offer complementary products to enhance your meal."
+        }
+      },
+      "code": "foodoption-info"
+    },
+    {
       "group": "Bandeau",
       "active": true,
       "_id": "6063825e767fbe362c869f8b",
@@ -309,25 +328,6 @@
         }
       },
       "code": "Slide-Home-1"
-    },
-    {
-      "group": "Module",
-      "active": true,
-      "_id": "612c91d2ebf4774d90ceb44d",
-      "translation": {
-        "fr": {
-          "description": "Information FoodOption",
-          "html": "Nous vous proposons des produits complémentaires pour agrémenter votre repas.",
-          "variables": [],
-          "content": "Nous vous proposons des produits complémentaires pour agrémenter votre repas."
-        },
-        "en": {
-          "html": "We offer complementary products to enhance your meal.",
-          "variables": [],
-          "content": "We offer complementary products to enhance your meal."
-        }
-      },
-      "code": "foodoption-info"
     },
     {
       "group": "Bandeau",
@@ -1345,6 +1345,40 @@
           "description": "foodoptions-info"
         }
       }
+    },
+    {
+      "group": "",
+      "active": true,
+      "_id": "6225c98901837d06e4c88781",
+      "translation": {
+        "fr": {
+          "html": "<ns-simplemap latitude=\"{{Latitude}}\" longitude=\"{{Longitude}}\" marker=\"{{url du marqueur (taille de l'image 90px X 90px)}}\" urlkeys=\"{{Clés Google Maps}}\" title=\"{{Titre du marker}}\"></ns-simplemap>",
+          "variables": [
+            {
+              "label": "Latitude",
+              "value": "43.61732608243277"
+            },
+            {
+              "label": "Longitude",
+              "value": "7.05785360225125"
+            },
+            {
+              "label": "url du marqueur (taille de l'image 90px X 90px)",
+              "value": "medias/logo2.png"
+            },
+            {
+              "label": "Clés Google Maps",
+              "value": ""
+            },
+            {
+              "label": "Titre du marker",
+              "value": "NextSourcia"
+            }
+          ],
+          "content": "<ns-simplemap latitude=\"43.61732608243277\" longitude=\"7.05785360225125\" marker=\"medias/logo2.png\" urlkeys=\"\" title=\"NextSourcia\"></ns-simplemap>"
+        }
+      },
+      "code": "map-banner"
     }
   ]
 }

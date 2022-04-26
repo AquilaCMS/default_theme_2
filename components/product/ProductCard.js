@@ -134,7 +134,7 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
     }
 
     return (
-        <div role="listitem" ref={productRef} className={`menu-item w-dyn-item w-col w-col-${col}`} hidden={hidden}>
+        <div role="listitem" ref={productRef} className={`menu-item w-dyn-item w-col w-col-${col}`} style={{ display: hidden ? 'none' : 'block' }}>
             {
                 pictos ? pictos.map((picto) => (
                     <div style={picto.style} key={picto.location + Math.random()}>

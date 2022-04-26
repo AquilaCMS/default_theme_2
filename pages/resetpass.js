@@ -38,8 +38,10 @@ export default function ResetPassword({ token }) {
         e.preventDefault();
         setIsLoading(true);
 
-        const password      = e.currentTarget.password.value;
-        const passwordCheck = e.currentTarget.passwordCheck.value;
+        const postForm = e.currentTarget;
+
+        const password      = postForm.password.value;
+        const passwordCheck = postForm.passwordCheck.value;
         
         if (password !== passwordCheck) {
             setMessageReset({ type: 'error', message: t('pages/resetpass:passNotMatching') });

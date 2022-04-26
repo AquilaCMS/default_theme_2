@@ -84,6 +84,12 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     } catch (err) {
         return { notFound: true };
     }
+    if (initProductsData.specialPriceMin.ati === null) {
+        initProductsData.specialPriceMin.ati = initProductsData.min.ati;
+    }
+    if (initProductsData.specialPriceMax.ati === null) {
+        initProductsData.specialPriceMax.ati = initProductsData.max.ati;
+    }
     if (initProductsData.count) {
         priceEnd = {
             min: Math.floor(Math.min(initProductsData.min.ati, initProductsData.specialPriceMin.ati)),
@@ -92,7 +98,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     }
 
     // Get filter from cookie
-    const cookieFilter = cookiesServerInstance.get('filter');
+    const cookieFilter = decodeURIComponent(cookiesServerInstance.get('filter'));
     let filter         = {};
     let sort           = { sortWeight: -1 };
     if (cookieFilter) {
@@ -177,14 +183,19 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     } catch (err) {
         return { notFound: true };
     }
-
+    if (productsData.specialPriceMin.ati === null) {
+        productsData.specialPriceMin.ati = productsData.min.ati;
+    }
+    if (productsData.specialPriceMax.ati === null) {
+        productsData.specialPriceMax.ati = productsData.max.ati;
+    }
     if (productsData.count) {
         // Conditions for filter
         if (!filter.conditions.price) {
             filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: productsData.min.ati, $lte: productsData.max.ati } }, { 'price.ati.special': { $gte: productsData.specialPriceMin.ati, $lte: productsData.specialPriceMax.ati } }] };
         }
     }
-    cookiesServerInstance.set('filter', JSON.stringify(filter), { path: '/', httpOnly: false, maxAge: 43200000 });
+    cookiesServerInstance.set('filter', encodeURIComponent(JSON.stringify(filter)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [
         {
@@ -199,14 +210,12 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         }
     ];
 
-    const pageProps = await dispatcher(locale, req, res, actions);
-    
-    pageProps.props.products = productsData;
-    pageProps.props.search   = search;
+    const pageProps        = await dispatcher(locale, req, res, actions);
+    pageProps.props.search = search;
     return pageProps;
 }
 
-export default function Search({ products, search, error }) {
+export default function Search({ search, error }) {
     const [message, setMessage] = useState();
     const { categoryProducts }  = useCategoryProducts();
     const { themeConfig }       = useSiteConfig();
@@ -247,7 +256,7 @@ export default function Search({ products, search, error }) {
                                     {
                                         themeConfig?.values?.find(v => v.key === 'filters')?.value === 'top' && (
                                             <div className="div-block-allergenes">
-                                                <Filters filtersData={products.filters} getProductsList={getProductsList} />
+                                                <Filters filtersData={categoryProducts.filters} getProductsList={getProductsList} />
                                             </div>
                                         )
                                     }

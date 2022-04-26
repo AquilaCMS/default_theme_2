@@ -37,6 +37,8 @@ export default function CheckoutClickAndCollect({ user }) {
     const nextStep = async (e) => {
         e.preventDefault();
 
+        const postForm = e.currentTarget;
+
         // Check if click & collect is validated
         if (!cart.orderReceipt?.date) {
             return setMessage({ type: 'error', message: t('pages/checkout:clickandcollect.submitError') });
@@ -54,7 +56,7 @@ export default function CheckoutClickAndCollect({ user }) {
         // Update phone mobile user
         const updateUser = {
             _id         : user._id,
-            phone_mobile: e.currentTarget.phone_mobile.value
+            phone_mobile: postForm.phone_mobile.value
         };
         try {
             await setUser(updateUser);

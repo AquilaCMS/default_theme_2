@@ -110,6 +110,79 @@
       "active": true,
       "clickable": true,
       "isDisplayed": true,
+      "action": "page",
+      "ancestors": [
+        "605360d84d77e748945f27f4"
+      ],
+      "children": [],
+      "displayOrder": 2,
+      "canonical_weight": 0,
+      "_id": "605361004d77e748945f27f5",
+      "translation": {
+        "fr": {
+          "name": "CGV",
+          "slug": "cgv",
+          "pageSlug": "cgv"
+        },
+        "en": {
+          "name": "CGV",
+          "pageSlug": "cgv",
+          "slug": "CGV"
+        }
+      },
+      "code": "CGV",
+      "openDate": "2021-03-18T14:17:36.057Z",
+      "productsList": [],
+      "createdAt": "2021-03-18T14:17:36.061Z",
+      "updatedAt": "2022-02-08T14:12:08.725Z"
+    },
+    {
+      "filters": {
+        "pictos": [],
+        "attributes": []
+      },
+      "active": true,
+      "clickable": true,
+      "isDisplayed": false,
+      "action": "catalog",
+      "ancestors": [
+        "607dabeab33c8e623487b5d1"
+      ],
+      "children": [],
+      "displayOrder": 2,
+      "canonical_weight": 0,
+      "_id": "6054a7c86153ac1a34d4334c",
+      "translation": {
+        "fr": {
+          "name": "Autre",
+          "slug": "autre"
+        },
+        "en": {
+          "name": "Other",
+          "slug": "other"
+        }
+      },
+      "code": "Autre",
+      "openDate": "2021-03-19T13:31:52.412Z",
+      "productsList": [
+        {
+          "checked": false,
+          "sortWeight": 0,
+          "_id": "6059e85f1e9d2b18902ce76e",
+          "id": "6054a7776153ac1a34d4334a"
+        }
+      ],
+      "createdAt": "2021-03-19T13:31:52.419Z",
+      "updatedAt": "2022-02-08T14:12:08.726Z"
+    },
+    {
+      "filters": {
+        "pictos": [],
+        "attributes": []
+      },
+      "active": true,
+      "clickable": true,
+      "isDisplayed": true,
       "action": "catalog",
       "ancestors": [
         "5b7ea55c09c72307ffb3c7dd"
@@ -187,79 +260,6 @@
       "productsList": [],
       "createdAt": "2021-03-18T14:18:25.176Z",
       "updatedAt": "2022-02-08T14:12:08.724Z"
-    },
-    {
-      "filters": {
-        "pictos": [],
-        "attributes": []
-      },
-      "active": true,
-      "clickable": true,
-      "isDisplayed": true,
-      "action": "page",
-      "ancestors": [
-        "605360d84d77e748945f27f4"
-      ],
-      "children": [],
-      "displayOrder": 2,
-      "canonical_weight": 0,
-      "_id": "605361004d77e748945f27f5",
-      "translation": {
-        "fr": {
-          "name": "CGV",
-          "slug": "cgv",
-          "pageSlug": "cgv"
-        },
-        "en": {
-          "name": "CGV",
-          "pageSlug": "cgv",
-          "slug": "CGV"
-        }
-      },
-      "code": "CGV",
-      "openDate": "2021-03-18T14:17:36.057Z",
-      "productsList": [],
-      "createdAt": "2021-03-18T14:17:36.061Z",
-      "updatedAt": "2022-02-08T14:12:08.725Z"
-    },
-    {
-      "filters": {
-        "pictos": [],
-        "attributes": []
-      },
-      "active": true,
-      "clickable": true,
-      "isDisplayed": false,
-      "action": "catalog",
-      "ancestors": [
-        "607dabeab33c8e623487b5d1"
-      ],
-      "children": [],
-      "displayOrder": 2,
-      "canonical_weight": 0,
-      "_id": "6054a7c86153ac1a34d4334c",
-      "translation": {
-        "fr": {
-          "name": "Autre",
-          "slug": "autre"
-        },
-        "en": {
-          "name": "Other",
-          "slug": "other"
-        }
-      },
-      "code": "Autre",
-      "openDate": "2021-03-19T13:31:52.412Z",
-      "productsList": [
-        {
-          "checked": false,
-          "sortWeight": 0,
-          "_id": "6059e85f1e9d2b18902ce76e",
-          "id": "6054a7776153ac1a34d4334a"
-        }
-      ],
-      "createdAt": "2021-03-19T13:31:52.419Z",
-      "updatedAt": "2022-02-08T14:12:08.726Z"
     },
     {
       "filters": {

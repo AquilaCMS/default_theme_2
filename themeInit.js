@@ -1,9 +1,9 @@
-const path           = require('path');
-const fs             = require('fs');
-const next           = require('next').default;
-const serverUtils    = require('../../utils/server');
-const packageManager = require('../../utils/packageManager');
-const dev            = serverUtils.dev;
+const path             = require('path');
+const fs               = require('fs');
+const next             = require('next').default;
+const serverUtils      = require('../../utils/server');
+const {packageManager} = require('aql-utils');
+const dev              = serverUtils.dev;
 
 const themeName   = path.basename(__dirname);
 const pathToTheme = path.join(global.appRoot, 'themes', themeName, '/');

@@ -2,7 +2,7 @@ const path             = require('path');
 const fs               = require('fs');
 const next             = require('next').default;
 const serverUtils      = require('../../utils/server');
-const {packageManager} = require('aql-utils');
+const {execCmd} = require('aql-utils');
 const dev              = serverUtils.dev;
 
 const themeName   = path.basename(__dirname);
@@ -26,7 +26,7 @@ const start = async () => {
 const build = async () => {
     createDotEnvIfNotExists();
     createCustomCSSIfNotExists();
-    await packageManager.execCmd('npx next build', pathToTheme);
+    await execCmd('npx next build', pathToTheme);
 };
 
 const createCustomCSSIfNotExists = () => {

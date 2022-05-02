@@ -12,6 +12,7 @@ import ProductList                              from '@components/product/Produc
 import Slider                                   from '@components/common/Slider';
 import SimpleMap                                from '@components/map/Map';
 import { useCmsBlocks, useComponentData }       from '@lib/hooks';
+import nsModules                                from 'modules/list_modules';
 
 export default function BlockCMS({ nsCode, content = '', displayerror = false, recursion = 0 }) {
     const cmsBlocks     = useCmsBlocks();
@@ -51,6 +52,18 @@ export default function BlockCMS({ nsCode, content = '', displayerror = false, r
                     {
                         ...attribs,
                         children: domToReact(children, options)
+                    }
+                );
+                return component;
+            }
+
+            // Replace <aq-[...]> by Next Sourcia Module
+            if (type === 'tag' && name && nsModules.find((comp) => comp.code === name)) {
+                const NsModule  = nsModules.find((comp) => comp.code === name).jsx.default;
+                const component = React.cloneElement(
+                    <NsModule />,
+                    {
+                        ...attribs
                     }
                 );
                 return component;

@@ -1349,7 +1349,7 @@
       "_id": "6225c98901837d06e4c88781",
       "translation": {
         "fr": {
-          "html": "<ns-simplemap latitude=\"{{Latitude}}\" longitude=\"{{Longitude}}\" marker=\"{{url du marqueur (taille de l'image 90px X 90px)}}\" urlkeys=\"{{Clés Google Maps}}\" title=\"{{Titre du marker}}\"></ns-simplemap>",
+          "html": "<aq-map latitude=\"{{Latitude}}\" longitude=\"{{Longitude}}\" marker=\"{{url du marqueur (taille de l'image 90px X 90px)}}\" urlkeys=\"{{Clés Google Maps}}\" title=\"{{Titre du marker}}\"></aq-map>",
           "variables": [
             {
               "label": "Latitude",
@@ -1361,7 +1361,7 @@
             },
             {
               "label": "url du marqueur (taille de l'image 90px X 90px)",
-              "value": "medias/logo2.png"
+              "value": "medias/logoMarker.png"
             },
             {
               "label": "Clés Google Maps",
@@ -1372,7 +1372,7 @@
               "value": "NextSourcia"
             }
           ],
-          "content": "<ns-simplemap latitude=\"43.61732608243277\" longitude=\"7.05785360225125\" marker=\"medias/logo2.png\" urlkeys=\"\" title=\"NextSourcia\"></ns-simplemap>"
+          "content": "<aq-map latitude=\"43.61732608243277\" longitude=\"7.05785360225125\" marker=\"medias/logoMarker.png\" urlkeys=\"\" title=\"NextSourcia\"></aq-map>"
         }
       },
       "code": "map-banner"

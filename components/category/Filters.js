@@ -301,21 +301,20 @@ export default function Filters({ filtersData, getProductsList }) {
                     }
                     {
                         filtersData.attributes.map((attribute) => {
-                            const attId = attribute._id || attribute.id_attribut;
-                            if (!filtersData.attributesValues[attId]) return null;
+                            if (!filtersData.attributesValues[attribute.id_attribut]) return null;
                             return (
-                                <div className="filter" key={attId}>
+                                <div className="filter" key={attribute.id_attribut}>
                                     <h6>{attribute.name}</h6>
                                     <div>
                                         {
-                                            filtersData.attributesValues[attId].sort().map((value) => {
+                                            filtersData.attributesValues[attribute.id_attribut].sort().map((value) => {
                                                 return (
-                                                    <label className="w-checkbox checkbox-field-allergene" key={attId + value}>
+                                                    <label className="w-checkbox checkbox-field-allergene" key={`${attribute.id_attribut}-${value}`}>
                                                         <input 
                                                             type="checkbox"
                                                             name="newsletter"
-                                                            value={`attribute|${attId}|${attribute.type}|${value}`}
-                                                            checked={checkedAttributesFilters[attId]?.includes(value) ? true : false}
+                                                            value={`attribute|${attribute.id_attribut}|${attribute.type}|${value}`}
+                                                            checked={checkedAttributesFilters[attribute.id_attribut]?.includes(value) ? true : false}
                                                             onChange={handleAttributeFilterClick}
                                                             style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
                                                         />

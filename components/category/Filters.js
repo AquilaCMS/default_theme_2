@@ -117,12 +117,12 @@ export default function Filters({ filtersData, getProductsList }) {
         const inputs     = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
         for (const input of inputs) {
             if (input.checked) {
-                const [type, attributeId, value] = input.value.split('|');
-                if (type === 'attribute') {
+                const [filterType, attributeId, type, value] = input.value.split('|');
+                if (filterType === 'attribute') {
                     if (!attributes[attributeId]) {
                         attributes[attributeId] = [];
                     }
-                    attributes[attributeId] = [...attributes[attributeId], (value === 'true' || value === 'false' ? value === 'true' : value.toString())];
+                    attributes[attributeId] = [...attributes[attributeId], (type === 'bool' ? value === 'true' : (type === 'number' ? Number(value) : value.toString()))];
                 }
             }
         }
@@ -166,8 +166,8 @@ export default function Filters({ filtersData, getProductsList }) {
         const inputs = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
         for (const input of inputs) {
             if (input.checked) {
-                const [type, code] = input.value.split('|');
-                if (type === 'picto') {
+                const [filterType, code] = input.value.split('|');
+                if (filterType === 'picto') {
                     pictos = [...pictos, code];
                 }
             }
@@ -314,7 +314,7 @@ export default function Filters({ filtersData, getProductsList }) {
                                                         <input 
                                                             type="checkbox"
                                                             name="newsletter"
-                                                            value={`attribute|${attId}|${value}`}
+                                                            value={`attribute|${attId}|${attribute.type}|${value}`}
                                                             checked={checkedAttributesFilters[attId]?.includes(value) ? true : false}
                                                             onChange={handleAttributeFilterClick}
                                                             style={{ opacity: 0, position: 'absolute', zIndex: -1 }}

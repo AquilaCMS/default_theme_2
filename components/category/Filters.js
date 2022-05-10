@@ -372,8 +372,8 @@ export default function Filters({ filtersData, getProductsList }) {
                         <option value="sortWeight|-1">{t('components/filters:pertinence')}</option>
                         <option value={`translation.${lang}.name|1`}>A-Z</option>
                         <option value={`translation.${lang}.name|-1`}>Z-A</option>
-                        <option value="price.ati.normal|1">{t('components/filters:price')} -</option>
-                        <option value="price.ati.normal|-1">{t('components/filters:price')} +</option>
+                        <option value="price.priceSort.ati|1">{t('components/filters:price')} -</option>
+                        <option value="price.priceSort.ati|-1">{t('components/filters:price')} +</option>
                         <option value="is_new|-1">{t('components/filters:novelty')}</option>
                         <option value="stats.sells|-1">{t('components/filters:sells')}</option>
                         <option value="stats.views|-1" >{t('components/filters:mostViewed')}</option>

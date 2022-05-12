@@ -22,7 +22,7 @@ import { addToCart, setCartShipment }                                          f
 import { getCategories }                                                       from '@aquilacms/aquila-connector/api/category';
 import { getProduct }                                                          from '@aquilacms/aquila-connector/api/product';
 import { getImage, getMainImage, getTabImageURL }                              from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import { useCart, useShowCartSidebar, useSiteConfig }                          from '@lib/hooks';
+import { useCart, useProduct, useShowCartSidebar, useSiteConfig }              from '@lib/hooks';
 import { setLangAxios, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 
 import 'lightbox-react/style.css';
@@ -115,9 +115,8 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     pageProps.props.breadcrumb = breadcrumb;
 
     // URL origin
-    const { origin }        = absoluteUrl(req);
-    pageProps.props.origin  = origin;
-    pageProps.props.product = product;
+    const { origin }       = absoluteUrl(req);
+    pageProps.props.origin = origin;
 
     return pageProps;
 }
@@ -140,7 +139,7 @@ const Video = ({ content }) => (
     />
 );
 
-export default function Product({ breadcrumb, origin, product }) {
+export default function Product({ breadcrumb, origin }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
@@ -149,6 +148,7 @@ export default function Product({ breadcrumb, origin, product }) {
     const [openModal, setOpenModal]   = useState(false);
     const [tabs, setTabs]             = useState(0);
     const { cart, setCart }           = useCart();
+    const product                     = useProduct();
     const { themeConfig }             = useSiteConfig();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();

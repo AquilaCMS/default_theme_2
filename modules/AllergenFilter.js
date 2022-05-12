@@ -46,23 +46,20 @@ export default function AllergenFilter() {
                 const data = await getAllergens();
                 setAllergens(data);
 
-                // If cookie filter exists, we parse it
-                const cookieFilter = cookie.parse(document.cookie).filter;
-                if (cookieFilter) {
-                    const filt = JSON.parse(cookieFilter);
+                // Getting filter & sort from cookie
+                const { filter } = getFilterAndSortFromCookie();
 
-                    // Updating checked allergens
-                    if (filt.conditions?.allergens) {
-                        const arrayChecked = filt.conditions.allergens.$or[0].allergens.$nin;
-                        let checked        = {};
-                        for (const c of arrayChecked) {
-                            checked[c] = true;
-                        }
-                        setCheckedAllergens(checked);
-
-                        // Opening the allergens block
-                        openBlock(true);
+                // Updating checked allergens
+                if (filter.conditions?.allergens) {
+                    const arrayChecked = filter.conditions.allergens.$or[0].allergens.$nin;
+                    let checked        = {};
+                    for (const c of arrayChecked) {
+                        checked[c] = true;
                     }
+                    setCheckedAllergens(checked);
+
+                    // Opening the allergens block
+                    openBlock(true);
                 }
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
@@ -139,15 +136,15 @@ export default function AllergenFilter() {
     const resetAllergens = async () => {
         setCheckedAllergens([]);
 
-        // If cookie filter exists, we parse it
-        const cookieFilter = cookie.parse(document.cookie).filter;
-        if (cookieFilter) {
-            const filter = JSON.parse(cookieFilter);
-            let sort     = { sortWeight: -1 };
-            if (filter.sort) {
-                sort = filter.sort;
-            }
+        // Getting filter & sort from cookie
+        const { filter, sort } = getFilterAndSortFromCookie();
 
+        // If filter empty (cookie not present), reload
+        if (!Object.keys(filter).length) {
+            return router.reload();
+        }
+
+        if (filter.conditions?.allergens) {
             // Filter construction
             delete filter.conditions.allergens;
 

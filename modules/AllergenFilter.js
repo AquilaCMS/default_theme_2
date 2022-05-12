@@ -1,6 +1,5 @@
 import { useEffect, useState }                                                    from 'react';
 import { useRouter }                                                              from 'next/router';
-import cookie                                                                     from 'cookie';
 import useTranslation                                                             from 'next-translate/useTranslation';
 import { getBlockCMS }                                                            from '@aquilacms/aquila-connector/api/blockcms';
 import { getCategoryProducts }                                                    from '@aquilacms/aquila-connector/api/category';

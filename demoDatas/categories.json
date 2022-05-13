@@ -40,7 +40,33 @@
     {
       "filters": {
         "pictos": [],
-        "attributes": []
+        "attributes" : [
+          {
+            "_id" : "ff06a08a6350becbd5d0adea",
+            "code" : "viande",
+            "translation" : {
+              "fr" : {
+                "name" : "Viande",
+                "values" : [
+                  "Poulet",
+                  "Boeuf",
+                  "Bacon"
+                ]
+              },
+              "en" : {
+                "name" : "Meat",
+                "values" : [
+                  "Chicken",
+                  "Beef",
+                  "Bacon"
+                ]
+              }
+            },
+            "type" : "multiselect",
+            "id_attribut" : "ff06a08a6350becbd5d0adea",
+            "position" : 1
+          }
+        ]
       },
       "active": true,
       "clickable": true,

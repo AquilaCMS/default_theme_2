@@ -30,9 +30,13 @@ import 'react-responsive-modal/styles.css';
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     setLangAxios(locale, req, res);
-
+    
     const productSlug   = params.productSlug.pop();
     const categorySlugs = params.productSlug;
+    
+    if (productSlug.match(/\.[a-z]{2,}$/i)) {
+        return { notFound: true };
+    }
 
     let categories = [];
     let product    = {};

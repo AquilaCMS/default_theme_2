@@ -94,21 +94,23 @@ export default function AllergenFilter() {
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
-        // If filter empty (cookie not present)
-        if (!filter.conditions) {
-            // Price filter must be present (Aquila constraint)
-            filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
+        // If the filter does not have the "category" property, reload
+        if (!filter.category) {
+            return router.reload();
         }
 
         // Filter construction
         let filterAllergens = {};
         if (Object.keys(checked).length > 0) {
-            filterAllergens             = {
+            filterAllergens = {
                 $or: [
                     { allergens: { $nin: Object.keys(checked) } },
                     { allergens: [] }
                 ]
             };
+            if (!filter.conditions) {
+                filter.conditions = {};
+            }
             filter.conditions.allergens = filterAllergens;
         } else {
             delete filter.conditions.allergens;
@@ -121,6 +123,16 @@ export default function AllergenFilter() {
         try {
             const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
             setCategoryProducts(products);
+
+            const priceEnd = {
+                min: Math.floor(products.unfilteredPriceSortMin.ati),
+                max: Math.ceil(products.unfilteredPriceSortMax.ati)
+            };
+    
+            // If price end has changed, reload
+            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                return router.reload();
+            }
 
             // Back to page 1
             setSelectPage(1);

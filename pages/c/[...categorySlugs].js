@@ -1,25 +1,25 @@
-import { useState }                                                       from 'react';
-import absoluteUrl                                                        from 'next-absolute-url';
-import Head                                                               from 'next/head';
-import { useRouter }                                                      from 'next/router';
-import getT                                                               from 'next-translate/getT';
-import useTranslation                                                     from 'next-translate/useTranslation';
-import Cookies                                                            from 'cookies';
-import Error                                                              from '@pages/_error';
-import Filters                                                            from '@components/category/Filters';
-import Pagination                                                         from '@components/category/Pagination';
-import Layout                                                             from '@components/layouts/Layout';
-import NextSeoCustom                                                      from '@components/tools/NextSeoCustom';
-import Breadcrumb                                                         from '@components/navigation/Breadcrumb';
-import CategoryList                                                       from '@components/category/CategoryList';
-import ProductList                                                        from '@components/product/ProductList';
-import MenuCategories                                                     from '@components/navigation/MenuCategories';
-import { dispatcher }                                                     from '@lib/redux/dispatcher';
-import { getBreadcrumb }                                                  from '@aquilacms/aquila-connector/api/breadcrumb';
-import { getCategory, getCategoryProducts }                               from '@aquilacms/aquila-connector/api/category';
-import { getSiteInfo }                                                    from '@aquilacms/aquila-connector/api/site';
-import { useCategoryProducts, useSiteConfig }                             from '@lib/hooks';
-import { setLangAxios, cloneObj, convertFilter, moduleHook, unsetCookie } from '@lib/utils';
+import { useState }                                                        from 'react';
+import absoluteUrl                                                         from 'next-absolute-url';
+import Head                                                                from 'next/head';
+import { useRouter }                                                       from 'next/router';
+import getT                                                                from 'next-translate/getT';
+import useTranslation                                                      from 'next-translate/useTranslation';
+import Cookies                                                             from 'cookies';
+import Error                                                               from '@pages/_error';
+import Filters                                                             from '@components/category/Filters';
+import Pagination                                                          from '@components/category/Pagination';
+import Layout                                                              from '@components/layouts/Layout';
+import NextSeoCustom                                                       from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                          from '@components/navigation/Breadcrumb';
+import CategoryList                                                        from '@components/category/CategoryList';
+import ProductList                                                         from '@components/product/ProductList';
+import MenuCategories                                                      from '@components/navigation/MenuCategories';
+import { dispatcher }                                                      from '@lib/redux/dispatcher';
+import { getBreadcrumb }                                                   from '@aquilacms/aquila-connector/api/breadcrumb';
+import { getCategory, getCategoryProducts }                                from '@aquilacms/aquila-connector/api/category';
+import { getSiteInfo }                                                     from '@aquilacms/aquila-connector/api/site';
+import { useCategoryProducts, useSiteConfig }                              from '@lib/hooks';
+import { setLangAxios, convertFilter, filterFix, moduleHook, unsetCookie } from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     setLangAxios(locale, req, res);
@@ -116,27 +116,6 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         limit       = page * limit;
     }
 
-    // "Empty" request to retrieve price limits
-    let initProductsData = {};
-    let priceEnd         = { min: 0, max: 0 };
-    try {
-        initProductsData = await getCategoryProducts('', category._id, locale, { PostBody: { page: 1, limit: 1 } });
-    } catch (err) {
-        return { notFound: true };
-    }
-    if (initProductsData.specialPriceMin.ati === null) {
-        initProductsData.specialPriceMin.ati = initProductsData.priceMin.ati;
-    }
-    if (initProductsData.specialPriceMax.ati === null) {
-        initProductsData.specialPriceMax.ati = initProductsData.priceMax.ati;
-    }
-    if (initProductsData.count) {
-        priceEnd = {
-            min: Math.floor(Math.min(initProductsData.priceMin.ati, initProductsData.specialPriceMin.ati)),
-            max: Math.ceil(Math.max(initProductsData.priceMax.ati, initProductsData.specialPriceMax.ati))
-        };
-    }
-
     // Get filter from cookie
     const cookieFilter = decodeURIComponent(cookiesServerInstance.get('filter'));
     let filter         = {};
@@ -153,8 +132,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     }
 
     // If we change category, we remove the filters
-    if (Object.keys(filter).length && filter.category !== category._id) {
-        delete filter.priceValues;
+    if (Object.keys(filter).length && filter.category !== `${category._id}-${locale}`) {
         if (filter.conditions?.price) {
             delete filter.conditions.price;
         }
@@ -167,78 +145,30 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         if (filter.conditions?.$text) {
             delete filter.conditions.$text;
         }
-        // If there are any conditions, price filter must be present (Aquila constraint)
-        if (filter.conditions && Object.keys(filter.conditions).length) {
-            filter.conditions.price = { 
-                $or: [
-                    { 'price.ati.normal': { $gte: initProductsData.priceMin.ati, $lte: initProductsData.priceMax.ati } }, 
-                    { 'price.ati.special': { $gte: initProductsData.specialPriceMin.ati, $lte: initProductsData.specialPriceMax.ati } }
-                ]
-            };
-        }
-    }
-
-    // Detecting bad price data cookie
-    if (filter && filter.conditions?.price && initProductsData.count) {
-        const filterPriceMin    = filter.conditions.price.$or[0]['price.ati.normal'].$gte;
-        const filterPriceMax    = filter.conditions.price.$or[0]['price.ati.normal'].$lte;
-        const filterPriceSpeMin = filter.conditions.price.$or[1]['price.ati.special'].$gte;
-        const filterPriceSpeMax = filter.conditions.price.$or[1]['price.ati.special'].$lte;
-
-        // If there is no price filter selected (priceValues) and the min & max in filter price don't match the result of the initial query
-        if (!filter.priceValues) {
-            if (filterPriceMin !== initProductsData.priceMin.ati || filterPriceMax !== initProductsData.priceMax.ati || filterPriceSpeMin !== initProductsData.priceMin.ati || filterPriceSpeMax !== initProductsData.priceMax.ati) {
-                filter.conditions.price = { 
-                    $or: [
-                        { 'price.ati.normal': { $gte: initProductsData.priceMin.ati, $lte: initProductsData.priceMax.ati } }, 
-                        { 'price.ati.special': { $gte: initProductsData.specialPriceMin.ati, $lte: initProductsData.specialPriceMax.ati } }
-                    ]
-                };
-            }
-        }
-
-        // If there is a price filter selected (priceValues) and the min and max values of priceValues are outside the limits
-        if (filter.priceValues) {
-            if (filter.priceValues.min < priceEnd.min) {
-                filter.priceValues.min                                   = priceEnd.min;
-                filter.conditions.price.$or[0]['price.ati.normal'].$gte  = initProductsData.priceMin.ati;
-                filter.conditions.price.$or[1]['price.ati.special'].$gte = initProductsData.specialPriceMin.ati;
-            }
-            if (filter.priceValues.max > priceEnd.max) {
-                filter.priceValues.max                                   = priceEnd.max;
-                filter.conditions.price.$or[0]['price.ati.normal'].$lte  = initProductsData.priceMax.ati;
-                filter.conditions.price.$or[1]['price.ati.special'].$lte = initProductsData.specialPriceMax.ati;
-            }
-            if (filter.priceValues.min === priceEnd.min && filter.priceValues.max === priceEnd.max) {
-                delete filter.priceValues;
-            }
+        if (filter.conditions && !Object.keys(filter.conditions).length) {
+            delete filter.conditions;
         }
     }
 
     // Category ID for filter
-    filter.category = category._id;
+    filter.category = `${category._id}-${locale}`;
 
     // Get products
     let productsData = {};
+    let priceEnd     = { min: 0, max: 0 };
     try {
-        productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: convertFilter(cloneObj(filter)), page: requestPage, limit, sort } });
+        productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: convertFilter(filter, locale), page: requestPage, limit, sort } });
     } catch (err) {
         return { notFound: true };
     }
-    if (productsData.specialPriceMin.ati === null) {
-        productsData.specialPriceMin.ati = productsData.priceMin.ati;
-    }
-    if (productsData.specialPriceMax.ati === null) {
-        productsData.specialPriceMax.ati = productsData.priceMax.ati;
-    }
     if (productsData.count) {
-        // Conditions for filter
-        if (!filter.conditions) {
-            filter.conditions = {};
-        }
-        if (!filter.conditions.price) {
-            filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: productsData.priceMin.ati, $lte: productsData.priceMax.ati } }, { 'price.ati.special': { $gte: productsData.specialPriceMin.ati, $lte: productsData.specialPriceMax.ati } }] };
-        }
+        priceEnd = {
+            min: Math.floor(productsData.unfilteredPriceSortMin.ati),
+            max: Math.ceil(productsData.unfilteredPriceSortMax.ati)
+        };
+
+        // Detecting bad price data cookie
+        filterFix(filter, priceEnd);
     }
     cookiesServerInstance.set('filter', encodeURIComponent(JSON.stringify(filter)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
@@ -271,15 +201,14 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // URL origin
     const { origin } = absoluteUrl(req);
     
-    pageProps.props.origin           = origin;
-    pageProps.props.breadcrumb       = breadcrumb;
-    pageProps.props.category         = category;
-    pageProps.props.initProductsData = initProductsData;
-    pageProps.props.limit            = defaultLimit;
+    pageProps.props.origin     = origin;
+    pageProps.props.breadcrumb = breadcrumb;
+    pageProps.props.category   = category;
+    pageProps.props.limit      = defaultLimit;
     return pageProps;
 }
 
-export default function Category({ breadcrumb, category, initProductsData, limit, origin, error }) {
+export default function Category({ breadcrumb, category, limit, origin, error }) {
     const [message, setMessage] = useState();
     const { categoryProducts }  = useCategoryProducts();
     const { themeConfig }       = useSiteConfig();
@@ -341,7 +270,7 @@ export default function Category({ breadcrumb, category, initProductsData, limit
 
             <div className="content-section-carte">
                 {
-                    initProductsData.count === 0 && category.children.length ? (
+                    category.action !== 'catalog' ? (
                         <>
                             <div className="container w-container">
                                 <p className="paragraph-seo" dangerouslySetInnerHTML={{

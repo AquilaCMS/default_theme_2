@@ -8,10 +8,10 @@ import { dispatcher }    from '@lib/redux/dispatcher';
 import { getPageStatic } from '@aquilacms/aquila-connector/api/static';
 import { getBlocksCMS }  from '@aquilacms/aquila-connector/api/blockcms';
 import { useStaticPage } from '@lib/hooks';
-import { setLangAxios }  from '@lib/utils';
+import { initAxios }     from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     let staticPage = {};
     try {

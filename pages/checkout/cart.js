@@ -1,14 +1,14 @@
-import Link                                      from 'next/link';
-import useTranslation                            from 'next-translate/useTranslation';
-import CartItem                                  from '@components/cart/CartItem';
-import Layout                                    from '@components/layouts/Layout';
-import NextSeoCustom                             from '@components/tools/NextSeoCustom';
-import { useCart }                               from '@lib/hooks';
-import { setLangAxios, formatPrice, moduleHook } from '@lib/utils';
-import { dispatcher }                            from '@lib/redux/dispatcher';
+import Link                                   from 'next/link';
+import useTranslation                         from 'next-translate/useTranslation';
+import CartItem                               from '@components/cart/CartItem';
+import Layout                                 from '@components/layouts/Layout';
+import NextSeoCustom                          from '@components/tools/NextSeoCustom';
+import { useCart }                            from '@lib/hooks';
+import { initAxios, formatPrice, moduleHook } from '@lib/utils';
+import { dispatcher }                         from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     const pageProps = await dispatcher(locale, req, res);
     return pageProps;

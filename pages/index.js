@@ -5,10 +5,10 @@ import NextSeoCustom     from '@components/tools/NextSeoCustom';
 import BlockCMS          from '@components/common/BlockCMS';
 import { dispatcher }    from '@lib/redux/dispatcher';
 import { getPageStatic } from '@aquilacms/aquila-connector/api/static';
-import { setLangAxios }  from '@lib/utils';
+import { initAxios }     from '@lib/utils';
 
 export async function getServerSideProps({ locale, query, req, res }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     let staticPage = {};
     try {

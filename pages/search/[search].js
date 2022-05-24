@@ -1,20 +1,20 @@
-import { useState }                                            from 'react';
-import useTranslation                                          from 'next-translate/useTranslation';
-import Cookies                                                 from 'cookies';
-import Error                                                   from '@pages/_error';
-import Filters                                                 from '@components/category/Filters';
-import Pagination                                              from '@components/category/Pagination';
-import Layout                                                  from '@components/layouts/Layout';
-import NextSeoCustom                                           from '@components/tools/NextSeoCustom';
-import ProductList                                             from '@components/product/ProductList';
-import { dispatcher }                                          from '@lib/redux/dispatcher';
-import { getProducts }                                         from '@aquilacms/aquila-connector/api/product';
-import { getSiteInfo }                                         from '@aquilacms/aquila-connector/api/site';
-import { useCategoryProducts, useSiteConfig }                  from '@lib/hooks';
-import { setLangAxios, convertFilter, filterFix, unsetCookie } from '@lib/utils';
+import { useState }                                         from 'react';
+import useTranslation                                       from 'next-translate/useTranslation';
+import Cookies                                              from 'cookies';
+import Error                                                from '@pages/_error';
+import Filters                                              from '@components/category/Filters';
+import Pagination                                           from '@components/category/Pagination';
+import Layout                                               from '@components/layouts/Layout';
+import NextSeoCustom                                        from '@components/tools/NextSeoCustom';
+import ProductList                                          from '@components/product/ProductList';
+import { dispatcher }                                       from '@lib/redux/dispatcher';
+import { getProducts }                                      from '@aquilacms/aquila-connector/api/product';
+import { getSiteInfo }                                      from '@aquilacms/aquila-connector/api/site';
+import { useCategoryProducts, useSiteConfig }               from '@lib/hooks';
+import { initAxios, convertFilter, filterFix, unsetCookie } from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     const search = decodeURIComponent(params.search) || '';
 

@@ -1,17 +1,17 @@
-import { useEffect, useState }                                          from 'react';
-import Link                                                             from 'next/link';
-import { useRouter }                                                    from 'next/router';
-import useTranslation                                                   from 'next-translate/useTranslation';
-import cookie                                                           from 'cookie';
-import Layout                                                           from '@components/layouts/Layout';
-import OrderDetails                                                     from '@components/order/OrderDetails';
-import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
-import { getOrderById }                                                 from '@aquilacms/aquila-connector/api/order';
-import { setLangAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
-import { dispatcher }                                                   from '@lib/redux/dispatcher';
+import { useEffect, useState }                                       from 'react';
+import Link                                                          from 'next/link';
+import { useRouter }                                                 from 'next/router';
+import useTranslation                                                from 'next-translate/useTranslation';
+import cookie                                                        from 'cookie';
+import Layout                                                        from '@components/layouts/Layout';
+import OrderDetails                                                  from '@components/order/OrderDetails';
+import NextSeoCustom                                                 from '@components/tools/NextSeoCustom';
+import { getOrderById }                                              from '@aquilacms/aquila-connector/api/order';
+import { initAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
+import { dispatcher }                                                from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {

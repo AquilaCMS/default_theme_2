@@ -1,19 +1,19 @@
-import { useState }                                                     from 'react';
-import { useRouter }                                                    from 'next/router';
-import useTranslation                                                   from 'next-translate/useTranslation';
-import { Modal }                                                        from 'react-responsive-modal';
-import AccountLayout                                                    from '@components/account/AccountLayout';
-import BlockCMS                                                         from '@components/common/BlockCMS';
-import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
-import { getBlocksCMS }                                                 from '@aquilacms/aquila-connector/api/blockcms';
-import { dataUserExport, deleteUser }                                   from '@aquilacms/aquila-connector/api/user';
-import { setLangAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
-import { dispatcher }                                                   from '@lib/redux/dispatcher';
+import { useState }                                                  from 'react';
+import { useRouter }                                                 from 'next/router';
+import useTranslation                                                from 'next-translate/useTranslation';
+import { Modal }                                                     from 'react-responsive-modal';
+import AccountLayout                                                 from '@components/account/AccountLayout';
+import BlockCMS                                                      from '@components/common/BlockCMS';
+import NextSeoCustom                                                 from '@components/tools/NextSeoCustom';
+import { getBlocksCMS }                                              from '@aquilacms/aquila-connector/api/blockcms';
+import { dataUserExport, deleteUser }                                from '@aquilacms/aquila-connector/api/user';
+import { initAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
+import { dispatcher }                                                from '@lib/redux/dispatcher';
 
 import 'react-responsive-modal/styles.css';
 
 export async function getServerSideProps({ locale, req, res }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
     
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {

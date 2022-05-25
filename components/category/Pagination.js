@@ -14,7 +14,7 @@ export default function Pagination({ children, getProductsList }) {
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
     const { themeConfig }                           = useSiteConfig();
     const router                                    = useRouter();
-    const { t }                                     = useTranslation();
+    const { lang, t }                               = useTranslation();
 
     // Force page
     let forcePage   = false;
@@ -48,7 +48,7 @@ export default function Pagination({ children, getProductsList }) {
         }
 
         // Updating the products list
-        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page, limit, sort } });
+        const products = await getProductsList({ PostBody: { filter: convertFilter(filter, lang), page, limit, sort } });
         setCategoryProducts(products);
 
         // Updating category page
@@ -66,8 +66,6 @@ export default function Pagination({ children, getProductsList }) {
     const loadMoreData = async () => {
         setIsLoading(true);
 
-        const page = selectPage + 1;
-
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
@@ -76,8 +74,10 @@ export default function Pagination({ children, getProductsList }) {
             return router.reload();
         }
 
+        const page = selectPage + 1;
+
         // Updating the products list
-        const products         = await getProductsList({ PostBody: { filter: convertFilter(filter), page, limit, sort } });
+        const products         = await getProductsList({ PostBody: { filter: convertFilter(filter, lang), page, limit, sort } });
         categoryProducts.datas = [...categoryProducts.datas, ...products.datas];
         setCategoryProducts({ ...categoryProducts });
 

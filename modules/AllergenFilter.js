@@ -81,16 +81,6 @@ export default function AllergenFilter() {
     }, []);
 
     const filterAllergens = async (e, _id) => {
-        const checked = { ...checkedAllergens };
-
-        // Updating checked allergens
-        if (e.target.checked) {
-            checked[_id] = true;
-        } else {
-            delete checked[_id];
-        }
-        setCheckedAllergens(checked);
-
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
@@ -98,6 +88,15 @@ export default function AllergenFilter() {
         if (!filter.category) {
             return router.reload();
         }
+
+        // Updating checked allergens
+        const checked = { ...checkedAllergens };
+        if (e.target.checked) {
+            checked[_id] = true;
+        } else {
+            delete checked[_id];
+        }
+        setCheckedAllergens(checked);
 
         // Filter construction
         let filterAllergens = {};
@@ -121,7 +120,7 @@ export default function AllergenFilter() {
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+            const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter, lang), page: 1, limit, sort } });
             setCategoryProducts(products);
 
             const priceEnd = {
@@ -150,8 +149,8 @@ export default function AllergenFilter() {
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
-        // If filter empty (cookie not present), reload
-        if (!Object.keys(filter).length) {
+        // If the filter does not have the "category" property, reload
+        if (!filter.category) {
             return router.reload();
         }
 
@@ -164,7 +163,7 @@ export default function AllergenFilter() {
 
             // Updating the products list
             try {
-                const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+                const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter, lang), page: 1, limit, sort } });
                 setCategoryProducts(products);
 
                 // Back to page 1

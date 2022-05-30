@@ -42,8 +42,8 @@ export default function Pagination({ children, getProductsList }) {
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
-        // If filter empty (cookie not present), reload
-        if (!Object.keys(filter).length) {
+        // If the filter does not have the "category" property, reload
+        if (!filter.category) {
             return router.reload();
         }
 
@@ -69,8 +69,8 @@ export default function Pagination({ children, getProductsList }) {
         // Getting filter & sort from cookie
         const { filter, sort } = getFilterAndSortFromCookie();
 
-        // If filter empty (cookie not present), reload
-        if (!Object.keys(filter).length) {
+        // If the filter does not have the "category" property, reload
+        if (!filter.category) {
             return router.reload();
         }
 

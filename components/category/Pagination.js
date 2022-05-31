@@ -1,15 +1,17 @@
 
-import { useState }                                               from 'react';
-import InfiniteScroll                                             from 'react-infinite-scroll-component';
-import ReactPaginate                                              from 'react-paginate';
-import { useRouter }                                              from 'next/router';
-import useTranslation                                             from 'next-translate/useTranslation';
-import Button                                                     from '@components/ui/Button';
-import { useSelectPage, useCategoryProducts, useSiteConfig }      from '@lib/hooks';
-import { getFilterAndSortFromCookie, convertFilter, unsetCookie } from '@lib/utils';
+import { useEffect, useState }                               from 'react';
+import InfiniteScroll                                        from 'react-infinite-scroll-component';
+import ReactPaginate                                         from 'react-paginate';
+import { useRouter }                                         from 'next/router';
+import useTranslation                                        from 'next-translate/useTranslation';
+import Button                                                from '@components/ui/Button';
+import { useSelectPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
+import { getBodyRequestProductsFromCookie, convertFilter }   from '@lib/utils';
 
 export default function Pagination({ children, getProductsList }) {
+    const [pageCount, setPageCount]                 = useState(0);
     const [isLoading, setIsLoading]                 = useState(false);
+    const [message, setMessage]                     = useState();
     const { selectPage, setSelectPage }             = useSelectPage();
     const { categoryProducts, setCategoryProducts } = useCategoryProducts();
     const { themeConfig }                           = useSiteConfig();
@@ -24,7 +26,7 @@ export default function Pagination({ children, getProductsList }) {
     }
 
     // Getting Limit for request
-    const limit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+    const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
 
     // Getting pagination mode (0=normal | 1=infinite scroll | 2=infinite scroll with button)
     const paginationMode = themeConfig?.values?.find(t => t.key === 'infiniteScroll')?.value || 0;
@@ -32,65 +34,121 @@ export default function Pagination({ children, getProductsList }) {
     // Getting URL page
     const [url] = router.asPath.split('?');
 
-    const handlePageClick = async (data) => {
-        const page = data.selected + 1;
+    useEffect(() => {
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
-        if (forcePage) {
-            return router.push(`${url}?page=${page}`);
+        let limit = defaultLimit;
+        if (bodyRequestProducts.limit) {
+            limit = bodyRequestProducts.limit;
         }
 
-        // Getting filter & sort from cookie
-        const { filter, sort } = getFilterAndSortFromCookie();
+        const count = Math.ceil(categoryProducts.count / limit);
+        setPageCount(count);
+    }, [url, categoryProducts]);
 
-        // If the filter does not have the "category" property, reload
-        if (!filter.category) {
+    const handlePageClick = async (data) => {
+        setMessage();
+
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
+
+        // If the body request cookie does not have the validity key property, reload
+        if (!bodyRequestProducts.key) {
             return router.reload();
         }
 
-        // Updating the products list
-        const products = await getProductsList({ PostBody: { filter: convertFilter(filter, lang), page, limit, sort } });
-        setCategoryProducts(products);
+        // Body request : filter
+        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
 
-        // Updating category page
-        setSelectPage(page);
-
-        // Setting category page cookie
-        if (page > 1) {
-            document.cookie = 'page=' + JSON.stringify({ url, page }) + '; path=/; max-age=43200;';
+        // Body request : page
+        const pageRequest = data.selected + 1;
+        if (forcePage) {
+            return router.push(`${url}?page=${pageRequest}`);
+        }
+        if (pageRequest > 1) {
+            bodyRequestProducts.page = pageRequest;
         } else {
-            // Page 1... so useless "page" cookie
-            unsetCookie('page');
+            delete bodyRequestProducts.page;
+        }
+
+        // Body request : limit
+        let limitRequest = defaultLimit;
+        if (bodyRequestProducts.limit) {
+            limitRequest = bodyRequestProducts.limit;
+        }
+
+        // Body request : sort
+        let sortRequest = { sortWeight: -1 };
+        if (bodyRequestProducts.sort) {
+            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+            sortRequest                  = { [sortField]: parseInt(sortValue) };
+        }
+
+        // Updating the products list
+        try {
+            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
+            setCategoryProducts(products);
+
+            // Updating category page
+            setSelectPage(pageRequest);
+
+            // Setting body request cookie
+            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
     };
 
     const loadMoreData = async () => {
+        setMessage();
         setIsLoading(true);
 
-        // Getting filter & sort from cookie
-        const { filter, sort } = getFilterAndSortFromCookie();
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
-        // If the filter does not have the "category" property, reload
-        if (!filter.category) {
+        // If the body request cookie does not have the validity key property, reload
+        if (!bodyRequestProducts.key) {
             return router.reload();
         }
 
-        const page = selectPage + 1;
+        // Body request : filter
+        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
+
+        // Body request : page
+        const pageRequest        = selectPage + 1;
+        bodyRequestProducts.page = pageRequest;
+
+        // Body request : limit
+        let limitRequest = defaultLimit;
+        if (bodyRequestProducts.limit) {
+            limitRequest = bodyRequestProducts.limit;
+        }
+
+        // Body request : sort
+        let sortRequest = { sortWeight: -1 };
+        if (bodyRequestProducts.sort) {
+            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+            sortRequest                  = { [sortField]: parseInt(sortValue) };
+        }
 
         // Updating the products list
-        const products         = await getProductsList({ PostBody: { filter: convertFilter(filter, lang), page, limit, sort } });
-        categoryProducts.datas = [...categoryProducts.datas, ...products.datas];
-        setCategoryProducts({ ...categoryProducts });
+        try {
+            const products         = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
+            categoryProducts.datas = [...categoryProducts.datas, ...products.datas];
+            setCategoryProducts({ ...categoryProducts });
 
-        // Updating category page
-        setSelectPage(page);
+            // Updating category page
+            setSelectPage(pageRequest);
 
-        // Setting category page cookie
-        document.cookie = 'page=' + JSON.stringify({ url, page }) + '; path=/; max-age=43200;';
-
-        setIsLoading(false);
+            // Setting body request cookie
+            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
+        }
     };
-
-    const pageCount = Math.ceil(categoryProducts.count / limit);
 
     return (
         <div className="tab-pane-wrap w-tab-pane w--tab-active">
@@ -143,7 +201,15 @@ export default function Pagination({ children, getProductsList }) {
                     />
                 )
             }
-            
+            {
+                message && (
+                    <div className={`w-commerce-commerce${message.type}`}>
+                        <div>
+                            {message.message}
+                        </div>
+                    </div>
+                )
+            }
         </div>
     );
 }

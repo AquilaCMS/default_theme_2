@@ -1,25 +1,25 @@
-import { useState }                                                     from 'react';
-import absoluteUrl                                                      from 'next-absolute-url';
-import Head                                                             from 'next/head';
-import { useRouter }                                                    from 'next/router';
-import getT                                                             from 'next-translate/getT';
-import useTranslation                                                   from 'next-translate/useTranslation';
-import Cookies                                                          from 'cookies';
-import Error                                                            from '@pages/_error';
-import Filters                                                          from '@components/category/Filters';
-import Pagination                                                       from '@components/category/Pagination';
-import Layout                                                           from '@components/layouts/Layout';
-import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
-import Breadcrumb                                                       from '@components/navigation/Breadcrumb';
-import CategoryList                                                     from '@components/category/CategoryList';
-import ProductList                                                      from '@components/product/ProductList';
-import MenuCategories                                                   from '@components/navigation/MenuCategories';
-import { dispatcher }                                                   from '@lib/redux/dispatcher';
-import { getBreadcrumb }                                                from '@aquilacms/aquila-connector/api/breadcrumb';
-import { getCategory, getCategoryProducts }                             from '@aquilacms/aquila-connector/api/category';
-import { getSiteInfo }                                                  from '@aquilacms/aquila-connector/api/site';
-import { useCategoryProducts, useSiteConfig }                           from '@lib/hooks';
-import { initAxios, convertFilter, filterFix, moduleHook, unsetCookie } from '@lib/utils';
+import { useState }                                                                               from 'react';
+import absoluteUrl                                                                                from 'next-absolute-url';
+import Head                                                                                       from 'next/head';
+import { useRouter }                                                                              from 'next/router';
+import getT                                                                                       from 'next-translate/getT';
+import useTranslation                                                                             from 'next-translate/useTranslation';
+import Cookies                                                                                    from 'cookies';
+import Error                                                                                      from '@pages/_error';
+import Filters                                                                                    from '@components/category/Filters';
+import Pagination                                                                                 from '@components/category/Pagination';
+import Layout                                                                                     from '@components/layouts/Layout';
+import NextSeoCustom                                                                              from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                                                 from '@components/navigation/Breadcrumb';
+import CategoryList                                                                               from '@components/category/CategoryList';
+import ProductList                                                                                from '@components/product/ProductList';
+import MenuCategories                                                                             from '@components/navigation/MenuCategories';
+import { dispatcher }                                                                             from '@lib/redux/dispatcher';
+import { getBreadcrumb }                                                                          from '@aquilacms/aquila-connector/api/breadcrumb';
+import { getCategory, getCategoryProducts }                                                       from '@aquilacms/aquila-connector/api/category';
+import { getSiteInfo }                                                                            from '@aquilacms/aquila-connector/api/site';
+import { useCategoryProducts, useSiteConfig }                                                     from '@lib/hooks';
+import { initAxios, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix, moduleHook } from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     initAxios(locale, req, res);
@@ -68,96 +68,99 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Get cookie server instance
     const cookiesServerInstance = new Cookies(req, res);
 
-    // Get page from GET param or cookie
+    // Validity key for body request cookie
+    const key = `${category._id}-${locale}`;
+
+    // Get body request from cookie
+    const bodyRequestProducts = getBodyRequestProductsFromCookie(cookiesServerInstance);
+
+    // If validity key is different (=> change category), we remove filter & page
+    if (bodyRequestProducts.key !== key) {
+        if (bodyRequestProducts.filter) {
+            if (bodyRequestProducts.filter.price) {
+                delete bodyRequestProducts.filter.price;
+            }
+            if (bodyRequestProducts.filter.attributes) {
+                delete bodyRequestProducts.filter.attributes;
+            }
+            if (bodyRequestProducts.filter.pictos) {
+                delete bodyRequestProducts.filter.pictos;
+            }
+            if (bodyRequestProducts.filter.$text) {
+                delete bodyRequestProducts.filter.$text;
+            }
+            if (!Object.keys(bodyRequestProducts.filter).length) {
+                delete bodyRequestProducts.filter;
+            }
+        }
+
+        if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
+        }
+    }
+
+    // Body request : filter
+    let filterRequest = {};
+    if (bodyRequestProducts.filter) {
+        filterRequest = convertFilter(bodyRequestProducts.filter, locale);
+    }
+
+    // Body request : page (from GET param or cookie)
     // Important : the "page" cookie is used to remember the page when you consult a product and want to go back,
     // we can't do it with Redux because it is reinitialized at each change of page unlike the cookie available on the server side.
     let page        = 1;
     let forcePage   = false;
-    const [url]     = resolvedUrl.split('?');
     const queryPage = Number(query.page);
     // If GET "page" param exists, we take its value first
     if (queryPage) {
         page = queryPage;
         if (page > 1) {
             // Ascertainment : "httpOnly: false" is important otherwise we cannot correctly delete the cookie afterwards
-            cookiesServerInstance.set('page', JSON.stringify({ url, page }), { path: '/', httpOnly: false, maxAge: 43200000 });
-        } else {
-            unsetCookie('page', cookiesServerInstance);
+            bodyRequestProducts.page = page;
+        } else if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
         }
         forcePage = true;
     } else {
-        const cookiePage = cookiesServerInstance.get('page');
-        // If cookie page exists
-        if (cookiePage) {
-            try {
-                const dataPage = JSON.parse(cookiePage);
-                // We take the value only if category ID matches
-                // Otherwise, we delete "page" cookie
-                if (dataPage.url === url) {
-                    page = dataPage.page;
-                } else {
-                    unsetCookie('page', cookiesServerInstance);
-                }
-            } catch (err) {
-                unsetCookie('page', cookiesServerInstance);
-            }
+        // We take the value only if validity key of body request cookie matches
+        // Otherwise, we delete "page" cookie
+        if (bodyRequestProducts.key === key) {
+            page = bodyRequestProducts.page;
         }
     }
 
-    // Get limit (count of products per pages)
-    const defaultLimit = siteInfo.themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
-    let limit          = defaultLimit;
+    // Body request : limit (from cookie or theme config)
+    let defaultLimit = 1;
+    if (bodyRequestProducts.limit) {
+        defaultLimit = bodyRequestProducts.limit;
+    } else {
+        defaultLimit = siteInfo.themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+    }
+    let limitRequest = defaultLimit;
 
-    // If infinite scroll activated (infiniteScroll >= 1 & no force page) and pagination > 1
+    // Body request : sort
+    let sortRequest = { sortWeight: -1 };
+    if (bodyRequestProducts.sort) {
+        const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+        sortRequest                  = { [sortField]: parseInt(sortValue) };
+    }
+
+    // Special process if infinite scroll activated (infiniteScroll >= 1 & no force page) and pagination > 1
     // We load all products loaded via infinite scroll
-    let requestPage = page;
+    let pageRequest = page;
     if (infiniteScroll && !forcePage && page > 1) {
-        requestPage = 1;
-        limit       = page * limit;
+        pageRequest  = 1;
+        limitRequest = page * limitRequest;
     }
 
-    // Get filter from cookie
-    const cookieFilter = decodeURIComponent(cookiesServerInstance.get('filter'));
-    let filter         = {};
-    let sort           = { sortWeight: -1 };
-    if (cookieFilter) {
-        try {
-            filter = JSON.parse(cookieFilter);
-            if (filter.sort) {
-                sort = filter.sort;
-            }
-        } catch (err) {
-            unsetCookie('filter', cookiesServerInstance);
-        }
-    }
-
-    // If we change category, we remove the filters
-    if (Object.keys(filter).length && filter.category !== `${category._id}-${locale}`) {
-        if (filter.conditions?.price) {
-            delete filter.conditions.price;
-        }
-        if (filter.conditions?.attributes) {
-            delete filter.conditions.attributes;
-        }
-        if (filter.conditions?.pictos) {
-            delete filter.conditions.pictos;
-        }
-        if (filter.conditions?.$text) {
-            delete filter.conditions.$text;
-        }
-        if (filter.conditions && !Object.keys(filter.conditions).length) {
-            delete filter.conditions;
-        }
-    }
-
-    // Category ID for filter
-    filter.category = `${category._id}-${locale}`;
+    // Using category ID & locale (lang) for validity key of body request cookie
+    bodyRequestProducts.key = key;
 
     // Get products
     let productsData = {};
     let priceEnd     = { min: 0, max: 0 };
     try {
-        productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: convertFilter(filter, locale), page: requestPage, limit, sort } });
+        productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
     } catch (err) {
         return { notFound: true };
     }
@@ -167,10 +170,10 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             max: Math.ceil(productsData.unfilteredPriceSortMax.ati)
         };
 
-        // Detecting bad price data cookie
-        filterFix(filter, priceEnd);
+        // Detecting bad price end in price filter of body request cookie
+        filterPriceFix(bodyRequestProducts, priceEnd);
     }
-    cookiesServerInstance.set('filter', encodeURIComponent(JSON.stringify(filter)), { path: '/', httpOnly: false, maxAge: 43200000 });
+    cookiesServerInstance.set('bodyRequestProducts', encodeURIComponent(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [
         {

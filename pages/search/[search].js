@@ -110,16 +110,17 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
     } catch (err) {
         return { notFound: true };
     }
-    if (productsData.count) {
-        priceEnd = {
-            min: Math.floor(productsData.unfilteredPriceSortMin.ati),
-            max: Math.ceil(productsData.unfilteredPriceSortMax.ati)
-        };
 
-        // Detecting bad price end in price filter of body request cookie
-        filterPriceFix(bodyRequestProducts, priceEnd);
-    }
+    // Price end (min & max)
+    priceEnd = {
+        min: Math.floor(productsData.unfilteredPriceSortMin.ati),
+        max: Math.ceil(productsData.unfilteredPriceSortMax.ati)
+    };
 
+    // Detecting bad price end in price filter of body request cookie
+    filterPriceFix(bodyRequestProducts, priceEnd);
+
+    // Set body request cookie
     cookiesServerInstance.set('bodyRequestProducts', encodeURIComponent(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [

@@ -125,6 +125,8 @@ export default function Filters({ filtersData, getProductsList }) {
         if (bodyRequestProducts.sort) {
             const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
             sortRequest                  = { [sortField]: parseInt(sortValue) };
+        } else {
+            setSort('sortWeight|-1');
         }
 
         // Updating the products list
@@ -229,6 +231,8 @@ export default function Filters({ filtersData, getProductsList }) {
         if (bodyRequestProducts.sort) {
             const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
             sortRequest                  = { [sortField]: parseInt(sortValue) };
+        } else {
+            setSort('sortWeight|-1');
         }
 
         // Updating the products list
@@ -265,9 +269,8 @@ export default function Filters({ filtersData, getProductsList }) {
                 }
             }
 
-            // If no price filter in cookie, reset priceValue
+            // If no price filter in cookie, reset priceValue with price end
             if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
-                // Setting the new price values
                 setPriceValue([priceEnd.min, priceEnd.max]);
             }
 
@@ -336,6 +339,8 @@ export default function Filters({ filtersData, getProductsList }) {
         if (bodyRequestProducts.sort) {
             const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
             sortRequest                  = { [sortField]: parseInt(sortValue) };
+        } else {
+            setSort('sortWeight|-1');
         }
 
         // Updating the products list
@@ -372,9 +377,8 @@ export default function Filters({ filtersData, getProductsList }) {
                 }
             }
 
-            // If no price filter in cookie, reset priceValue
+            // If no price filter in cookie, reset priceValue with price end
             if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
-                // Setting the new price values
                 setPriceValue([priceEnd.min, priceEnd.max]);
             }
 
@@ -427,6 +431,8 @@ export default function Filters({ filtersData, getProductsList }) {
         if (bodyRequestProducts.sort) {
             const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
             sortRequest                  = { [sortField]: parseInt(sortValue) };
+        } else {
+            setSort('sortWeight|-1');
         }
 
         // Updating the products list
@@ -517,9 +523,8 @@ export default function Filters({ filtersData, getProductsList }) {
                 }
             }
 
-            // If no price filter in cookie, reset priceValue
+            // If no price filter in cookie, reset priceValue with price end
             if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
-                // Setting the new price values
                 setPriceValue([priceEnd.min, priceEnd.max]);
             }
 

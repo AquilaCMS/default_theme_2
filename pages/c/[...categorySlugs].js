@@ -86,8 +86,8 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
             if (bodyRequestProducts.filter.pictos) {
                 delete bodyRequestProducts.filter.pictos;
             }
-            if (bodyRequestProducts.filter.$text) {
-                delete bodyRequestProducts.filter.$text;
+            if (bodyRequestProducts.filter.search) {
+                delete bodyRequestProducts.filter.search;
             }
             if (!Object.keys(bodyRequestProducts.filter).length) {
                 delete bodyRequestProducts.filter;

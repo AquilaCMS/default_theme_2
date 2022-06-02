@@ -1,22 +1,27 @@
-import { useState }                                                                   from 'react';
-import useTranslation                                                                 from 'next-translate/useTranslation';
-import Cookies                                                                        from 'cookies';
-import Error                                                                          from '@pages/_error';
-import Filters                                                                        from '@components/category/Filters';
-import Pagination                                                                     from '@components/category/Pagination';
-import Layout                                                                         from '@components/layouts/Layout';
-import NextSeoCustom                                                                  from '@components/tools/NextSeoCustom';
-import ProductList                                                                    from '@components/product/ProductList';
-import { dispatcher }                                                                 from '@lib/redux/dispatcher';
-import { getProducts }                                                                from '@aquilacms/aquila-connector/api/product';
-import { getSiteInfo }                                                                from '@aquilacms/aquila-connector/api/site';
-import { useCategoryProducts, useSiteConfig }                                         from '@lib/hooks';
-import { initAxios, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix } from '@lib/utils';
+import { useState }                                                                                   from 'react';
+import useTranslation                                                                                 from 'next-translate/useTranslation';
+import Cookies                                                                                        from 'cookies';
+import Error                                                                                          from '@pages/_error';
+import Filters                                                                                        from '@components/category/Filters';
+import Pagination                                                                                     from '@components/category/Pagination';
+import Layout                                                                                         from '@components/layouts/Layout';
+import NextSeoCustom                                                                                  from '@components/tools/NextSeoCustom';
+import ProductList                                                                                    from '@components/product/ProductList';
+import { dispatcher }                                                                                 from '@lib/redux/dispatcher';
+import { getProducts }                                                                                from '@aquilacms/aquila-connector/api/product';
+import { getSiteInfo }                                                                                from '@aquilacms/aquila-connector/api/site';
+import { useCategoryProducts, useSiteConfig }                                                         from '@lib/hooks';
+import { initAxios, serverRedirect, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix } from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res }) {
     initAxios(locale, req, res);
 
-    const search = decodeURIComponent(params.search) || '';
+    const search = params.search.trim() || '';
+
+    // Min 2 caracters
+    if (search.length < 2) {
+        return serverRedirect('/');
+    }
 
     // Enable / Disable infinite scroll
     let infiniteScroll = false;
@@ -48,8 +53,8 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
     if (!bodyRequestProducts.filter) {
         bodyRequestProducts.filter = {};
     }
-    bodyRequestProducts.filter.$text = { $search: search };
-    const filterRequest              = convertFilter(bodyRequestProducts.filter, locale);
+    bodyRequestProducts.filter.search = search;
+    const filterRequest               = convertFilter(bodyRequestProducts.filter, locale);
 
     // Body request : page (from GET param or cookie)
     // Important : the "page" cookie is used to remember the page when you consult a product and want to go back,

@@ -1,28 +1,29 @@
-import { useState }                                                       from 'react';
-import absoluteUrl                                                        from 'next-absolute-url';
-import Head                                                               from 'next/head';
-import { useRouter }                                                      from 'next/router';
-import getT                                                               from 'next-translate/getT';
-import useTranslation                                                     from 'next-translate/useTranslation';
-import Cookies                                                            from 'cookies';
-import Error                                                              from '@pages/_error';
-import Filters                                                            from '@components/category/Filters';
-import Pagination                                                         from '@components/category/Pagination';
-import Layout                                                             from '@components/layouts/Layout';
-import NextSeoCustom                                                      from '@components/tools/NextSeoCustom';
-import Breadcrumb                                                         from '@components/navigation/Breadcrumb';
-import CategoryList                                                       from '@components/category/CategoryList';
-import ProductList                                                        from '@components/product/ProductList';
-import MenuCategories                                                     from '@components/navigation/MenuCategories';
-import { dispatcher }                                                     from '@lib/redux/dispatcher';
-import { getBreadcrumb }                                                  from '@aquilacms/aquila-connector/api/breadcrumb';
-import { getCategory, getCategoryProducts }                               from '@aquilacms/aquila-connector/api/category';
-import { getSiteInfo }                                                    from '@aquilacms/aquila-connector/api/site';
-import { useCategoryProducts, useSiteConfig }                             from '@lib/hooks';
-import { setLangAxios, cloneObj, convertFilter, moduleHook, unsetCookie } from '@lib/utils';
+import { useState }                                                                               from 'react';
+import absoluteUrl                                                                                from 'next-absolute-url';
+import Head                                                                                       from 'next/head';
+import { useRouter }                                                                              from 'next/router';
+import getT                                                                                       from 'next-translate/getT';
+import useTranslation                                                                             from 'next-translate/useTranslation';
+import parse                                                                                      from 'html-react-parser';
+import Cookies                                                                                    from 'cookies';
+import Error                                                                                      from '@pages/_error';
+import Filters                                                                                    from '@components/category/Filters';
+import Pagination                                                                                 from '@components/category/Pagination';
+import Layout                                                                                     from '@components/layouts/Layout';
+import NextSeoCustom                                                                              from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                                                 from '@components/navigation/Breadcrumb';
+import CategoryList                                                                               from '@components/category/CategoryList';
+import ProductList                                                                                from '@components/product/ProductList';
+import MenuCategories                                                                             from '@components/navigation/MenuCategories';
+import { dispatcher }                                                                             from '@lib/redux/dispatcher';
+import { getBreadcrumb }                                                                          from '@aquilacms/aquila-connector/api/breadcrumb';
+import { getCategory, getCategoryProducts }                                                       from '@aquilacms/aquila-connector/api/category';
+import { getSiteInfo }                                                                            from '@aquilacms/aquila-connector/api/site';
+import { useCategoryProducts, useSiteConfig }                                                     from '@lib/hooks';
+import { initAxios, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix, moduleHook } from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     const categorySlugs = Array.isArray(params.categorySlugs) ? params.categorySlugs : [params.categorySlugs];
     const t             = await getT(locale, 'common');
@@ -68,179 +69,114 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Get cookie server instance
     const cookiesServerInstance = new Cookies(req, res);
 
-    // Get page from GET param or cookie
+    // Validity key for body request cookie
+    const key = `${category._id}-${locale}`;
+
+    // Get body request from cookie
+    const bodyRequestProducts = getBodyRequestProductsFromCookie(cookiesServerInstance);
+
+    // If validity key is different (=> change category), we remove filter & page
+    if (bodyRequestProducts.key !== key) {
+        if (bodyRequestProducts.filter) {
+            if (bodyRequestProducts.filter.price) {
+                delete bodyRequestProducts.filter.price;
+            }
+            if (bodyRequestProducts.filter.attributes) {
+                delete bodyRequestProducts.filter.attributes;
+            }
+            if (bodyRequestProducts.filter.pictos) {
+                delete bodyRequestProducts.filter.pictos;
+            }
+            if (bodyRequestProducts.filter.search) {
+                delete bodyRequestProducts.filter.search;
+            }
+            if (!Object.keys(bodyRequestProducts.filter).length) {
+                delete bodyRequestProducts.filter;
+            }
+        }
+
+        if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
+        }
+    }
+
+    // Body request : filter
+    let filterRequest = {};
+    if (bodyRequestProducts.filter) {
+        filterRequest = convertFilter(bodyRequestProducts.filter, locale);
+    }
+
+    // Body request : page (from GET param or cookie)
     // Important : the "page" cookie is used to remember the page when you consult a product and want to go back,
     // we can't do it with Redux because it is reinitialized at each change of page unlike the cookie available on the server side.
     let page        = 1;
     let forcePage   = false;
-    const [url]     = resolvedUrl.split('?');
     const queryPage = Number(query.page);
     // If GET "page" param exists, we take its value first
     if (queryPage) {
         page = queryPage;
         if (page > 1) {
             // Ascertainment : "httpOnly: false" is important otherwise we cannot correctly delete the cookie afterwards
-            cookiesServerInstance.set('page', JSON.stringify({ url, page }), { path: '/', httpOnly: false, maxAge: 43200000 });
-        } else {
-            unsetCookie('page', cookiesServerInstance);
+            bodyRequestProducts.page = page;
+        } else if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
         }
         forcePage = true;
     } else {
-        const cookiePage = cookiesServerInstance.get('page');
-        // If cookie page exists
-        if (cookiePage) {
-            try {
-                const dataPage = JSON.parse(cookiePage);
-                // We take the value only if category ID matches
-                // Otherwise, we delete "page" cookie
-                if (dataPage.url === url) {
-                    page = dataPage.page;
-                } else {
-                    unsetCookie('page', cookiesServerInstance);
-                }
-            } catch (err) {
-                unsetCookie('page', cookiesServerInstance);
-            }
+        // We take the value only if validity key of body request cookie matches
+        // Otherwise, we delete "page" cookie
+        if (bodyRequestProducts.key === key) {
+            page = bodyRequestProducts.page;
         }
     }
 
-    // Get limit (count of products per pages)
-    const defaultLimit = siteInfo.themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
-    let limit          = defaultLimit;
+    // Body request : limit (from cookie or theme config)
+    let defaultLimit = 1;
+    if (bodyRequestProducts.limit) {
+        defaultLimit = bodyRequestProducts.limit;
+    } else {
+        defaultLimit = siteInfo.themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+    }
+    let limitRequest = defaultLimit;
 
-    // If infinite scroll activated (infiniteScroll >= 1 & no force page) and pagination > 1
+    // Body request : sort
+    let sortRequest = { sortWeight: -1 };
+    if (bodyRequestProducts.sort) {
+        const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+        sortRequest                  = { [sortField]: parseInt(sortValue) };
+    }
+
+    // Special process if infinite scroll activated (infiniteScroll >= 1 & no force page) and pagination > 1
     // We load all products loaded via infinite scroll
-    let requestPage = page;
+    let pageRequest = page;
     if (infiniteScroll && !forcePage && page > 1) {
-        requestPage = 1;
-        limit       = page * limit;
+        pageRequest  = 1;
+        limitRequest = page * limitRequest;
     }
 
-    // "Empty" request to retrieve price limits
-    let initProductsData = {};
-    let priceEnd         = { min: 0, max: 0 };
-    try {
-        initProductsData = await getCategoryProducts('', category._id, locale, { PostBody: { page: 1, limit: 1 } });
-    } catch (err) {
-        return { notFound: true };
-    }
-    if (initProductsData.specialPriceMin.ati === null) {
-        initProductsData.specialPriceMin.ati = initProductsData.priceMin.ati;
-    }
-    if (initProductsData.specialPriceMax.ati === null) {
-        initProductsData.specialPriceMax.ati = initProductsData.priceMax.ati;
-    }
-    if (initProductsData.count) {
-        priceEnd = {
-            min: Math.floor(Math.min(initProductsData.priceMin.ati, initProductsData.specialPriceMin.ati)),
-            max: Math.ceil(Math.max(initProductsData.priceMax.ati, initProductsData.specialPriceMax.ati))
-        };
-    }
-
-    // Get filter from cookie
-    const cookieFilter = decodeURIComponent(cookiesServerInstance.get('filter'));
-    let filter         = {};
-    let sort           = { sortWeight: -1 };
-    if (cookieFilter) {
-        try {
-            filter = JSON.parse(cookieFilter);
-            if (filter.sort) {
-                sort = filter.sort;
-            }
-        } catch (err) {
-            unsetCookie('filter', cookiesServerInstance);
-        }
-    }
-
-    // If we change category, we remove the filters
-    if (Object.keys(filter).length && filter.category !== category._id) {
-        delete filter.priceValues;
-        if (filter.conditions?.price) {
-            delete filter.conditions.price;
-        }
-        if (filter.conditions?.attributes) {
-            delete filter.conditions.attributes;
-        }
-        if (filter.conditions?.pictos) {
-            delete filter.conditions.pictos;
-        }
-        if (filter.conditions?.$text) {
-            delete filter.conditions.$text;
-        }
-        // If there are any conditions, price filter must be present (Aquila constraint)
-        if (filter.conditions && Object.keys(filter.conditions).length) {
-            filter.conditions.price = { 
-                $or: [
-                    { 'price.ati.normal': { $gte: initProductsData.priceMin.ati, $lte: initProductsData.priceMax.ati } }, 
-                    { 'price.ati.special': { $gte: initProductsData.specialPriceMin.ati, $lte: initProductsData.specialPriceMax.ati } }
-                ]
-            };
-        }
-    }
-
-    // Detecting bad price data cookie
-    if (filter && filter.conditions?.price && initProductsData.count) {
-        const filterPriceMin    = filter.conditions.price.$or[0]['price.ati.normal'].$gte;
-        const filterPriceMax    = filter.conditions.price.$or[0]['price.ati.normal'].$lte;
-        const filterPriceSpeMin = filter.conditions.price.$or[1]['price.ati.special'].$gte;
-        const filterPriceSpeMax = filter.conditions.price.$or[1]['price.ati.special'].$lte;
-
-        // If there is no price filter selected (priceValues) and the min & max in filter price don't match the result of the initial query
-        if (!filter.priceValues) {
-            if (filterPriceMin !== initProductsData.priceMin.ati || filterPriceMax !== initProductsData.priceMax.ati || filterPriceSpeMin !== initProductsData.priceMin.ati || filterPriceSpeMax !== initProductsData.priceMax.ati) {
-                filter.conditions.price = { 
-                    $or: [
-                        { 'price.ati.normal': { $gte: initProductsData.priceMin.ati, $lte: initProductsData.priceMax.ati } }, 
-                        { 'price.ati.special': { $gte: initProductsData.specialPriceMin.ati, $lte: initProductsData.specialPriceMax.ati } }
-                    ]
-                };
-            }
-        }
-
-        // If there is a price filter selected (priceValues) and the min and max values of priceValues are outside the limits
-        if (filter.priceValues) {
-            if (filter.priceValues.min < priceEnd.min) {
-                filter.priceValues.min                                   = priceEnd.min;
-                filter.conditions.price.$or[0]['price.ati.normal'].$gte  = initProductsData.priceMin.ati;
-                filter.conditions.price.$or[1]['price.ati.special'].$gte = initProductsData.specialPriceMin.ati;
-            }
-            if (filter.priceValues.max > priceEnd.max) {
-                filter.priceValues.max                                   = priceEnd.max;
-                filter.conditions.price.$or[0]['price.ati.normal'].$lte  = initProductsData.priceMax.ati;
-                filter.conditions.price.$or[1]['price.ati.special'].$lte = initProductsData.specialPriceMax.ati;
-            }
-            if (filter.priceValues.min === priceEnd.min && filter.priceValues.max === priceEnd.max) {
-                delete filter.priceValues;
-            }
-        }
-    }
-
-    // Category ID for filter
-    filter.category = category._id;
+    // Using category ID & locale (lang) for validity key of body request cookie
+    bodyRequestProducts.key = key;
 
     // Get products
     let productsData = {};
+    let priceEnd     = { min: 0, max: 0 };
     try {
-        productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: convertFilter(cloneObj(filter)), page: requestPage, limit, sort } });
+        productsData = await getCategoryProducts('', category._id, locale, { PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
     } catch (err) {
         return { notFound: true };
     }
-    if (productsData.specialPriceMin.ati === null) {
-        productsData.specialPriceMin.ati = productsData.priceMin.ati;
-    }
-    if (productsData.specialPriceMax.ati === null) {
-        productsData.specialPriceMax.ati = productsData.priceMax.ati;
-    }
-    if (productsData.count) {
-        // Conditions for filter
-        if (!filter.conditions) {
-            filter.conditions = {};
-        }
-        if (!filter.conditions.price) {
-            filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: productsData.priceMin.ati, $lte: productsData.priceMax.ati } }, { 'price.ati.special': { $gte: productsData.specialPriceMin.ati, $lte: productsData.specialPriceMax.ati } }] };
-        }
-    }
-    cookiesServerInstance.set('filter', encodeURIComponent(JSON.stringify(filter)), { path: '/', httpOnly: false, maxAge: 43200000 });
+
+    // Price end (min & max)
+    priceEnd = {
+        min: Math.floor(productsData.unfilteredPriceSortMin.ati),
+        max: Math.ceil(productsData.unfilteredPriceSortMax.ati)
+    };
+
+    // Detecting bad price end in price filter of body request cookie
+    filterPriceFix(bodyRequestProducts, priceEnd);
+
+    // Set body request cookie
+    cookiesServerInstance.set('bodyRequestProducts', encodeURIComponent(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [
         {
@@ -271,15 +207,14 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // URL origin
     const { origin } = absoluteUrl(req);
     
-    pageProps.props.origin           = origin;
-    pageProps.props.breadcrumb       = breadcrumb;
-    pageProps.props.category         = category;
-    pageProps.props.initProductsData = initProductsData;
-    pageProps.props.limit            = defaultLimit;
+    pageProps.props.origin     = origin;
+    pageProps.props.breadcrumb = breadcrumb;
+    pageProps.props.category   = category;
+    pageProps.props.limit      = defaultLimit;
     return pageProps;
 }
 
-export default function Category({ breadcrumb, category, initProductsData, limit, origin, error }) {
+export default function Category({ breadcrumb, category, limit, origin, error }) {
     const [message, setMessage] = useState();
     const { categoryProducts }  = useCategoryProducts();
     const { themeConfig }       = useSiteConfig();
@@ -329,9 +264,7 @@ export default function Category({ breadcrumb, category, initProductsData, limit
                 }
             </Head>
 
-            <div dangerouslySetInnerHTML={{
-                __html: category.extraText,
-            }} />
+            <div>{parse(category.extraText || '')}</div>
 
             {
                 moduleHook('category-top')
@@ -341,12 +274,10 @@ export default function Category({ breadcrumb, category, initProductsData, limit
 
             <div className="content-section-carte">
                 {
-                    initProductsData.count === 0 && category.children.length ? (
+                    category.action !== 'catalog' ? (
                         <>
                             <div className="container w-container">
-                                <p className="paragraph-seo" dangerouslySetInnerHTML={{
-                                    __html: category.extraText2,
-                                }} />
+                                <p className="paragraph-seo">{parse(category.extraText2 || '')}</p>
                             </div>
                             <div className="container-col">
                                 <div className="tabs w-tabs">
@@ -363,9 +294,7 @@ export default function Category({ breadcrumb, category, initProductsData, limit
                     ) : (
                         <>
                             <div className="container w-container">
-                                <p className="paragraph-seo" dangerouslySetInnerHTML={{
-                                    __html: category.extraText2,
-                                }} />
+                                <p className="paragraph-seo">{parse(category.extraText2 || '')}</p>
                                 {
                                     moduleHook('category-top-list')
                                 }
@@ -403,9 +332,7 @@ export default function Category({ breadcrumb, category, initProductsData, limit
                 }
                 
                 <div className="container w-container">
-                    <p className="paragraph-seo" dangerouslySetInnerHTML={{
-                        __html: category.extraText3,
-                    }} />
+                    <p className="paragraph-seo">{parse(category.extraText3 || '')}</p>
                 </div>
             </div>
         </Layout>

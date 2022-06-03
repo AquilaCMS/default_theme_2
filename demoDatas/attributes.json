@@ -66,6 +66,38 @@
         }
       },
       "type": "number"
+    },
+    {
+      "_type": "products",
+      "set_attributes": [
+          "5c5abe92c1f87b5f46c451fa"
+      ],
+      "position": 1,
+      "visible": true,
+      "usedInRules": true,
+      "usedInFilters": true,
+      "_id": "ff06a08a6350becbd5d0adea",
+      "param": "Non",
+      "code": "viande",
+      "translation": {
+        "fr": {
+          "name": "Viande",
+          "values": [
+            "Poulet",
+            "Boeuf",
+            "Bacon"
+          ]
+        },
+        "en": {
+          "name": "Meat",
+          "values": [
+            "Chicken",
+            "Beef",
+            "Bacon"
+          ]
+        }
+      },
+      "type": "multiselect"
     }
   ]
 }

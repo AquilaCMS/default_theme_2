@@ -161,6 +161,13 @@
       "_id": "6225d0a6cb19f643185016a0",
       "link": "medias/logo2.png",
       "name": "logo2"
+    },
+    {
+      "group": "general",
+      "extension": ".jpg",
+      "_id": "6270fb9d340829255c5206fa",
+      "link": "medias/logoMarker.png",
+      "name": "logoMarker"
     }
   ]
 }

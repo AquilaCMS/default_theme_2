@@ -1,38 +1,43 @@
-import { useState }                                                            from 'react';
-import { ProductJsonLd }                                                       from 'next-seo';
-import absoluteUrl                                                             from 'next-absolute-url';
-import { useRouter }                                                           from 'next/router';
-import getT                                                                    from 'next-translate/getT';
-import useTranslation                                                          from 'next-translate/useTranslation';
-import Cookies                                                                 from 'cookies';
-import { Modal }                                                               from 'react-responsive-modal';
-import Lightbox                                                                from 'lightbox-react';
-import ErrorPage                                                               from '@pages/_error';
-import BundleProduct                                                           from '@components/product/BundleProduct';
-import Layout                                                                  from '@components/layouts/Layout';
-import NextSeoCustom                                                           from '@components/tools/NextSeoCustom';
-import Breadcrumb                                                              from '@components/navigation/Breadcrumb';
-import ProductList                                                             from '@components/product/ProductList';
-import BlockCMS                                                                from '@components/common/BlockCMS';
-import Button                                                                  from '@components/ui/Button';
-import { dispatcher }                                                          from '@lib/redux/dispatcher';
-import { getBlocksCMS }                                                        from '@aquilacms/aquila-connector/api/blockcms';
-import { getBreadcrumb }                                                       from '@aquilacms/aquila-connector/api/breadcrumb';
-import { addToCart, setCartShipment }                                          from '@aquilacms/aquila-connector/api/cart';
-import { getCategories }                                                       from '@aquilacms/aquila-connector/api/category';
-import { getProduct }                                                          from '@aquilacms/aquila-connector/api/product';
-import { getImage, getMainImage, getTabImageURL }                              from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import { useCart, useShowCartSidebar, useSiteConfig }                          from '@lib/hooks';
-import { setLangAxios, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
+import { useState }                                                         from 'react';
+import { ProductJsonLd }                                                    from 'next-seo';
+import absoluteUrl                                                          from 'next-absolute-url';
+import { useRouter }                                                        from 'next/router';
+import getT                                                                 from 'next-translate/getT';
+import useTranslation                                                       from 'next-translate/useTranslation';
+import parse                                                                from 'html-react-parser';
+import Cookies                                                              from 'cookies';
+import { Modal }                                                            from 'react-responsive-modal';
+import Lightbox                                                             from 'lightbox-react';
+import ErrorPage                                                            from '@pages/_error';
+import BundleProduct                                                        from '@components/product/BundleProduct';
+import Layout                                                               from '@components/layouts/Layout';
+import NextSeoCustom                                                        from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                           from '@components/navigation/Breadcrumb';
+import ProductList                                                          from '@components/product/ProductList';
+import BlockCMS                                                             from '@components/common/BlockCMS';
+import Button                                                               from '@components/ui/Button';
+import { dispatcher }                                                       from '@lib/redux/dispatcher';
+import { getBlocksCMS }                                                     from '@aquilacms/aquila-connector/api/blockcms';
+import { getBreadcrumb }                                                    from '@aquilacms/aquila-connector/api/breadcrumb';
+import { addToCart, setCartShipment }                                       from '@aquilacms/aquila-connector/api/cart';
+import { getCategories }                                                    from '@aquilacms/aquila-connector/api/category';
+import { getProduct }                                                       from '@aquilacms/aquila-connector/api/product';
+import { getImage, getMainImage, getTabImageURL }                           from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import { useCart, useProduct, useShowCartSidebar, useSiteConfig }           from '@lib/hooks';
+import { initAxios, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 
 import 'lightbox-react/style.css';
 import 'react-responsive-modal/styles.css';
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
-    setLangAxios(locale, req, res);
-
+    initAxios(locale, req, res);
+    
     const productSlug   = params.productSlug.pop();
     const categorySlugs = params.productSlug;
+    
+    if (productSlug.match(/\.[a-z]{2,}$/i)) {
+        return { notFound: true };
+    }
 
     let categories = [];
     let product    = {};
@@ -115,9 +120,8 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     pageProps.props.breadcrumb = breadcrumb;
 
     // URL origin
-    const { origin }        = absoluteUrl(req);
-    pageProps.props.origin  = origin;
-    pageProps.props.product = product;
+    const { origin }       = absoluteUrl(req);
+    pageProps.props.origin = origin;
 
     return pageProps;
 }
@@ -140,7 +144,7 @@ const Video = ({ content }) => (
     />
 );
 
-export default function Product({ breadcrumb, origin, product }) {
+export default function Product({ breadcrumb, origin }) {
     const [qty, setQty]               = useState(1);
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen]         = useState(false);
@@ -149,6 +153,7 @@ export default function Product({ breadcrumb, origin, product }) {
     const [openModal, setOpenModal]   = useState(false);
     const [tabs, setTabs]             = useState(0);
     const { cart, setCart }           = useCart();
+    const product                     = useProduct();
     const { themeConfig }             = useSiteConfig();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
@@ -366,7 +371,7 @@ export default function Product({ breadcrumb, origin, product }) {
                                 { product.price.ati.special ? <div className="price-text sale">{formatPrice(product.price.ati.normal)}</div> : null }
                             </div>
                             <div className="plain-line" />
-                            <div className="full-details w-richtext"><p dangerouslySetInnerHTML={{ __html: product.description2?.text }} /></div>
+                            <div className="full-details w-richtext"><p>{parse(product.description2?.text)}</p></div>
                             <div>
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
@@ -410,7 +415,7 @@ export default function Product({ breadcrumb, origin, product }) {
                             </a> */}
                         </div>
                         <div className="w-tab-content">
-                            <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`} dangerouslySetInnerHTML={{ __html: product.description1?.text }} />
+                            <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`}>{parse(product.description1?.text)}</div>
                             <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
                                 <table>
                                     <tbody>
@@ -429,9 +434,7 @@ export default function Product({ breadcrumb, origin, product }) {
                                                     return (
                                                         <tr key={attribute._id}>
                                                             <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                            <td style={{ padding: '10px' }}>
-                                                                <div dangerouslySetInnerHTML={{ __html: attribute.value }} />
-                                                            </td>
+                                                            <td style={{ padding: '10px' }}>{parse(attribute.value)}</td>
                                                         </tr>
                                                     );
                                                 }
@@ -455,9 +458,7 @@ export default function Product({ breadcrumb, origin, product }) {
                                                     return (
                                                         <tr key={attribute._id}>
                                                             <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                            <td style={{ padding: '10px' }}>
-                                                                <div dangerouslySetInnerHTML={{ __html: attribute.value.join(', ') }} />
-                                                            </td>
+                                                            <td style={{ padding: '10px' }}>{parse(attribute.value.join(', '))}</td>
                                                         </tr>
                                                     );
                                                 }

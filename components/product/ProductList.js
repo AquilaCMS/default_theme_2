@@ -25,8 +25,10 @@ export default function ProductList({ type, value, max = undefined, autoplay = t
     if (type === 'data') {
         productList = value;
     } else {
-        const hash  = crypto.createHash('md5').update(`${type}_${value}`).digest('hex');
-        productList = componentData[`nsProductList_${hash}`];
+        const hash = crypto.createHash('md5').update(`${type}_${value}`).digest('hex');
+        if (componentData[`nsProductList_${hash}`]) {
+            productList = componentData[`nsProductList_${hash}`];
+        }
     }
 
     useEffect(() => {

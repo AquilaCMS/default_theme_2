@@ -1,16 +1,16 @@
-import { useEffect, useState }                                          from 'react';
-import { useRouter }                                                    from 'next/router';
-import useTranslation                                                   from 'next-translate/useTranslation';
-import LightLayout                                                      from '@components/layouts/LightLayout';
-import NextSeoCustom                                                    from '@components/tools/NextSeoCustom';
-import ClickAndCollect                                                  from 'modules/ClickAndCollect';
-import { setUser }                                                      from '@aquilacms/aquila-connector/api/user';
-import { useCart }                                                      from '@lib/hooks';
-import { setLangAxios, authProtectedPage, formatPrice, serverRedirect } from '@lib/utils';
-import { dispatcher }                                                   from '@lib/redux/dispatcher';
+import { useEffect, useState }                                       from 'react';
+import { useRouter }                                                 from 'next/router';
+import useTranslation                                                from 'next-translate/useTranslation';
+import LightLayout                                                   from '@components/layouts/LightLayout';
+import NextSeoCustom                                                 from '@components/tools/NextSeoCustom';
+import ClickAndCollect                                               from 'modules/ClickAndCollect';
+import { setUser }                                                   from '@aquilacms/aquila-connector/api/user';
+import { useCart }                                                   from '@lib/hooks';
+import { initAxios, authProtectedPage, formatPrice, serverRedirect } from '@lib/utils';
+import { dispatcher }                                                from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {

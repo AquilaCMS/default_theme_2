@@ -63,7 +63,7 @@
             "values": [
               {
                 "key": "filters",
-                "value": "left",
+                "value": "top",
                 "name": "Filter location",
                 "description": "Allows you to display category filters : top = 'top' | none = 'none'",
                 "group": "General"

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter }           from 'next/router';
 import useTranslation          from 'next-translate/useTranslation';
+import parse                   from 'html-react-parser';
 import cookie                  from 'cookie';
 import { getBlockCMS }         from '@aquilacms/aquila-connector/api/blockcms';
 import { useCookieNotice }     from '@lib/hooks';
@@ -46,7 +47,7 @@ export default function CookiesBanner() {
 
             <div className="div-block-cookies">
                 <blockquote className="block-quote-rgpd">Cookies<br />&amp;<br />RGPD</blockquote>
-                <p className="paragraph-rgpd" dangerouslySetInnerHTML={{ __html: txtLegal }}></p>
+                <p className="paragraph-rgpd">{parse(txtLegal)}</p>
                 <button type="button" onClick={acceptCookie} className="button-white w-button">{t('components/cookiesBanner:agree')}</button>
                 &nbsp;
                 <button type="button" onClick={denyCookie} className="button-white w-button">{t('components/cookiesBanner:deny')}</button>

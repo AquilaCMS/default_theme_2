@@ -252,6 +252,39 @@
               "name": "Cutlery"
             }
           }
+        },
+        {
+          "type" : "multiselect",
+          "position" : 1,
+          "visible" : true,
+          "_id" : "627e659aa9987c4488835273",
+          "id" : "ff06a08a6350becbd5d0adea",
+          "code" : "viande",
+          "param" : "Non",
+          "translation" : {
+            "fr" : {
+              "name" : "Viande",
+              "values" : [
+                "Poulet",
+                "Boeuf",
+                "Bacon"
+              ],
+              "value" : [
+                "Poulet"
+              ]
+            },
+            "en" : {
+              "name" : "Meat",
+              "values" : [
+                "Chicken",
+                "Beef",
+                "Bacon"
+              ],
+              "value" : [
+                "Chicken"
+              ]
+            }
+          }
         }
       ],
       "images": [
@@ -668,6 +701,41 @@
               "name": "Cutlery"
             }
           }
+        },
+        {
+          "type" : "multiselect",
+          "position" : 1,
+          "visible" : true,
+          "_id" : "627e659aa9987c4488835273",
+          "id" : "ff06a08a6350becbd5d0adea",
+          "code" : "viande",
+          "param" : "Non",
+          "translation" : {
+            "fr" : {
+              "name" : "Viande",
+              "values" : [
+                "Poulet",
+                "Boeuf",
+                "Bacon"
+              ],
+              "value" : [
+                "Boeuf",
+                "Bacon"
+              ]
+            },
+            "en" : {
+              "name" : "Meat",
+              "values" : [
+                "Chicken",
+                "Beef",
+                "Bacon"
+              ],
+              "value" : [
+                "Beef",
+                "Bacon"
+              ]
+            }
+          }
         }
       ],
       "images": [
@@ -843,6 +911,39 @@
             },
             "en": {
               "name": "Cutlery"
+            }
+          }
+        },
+        {
+          "type" : "multiselect",
+          "position" : 1,
+          "visible" : true,
+          "_id" : "627e659aa9987c4488835273",
+          "id" : "ff06a08a6350becbd5d0adea",
+          "code" : "viande",
+          "param" : "Non",
+          "translation" : {
+            "fr" : {
+              "name" : "Viande",
+              "values" : [
+                "Poulet",
+                "Boeuf",
+                "Bacon"
+              ],
+              "value" : [
+                "Boeuf"
+              ]
+            },
+            "en" : {
+              "name" : "Meat",
+              "values" : [
+                "Chicken",
+                "Beef",
+                "Bacon"
+              ],
+              "value" : [
+                "Beef"
+              ]
             }
           }
         }

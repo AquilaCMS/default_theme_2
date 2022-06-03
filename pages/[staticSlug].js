@@ -8,12 +8,10 @@ import { dispatcher }    from '@lib/redux/dispatcher';
 import { getPageStatic } from '@aquilacms/aquila-connector/api/static';
 import { getBlocksCMS }  from '@aquilacms/aquila-connector/api/blockcms';
 import { useStaticPage } from '@lib/hooks';
-import { setLangAxios }  from '@lib/utils';
-// import Breadcrumb   from '@components/navigation/Breadcrumb';
+import { initAxios }     from '@lib/utils';
 
-// voir pour le SSG
 export async function getServerSideProps({ locale, params, query, req, res }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     let staticPage = {};
     try {
@@ -69,8 +67,6 @@ export default function StaticPage({ error, origin }) {
                 lang={lang}
                 image={`${origin}/images/medias/max-100/605363104b9ac91f54fcabac/Logo.jpg`}
             />
-
-            {/* <Breadcrumb /> */}{/*  The Breadcrumb sould be between the title and the text, but its not possible now */}
             
             <BlockCMS content={staticPage.content} />
             

@@ -1,20 +1,20 @@
-import { useEffect }                                                                             from 'react';
-import { useRouter }                                                                             from 'next/router';
-import useTranslation                                                                            from 'next-translate/useTranslation';
-import parse                                                                                     from 'html-react-parser';
-import LightLayout                                                                               from '@components/layouts/LightLayout';
-import NextSeoCustom                                                                             from '@components/tools/NextSeoCustom';
-import Button                                                                                    from '@components/ui/Button';
-import { cartToOrder }                                                                           from '@aquilacms/aquila-connector/api/cart';
-import { makePayment }                                                                           from '@aquilacms/aquila-connector/api/payment';
-import { useState }                                                                              from 'react';
-import { useCart, usePaymentMethods, useSiteConfig }                                             from '@lib/hooks';
-import { setLangAxios, authProtectedPage, formatPrice, serverRedirect, moduleHook, unsetCookie } from '@lib/utils';
-import { dispatcher }                                                                            from '@lib/redux/dispatcher';
-import i18n                                                                                      from '/i18n.json';
+import { useEffect }                                                                          from 'react';
+import { useRouter }                                                                          from 'next/router';
+import useTranslation                                                                         from 'next-translate/useTranslation';
+import parse                                                                                  from 'html-react-parser';
+import LightLayout                                                                            from '@components/layouts/LightLayout';
+import NextSeoCustom                                                                          from '@components/tools/NextSeoCustom';
+import Button                                                                                 from '@components/ui/Button';
+import { cartToOrder }                                                                        from '@aquilacms/aquila-connector/api/cart';
+import { makePayment }                                                                        from '@aquilacms/aquila-connector/api/payment';
+import { useState }                                                                           from 'react';
+import { useCart, usePaymentMethods, useSiteConfig }                                          from '@lib/hooks';
+import { initAxios, authProtectedPage, formatPrice, serverRedirect, moduleHook, unsetCookie } from '@lib/utils';
+import { dispatcher }                                                                         from '@lib/redux/dispatcher';
+import i18n                                                                                   from '/i18n.json';
 
 export async function getServerSideProps({ locale, req, res }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {

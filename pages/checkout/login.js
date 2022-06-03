@@ -1,16 +1,16 @@
-import { useEffect }                                                   from 'react';
-import { useRouter }                                                   from 'next/router';
-import useTranslation                                                  from 'next-translate/useTranslation';
-import Layout                                                          from '@components/layouts/Layout';
-import LoginBlock                                                      from '@components/login/LoginBlock';
-import RegisterBlock                                                   from '@components/login/RegisterBlock';
-import NextSeoCustom                                                   from '@components/tools/NextSeoCustom';
-import { useCart }                                                     from '@lib/hooks';
-import { setLangAxios, authProtectedPage, serverRedirect, moduleHook } from '@lib/utils';
-import { dispatcher }                                                  from '@lib/redux/dispatcher';
+import { useEffect }                                                from 'react';
+import { useRouter }                                                from 'next/router';
+import useTranslation                                               from 'next-translate/useTranslation';
+import Layout                                                       from '@components/layouts/Layout';
+import LoginBlock                                                   from '@components/login/LoginBlock';
+import RegisterBlock                                                from '@components/login/RegisterBlock';
+import NextSeoCustom                                                from '@components/tools/NextSeoCustom';
+import { useCart }                                                  from '@lib/hooks';
+import { initAxios, authProtectedPage, serverRedirect, moduleHook } from '@lib/utils';
+import { dispatcher }                                               from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     // If the user is already logged in, we will automatically redirect to the page /account/informations
     const user = await authProtectedPage(req.headers.cookie);

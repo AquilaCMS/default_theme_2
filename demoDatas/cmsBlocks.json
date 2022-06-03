@@ -1345,40 +1345,6 @@
           "description": "foodoptions-info"
         }
       }
-    },
-    {
-      "group": "",
-      "active": true,
-      "_id": "6225c98901837d06e4c88781",
-      "translation": {
-        "fr": {
-          "html": "<ns-simplemap latitude=\"{{Latitude}}\" longitude=\"{{Longitude}}\" marker=\"{{url du marqueur (taille de l'image 90px X 90px)}}\" urlkeys=\"{{Clés Google Maps}}\" title=\"{{Titre du marker}}\"></ns-simplemap>",
-          "variables": [
-            {
-              "label": "Latitude",
-              "value": "43.61732608243277"
-            },
-            {
-              "label": "Longitude",
-              "value": "7.05785360225125"
-            },
-            {
-              "label": "url du marqueur (taille de l'image 90px X 90px)",
-              "value": "medias/logo2.png"
-            },
-            {
-              "label": "Clés Google Maps",
-              "value": ""
-            },
-            {
-              "label": "Titre du marker",
-              "value": "NextSourcia"
-            }
-          ],
-          "content": "<ns-simplemap latitude=\"43.61732608243277\" longitude=\"7.05785360225125\" marker=\"medias/logo2.png\" urlkeys=\"\" title=\"NextSourcia\"></ns-simplemap>"
-        }
-      },
-      "code": "map-banner"
     }
   ]
 }

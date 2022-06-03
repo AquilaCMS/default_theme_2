@@ -1,12 +1,11 @@
 import { useEffect, useState }                                                    from 'react';
 import { useRouter }                                                              from 'next/router';
-import cookie                                                                     from 'cookie';
 import useTranslation                                                             from 'next-translate/useTranslation';
 import { getBlockCMS }                                                            from '@aquilacms/aquila-connector/api/blockcms';
 import { getCategoryProducts }                                                    from '@aquilacms/aquila-connector/api/category';
 import axios                                                                      from '@aquilacms/aquila-connector/lib/AxiosInstance';
 import { useSelectPage, useCategoryProducts, useCategoryPriceEnd, useSiteConfig } from '@lib/hooks';
-import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                 from '@lib/utils';
+import { getBodyRequestProductsFromCookie, convertFilter, unsetCookie }           from '@lib/utils';
 
 // GET allergens
 async function getAllergens() {
@@ -24,6 +23,7 @@ export default function AllergenFilter() {
     const [checkedAllergens, setCheckedAllergens] = useState({});
     const [cmsBlockWarning, setCmsBlockWarning]   = useState('');
     const [open, setOpen]                         = useState(false);
+    const [hasFilters, setHasFilters]             = useState(false);
     const [message, setMessage]                   = useState();
     const router                                  = useRouter();
     const { setSelectPage }                       = useSelectPage();
@@ -37,7 +37,7 @@ export default function AllergenFilter() {
     const slug          = categorySlugs[categorySlugs.length - 1];
 
     // Getting Limit
-    const limit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+    const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,23 +46,17 @@ export default function AllergenFilter() {
                 const data = await getAllergens();
                 setAllergens(data);
 
-                // If cookie filter exists, we parse it
-                const cookieFilter = cookie.parse(document.cookie).filter;
-                if (cookieFilter) {
-                    const filt = JSON.parse(cookieFilter);
+                // Getting filter & sort from cookie
+                const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
-                    // Updating checked allergens
-                    if (filt.conditions?.allergens) {
-                        const arrayChecked = filt.conditions.allergens.$or[0].allergens.$nin;
-                        let checked        = {};
-                        for (const c of arrayChecked) {
-                            checked[c] = true;
-                        }
-                        setCheckedAllergens(checked);
-
-                        // Opening the allergens block
-                        openBlock(true);
+                // Updating checked allergens
+                if (bodyRequestProducts.filter?.allergens) {
+                    const arrayChecked = bodyRequestProducts.filter.allergens.$or[0].allergens.$nin;
+                    let checked        = {};
+                    for (const c of arrayChecked) {
+                        checked[c] = true;
                     }
+                    setCheckedAllergens(checked);
                 }
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
@@ -70,6 +64,16 @@ export default function AllergenFilter() {
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        // Checking if the filter is empty
+        if (Object.keys(checkedAllergens).length) {
+            setHasFilters(true);
+            openBlock(true);
+        } else {
+            setHasFilters(false);
+        }
+    }, [checkedAllergens]);
 
     // Get CMS block cms_allergens
     useEffect(() => {
@@ -85,9 +89,16 @@ export default function AllergenFilter() {
     }, []);
 
     const filterAllergens = async (e, _id) => {
-        const checked = { ...checkedAllergens };
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
+
+        // If the body request cookie does not have the validity key property, reload
+        if (!bodyRequestProducts.key) {
+            return router.reload();
+        }
 
         // Updating checked allergens
+        const checked = { ...checkedAllergens };
         if (e.target.checked) {
             checked[_id] = true;
         } else {
@@ -95,42 +106,66 @@ export default function AllergenFilter() {
         }
         setCheckedAllergens(checked);
 
-        // Getting filter & sort from cookie
-        const { filter, sort } = getFilterAndSortFromCookie();
-
-        // If filter empty (cookie not present)
-        if (!filter.conditions) {
-            // Price filter must be present (Aquila constraint)
-            filter.conditions = { price: { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] } };
-        }
-
-        // Filter construction
+        // Body request : filter
         let filterAllergens = {};
-        if (Object.keys(checked).length > 0) {
-            filterAllergens             = {
+        if (Object.keys(checked).length) {
+            filterAllergens = {
                 $or: [
                     { allergens: { $nin: Object.keys(checked) } },
                     { allergens: [] }
                 ]
             };
-            filter.conditions.allergens = filterAllergens;
-        } else {
-            delete filter.conditions.allergens;
+            if (!bodyRequestProducts.filter) {
+                bodyRequestProducts.filter = {};
+            }
+            bodyRequestProducts.filter.allergens = filterAllergens;
+        } else if (bodyRequestProducts.filter?.allergens) {
+            delete bodyRequestProducts.filter.allergens;
+            if (!Object.keys(bodyRequestProducts.filter).length) {
+                delete bodyRequestProducts.filter;
+            }
+        }
+        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
+
+        // Body request : page
+        if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
+        }
+        const pageRequest = 1;
+
+        // Body request : limit
+        let limitRequest = defaultLimit;
+        if (bodyRequestProducts.limit) {
+            limitRequest = bodyRequestProducts.limit;
         }
 
-        // Setting filter cookie
-        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
+        // Body request : sort
+        let sortRequest = { sortWeight: -1 };
+        if (bodyRequestProducts.sort) {
+            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+            sortRequest                  = { [sortField]: parseInt(sortValue) };
+        }
 
         // Updating the products list
         try {
-            const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+            const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
             setCategoryProducts(products);
 
-            // Back to page 1
+            const priceEnd = {
+                min: Math.floor(products.unfilteredPriceSortMin.ati),
+                max: Math.ceil(products.unfilteredPriceSortMax.ati)
+            };
+    
+            // If price end has changed, reload
+            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                return router.reload();
+            }
+
+            // Force page 1
             setSelectPage(1);
 
-            // Back to page 1... so useless "page" cookie
-            unsetCookie('page');
+            // Setting body request cookie
+            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
@@ -139,31 +174,48 @@ export default function AllergenFilter() {
     const resetAllergens = async () => {
         setCheckedAllergens([]);
 
-        // If cookie filter exists, we parse it
-        const cookieFilter = cookie.parse(document.cookie).filter;
-        if (cookieFilter) {
-            const filter = JSON.parse(cookieFilter);
-            let sort     = { sortWeight: -1 };
-            if (filter.sort) {
-                sort = filter.sort;
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
+
+        // If the body request cookie does not have the validity key property, reload
+        if (!bodyRequestProducts.key) {
+            return router.reload();
+        }
+
+        if (bodyRequestProducts.filter?.allergens) {
+            // Body request : filter
+            delete bodyRequestProducts.filter.allergens;
+            const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
+
+            // Body request : page
+            if (bodyRequestProducts.page) {
+                delete bodyRequestProducts.page;
+            }
+            const pageRequest = 1;
+
+            // Body request : limit
+            let limitRequest = defaultLimit;
+            if (bodyRequestProducts.limit) {
+                limitRequest = bodyRequestProducts.limit;
             }
 
-            // Filter construction
-            delete filter.conditions.allergens;
-
-            // Setting filter cookie
-            document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
+            // Body request : sort
+            let sortRequest = { sortWeight: -1 };
+            if (bodyRequestProducts.sort) {
+                const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+                sortRequest                  = { [sortField]: parseInt(sortValue) };
+            }
 
             // Updating the products list
             try {
-                const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
+                const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
                 setCategoryProducts(products);
 
-                // Back to page 1
+                // Force page 1
                 setSelectPage(1);
 
-                // Back to page 1... so useless "page" cookie
-                unsetCookie('page');
+                // Setting body request cookie
+                document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
             }
@@ -205,9 +257,13 @@ export default function AllergenFilter() {
                                     })
                                 }
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <button type="button" className="log-button-03 w-button" onClick={resetAllergens}>{t('modules/allergen-aquila:reset')}</button>
-                            </div>
+                            {
+                                hasFilters && (
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <button type="button" className="log-button-03 w-button" onClick={resetAllergens}>{t('modules/allergen-aquila:reset')}</button>
+                                    </div>
+                                )
+                            }
                         </form>
                         {
                             message && (

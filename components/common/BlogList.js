@@ -1,3 +1,5 @@
+
+import parse                from 'html-react-parser';
 import useTranslation       from 'next-translate/useTranslation';
 import { useComponentData } from '@lib/hooks';
 import { formatDate }       from '@lib/utils';
@@ -23,7 +25,7 @@ export default function BlogList({ list = [] }) {
                         <div className="content-block">
                             <h2 className="heading-5" style={{ marginBottom: '0px' }}>{item.title}</h2>
                             <p style={{ fontStyle: 'italic' }}>{formatDate(item.createdAt, lang, { hour: '2-digit', minute: '2-digit', weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>
-                            <div dangerouslySetInnerHTML={{ __html: item.content.text }}></div>
+                            <div>{parse(item.content.text)}</div>
                         </div>
                         {
                             item.img && 

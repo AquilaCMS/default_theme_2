@@ -3,18 +3,20 @@ import { useRouter }                                                            
 import useTranslation                                                             from 'next-translate/useTranslation';
 import Slider                                                                     from 'rc-slider';
 import { useCategoryPriceEnd, useSelectPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
-import { getFilterAndSortFromCookie, convertFilter, unsetCookie }                 from '@lib/utils';
+import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix }        from '@lib/utils';
 
 import 'rc-slider/assets/index.css';
 
 export default function Filters({ filtersData, getProductsList }) {
     const formRef                                                 = useRef();
-    const { categoryPriceEnd }                                    = useCategoryPriceEnd();
+    const { categoryPriceEnd, setCategoryPriceEnd }               = useCategoryPriceEnd();
     const [checkedAttributesFilters, setCheckedAttributesFilters] = useState({});
     const [checkedPictosFilters, setCheckedPictosFilters]         = useState([]);
     const [sort, setSort]                                         = useState('sortWeight|-1');
     const [priceValue, setPriceValue]                             = useState([categoryPriceEnd.min, categoryPriceEnd.max]);
     const [open, setOpen]                                         = useState(false);
+    const [hasFilters, setHasFilters]                             = useState(false);
+    const [message, setMessage]                                   = useState();
     const { setSelectPage }                                       = useSelectPage();
     const { setCategoryProducts }                                 = useCategoryProducts();
     const { themeConfig }                                         = useSiteConfig();
@@ -22,93 +24,163 @@ export default function Filters({ filtersData, getProductsList }) {
     const { lang, t }                                             = useTranslation();
 
     // Getting Limit for request
-    const limit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+    const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
 
     // Getting URL page
     const [url] = router.asPath.split('?');
 
     useEffect(() => {
         // Getting filter from cookie
-        const { filter } = getFilterAndSortFromCookie();
-        if (filter.conditions && Object.entries(filter.conditions).length) {
-            // Opening the filter block
-            openBlock(true);
-        }
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
         // Init price filter
-        if (!filter.priceValues) { 
-            setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
+        if (bodyRequestProducts.filter?.price) {
+            setPriceValue([bodyRequestProducts.filter.price.min, bodyRequestProducts.filter.price.max]);
         } else {
-            setPriceValue([filter.priceValues.min, filter.priceValues.max]);
+            setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
         }
 
         // Init attributes filters
         let checkedArray = {};
-        if (filter.conditions?.attributes) {
-            for (let attribute of filter.conditions.attributes) {
-                checkedArray[attribute.attributes.$elemMatch.id] = attribute.attributes.$elemMatch[`translation.${lang}.value`].$in;
+        if (bodyRequestProducts.filter?.attributes) {
+            for (let id in bodyRequestProducts.filter.attributes) {
+                checkedArray[id] = bodyRequestProducts.filter.attributes[id];
             }
         }
         setCheckedAttributesFilters(checkedArray);
 
         // Init pictos filters
         checkedArray = [];
-        if (filter.conditions?.pictos) {
-            checkedArray = filter.conditions.pictos[0].pictos.$elemMatch.code.$in;
+        if (bodyRequestProducts.filter?.pictos) {
+            checkedArray = bodyRequestProducts.filter.pictos;
         }
         setCheckedPictosFilters(checkedArray);
 
         // Init sort
-        if (filter.sort) {
-            const [key, value] = Object.entries(filter.sort)[0];
-            setSort(`${key}|${value}`);
+        if (bodyRequestProducts.sort) {
+            setSort(bodyRequestProducts.sort);
         }
     }, [url]);
+
+    useEffect(() => {
+        // Checking if the filter is empty
+        if (priceValue[0] !== categoryPriceEnd.min || priceValue[1] !== categoryPriceEnd.max || Object.keys(checkedAttributesFilters).length || checkedPictosFilters.length) {
+            setHasFilters(true);
+            openBlock(true);
+        } else {
+            setHasFilters(false);
+        }
+    }, [priceValue, checkedAttributesFilters, checkedPictosFilters]);
 
     const handlePriceFilterChange = async (value) => {
         setPriceValue(value);
     };
 
     const handlePriceFilterAfterChange = async (value) => {
-        // Getting filter & sort from cookie
-        const { filter, sort } = getFilterAndSortFromCookie();
+        setMessage();
 
-        // If filter empty (cookie not present), reload
-        if (!Object.keys(filter).length) {
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
+
+        // If the body request cookie does not have the validity key property, reload
+        if (!bodyRequestProducts.key) {
             return router.reload();
         }
 
+        // If values are the same, do nothing
+        if (value[0] === priceValue[0] && value[1] === priceValue[1]) {
+            return;
+        }
+
+        // Body request : filter
         if (value[0] === categoryPriceEnd.min && value[1] === categoryPriceEnd.max) {
-            delete filter.priceValues;
+            if (bodyRequestProducts.filter?.price) {
+                delete bodyRequestProducts.filter.price;
+                if (!Object.keys(bodyRequestProducts.filter).length) {
+                    delete bodyRequestProducts.filter;
+                }
+            }
         } else {
-            filter.priceValues = { min: value[0], max: value[1] };
+            if (!bodyRequestProducts.filter) {
+                bodyRequestProducts.filter = {};
+            }
+            bodyRequestProducts.filter.price = { min: value[0], max: value[1] };
+        }
+        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
+
+        // Body request : page
+        if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
+        }
+        const pageRequest = 1;
+
+        // Body request : limit
+        let limitRequest = defaultLimit;
+        if (bodyRequestProducts.limit) {
+            limitRequest = bodyRequestProducts.limit;
         }
 
-        if (!filter.conditions) {
-            filter.conditions = {};
+        // Body request : sort
+        let sortRequest = { sortWeight: -1 };
+        if (bodyRequestProducts.sort) {
+            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+            sortRequest                  = { [sortField]: parseInt(sortValue) };
+        } else {
+            setSort('sortWeight|-1');
         }
-        filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: value[0], $lte: value[1] } }, { 'price.ati.special': { $gte: value[0], $lte: value[1] } }] };
 
-        // Setting filter cookie
-        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
+        // Updating the products list
+        try {
+            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
+            setCategoryProducts(products);
 
-        // Getting & updating the products list
-        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
-        setCategoryProducts(products);
+            const priceEnd = {
+                min: Math.floor(products.unfilteredPriceSortMin.ati),
+                max: Math.ceil(products.unfilteredPriceSortMax.ati)
+            };
+    
+            // If price end has changed
+            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                // Detecting bad price end in price filter of body request cookie
+                filterPriceFix(bodyRequestProducts, priceEnd);
+    
+                // Setting the new price end
+                setCategoryPriceEnd(priceEnd);
+    
+                // Setting the new price values
+                const newPriceValue = [...value];
+                let hasChanged      = false;
+                if (newPriceValue[0] < priceEnd.min) {
+                    newPriceValue[0] = priceEnd.min;
+                    hasChanged       = true;
+                }
+                if (newPriceValue[1] > priceEnd.max) {
+                    newPriceValue[1] = priceEnd.max;
+                    hasChanged       = true;
+                }
+                if (hasChanged) {
+                    setPriceValue(newPriceValue);
+                }
+            }
 
-        // Force page 1
-        setSelectPage(1);
-
-        // Page 1... so useless "page" cookie
-        unsetCookie('page');
+            // Force page 1
+            setSelectPage(1);
+    
+            // Setting body request cookie
+            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
     };
 
-    const handleAttributeFilterClick = async (e) => {
-        // Getting filter & sort from cookie
-        const { filter, sort } = getFilterAndSortFromCookie();
+    const handleAttributeFilterClick = async () => {
+        setMessage();
 
-        // If filter empty (cookie not present), reload
-        if (!Object.keys(filter).length || !filter.conditions?.price) {
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
+
+        // If the body request cookie does not have the validity key property, reload
+        if (!bodyRequestProducts.key) {
             return router.reload();
         }
 
@@ -117,47 +189,109 @@ export default function Filters({ filtersData, getProductsList }) {
         const inputs     = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
         for (const input of inputs) {
             if (input.checked) {
-                const [type, attributeId, value] = input.value.split('|');
-                if (type === 'attribute') {
+                const [filterType, attributeId, type, value] = input.value.split('|');
+                if (filterType === 'attribute') {
                     if (!attributes[attributeId]) {
                         attributes[attributeId] = [];
                     }
-                    attributes[attributeId] = [...attributes[attributeId], (value === 'true' || value === 'false' ? value === 'true' : value.toString())];
+                    attributes[attributeId] = [...attributes[attributeId], (type === 'bool' ? value === 'true' : (type === 'number' ? Number(value) : value.toString()))];
                 }
             }
         }
         setCheckedAttributesFilters(attributes);
-        
-        let conditions = [];
-        for (const [attributeId, values] of Object.entries(attributes)) {
-            conditions.push({ attributes: { $elemMatch: { [`translation.${lang}.value`]: { $in: values }, id: attributeId } } });
+
+        // Body request : filter
+        if (Object.keys(attributes).length) {
+            if (!bodyRequestProducts.filter) {
+                bodyRequestProducts.filter = {};
+            }
+            bodyRequestProducts.filter.attributes = attributes;
+        } else if (bodyRequestProducts.filter?.attributes) {
+            delete bodyRequestProducts.filter.attributes;
+            if (!Object.keys(bodyRequestProducts.filter).length) {
+                delete bodyRequestProducts.filter;
+            }
+        }
+        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
+
+        // Body request : page
+        if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
+        }
+        const pageRequest = 1;
+
+        // Body request : limit
+        let limitRequest = defaultLimit;
+        if (bodyRequestProducts.limit) {
+            limitRequest = bodyRequestProducts.limit;
         }
 
-        filter.conditions.attributes = conditions;
-        if (!filter.conditions.attributes.length) {
-            delete filter.conditions.attributes;
+        // Body request : sort
+        let sortRequest = { sortWeight: -1 };
+        if (bodyRequestProducts.sort) {
+            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+            sortRequest                  = { [sortField]: parseInt(sortValue) };
+        } else {
+            setSort('sortWeight|-1');
         }
 
-        // Setting filter cookie
-        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
+        // Updating the products list
+        try {
+            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
+            setCategoryProducts(products);
 
-        // Getting & updating the products list
-        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
-        setCategoryProducts(products);
+            const priceEnd = {
+                min: Math.floor(products.unfilteredPriceSortMin.ati),
+                max: Math.ceil(products.unfilteredPriceSortMax.ati)
+            };
 
-        // Force page 1
-        setSelectPage(1);
+            // If price end has changed
+            const newPriceValue = [...priceValue];
+            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                // Detecting bad price end in price filter of body request cookie
+                filterPriceFix(bodyRequestProducts, priceEnd);
 
-        // Page 1... so useless "page" cookie
-        unsetCookie('page');
+                // Setting the new price end
+                setCategoryPriceEnd(priceEnd);
+
+                // Setting the new price values
+                let hasChanged = false;
+                if (newPriceValue[0] < priceEnd.min) {
+                    newPriceValue[0] = priceEnd.min;
+                    hasChanged       = true;
+                }
+                if (newPriceValue[1] > priceEnd.max) {
+                    newPriceValue[1] = priceEnd.max;
+                    hasChanged       = true;
+                }
+                if (hasChanged) {
+                    setPriceValue(newPriceValue);
+                }
+            }
+
+            // If no price filter in cookie, reset priceValue with price end
+            if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
+                setPriceValue([priceEnd.min, priceEnd.max]);
+            }
+
+            // Force page 1
+            setSelectPage(1);
+
+            // Setting body request cookie
+            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
     };
 
-    const handlePictoFilterClick = async (e) => {
-        // Getting filter & sort from cookie
-        const { filter, sort } = getFilterAndSortFromCookie();
+    const handlePictoFilterClick = async () => {
+        setMessage();
 
-        // If filter empty (cookie not present), reload
-        if (!Object.keys(filter).length || !filter.conditions?.price) {
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
+
+        // If the body request cookie does not have the validity key property, reload
+        if (!bodyRequestProducts.key) {
             return router.reload();
         }
 
@@ -166,101 +300,242 @@ export default function Filters({ filtersData, getProductsList }) {
         const inputs = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
         for (const input of inputs) {
             if (input.checked) {
-                const [type, code] = input.value.split('|');
-                if (type === 'picto') {
+                const [filterType, code] = input.value.split('|');
+                if (filterType === 'picto') {
                     pictos = [...pictos, code];
                 }
             }
         }
         setCheckedPictosFilters(pictos);
-        
-        let conditions = [{ pictos: { $elemMatch: { code: { $in: pictos } } } }];
 
-        filter.conditions.pictos = conditions;
-        if (!pictos.length) {
-            delete filter.conditions.pictos;
+        // Body request : filter
+        if (pictos.length) {
+            if (!bodyRequestProducts.filter) {
+                bodyRequestProducts.filter = {};
+            }
+            bodyRequestProducts.filter.pictos = pictos;
+        } else if (bodyRequestProducts.filter?.pictos) {
+            delete bodyRequestProducts.filter.pictos;
+            if (!Object.keys(bodyRequestProducts.filter).length) {
+                delete bodyRequestProducts.filter;
+            }
+        }
+        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
+
+        // Body request : page
+        if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
+        }
+        const pageRequest = 1;
+
+        // Body request : limit
+        let limitRequest = defaultLimit;
+        if (bodyRequestProducts.limit) {
+            limitRequest = bodyRequestProducts.limit;
         }
 
-        // Setting filter cookie
-        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
+        // Body request : sort
+        let sortRequest = { sortWeight: -1 };
+        if (bodyRequestProducts.sort) {
+            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+            sortRequest                  = { [sortField]: parseInt(sortValue) };
+        } else {
+            setSort('sortWeight|-1');
+        }
 
-        // Getting & updating the products list
-        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
-        setCategoryProducts(products);
+        // Updating the products list
+        try {
+            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
+            setCategoryProducts(products);
 
-        // Force page 1
-        setSelectPage(1);
+            const priceEnd = {
+                min: Math.floor(products.unfilteredPriceSortMin.ati),
+                max: Math.ceil(products.unfilteredPriceSortMax.ati)
+            };
 
-        // Page 1... so useless "page" cookie
-        unsetCookie('page');
+            // If price end has changed
+            const newPriceValue = [...priceValue];
+            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                // Detecting bad price end in price filter of body request cookie
+                filterPriceFix(bodyRequestProducts, priceEnd);
+
+                // Setting the new price end
+                setCategoryPriceEnd(priceEnd);
+
+                // Setting the new price values
+                let hasChanged = false;
+                if (newPriceValue[0] < priceEnd.min) {
+                    newPriceValue[0] = priceEnd.min;
+                    hasChanged       = true;
+                }
+                if (newPriceValue[1] > priceEnd.max) {
+                    newPriceValue[1] = priceEnd.max;
+                    hasChanged       = true;
+                }
+                if (hasChanged) {
+                    setPriceValue(newPriceValue);
+                }
+            }
+
+            // If no price filter in cookie, reset priceValue with price end
+            if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
+                setPriceValue([priceEnd.min, priceEnd.max]);
+            }
+
+            // Force page 1
+            setSelectPage(1);
+
+            // Setting body request cookie
+            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
     };
 
-    const resetFilters = async (e) => {
-        // Getting filter & sort from cookie
-        const { filter, sort } = getFilterAndSortFromCookie();
+    const resetFilters = async () => {
+        setMessage();
 
-        // If filter empty (cookie not present), reload
-        if (!Object.keys(filter).length) {
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
+
+        // If the body request cookie does not have the validity key property, reload
+        if (!bodyRequestProducts.key) {
             return router.reload();
         }
 
-        if (!filter.conditions) {
-            filter.conditions = {};
+        // Body request : filter
+        if (bodyRequestProducts.filter) {
+            delete bodyRequestProducts.filter.price;
+            delete bodyRequestProducts.filter.attributes;
+            delete bodyRequestProducts.filter.pictos;
+            if (!Object.keys(bodyRequestProducts.filter).length) {
+                delete bodyRequestProducts.filter;
+            }
         }
-        if (filter.conditions.attributes) {
-            delete filter.conditions.attributes;
-            delete filter.conditions.pictos;
+        let filterRequest = convertFilter(bodyRequestProducts.filter, lang);
+
+        // Body request : page
+        if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
+        }
+        const pageRequest = 1;
+
+        // Body request : limit
+        let limitRequest = defaultLimit;
+        if (bodyRequestProducts.limit) {
+            limitRequest = bodyRequestProducts.limit;
         }
 
-        // Price filter must be present (Aquila constraint)
-        filter.conditions.price = { $or: [{ 'price.ati.normal': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }, { 'price.ati.special': { $gte: categoryPriceEnd.min, $lte: categoryPriceEnd.max } }] };
-        delete filter.priceValues;
-        
-        // Setting filter cookie
-        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
+        // Body request : sort
+        let sortRequest = { sortWeight: -1 };
+        if (bodyRequestProducts.sort) {
+            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+            sortRequest                  = { [sortField]: parseInt(sortValue) };
+        } else {
+            setSort('sortWeight|-1');
+        }
 
-        // Reset attributes, pictos & price
-        setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
-        setCheckedAttributesFilters({});
-        setCheckedPictosFilters([]);
+        // Updating the products list
+        try {
+            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
+            setCategoryProducts(products);
 
-        // Getting & updating the products list
-        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort } });
-        setCategoryProducts(products);
+            const priceEnd = {
+                min: Math.floor(products.unfilteredPriceSortMin.ati),
+                max: Math.ceil(products.unfilteredPriceSortMax.ati)
+            };
 
-        // Force page 1
-        setSelectPage(1);
+            // Setting the new price end if has changed
+            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                setCategoryPriceEnd(priceEnd);
+            }
 
-        // Page 1... so useless "page" cookie
-        unsetCookie('page');
+            // Reset price, attributes & pictos
+            setPriceValue([priceEnd.min, priceEnd.max]);
+            setCheckedAttributesFilters({});
+            setCheckedPictosFilters([]);
+
+            // Force page 1
+            setSelectPage(1);
+
+            // Setting body request cookie
+            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
     };
 
     const handleSortChange = async (e) => {
-        // Getting filter from cookie
-        const { filter } = getFilterAndSortFromCookie();
+        setMessage();
 
-        // If filter empty (cookie not present), reload
-        if (!Object.keys(filter).length) {
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
+
+        // If the body request cookie does not have the validity key property, reload
+        if (!bodyRequestProducts.key) {
             return router.reload();
         }
 
-        // Setting sort
-        setSort(e.target.value);
-        const [field, value] = e.target.value.split('|');
-        filter.sort          = { [field]: parseInt(value) };
+        // Body request : limit
+        let limitRequest = defaultLimit;
+        if (bodyRequestProducts.limit) {
+            limitRequest = bodyRequestProducts.limit;
+        }
 
-        // Setting filter cookie
-        document.cookie = 'filter=' + encodeURIComponent(JSON.stringify(filter)) + '; path=/; max-age=43200;';
+        // Body request : sort
+        const seletedSort = e.target.value;
+        setSort(seletedSort);
+        const [field, value]     = seletedSort.split('|');
+        const sortRequest        = { [field]: parseInt(value) };
+        bodyRequestProducts.sort = seletedSort;
 
-        // Getting & updating the products list
-        const products = await getProductsList({ PostBody: { filter: convertFilter(filter), page: 1, limit, sort: filter.sort } });
-        setCategoryProducts(products);
+        // Updating the products list
+        try {
+            const products = await getProductsList({ PostBody: { filter: convertFilter(bodyRequestProducts.filter, lang), page: 1, limit: limitRequest, sort: sortRequest } });
+            setCategoryProducts(products);
 
-        // Force page 1
-        setSelectPage(1);
+            const priceEnd = {
+                min: Math.floor(products.unfilteredPriceSortMin.ati),
+                max: Math.ceil(products.unfilteredPriceSortMax.ati)
+            };
 
-        // Page 1... so useless "page" cookie
-        unsetCookie('page');
+            // If price end has changed
+            const newPriceValue = [...priceValue];
+            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                // Detecting bad price end in price filter of body request cookie
+                filterPriceFix(bodyRequestProducts, priceEnd);
+
+                // Setting the new price end
+                setCategoryPriceEnd(priceEnd);
+
+                // Setting the new price values
+                let hasChanged = false;
+                if (newPriceValue[0] < priceEnd.min) {
+                    newPriceValue[0] = priceEnd.min;
+                    hasChanged       = true;
+                }
+                if (newPriceValue[1] > priceEnd.max) {
+                    newPriceValue[1] = priceEnd.max;
+                    hasChanged       = true;
+                }
+                if (hasChanged) {
+                    setPriceValue(newPriceValue);
+                }
+            }
+
+            // If no price filter in cookie, reset priceValue with price end
+            if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
+                setPriceValue([priceEnd.min, priceEnd.max]);
+            }
+
+            // Force page 1
+            setSelectPage(1);
+
+            // Setting body request cookie
+            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
     };
 
     const openBlock = (force = undefined) => {
@@ -284,38 +559,36 @@ export default function Filters({ filtersData, getProductsList }) {
                                         range
                                         min={categoryPriceEnd.min}
                                         max={categoryPriceEnd.max}
-                                        tipFormatter={value => `${value}€`}
                                         value={[priceValue[0], priceValue[1]]}
                                         onChange={handlePriceFilterChange}
                                         onAfterChange={handlePriceFilterAfterChange}
                                     />
                                 </div>
                                 <span style={{ float: 'left' }}>
-                                    {categoryPriceEnd.min} €
+                                    {priceValue[0]} €
                                 </span>
                                 <span style={{ float: 'right' }}>
-                                    {categoryPriceEnd.max} €
+                                    {priceValue[1]} €
                                 </span>
                             </div>
                         )
                     }
                     {
                         filtersData.attributes.map((attribute) => {
-                            const attId = attribute._id || attribute.id_attribut;
-                            if (!filtersData.attributesValues[attId]) return null;
+                            if (!filtersData.attributesValues[attribute.id_attribut]) return null;
                             return (
-                                <div className="filter" key={attId}>
+                                <div className="filter" key={attribute.id_attribut}>
                                     <h6>{attribute.name}</h6>
                                     <div>
                                         {
-                                            filtersData.attributesValues[attId].sort().map((value) => {
+                                            filtersData.attributesValues[attribute.id_attribut].sort().map((value) => {
                                                 return (
-                                                    <label className="w-checkbox checkbox-field-allergene" key={attId + value}>
+                                                    <label className="w-checkbox checkbox-field-allergene" key={`${attribute.id_attribut}-${value}`}>
                                                         <input 
                                                             type="checkbox"
                                                             name="newsletter"
-                                                            value={`attribute|${attId}|${value}`}
-                                                            checked={checkedAttributesFilters[attId]?.includes(value) ? true : false}
+                                                            value={`attribute|${attribute.id_attribut}|${attribute.type}|${value}`}
+                                                            checked={checkedAttributesFilters[attribute.id_attribut]?.includes(value) ? true : false}
                                                             onChange={handleAttributeFilterClick}
                                                             style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
                                                         />
@@ -336,7 +609,7 @@ export default function Filters({ filtersData, getProductsList }) {
                         // TODO to review because:
                         // Displayed only if there are attribute type filters
                         // The switch in the back office so that this filter does not appear does not work
-                        /*filtersData.pictos?.length > 0 && (
+                        filtersData.pictos?.length > 0 && (
                             <div className="filter">
                                 <h6>{t('components/filters:pictogram')}</h6>
                                 <div>
@@ -360,12 +633,17 @@ export default function Filters({ filtersData, getProductsList }) {
                                     }
                                 </div>
                             </div>
-                        )*/
+                        )
                     }
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-                    <button type="button" className="log-button-03 w-button" onClick={resetFilters}>{t('components/filters:btnReset')}</button>
-                </div>
+                {
+                    hasFilters && (
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                            <button type="button" className="log-button-03 w-button" onClick={resetFilters}>{t('components/filters:btnReset')}</button>
+                        </div>
+                    )
+                }
+                
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <div>
@@ -373,14 +651,23 @@ export default function Filters({ filtersData, getProductsList }) {
                         <option value="sortWeight|-1">{t('components/filters:pertinence')}</option>
                         <option value={`translation.${lang}.name|1`}>A-Z</option>
                         <option value={`translation.${lang}.name|-1`}>Z-A</option>
-                        <option value="price.ati.normal|1">{t('components/filters:price')} -</option>
-                        <option value="price.ati.normal|-1">{t('components/filters:price')} +</option>
+                        <option value="price.priceSort.ati|1">{t('components/filters:price')} -</option>
+                        <option value="price.priceSort.ati|-1">{t('components/filters:price')} +</option>
                         <option value="is_new|-1">{t('components/filters:novelty')}</option>
                         <option value="stats.sells|-1">{t('components/filters:sells')}</option>
                         <option value="stats.views|-1" >{t('components/filters:mostViewed')}</option>
                     </select>
                 </div>
             </div>
+            {
+                message && (
+                    <div className={`w-commerce-commerce${message.type}`}>
+                        <div>
+                            {message.message}
+                        </div>
+                    </div>
+                )
+            }
         </form>
     );
 }

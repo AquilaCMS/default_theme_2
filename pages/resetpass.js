@@ -1,16 +1,16 @@
-import { useState }                     from 'react';
-import { useRouter }                    from 'next/router';
-import useTranslation                   from 'next-translate/useTranslation';
-import Layout                           from '@components/layouts/Layout';
-import Button                           from '@components/ui/Button';
-import NextSeoCustom                    from '@components/tools/NextSeoCustom';
-import { resetPassword }                from '@aquilacms/aquila-connector/api/user';
-import { setLangAxios, serverRedirect } from '@lib/utils';
-import { dispatcher }                   from '@lib/redux/dispatcher';
+import { useState }                  from 'react';
+import { useRouter }                 from 'next/router';
+import useTranslation                from 'next-translate/useTranslation';
+import Layout                        from '@components/layouts/Layout';
+import Button                        from '@components/ui/Button';
+import NextSeoCustom                 from '@components/tools/NextSeoCustom';
+import { resetPassword }             from '@aquilacms/aquila-connector/api/user';
+import { initAxios, serverRedirect } from '@lib/utils';
+import { dispatcher }                from '@lib/redux/dispatcher';
 
 
 export async function getServerSideProps({ locale, query, req, res }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     try {
         const data = await resetPassword(query.token);

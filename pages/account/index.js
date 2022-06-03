@@ -1,18 +1,18 @@
-import { Fragment, useEffect, useState }                                                                from 'react';
-import ReactPaginate                                                                                    from 'react-paginate';
-import { useRouter }                                                                                    from 'next/router';
-import useTranslation                                                                                   from 'next-translate/useTranslation';
-import Cookies                                                                                          from 'cookies';
-import AccountLayout                                                                                    from '@components/account/AccountLayout';
-import OrderDetails                                                                                     from '@components/order/OrderDetails';
-import NextSeoCustom                                                                                    from '@components/tools/NextSeoCustom';
-import { getOrders }                                                                                    from '@aquilacms/aquila-connector/api/order';
-import { useSelectPage, useOrders }                                                                     from '@lib/hooks';
-import { setLangAxios, authProtectedPage, serverRedirect, formatPrice, formatOrderStatus, unsetCookie } from '@lib/utils';
-import { dispatcher }                                                                                   from '@lib/redux/dispatcher';
+import { Fragment, useEffect, useState }                                                             from 'react';
+import ReactPaginate                                                                                 from 'react-paginate';
+import { useRouter }                                                                                 from 'next/router';
+import useTranslation                                                                                from 'next-translate/useTranslation';
+import Cookies                                                                                       from 'cookies';
+import AccountLayout                                                                                 from '@components/account/AccountLayout';
+import OrderDetails                                                                                  from '@components/order/OrderDetails';
+import NextSeoCustom                                                                                 from '@components/tools/NextSeoCustom';
+import { getOrders }                                                                                 from '@aquilacms/aquila-connector/api/order';
+import { useSelectPage, useOrders }                                                                  from '@lib/hooks';
+import { initAxios, authProtectedPage, serverRedirect, formatPrice, formatOrderStatus, unsetCookie } from '@lib/utils';
+import { dispatcher }                                                                                from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res, resolvedUrl }) {
-    setLangAxios(locale, req, res);
+    initAxios(locale, req, res);
 
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {

@@ -9,7 +9,9 @@ export default function SearchBar() {
         e.preventDefault();
         const postForm = e.currentTarget;
         const search   = postForm.search.value.trim();
-        if (search) {
+        
+        // Min 2 caracters
+        if (search?.length >= 2) {
             router.push(`/search/${encodeURIComponent(search)}`);
         }
     };

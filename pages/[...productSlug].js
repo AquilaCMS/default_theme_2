@@ -4,6 +4,7 @@ import absoluteUrl                                                          from
 import { useRouter }                                                        from 'next/router';
 import getT                                                                 from 'next-translate/getT';
 import useTranslation                                                       from 'next-translate/useTranslation';
+import parse                                                                from 'html-react-parser';
 import Cookies                                                              from 'cookies';
 import { Modal }                                                            from 'react-responsive-modal';
 import Lightbox                                                             from 'lightbox-react';
@@ -370,7 +371,7 @@ export default function Product({ breadcrumb, origin }) {
                                 { product.price.ati.special ? <div className="price-text sale">{formatPrice(product.price.ati.normal)}</div> : null }
                             </div>
                             <div className="plain-line" />
-                            <div className="full-details w-richtext"><p dangerouslySetInnerHTML={{ __html: product.description2?.text }} /></div>
+                            <div className="full-details w-richtext"><p>{parse(product.description2?.text)}</p></div>
                             <div>
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
@@ -414,7 +415,7 @@ export default function Product({ breadcrumb, origin }) {
                             </a> */}
                         </div>
                         <div className="w-tab-content">
-                            <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`} dangerouslySetInnerHTML={{ __html: product.description1?.text }} />
+                            <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`}>{parse(product.description1?.text)}</div>
                             <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
                                 <table>
                                     <tbody>
@@ -433,9 +434,7 @@ export default function Product({ breadcrumb, origin }) {
                                                     return (
                                                         <tr key={attribute._id}>
                                                             <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                            <td style={{ padding: '10px' }}>
-                                                                <div dangerouslySetInnerHTML={{ __html: attribute.value }} />
-                                                            </td>
+                                                            <td style={{ padding: '10px' }}>{parse(attribute.value)}</td>
                                                         </tr>
                                                     );
                                                 }
@@ -459,9 +458,7 @@ export default function Product({ breadcrumb, origin }) {
                                                     return (
                                                         <tr key={attribute._id}>
                                                             <td style={{ padding: '10px', fontWeight: 'bold' }}>{attribute.name}</td>
-                                                            <td style={{ padding: '10px' }}>
-                                                                <div dangerouslySetInnerHTML={{ __html: attribute.value.join(', ') }} />
-                                                            </td>
+                                                            <td style={{ padding: '10px' }}>{parse(attribute.value.join(', '))}</td>
                                                         </tr>
                                                     );
                                                 }

@@ -4,6 +4,7 @@ import Head                                                                     
 import { useRouter }                                                                              from 'next/router';
 import getT                                                                                       from 'next-translate/getT';
 import useTranslation                                                                             from 'next-translate/useTranslation';
+import parse                                                                                      from 'html-react-parser';
 import Cookies                                                                                    from 'cookies';
 import Error                                                                                      from '@pages/_error';
 import Filters                                                                                    from '@components/category/Filters';
@@ -263,9 +264,7 @@ export default function Category({ breadcrumb, category, limit, origin, error })
                 }
             </Head>
 
-            <div dangerouslySetInnerHTML={{
-                __html: category.extraText,
-            }} />
+            <div>{parse(category.extraText || '')}</div>
 
             {
                 moduleHook('category-top')
@@ -278,9 +277,7 @@ export default function Category({ breadcrumb, category, limit, origin, error })
                     category.action !== 'catalog' ? (
                         <>
                             <div className="container w-container">
-                                <p className="paragraph-seo" dangerouslySetInnerHTML={{
-                                    __html: category.extraText2,
-                                }} />
+                                <p className="paragraph-seo">{parse(category.extraText2 || '')}</p>
                             </div>
                             <div className="container-col">
                                 <div className="tabs w-tabs">
@@ -297,9 +294,7 @@ export default function Category({ breadcrumb, category, limit, origin, error })
                     ) : (
                         <>
                             <div className="container w-container">
-                                <p className="paragraph-seo" dangerouslySetInnerHTML={{
-                                    __html: category.extraText2,
-                                }} />
+                                <p className="paragraph-seo">{parse(category.extraText2 || '')}</p>
                                 {
                                     moduleHook('category-top-list')
                                 }
@@ -337,9 +332,7 @@ export default function Category({ breadcrumb, category, limit, origin, error })
                 }
                 
                 <div className="container w-container">
-                    <p className="paragraph-seo" dangerouslySetInnerHTML={{
-                        __html: category.extraText3,
-                    }} />
+                    <p className="paragraph-seo">{parse(category.extraText3 || '')}</p>
                 </div>
             </div>
         </Layout>

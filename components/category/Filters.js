@@ -33,32 +33,9 @@ export default function Filters({ filtersData, getProductsList }) {
         // Getting filter from cookie
         const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
-        // Init price filter
-        if (bodyRequestProducts.filter?.price) {
-            setPriceValue([bodyRequestProducts.filter.price.min, bodyRequestProducts.filter.price.max]);
-        } else {
-            setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
-        }
-
-        // Init attributes filters
-        let checkedArray = {};
-        if (bodyRequestProducts.filter?.attributes) {
-            for (let id in bodyRequestProducts.filter.attributes) {
-                checkedArray[id] = bodyRequestProducts.filter.attributes[id];
-            }
-        }
-        setCheckedAttributesFilters(checkedArray);
-
-        // Init pictos filters
-        checkedArray = [];
-        if (bodyRequestProducts.filter?.pictos) {
-            checkedArray = bodyRequestProducts.filter.pictos;
-        }
-        setCheckedPictosFilters(checkedArray);
-
-        // Init sort
-        if (bodyRequestProducts.sort) {
-            setSort(bodyRequestProducts.sort);
+        // Init filters inputs
+        if (bodyRequestProducts) {
+            initOrUpdateFilters(bodyRequestProducts);
         }
     }, [url]);
 
@@ -71,6 +48,46 @@ export default function Filters({ filtersData, getProductsList }) {
             setHasFilters(false);
         }
     }, [priceValue, checkedAttributesFilters, checkedPictosFilters]);
+
+    const initOrUpdateFilters = (bodyRequestProducts, excludeUpdate = []) => {
+        // Init/update price filter input
+        if (!excludeUpdate.includes('filter.price')) {
+            if (bodyRequestProducts.filter?.price) {
+                setPriceValue([bodyRequestProducts.filter.price.min, bodyRequestProducts.filter.price.max]);
+            } else {
+                setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
+            }
+        }
+
+        // Init/update attributes filters input
+        if (!excludeUpdate.includes('filter.attributes')) {
+            let checkedArrayAttr = {};
+            if (bodyRequestProducts.filter?.attributes) {
+                for (let id in bodyRequestProducts.filter.attributes) {
+                    checkedArrayAttr[id] = bodyRequestProducts.filter.attributes[id];
+                }
+            }
+            setCheckedAttributesFilters(checkedArrayAttr);
+        }
+
+        // Init/update pictos filters input
+        if (!excludeUpdate.includes('filter.pictos')) {
+            let checkedArrayPictos = [];
+            if (bodyRequestProducts.filter?.pictos) {
+                checkedArrayPictos = bodyRequestProducts.filter.pictos;
+            }
+            setCheckedPictosFilters(checkedArrayPictos);
+        }
+
+        // Init/update sort input
+        if (!excludeUpdate.includes('sort')) {
+            if (bodyRequestProducts.sort) {
+                setSort(bodyRequestProducts.sort);
+            } else {
+                setSort('sortWeight|-1');
+            }
+        }
+    };
 
     const handlePriceFilterChange = async (value) => {
         setPriceValue(value);
@@ -125,9 +142,10 @@ export default function Filters({ filtersData, getProductsList }) {
         if (bodyRequestProducts.sort) {
             const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
             sortRequest                  = { [sortField]: parseInt(sortValue) };
-        } else {
-            setSort('sortWeight|-1');
         }
+
+        // Update others filters inputs
+        initOrUpdateFilters(bodyRequestProducts, ['filter.price']);
 
         // Updating the products list
         try {
@@ -231,9 +249,10 @@ export default function Filters({ filtersData, getProductsList }) {
         if (bodyRequestProducts.sort) {
             const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
             sortRequest                  = { [sortField]: parseInt(sortValue) };
-        } else {
-            setSort('sortWeight|-1');
         }
+
+        // Update others filters inputs
+        initOrUpdateFilters(bodyRequestProducts, ['filter.attributes']);
 
         // Updating the products list
         try {
@@ -339,9 +358,10 @@ export default function Filters({ filtersData, getProductsList }) {
         if (bodyRequestProducts.sort) {
             const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
             sortRequest                  = { [sortField]: parseInt(sortValue) };
-        } else {
-            setSort('sortWeight|-1');
         }
+
+        // Update others filters inputs
+        initOrUpdateFilters(bodyRequestProducts, ['filter.pictos']);
 
         // Updating the products list
         try {
@@ -431,9 +451,10 @@ export default function Filters({ filtersData, getProductsList }) {
         if (bodyRequestProducts.sort) {
             const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
             sortRequest                  = { [sortField]: parseInt(sortValue) };
-        } else {
-            setSort('sortWeight|-1');
         }
+
+        // Update sort filter input
+        initOrUpdateFilters(bodyRequestProducts, ['filter.price', 'filter.attributes', 'filter.pictos']);
 
         // Updating the products list
         try {
@@ -488,6 +509,9 @@ export default function Filters({ filtersData, getProductsList }) {
         const [field, value]     = seletedSort.split('|');
         const sortRequest        = { [field]: parseInt(value) };
         bodyRequestProducts.sort = seletedSort;
+
+        // Update others filters
+        initOrUpdateFilters(bodyRequestProducts, ['sort']);
 
         // Updating the products list
         try {

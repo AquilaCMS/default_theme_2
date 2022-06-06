@@ -112,7 +112,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Breadcrumb
     let breadcrumb = [];
     try {
-        breadcrumb = await getBreadcrumb(resolvedUrl);
+        breadcrumb = await getBreadcrumb(`${locale}/${resolvedUrl}`);
     } catch (err) {
         const t = await getT(locale, 'common');
         console.error(err.message || t('common:message.unknownError'));
@@ -371,7 +371,7 @@ export default function Product({ breadcrumb, origin }) {
                                 { product.price.ati.special ? <div className="price-text sale">{formatPrice(product.price.ati.normal)}</div> : null }
                             </div>
                             <div className="plain-line" />
-                            <div className="full-details w-richtext"><p>{parse(product.description2?.text)}</p></div>
+                            <div className="full-details w-richtext"><p>{parse(product.description2?.text || '')}</p></div>
                             <div>
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
                                     <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
@@ -415,7 +415,7 @@ export default function Product({ breadcrumb, origin }) {
                             </a> */}
                         </div>
                         <div className="w-tab-content">
-                            <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`}>{parse(product.description1?.text)}</div>
+                            <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`}>{parse(product.description1?.text || '')}</div>
                             <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
                                 <table>
                                     <tbody>

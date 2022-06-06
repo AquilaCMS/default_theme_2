@@ -199,7 +199,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Get breadcrumb
     let breadcrumb = [];
     try {
-        breadcrumb = await getBreadcrumb(resolvedUrl);
+        breadcrumb = await getBreadcrumb(`${locale}/${resolvedUrl}`);
     } catch (err) {
         console.error(err.message || t('common:message.unknownError'));
     }

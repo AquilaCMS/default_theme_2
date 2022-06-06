@@ -10,10 +10,11 @@ import 'rc-slider/assets/index.css';
 export default function Filters({ filtersData, getProductsList }) {
     const formRef                                                 = useRef();
     const { categoryPriceEnd, setCategoryPriceEnd }               = useCategoryPriceEnd();
+    const [priceValue, setPriceValue]                             = useState([categoryPriceEnd.min, categoryPriceEnd.max]);
     const [checkedAttributesFilters, setCheckedAttributesFilters] = useState({});
     const [checkedPictosFilters, setCheckedPictosFilters]         = useState([]);
+    const [limit, setLimit]                                       = useState(16);
     const [sort, setSort]                                         = useState('sortWeight|-1');
-    const [priceValue, setPriceValue]                             = useState([categoryPriceEnd.min, categoryPriceEnd.max]);
     const [open, setOpen]                                         = useState(false);
     const [hasFilters, setHasFilters]                             = useState(false);
     const [message, setMessage]                                   = useState();
@@ -24,7 +25,7 @@ export default function Filters({ filtersData, getProductsList }) {
     const { lang, t }                                             = useTranslation();
 
     // Getting Limit for request
-    const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+    const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 16;
 
     // Getting URL page
     const [url] = router.asPath.split('?');
@@ -85,6 +86,15 @@ export default function Filters({ filtersData, getProductsList }) {
                 setSort(bodyRequestProducts.sort);
             } else {
                 setSort('sortWeight|-1');
+            }
+        }
+
+        // Init/update limit input
+        if (!excludeUpdate.includes('limit')) {
+            if (bodyRequestProducts.limit) {
+                setLimit(bodyRequestProducts.limit);
+            } else {
+                setLimit(defaultLimit);
             }
         }
     };
@@ -486,6 +496,81 @@ export default function Filters({ filtersData, getProductsList }) {
         }
     };
 
+    const handleLimitChange = async (e) => {
+        setMessage();
+
+        // Getting body request from cookie
+        const bodyRequestProducts = getBodyRequestProductsFromCookie();
+
+        // If the body request cookie does not have the validity key property, reload
+        if (!bodyRequestProducts.key) {
+            return router.reload();
+        }
+
+        // Body request : limit
+        const limitRequest = Number(e.target.value);
+        setLimit(limitRequest);
+        bodyRequestProducts.limit = limitRequest;
+
+        // Body request : sort
+        let sortRequest = { sortWeight: -1 };
+        if (bodyRequestProducts.sort) {
+            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+            sortRequest                  = { [sortField]: parseInt(sortValue) };
+        }
+
+        // Update others filters
+        initOrUpdateFilters(bodyRequestProducts, ['sort']);
+
+        // Updating the products list
+        try {
+            const products = await getProductsList({ PostBody: { filter: convertFilter(bodyRequestProducts.filter, lang), page: 1, limit: limitRequest, sort: sortRequest } });
+            setCategoryProducts(products);
+
+            const priceEnd = {
+                min: Math.floor(products.unfilteredPriceSortMin.ati),
+                max: Math.ceil(products.unfilteredPriceSortMax.ati)
+            };
+
+            // If price end has changed
+            const newPriceValue = [...priceValue];
+            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                // Detecting bad price end in price filter of body request cookie
+                filterPriceFix(bodyRequestProducts, priceEnd);
+
+                // Setting the new price end
+                setCategoryPriceEnd(priceEnd);
+
+                // Setting the new price values
+                let hasChanged = false;
+                if (newPriceValue[0] < priceEnd.min) {
+                    newPriceValue[0] = priceEnd.min;
+                    hasChanged       = true;
+                }
+                if (newPriceValue[1] > priceEnd.max) {
+                    newPriceValue[1] = priceEnd.max;
+                    hasChanged       = true;
+                }
+                if (hasChanged) {
+                    setPriceValue(newPriceValue);
+                }
+            }
+
+            // If no price filter in cookie, reset priceValue with price end
+            if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
+                setPriceValue([priceEnd.min, priceEnd.max]);
+            }
+
+            // Force page 1
+            setSelectPage(1);
+
+            // Setting body request cookie
+            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        }
+    };
+
     const handleSortChange = async (e) => {
         setMessage();
 
@@ -671,7 +756,7 @@ export default function Filters({ filtersData, getProductsList }) {
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <div>
-                    {t('components/filters:sortBy')} <select value={sort} onChange={handleSortChange}>
+                    {t('components/filters:sortBy')} : <select value={sort} onChange={handleSortChange}>
                         <option value="sortWeight|-1">{t('components/filters:pertinence')}</option>
                         <option value={`translation.${lang}.name|1`}>A-Z</option>
                         <option value={`translation.${lang}.name|-1`}>Z-A</option>
@@ -680,6 +765,14 @@ export default function Filters({ filtersData, getProductsList }) {
                         <option value="is_new|-1">{t('components/filters:novelty')}</option>
                         <option value="stats.sells|-1">{t('components/filters:sells')}</option>
                         <option value="stats.views|-1" >{t('components/filters:mostViewed')}</option>
+                    </select>
+                </div>
+                <div style={{ marginLeft: '10px' }}>
+                    {t('components/filters:limit')} : <select value={limit} onChange={handleLimitChange}>
+                        <option value="4">4</option>
+                        <option value="8">8</option>
+                        <option value="16">16</option>
+                        <option value="32">32</option>
                     </select>
                 </div>
             </div>

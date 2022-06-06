@@ -26,7 +26,7 @@ export default function Pagination({ children, getProductsList }) {
     }
 
     // Getting Limit for request
-    const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+    const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 16;
 
     // Getting pagination mode (0=normal | 1=infinite scroll | 2=infinite scroll with button)
     const paginationMode = themeConfig?.values?.find(t => t.key === 'infiniteScroll')?.value || 0;

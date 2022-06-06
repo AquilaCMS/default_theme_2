@@ -85,7 +85,7 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
     if (bodyRequestProducts.limit) {
         defaultLimit = bodyRequestProducts.limit;
     } else {
-        defaultLimit = siteInfo.themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+        defaultLimit = siteInfo.themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 16;
     }
     let limitRequest = defaultLimit;
 

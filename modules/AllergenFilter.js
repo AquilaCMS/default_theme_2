@@ -37,7 +37,7 @@ export default function AllergenFilter() {
     const slug          = categorySlugs[categorySlugs.length - 1];
 
     // Getting Limit
-    const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+    const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 16;
 
     useEffect(() => {
         const fetchData = async () => {

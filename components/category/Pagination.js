@@ -1,22 +1,23 @@
 
-import { useEffect, useState }                               from 'react';
-import InfiniteScroll                                        from 'react-infinite-scroll-component';
-import ReactPaginate                                         from 'react-paginate';
-import { useRouter }                                         from 'next/router';
-import useTranslation                                        from 'next-translate/useTranslation';
-import Button                                                from '@components/ui/Button';
-import { useSelectPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
-import { getBodyRequestProductsFromCookie, convertFilter }   from '@lib/utils';
+import { useEffect, useState }                                                             from 'react';
+import InfiniteScroll                                                                      from 'react-infinite-scroll-component';
+import ReactPaginate                                                                       from 'react-paginate';
+import { useRouter }                                                                       from 'next/router';
+import useTranslation                                                                      from 'next-translate/useTranslation';
+import Button                                                                              from '@components/ui/Button';
+import { useCategoryPriceEnd, useCategoryBodyRequest, useCategoryProducts, useSiteConfig } from '@lib/hooks';
+import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix }                 from '@lib/utils';
 
 export default function Pagination({ children, getProductsList }) {
-    const [pageCount, setPageCount]                 = useState(0);
-    const [isLoading, setIsLoading]                 = useState(false);
-    const [message, setMessage]                     = useState();
-    const { selectPage, setSelectPage }             = useSelectPage();
-    const { categoryProducts, setCategoryProducts } = useCategoryProducts();
-    const { themeConfig }                           = useSiteConfig();
-    const router                                    = useRouter();
-    const { lang, t }                               = useTranslation();
+    const [pageCount, setPageCount]                       = useState(0);
+    const [isLoading, setIsLoading]                       = useState(false);
+    const [message, setMessage]                           = useState();
+    const { categoryPriceEnd, setCategoryPriceEnd }       = useCategoryPriceEnd();
+    const { categoryBodyRequest, setCategoryBodyRequest } = useCategoryBodyRequest();
+    const { categoryProducts, setCategoryProducts }       = useCategoryProducts();
+    const { themeConfig }                                 = useSiteConfig();
+    const router                                          = useRouter();
+    const { lang, t }                                     = useTranslation();
 
     // Force page
     let forcePage   = false;
@@ -88,11 +89,35 @@ export default function Pagination({ children, getProductsList }) {
         // Updating the products list
         try {
             const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
+
+            // If page > 1 and no products, reload
+            if (!products.datas.length && pageRequest > 1) {
+                delete bodyRequestProducts.page;
+
+                // Setting body request cookie
+                document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+
+                return router.reload();
+            }
             setCategoryProducts(products);
 
-            // Updating category page
-            setSelectPage(pageRequest);
+            const priceEnd = {
+                min: Math.floor(products.unfilteredPriceSortMin.ati),
+                max: Math.ceil(products.unfilteredPriceSortMax.ati)
+            };
+    
+            // If price end has changed
+            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                // Detecting bad price end in price filter of body request cookie
+                filterPriceFix(bodyRequestProducts, priceEnd);
+    
+                // Setting the new price end
+                setCategoryPriceEnd(priceEnd);
+            }
 
+            // Updating page
+            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: pageRequest, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+    
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
@@ -116,7 +141,7 @@ export default function Pagination({ children, getProductsList }) {
         const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
 
         // Body request : page
-        const pageRequest        = selectPage + 1;
+        const pageRequest        = (categoryBodyRequest.page || 1) + 1;
         bodyRequestProducts.page = pageRequest;
 
         // Body request : limit
@@ -134,12 +159,36 @@ export default function Pagination({ children, getProductsList }) {
 
         // Updating the products list
         try {
-            const products         = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
+            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
+
+            // If page > 1 and no products, reload
+            if (!products.datas.length && pageRequest > 1) {
+                delete bodyRequestProducts.page;
+
+                // Setting body request cookie
+                document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+
+                return router.reload();
+            }
             categoryProducts.datas = [...categoryProducts.datas, ...products.datas];
             setCategoryProducts({ ...categoryProducts });
 
-            // Updating category page
-            setSelectPage(pageRequest);
+            const priceEnd = {
+                min: Math.floor(products.unfilteredPriceSortMin.ati),
+                max: Math.ceil(products.unfilteredPriceSortMax.ati)
+            };
+    
+            // If price end has changed
+            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                // Detecting bad price end in price filter of body request cookie
+                filterPriceFix(bodyRequestProducts, priceEnd);
+    
+                // Setting the new price end
+                setCategoryPriceEnd(priceEnd);
+            }
+
+            // Updating page
+            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: pageRequest, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -158,7 +207,7 @@ export default function Pagination({ children, getProductsList }) {
                         <InfiniteScroll
                             dataLength={categoryProducts.datas.length}
                             next={paginationMode > 1 ? undefined : loadMoreData}
-                            hasMore={selectPage < pageCount}
+                            hasMore={(categoryBodyRequest.page || 1) < pageCount}
                             loader={
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     {
@@ -191,7 +240,7 @@ export default function Pagination({ children, getProductsList }) {
                         previousLabel={'<'}
                         nextLabel={'>'}
                         breakLabel={'...'}
-                        forcePage={selectPage - 1}
+                        forcePage={(categoryBodyRequest.page || 1) - 1}
                         pageCount={pageCount}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={5}

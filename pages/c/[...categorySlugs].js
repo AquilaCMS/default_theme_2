@@ -1,26 +1,26 @@
-import { useState }                                                                               from 'react';
-import absoluteUrl                                                                                from 'next-absolute-url';
-import Head                                                                                       from 'next/head';
-import { useRouter }                                                                              from 'next/router';
-import getT                                                                                       from 'next-translate/getT';
-import useTranslation                                                                             from 'next-translate/useTranslation';
-import parse                                                                                      from 'html-react-parser';
-import Cookies                                                                                    from 'cookies';
-import Error                                                                                      from '@pages/_error';
-import Filters                                                                                    from '@components/category/Filters';
-import Pagination                                                                                 from '@components/category/Pagination';
-import Layout                                                                                     from '@components/layouts/Layout';
-import NextSeoCustom                                                                              from '@components/tools/NextSeoCustom';
-import Breadcrumb                                                                                 from '@components/navigation/Breadcrumb';
-import CategoryList                                                                               from '@components/category/CategoryList';
-import ProductList                                                                                from '@components/product/ProductList';
-import MenuCategories                                                                             from '@components/navigation/MenuCategories';
-import { dispatcher }                                                                             from '@lib/redux/dispatcher';
-import { getBreadcrumb }                                                                          from '@aquilacms/aquila-connector/api/breadcrumb';
-import { getCategory, getCategoryProducts }                                                       from '@aquilacms/aquila-connector/api/category';
-import { getSiteInfo }                                                                            from '@aquilacms/aquila-connector/api/site';
-import { useCategoryProducts, useSiteConfig }                                                     from '@lib/hooks';
-import { initAxios, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix, moduleHook } from '@lib/utils';
+import { useState }                                                                                               from 'react';
+import absoluteUrl                                                                                                from 'next-absolute-url';
+import Head                                                                                                       from 'next/head';
+import { useRouter }                                                                                              from 'next/router';
+import getT                                                                                                       from 'next-translate/getT';
+import useTranslation                                                                                             from 'next-translate/useTranslation';
+import parse                                                                                                      from 'html-react-parser';
+import Cookies                                                                                                    from 'cookies';
+import Error                                                                                                      from '@pages/_error';
+import Filters                                                                                                    from '@components/category/Filters';
+import Pagination                                                                                                 from '@components/category/Pagination';
+import Layout                                                                                                     from '@components/layouts/Layout';
+import NextSeoCustom                                                                                              from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                                                                 from '@components/navigation/Breadcrumb';
+import CategoryList                                                                                               from '@components/category/CategoryList';
+import ProductList                                                                                                from '@components/product/ProductList';
+import MenuCategories                                                                                             from '@components/navigation/MenuCategories';
+import { dispatcher }                                                                                             from '@lib/redux/dispatcher';
+import { getBreadcrumb }                                                                                          from '@aquilacms/aquila-connector/api/breadcrumb';
+import { getCategory, getCategoryProducts }                                                                       from '@aquilacms/aquila-connector/api/category';
+import { getSiteInfo }                                                                                            from '@aquilacms/aquila-connector/api/site';
+import { useCategoryProducts, useSiteConfig }                                                                     from '@lib/hooks';
+import { initAxios, serverRedirect, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix, moduleHook } from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     initAxios(locale, req, res);
@@ -166,6 +166,16 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         return { notFound: true };
     }
 
+    if (!productsData.datas.length && pageRequest > 1) {
+        delete bodyRequestProducts.page;
+
+        // Set body request cookie
+        cookiesServerInstance.set('bodyRequestProducts', encodeURIComponent(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
+
+        // Redirect to first page
+        return serverRedirect(resolvedUrl);
+    }
+
     // Price end (min & max)
     priceEnd = {
         min: Math.floor(productsData.unfilteredPriceSortMin.ati),
@@ -180,8 +190,8 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
 
     const actions = [
         {
-            type : 'SET_SELECT_PAGE',
-            value: page
+            type : 'SET_CATEGORY_BODY_REQUEST',
+            value: bodyRequestProducts
         }, {
             type : 'SET_CATEGORY_PRICE_END',
             value: priceEnd

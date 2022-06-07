@@ -1,106 +1,47 @@
-import { useEffect, useRef, useState }                                            from 'react';
-import { useRouter }                                                              from 'next/router';
-import useTranslation                                                             from 'next-translate/useTranslation';
-import Slider                                                                     from 'rc-slider';
-import { useCategoryPriceEnd, useSelectPage, useCategoryProducts, useSiteConfig } from '@lib/hooks';
-import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix }        from '@lib/utils';
+import { useEffect, useRef, useState }                                                     from 'react';
+import { useRouter }                                                                       from 'next/router';
+import useTranslation                                                                      from 'next-translate/useTranslation';
+import Slider                                                                              from 'rc-slider';
+import { useCategoryPriceEnd, useCategoryBodyRequest, useCategoryProducts, useSiteConfig } from '@lib/hooks';
+import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix, cloneObj }       from '@lib/utils';
 
 import 'rc-slider/assets/index.css';
 
 export default function Filters({ filtersData, getProductsList }) {
-    const formRef                                                 = useRef();
-    const { categoryPriceEnd, setCategoryPriceEnd }               = useCategoryPriceEnd();
-    const [priceValue, setPriceValue]                             = useState([categoryPriceEnd.min, categoryPriceEnd.max]);
-    const [checkedAttributesFilters, setCheckedAttributesFilters] = useState({});
-    const [checkedPictosFilters, setCheckedPictosFilters]         = useState([]);
-    const [limit, setLimit]                                       = useState(16);
-    const [sort, setSort]                                         = useState('sortWeight|-1');
-    const [open, setOpen]                                         = useState(false);
-    const [hasFilters, setHasFilters]                             = useState(false);
-    const [message, setMessage]                                   = useState();
-    const { setSelectPage }                                       = useSelectPage();
-    const { setCategoryProducts }                                 = useCategoryProducts();
-    const { themeConfig }                                         = useSiteConfig();
-    const router                                                  = useRouter();
-    const { lang, t }                                             = useTranslation();
+    const formRef                                         = useRef();
+    const [open, setOpen]                                 = useState(false);
+    const [hasFilters, setHasFilters]                     = useState(false);
+    const [message, setMessage]                           = useState();
+    const { categoryPriceEnd, setCategoryPriceEnd }       = useCategoryPriceEnd();
+    const { categoryBodyRequest, setCategoryBodyRequest } = useCategoryBodyRequest();
+    const { setCategoryProducts }                         = useCategoryProducts();
+    const { themeConfig }                                 = useSiteConfig();
+    const router                                          = useRouter();
+    const { lang, t }                                     = useTranslation();
 
     // Getting Limit for request
     const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 16;
 
-    // Getting URL page
-    const [url] = router.asPath.split('?');
-
     useEffect(() => {
-        // Getting filter from cookie
-        const bodyRequestProducts = getBodyRequestProductsFromCookie();
-
-        // Init filters inputs
-        if (bodyRequestProducts) {
-            initOrUpdateFilters(bodyRequestProducts);
-        }
-    }, [url]);
-
-    useEffect(() => {
-        // Checking if the filter is empty
-        if (priceValue[0] !== categoryPriceEnd.min || priceValue[1] !== categoryPriceEnd.max || Object.keys(checkedAttributesFilters).length || checkedPictosFilters.length) {
+        // Checking if the price, attributes or pictos filters are empty
+        if ((categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min) !== categoryPriceEnd.min || 
+            (categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max) !== categoryPriceEnd.max || 
+            Object.keys(categoryBodyRequest.filter?.attributes || {}).length || 
+            categoryBodyRequest.filter?.pictos?.length) {
             setHasFilters(true);
             openBlock(true);
         } else {
             setHasFilters(false);
         }
-    }, [priceValue, checkedAttributesFilters, checkedPictosFilters]);
-
-    const initOrUpdateFilters = (bodyRequestProducts, excludeUpdate = []) => {
-        // Init/update price filter input
-        if (!excludeUpdate.includes('filter.price')) {
-            if (bodyRequestProducts.filter?.price) {
-                setPriceValue([bodyRequestProducts.filter.price.min, bodyRequestProducts.filter.price.max]);
-            } else {
-                setPriceValue([categoryPriceEnd.min, categoryPriceEnd.max]);
-            }
-        }
-
-        // Init/update attributes filters input
-        if (!excludeUpdate.includes('filter.attributes')) {
-            let checkedArrayAttr = {};
-            if (bodyRequestProducts.filter?.attributes) {
-                for (let id in bodyRequestProducts.filter.attributes) {
-                    checkedArrayAttr[id] = bodyRequestProducts.filter.attributes[id];
-                }
-            }
-            setCheckedAttributesFilters(checkedArrayAttr);
-        }
-
-        // Init/update pictos filters input
-        if (!excludeUpdate.includes('filter.pictos')) {
-            let checkedArrayPictos = [];
-            if (bodyRequestProducts.filter?.pictos) {
-                checkedArrayPictos = bodyRequestProducts.filter.pictos;
-            }
-            setCheckedPictosFilters(checkedArrayPictos);
-        }
-
-        // Init/update sort input
-        if (!excludeUpdate.includes('sort')) {
-            if (bodyRequestProducts.sort) {
-                setSort(bodyRequestProducts.sort);
-            } else {
-                setSort('sortWeight|-1');
-            }
-        }
-
-        // Init/update limit input
-        if (!excludeUpdate.includes('limit')) {
-            if (bodyRequestProducts.limit) {
-                setLimit(bodyRequestProducts.limit);
-            } else {
-                setLimit(defaultLimit);
-            }
-        }
-    };
+    }, [categoryBodyRequest]);
 
     const handlePriceFilterChange = async (value) => {
-        setPriceValue(value);
+        const bodyRequest = cloneObj(categoryBodyRequest);
+        if (!bodyRequest.filter) {
+            bodyRequest.filter = {};
+        }
+        bodyRequest.filter.price = { min: value[0], max: value[1] };
+        setCategoryBodyRequest(bodyRequest);
     };
 
     const handlePriceFilterAfterChange = async (value) => {
@@ -115,7 +56,7 @@ export default function Filters({ filtersData, getProductsList }) {
         }
 
         // If values are the same, do nothing
-        if (value[0] === priceValue[0] && value[1] === priceValue[1]) {
+        if (value[0] === categoryBodyRequest.filter?.price?.min && value[1] === categoryBodyRequest.filter?.price?.max) {
             return;
         }
 
@@ -154,9 +95,6 @@ export default function Filters({ filtersData, getProductsList }) {
             sortRequest                  = { [sortField]: parseInt(sortValue) };
         }
 
-        // Update others filters inputs
-        initOrUpdateFilters(bodyRequestProducts, ['filter.price']);
-
         // Updating the products list
         try {
             const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
@@ -174,25 +112,10 @@ export default function Filters({ filtersData, getProductsList }) {
     
                 // Setting the new price end
                 setCategoryPriceEnd(priceEnd);
-    
-                // Setting the new price values
-                const newPriceValue = [...value];
-                let hasChanged      = false;
-                if (newPriceValue[0] < priceEnd.min) {
-                    newPriceValue[0] = priceEnd.min;
-                    hasChanged       = true;
-                }
-                if (newPriceValue[1] > priceEnd.max) {
-                    newPriceValue[1] = priceEnd.max;
-                    hasChanged       = true;
-                }
-                if (hasChanged) {
-                    setPriceValue(newPriceValue);
-                }
             }
 
-            // Force page 1
-            setSelectPage(1);
+            // Setting body request in redux
+            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
     
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -226,7 +149,6 @@ export default function Filters({ filtersData, getProductsList }) {
                 }
             }
         }
-        setCheckedAttributesFilters(attributes);
 
         // Body request : filter
         if (Object.keys(attributes).length) {
@@ -261,9 +183,6 @@ export default function Filters({ filtersData, getProductsList }) {
             sortRequest                  = { [sortField]: parseInt(sortValue) };
         }
 
-        // Update others filters inputs
-        initOrUpdateFilters(bodyRequestProducts, ['filter.attributes']);
-
         // Updating the products list
         try {
             const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
@@ -275,36 +194,16 @@ export default function Filters({ filtersData, getProductsList }) {
             };
 
             // If price end has changed
-            const newPriceValue = [...priceValue];
             if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
                 // Detecting bad price end in price filter of body request cookie
                 filterPriceFix(bodyRequestProducts, priceEnd);
 
                 // Setting the new price end
                 setCategoryPriceEnd(priceEnd);
-
-                // Setting the new price values
-                let hasChanged = false;
-                if (newPriceValue[0] < priceEnd.min) {
-                    newPriceValue[0] = priceEnd.min;
-                    hasChanged       = true;
-                }
-                if (newPriceValue[1] > priceEnd.max) {
-                    newPriceValue[1] = priceEnd.max;
-                    hasChanged       = true;
-                }
-                if (hasChanged) {
-                    setPriceValue(newPriceValue);
-                }
             }
-
-            // If no price filter in cookie, reset priceValue with price end
-            if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
-                setPriceValue([priceEnd.min, priceEnd.max]);
-            }
-
-            // Force page 1
-            setSelectPage(1);
+            
+            // Setting body request in redux
+            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -335,7 +234,6 @@ export default function Filters({ filtersData, getProductsList }) {
                 }
             }
         }
-        setCheckedPictosFilters(pictos);
 
         // Body request : filter
         if (pictos.length) {
@@ -370,9 +268,6 @@ export default function Filters({ filtersData, getProductsList }) {
             sortRequest                  = { [sortField]: parseInt(sortValue) };
         }
 
-        // Update others filters inputs
-        initOrUpdateFilters(bodyRequestProducts, ['filter.pictos']);
-
         // Updating the products list
         try {
             const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
@@ -384,36 +279,16 @@ export default function Filters({ filtersData, getProductsList }) {
             };
 
             // If price end has changed
-            const newPriceValue = [...priceValue];
             if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
                 // Detecting bad price end in price filter of body request cookie
                 filterPriceFix(bodyRequestProducts, priceEnd);
 
                 // Setting the new price end
                 setCategoryPriceEnd(priceEnd);
-
-                // Setting the new price values
-                let hasChanged = false;
-                if (newPriceValue[0] < priceEnd.min) {
-                    newPriceValue[0] = priceEnd.min;
-                    hasChanged       = true;
-                }
-                if (newPriceValue[1] > priceEnd.max) {
-                    newPriceValue[1] = priceEnd.max;
-                    hasChanged       = true;
-                }
-                if (hasChanged) {
-                    setPriceValue(newPriceValue);
-                }
             }
 
-            // If no price filter in cookie, reset priceValue with price end
-            if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
-                setPriceValue([priceEnd.min, priceEnd.max]);
-            }
-
-            // Force page 1
-            setSelectPage(1);
+            // Setting body request in redux
+            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -463,9 +338,6 @@ export default function Filters({ filtersData, getProductsList }) {
             sortRequest                  = { [sortField]: parseInt(sortValue) };
         }
 
-        // Update sort filter input
-        initOrUpdateFilters(bodyRequestProducts, ['filter.price', 'filter.attributes', 'filter.pictos']);
-
         // Updating the products list
         try {
             const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
@@ -481,13 +353,8 @@ export default function Filters({ filtersData, getProductsList }) {
                 setCategoryPriceEnd(priceEnd);
             }
 
-            // Reset price, attributes & pictos
-            setPriceValue([priceEnd.min, priceEnd.max]);
-            setCheckedAttributesFilters({});
-            setCheckedPictosFilters([]);
-
-            // Force page 1
-            setSelectPage(1);
+            // Setting body request in redux
+            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -508,8 +375,7 @@ export default function Filters({ filtersData, getProductsList }) {
         }
 
         // Body request : limit
-        const limitRequest = Number(e.target.value);
-        setLimit(limitRequest);
+        const limitRequest        = Number(e.target.value);
         bodyRequestProducts.limit = limitRequest;
 
         // Body request : sort
@@ -518,9 +384,6 @@ export default function Filters({ filtersData, getProductsList }) {
             const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
             sortRequest                  = { [sortField]: parseInt(sortValue) };
         }
-
-        // Update others filters
-        initOrUpdateFilters(bodyRequestProducts, ['sort']);
 
         // Updating the products list
         try {
@@ -533,36 +396,15 @@ export default function Filters({ filtersData, getProductsList }) {
             };
 
             // If price end has changed
-            const newPriceValue = [...priceValue];
             if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
                 // Detecting bad price end in price filter of body request cookie
                 filterPriceFix(bodyRequestProducts, priceEnd);
 
                 // Setting the new price end
                 setCategoryPriceEnd(priceEnd);
-
-                // Setting the new price values
-                let hasChanged = false;
-                if (newPriceValue[0] < priceEnd.min) {
-                    newPriceValue[0] = priceEnd.min;
-                    hasChanged       = true;
-                }
-                if (newPriceValue[1] > priceEnd.max) {
-                    newPriceValue[1] = priceEnd.max;
-                    hasChanged       = true;
-                }
-                if (hasChanged) {
-                    setPriceValue(newPriceValue);
-                }
             }
 
-            // If no price filter in cookie, reset priceValue with price end
-            if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
-                setPriceValue([priceEnd.min, priceEnd.max]);
-            }
-
-            // Force page 1
-            setSelectPage(1);
+            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -589,14 +431,10 @@ export default function Filters({ filtersData, getProductsList }) {
         }
 
         // Body request : sort
-        const seletedSort = e.target.value;
-        setSort(seletedSort);
+        const seletedSort        = e.target.value;
         const [field, value]     = seletedSort.split('|');
         const sortRequest        = { [field]: parseInt(value) };
         bodyRequestProducts.sort = seletedSort;
-
-        // Update others filters
-        initOrUpdateFilters(bodyRequestProducts, ['sort']);
 
         // Updating the products list
         try {
@@ -609,36 +447,16 @@ export default function Filters({ filtersData, getProductsList }) {
             };
 
             // If price end has changed
-            const newPriceValue = [...priceValue];
             if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
                 // Detecting bad price end in price filter of body request cookie
                 filterPriceFix(bodyRequestProducts, priceEnd);
 
                 // Setting the new price end
                 setCategoryPriceEnd(priceEnd);
-
-                // Setting the new price values
-                let hasChanged = false;
-                if (newPriceValue[0] < priceEnd.min) {
-                    newPriceValue[0] = priceEnd.min;
-                    hasChanged       = true;
-                }
-                if (newPriceValue[1] > priceEnd.max) {
-                    newPriceValue[1] = priceEnd.max;
-                    hasChanged       = true;
-                }
-                if (hasChanged) {
-                    setPriceValue(newPriceValue);
-                }
             }
 
-            // If no price filter in cookie, reset priceValue with price end
-            if ((!bodyRequestProducts.filter || !bodyRequestProducts.filter.price) && (newPriceValue[0] !== priceEnd.min || newPriceValue[1] !== priceEnd.max)) {
-                setPriceValue([priceEnd.min, priceEnd.max]);
-            }
-
-            // Force page 1
-            setSelectPage(1);
+            // Setting body request in redux
+            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -668,16 +486,16 @@ export default function Filters({ filtersData, getProductsList }) {
                                         range
                                         min={categoryPriceEnd.min}
                                         max={categoryPriceEnd.max}
-                                        value={[priceValue[0], priceValue[1]]}
+                                        value={[categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min, categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max]}
                                         onChange={handlePriceFilterChange}
                                         onAfterChange={handlePriceFilterAfterChange}
                                     />
                                 </div>
                                 <span style={{ float: 'left' }}>
-                                    {priceValue[0]} €
+                                    {categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min} €
                                 </span>
                                 <span style={{ float: 'right' }}>
-                                    {priceValue[1]} €
+                                    {categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max} €
                                 </span>
                             </div>
                         )
@@ -691,13 +509,17 @@ export default function Filters({ filtersData, getProductsList }) {
                                     <div>
                                         {
                                             filtersData.attributesValues[attribute.id_attribut].sort().map((value) => {
+                                                let checked = false;
+                                                if (categoryBodyRequest.filter?.attributes && categoryBodyRequest.filter.attributes[attribute.id_attribut]?.includes(value)) {
+                                                    checked = true;
+                                                }
                                                 return (
                                                     <label className="w-checkbox checkbox-field-allergene" key={`${attribute.id_attribut}-${value}`}>
                                                         <input 
                                                             type="checkbox"
                                                             name="newsletter"
                                                             value={`attribute|${attribute.id_attribut}|${attribute.type}|${value}`}
-                                                            checked={checkedAttributesFilters[attribute.id_attribut]?.includes(value) ? true : false}
+                                                            checked={checked}
                                                             onChange={handleAttributeFilterClick}
                                                             style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
                                                         />
@@ -730,7 +552,7 @@ export default function Filters({ filtersData, getProductsList }) {
                                                         type="checkbox"
                                                         name="newsletter"
                                                         value={`picto|${picto.code}`}
-                                                        checked={checkedPictosFilters.includes(picto.code) ? true : false}
+                                                        checked={categoryBodyRequest.filter?.pictos?.includes(picto.code) ? true : false}
                                                         onChange={handlePictoFilterClick}
                                                         style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
                                                     />
@@ -756,7 +578,7 @@ export default function Filters({ filtersData, getProductsList }) {
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <div>
-                    {t('components/filters:sortBy')} : <select value={sort} onChange={handleSortChange}>
+                    {t('components/filters:sortBy')} : <select value={categoryBodyRequest.sort || 'sortWeight|-1'} onChange={handleSortChange}>
                         <option value="sortWeight|-1">{t('components/filters:pertinence')}</option>
                         <option value={`translation.${lang}.name|1`}>A-Z</option>
                         <option value={`translation.${lang}.name|-1`}>Z-A</option>
@@ -768,7 +590,7 @@ export default function Filters({ filtersData, getProductsList }) {
                     </select>
                 </div>
                 <div style={{ marginLeft: '10px' }}>
-                    {t('components/filters:limit')} : <select value={limit} onChange={handleLimitChange}>
+                    {t('components/filters:limit')} : <select value={categoryBodyRequest.limit || defaultLimit} onChange={handleLimitChange}>
                         <option value="4">4</option>
                         <option value="8">8</option>
                         <option value="16">16</option>

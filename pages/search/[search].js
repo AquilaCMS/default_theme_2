@@ -13,7 +13,7 @@ import { getSiteInfo }                                                          
 import { useCategoryProducts, useSiteConfig }                                                         from '@lib/hooks';
 import { initAxios, serverRedirect, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix } from '@lib/utils';
 
-export async function getServerSideProps({ locale, params, query, req, res }) {
+export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     initAxios(locale, req, res);
 
     const search = params.search.trim() || '';
@@ -116,6 +116,16 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
         return { notFound: true };
     }
 
+    if (!productsData.datas.length && pageRequest > 1) {
+        delete bodyRequestProducts.page;
+
+        // Set body request cookie
+        cookiesServerInstance.set('bodyRequestProducts', encodeURIComponent(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
+
+        // Redirect to first page
+        return serverRedirect(resolvedUrl);
+    }
+
     // Price end (min & max)
     priceEnd = {
         min: Math.floor(productsData.unfilteredPriceSortMin.ati),
@@ -130,8 +140,8 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
 
     const actions = [
         {
-            type : 'SET_SELECT_PAGE',
-            value: page
+            type : 'SET_CATEGORY_BODY_REQUEST',
+            value: bodyRequestProducts
         }, {
             type : 'SET_CATEGORY_PRICE_END',
             value: priceEnd

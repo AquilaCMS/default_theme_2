@@ -1,11 +1,11 @@
-import { useEffect, useState }                                                    from 'react';
-import { useRouter }                                                              from 'next/router';
-import useTranslation                                                             from 'next-translate/useTranslation';
-import { getBlockCMS }                                                            from '@aquilacms/aquila-connector/api/blockcms';
-import { getCategoryProducts }                                                    from '@aquilacms/aquila-connector/api/category';
-import axios                                                                      from '@aquilacms/aquila-connector/lib/AxiosInstance';
-import { useSelectPage, useCategoryProducts, useCategoryPriceEnd, useSiteConfig } from '@lib/hooks';
-import { getBodyRequestProductsFromCookie, convertFilter, unsetCookie }           from '@lib/utils';
+import { useEffect, useState }                                                             from 'react';
+import { useRouter }                                                                       from 'next/router';
+import useTranslation                                                                      from 'next-translate/useTranslation';
+import { getBlockCMS }                                                                     from '@aquilacms/aquila-connector/api/blockcms';
+import { getCategoryProducts }                                                             from '@aquilacms/aquila-connector/api/category';
+import axios                                                                               from '@aquilacms/aquila-connector/lib/AxiosInstance';
+import { useCategoryBodyRequest, useCategoryProducts, useCategoryPriceEnd, useSiteConfig } from '@lib/hooks';
+import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix }                 from '@lib/utils';
 
 // GET allergens
 async function getAllergens() {
@@ -19,18 +19,18 @@ async function getAllergens() {
 }
 
 export default function AllergenFilter() {
-    const [allergens, setAllergens]               = useState([]);
-    const [checkedAllergens, setCheckedAllergens] = useState({});
-    const [cmsBlockWarning, setCmsBlockWarning]   = useState('');
-    const [open, setOpen]                         = useState(false);
-    const [hasFilters, setHasFilters]             = useState(false);
-    const [message, setMessage]                   = useState();
-    const router                                  = useRouter();
-    const { setSelectPage }                       = useSelectPage();
-    const { setCategoryProducts }                 = useCategoryProducts();
-    const { categoryPriceEnd }                    = useCategoryPriceEnd();
-    const { themeConfig }                         = useSiteConfig();
-    const { lang, t }                             = useTranslation();
+    const [allergens, setAllergens]                       = useState([]);
+    const [checkedAllergens, setCheckedAllergens]         = useState({});
+    const [cmsBlockWarning, setCmsBlockWarning]           = useState('');
+    const [open, setOpen]                                 = useState(false);
+    const [hasFilters, setHasFilters]                     = useState(false);
+    const [message, setMessage]                           = useState();
+    const router                                          = useRouter();
+    const { categoryBodyRequest, setCategoryBodyRequest } = useCategoryBodyRequest();
+    const { categoryPriceEnd, setCategoryPriceEnd }       = useCategoryPriceEnd();
+    const { setCategoryProducts }                         = useCategoryProducts();
+    const { themeConfig }                                 = useSiteConfig();
+    const { lang, t }                                     = useTranslation();
 
     // We determine the slug of the category
     const categorySlugs = Array.isArray(router.query.categorySlugs) ? router.query.categorySlugs : [router.query.categorySlugs];
@@ -156,13 +156,17 @@ export default function AllergenFilter() {
                 max: Math.ceil(products.unfilteredPriceSortMax.ati)
             };
     
-            // If price end has changed, reload
+            // If price end has changed
             if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
-                return router.reload();
+                // Detecting bad price end in price filter of body request cookie
+                filterPriceFix(bodyRequestProducts, priceEnd);
+    
+                // Setting the new price end
+                setCategoryPriceEnd(priceEnd);
             }
 
-            // Force page 1
-            setSelectPage(1);
+            // Setting body request in redux
+            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -211,8 +215,22 @@ export default function AllergenFilter() {
                 const products = await getCategoryProducts(slug, '', lang, { PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
                 setCategoryProducts(products);
 
-                // Force page 1
-                setSelectPage(1);
+                const priceEnd = {
+                    min: Math.floor(products.unfilteredPriceSortMin.ati),
+                    max: Math.ceil(products.unfilteredPriceSortMax.ati)
+                };
+
+                // If price end has changed
+                if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                    // Detecting bad price end in price filter of body request cookie
+                    filterPriceFix(bodyRequestProducts, priceEnd);
+        
+                    // Setting the new price end
+                    setCategoryPriceEnd(priceEnd);
+                }
+
+                // Setting body request in redux
+                setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
                 // Setting body request cookie
                 document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';

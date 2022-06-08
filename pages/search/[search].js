@@ -1,7 +1,7 @@
 import { useState }                                                                                   from 'react';
 import useTranslation                                                                                 from 'next-translate/useTranslation';
 import Cookies                                                                                        from 'cookies';
-import Error                                                                                          from '@pages/_error';
+import PageError                                                                                      from '@pages/_error';
 import Filters                                                                                        from '@components/category/Filters';
 import Pagination                                                                                     from '@components/category/Pagination';
 import Layout                                                                                         from '@components/layouts/Layout';
@@ -168,11 +168,12 @@ export default function Search({ search, error }) {
             return products;
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            throw new Error('Error getProductsList');
         }
     };
 
     if (error) {
-        return <Error statusCode={error.code} />;
+        return <PageError statusCode={error.code} />;
     }
     
     return (

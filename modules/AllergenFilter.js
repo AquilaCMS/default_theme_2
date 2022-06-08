@@ -166,7 +166,7 @@ export default function AllergenFilter() {
             }
 
             // Setting body request in redux
-            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -230,7 +230,7 @@ export default function AllergenFilter() {
                 }
 
                 // Setting body request in redux
-                setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+                setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
                 // Setting body request cookie
                 document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';

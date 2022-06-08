@@ -6,7 +6,7 @@ import getT                                                                     
 import useTranslation                                                                                             from 'next-translate/useTranslation';
 import parse                                                                                                      from 'html-react-parser';
 import Cookies                                                                                                    from 'cookies';
-import Error                                                                                                      from '@pages/_error';
+import PageError                                                                                                  from '@pages/_error';
 import Filters                                                                                                    from '@components/category/Filters';
 import Pagination                                                                                                 from '@components/category/Pagination';
 import Layout                                                                                                     from '@components/layouts/Layout';
@@ -237,6 +237,7 @@ export default function Category({ breadcrumb, category, limit, origin, error })
             return products;
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            throw new Error('Error getProductsList');
         }
     };
 
@@ -247,7 +248,7 @@ export default function Category({ breadcrumb, category, limit, origin, error })
     const pageCount = Math.ceil(categoryProducts.count / limit);
 
     if (error) {
-        return <Error statusCode={error.code} />;
+        return <PageError statusCode={error.code} />;
     }
 
     let [url] = router.asPath.split('?');

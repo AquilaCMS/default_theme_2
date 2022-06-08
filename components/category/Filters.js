@@ -11,7 +11,6 @@ export default function Filters({ filtersData, getProductsList }) {
     const formRef                                         = useRef();
     const [open, setOpen]                                 = useState(false);
     const [hasFilters, setHasFilters]                     = useState(false);
-    const [message, setMessage]                           = useState();
     const { categoryPriceEnd, setCategoryPriceEnd }       = useCategoryPriceEnd();
     const { categoryBodyRequest, setCategoryBodyRequest } = useCategoryBodyRequest();
     const { setCategoryProducts }                         = useCategoryProducts();
@@ -45,8 +44,6 @@ export default function Filters({ filtersData, getProductsList }) {
     };
 
     const handlePriceFilterAfterChange = async (value) => {
-        setMessage();
-
         // Getting body request from cookie
         const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
@@ -115,18 +112,16 @@ export default function Filters({ filtersData, getProductsList }) {
             }
 
             // Setting body request in redux
-            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
     
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            console.error(err);
         }
     };
 
     const handleAttributeFilterClick = async () => {
-        setMessage();
-
         // Getting body request from cookie
         const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
@@ -203,18 +198,16 @@ export default function Filters({ filtersData, getProductsList }) {
             }
             
             // Setting body request in redux
-            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            console.error(err);
         }
     };
 
     const handlePictoFilterClick = async () => {
-        setMessage();
-
         // Getting body request from cookie
         const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
@@ -288,18 +281,16 @@ export default function Filters({ filtersData, getProductsList }) {
             }
 
             // Setting body request in redux
-            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            console.error(err);
         }
     };
 
     const resetFilters = async () => {
-        setMessage();
-
         // Getting body request from cookie
         const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
@@ -354,18 +345,16 @@ export default function Filters({ filtersData, getProductsList }) {
             }
 
             // Setting body request in redux
-            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            console.error(err)
         }
     };
 
     const handleLimitChange = async (e) => {
-        setMessage();
-
         // Getting body request from cookie
         const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
@@ -404,18 +393,17 @@ export default function Filters({ filtersData, getProductsList }) {
                 setCategoryPriceEnd(priceEnd);
             }
 
-            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            // Setting body request in redux
+            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            console.error(err)
         }
     };
 
     const handleSortChange = async (e) => {
-        setMessage();
-
         // Getting body request from cookie
         const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
@@ -456,12 +444,12 @@ export default function Filters({ filtersData, getProductsList }) {
             }
 
             // Setting body request in redux
-            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            console.error(err)
         }
     };
 
@@ -598,15 +586,6 @@ export default function Filters({ filtersData, getProductsList }) {
                     </select>
                 </div>
             </div>
-            {
-                message && (
-                    <div className={`w-commerce-commerce${message.type}`}>
-                        <div>
-                            {message.message}
-                        </div>
-                    </div>
-                )
-            }
         </form>
     );
 }

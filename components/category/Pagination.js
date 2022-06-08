@@ -116,12 +116,12 @@ export default function Pagination({ children, getProductsList }) {
             }
 
             // Updating page
-            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: pageRequest, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: pageRequest, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
     
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            console.error(err);
         }
     };
 
@@ -188,12 +188,12 @@ export default function Pagination({ children, getProductsList }) {
             }
 
             // Updating page
-            setCategoryBodyRequest({ ...categoryBodyRequest, filter: bodyRequestProducts.filter, page: pageRequest, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: pageRequest, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            console.error(err);
         } finally {
             setIsLoading(false);
         }

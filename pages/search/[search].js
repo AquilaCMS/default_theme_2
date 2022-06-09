@@ -163,6 +163,7 @@ export default function Search({ search, error }) {
     const { lang, t }           = useTranslation();
 
     const getProductsList = async (postBody) => {
+        setMessage();
         try {
             const products = await getProducts(true, postBody, lang);
             return products;

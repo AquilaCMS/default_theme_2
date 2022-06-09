@@ -232,6 +232,7 @@ export default function Category({ breadcrumb, category, limit, origin, error })
     const { lang, t }           = useTranslation();
 
     const getProductsList = async (postBody) => {
+        setMessage();
         try {
             const products = await getCategoryProducts('', category._id, lang, postBody);
             return products;

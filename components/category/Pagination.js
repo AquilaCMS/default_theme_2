@@ -1,4 +1,3 @@
-
 import { useEffect, useState }                                                             from 'react';
 import InfiniteScroll                                                                      from 'react-infinite-scroll-component';
 import ReactPaginate                                                                       from 'react-paginate';
@@ -11,7 +10,6 @@ import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix }      
 export default function Pagination({ children, getProductsList }) {
     const [pageCount, setPageCount]                       = useState(0);
     const [isLoading, setIsLoading]                       = useState(false);
-    const [message, setMessage]                           = useState();
     const { categoryPriceEnd, setCategoryPriceEnd }       = useCategoryPriceEnd();
     const { categoryBodyRequest, setCategoryBodyRequest } = useCategoryBodyRequest();
     const { categoryProducts, setCategoryProducts }       = useCategoryProducts();
@@ -49,8 +47,6 @@ export default function Pagination({ children, getProductsList }) {
     }, [url, categoryProducts]);
 
     const handlePageClick = async (data) => {
-        setMessage();
-
         // Getting body request from cookie
         const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
@@ -90,7 +86,7 @@ export default function Pagination({ children, getProductsList }) {
         try {
             const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
 
-            // If page > 1 and no products, reload
+            // If page > 1 and no product, reload
             if (!products.datas.length && pageRequest > 1) {
                 const count = Math.ceil(products.count / limitRequest);
                 if (count > 1) {
@@ -131,7 +127,6 @@ export default function Pagination({ children, getProductsList }) {
     };
 
     const loadMoreData = async () => {
-        setMessage();
         setIsLoading(true);
 
         // Getting body request from cookie
@@ -166,7 +161,7 @@ export default function Pagination({ children, getProductsList }) {
         try {
             const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
 
-            // If page > 1 and no products, reload
+            // If page > 1 and no product, reload
             if (!products.datas.length && pageRequest > 1) {
                 const count = Math.ceil(products.count / limitRequest);
                 if (count > 1) {
@@ -258,15 +253,6 @@ export default function Pagination({ children, getProductsList }) {
                         containerClassName={'w-pagination-wrapper pagination'}
                         activeClassName={'active'}
                     />
-                )
-            }
-            {
-                message && (
-                    <div className={`w-commerce-commerce${message.type}`}>
-                        <div>
-                            {message.message}
-                        </div>
-                    </div>
                 )
             }
         </div>

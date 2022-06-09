@@ -112,7 +112,7 @@ export default function Filters({ filtersData, getProductsList }) {
             }
 
             // Setting body request in redux
-            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ ...bodyRequestProducts });
     
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -198,7 +198,7 @@ export default function Filters({ filtersData, getProductsList }) {
             }
             
             // Setting body request in redux
-            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ ...bodyRequestProducts });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -281,7 +281,7 @@ export default function Filters({ filtersData, getProductsList }) {
             }
 
             // Setting body request in redux
-            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ ...bodyRequestProducts });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -345,12 +345,12 @@ export default function Filters({ filtersData, getProductsList }) {
             }
 
             // Setting body request in redux
-            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ ...bodyRequestProducts });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     };
 
@@ -362,6 +362,15 @@ export default function Filters({ filtersData, getProductsList }) {
         if (!bodyRequestProducts.key) {
             return router.reload();
         }
+
+        // Body request : filter
+        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
+
+        // Body request : page
+        if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
+        }
+        const pageRequest = 1;
 
         // Body request : limit
         const limitRequest        = Number(e.target.value);
@@ -376,7 +385,7 @@ export default function Filters({ filtersData, getProductsList }) {
 
         // Updating the products list
         try {
-            const products = await getProductsList({ PostBody: { filter: convertFilter(bodyRequestProducts.filter, lang), page: 1, limit: limitRequest, sort: sortRequest } });
+            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
             setCategoryProducts(products);
 
             const priceEnd = {
@@ -394,12 +403,12 @@ export default function Filters({ filtersData, getProductsList }) {
             }
 
             // Setting body request in redux
-            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ ...bodyRequestProducts });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     };
 
@@ -411,6 +420,15 @@ export default function Filters({ filtersData, getProductsList }) {
         if (!bodyRequestProducts.key) {
             return router.reload();
         }
+
+        // Body request : filter
+        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
+
+        // Body request : page
+        if (bodyRequestProducts.page) {
+            delete bodyRequestProducts.page;
+        }
+        const pageRequest = 1;
 
         // Body request : limit
         let limitRequest = defaultLimit;
@@ -426,7 +444,7 @@ export default function Filters({ filtersData, getProductsList }) {
 
         // Updating the products list
         try {
-            const products = await getProductsList({ PostBody: { filter: convertFilter(bodyRequestProducts.filter, lang), page: 1, limit: limitRequest, sort: sortRequest } });
+            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
             setCategoryProducts(products);
 
             const priceEnd = {
@@ -444,12 +462,12 @@ export default function Filters({ filtersData, getProductsList }) {
             }
 
             // Setting body request in redux
-            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: 1, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            setCategoryBodyRequest({ ...bodyRequestProducts });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     };
 

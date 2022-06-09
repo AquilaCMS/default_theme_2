@@ -92,7 +92,12 @@ export default function Pagination({ children, getProductsList }) {
 
             // If page > 1 and no products, reload
             if (!products.datas.length && pageRequest > 1) {
-                delete bodyRequestProducts.page;
+                const count = Math.ceil(products.count / limitRequest);
+                if (count > 1) {
+                    bodyRequestProducts.page = count;
+                } else {
+                    delete bodyRequestProducts.page;
+                }
 
                 // Setting body request cookie
                 document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -115,8 +120,8 @@ export default function Pagination({ children, getProductsList }) {
                 setCategoryPriceEnd(priceEnd);
             }
 
-            // Updating page
-            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: pageRequest, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            // Setting body request in redux
+            setCategoryBodyRequest({ ...bodyRequestProducts });
     
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -163,7 +168,12 @@ export default function Pagination({ children, getProductsList }) {
 
             // If page > 1 and no products, reload
             if (!products.datas.length && pageRequest > 1) {
-                delete bodyRequestProducts.page;
+                const count = Math.ceil(products.count / limitRequest);
+                if (count > 1) {
+                    bodyRequestProducts.page = count;
+                } else {
+                    delete bodyRequestProducts.page;
+                }
 
                 // Setting body request cookie
                 document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
@@ -187,8 +197,8 @@ export default function Pagination({ children, getProductsList }) {
                 setCategoryPriceEnd(priceEnd);
             }
 
-            // Updating page
-            setCategoryBodyRequest({ filter: bodyRequestProducts.filter, page: pageRequest, limit: bodyRequestProducts.limit, sort: bodyRequestProducts.sort });
+            // Setting body request in redux
+            setCategoryBodyRequest({ ...bodyRequestProducts });
 
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';

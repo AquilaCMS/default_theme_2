@@ -52,13 +52,15 @@ export default function Filters({ filtersData, getProductsList }) {
             return router.reload();
         }
 
+        const [minValue, maxValue] = value;
+
         // If values are the same, do nothing
-        if (value[0] === categoryBodyRequest.filter?.price?.min && value[1] === categoryBodyRequest.filter?.price?.max) {
+        if (minValue === (categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min) && maxValue === (categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max)) {
             return;
         }
 
         // Body request : filter
-        if (value[0] === categoryPriceEnd.min && value[1] === categoryPriceEnd.max) {
+        if (minValue === categoryPriceEnd.min && maxValue === categoryPriceEnd.max) {
             if (bodyRequestProducts.filter?.price) {
                 delete bodyRequestProducts.filter.price;
                 if (!Object.keys(bodyRequestProducts.filter).length) {
@@ -69,7 +71,7 @@ export default function Filters({ filtersData, getProductsList }) {
             if (!bodyRequestProducts.filter) {
                 bodyRequestProducts.filter = {};
             }
-            bodyRequestProducts.filter.price = { min: value[0], max: value[1] };
+            bodyRequestProducts.filter.price = { min: minValue, max: maxValue };
         }
         const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
 

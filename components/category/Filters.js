@@ -21,25 +21,47 @@ export default function Filters({ filtersData, getProductsList }) {
     // Getting Limit for request
     const defaultLimit = themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 16;
 
+    // Getting URL page
+    const [url] = router.asPath.split('?');
+
     useEffect(() => {
         // Checking if the price, attributes or pictos filters are empty
-        if ((categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min) !== categoryPriceEnd.min || 
-            (categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max) !== categoryPriceEnd.max || 
-            Object.keys(categoryBodyRequest.filter?.attributes || {}).length || 
-            categoryBodyRequest.filter?.pictos?.length) {
-            setHasFilters(true);
+        if (filtersSelected()) {
             openBlock(true);
+        } else {
+            openBlock(false);
+        }
+    }, [url]);
+
+    useEffect(() => {
+        // Checking if the price, attributes or pictos filters are empty
+        if (filtersSelected()) {
+            setHasFilters(true);
         } else {
             setHasFilters(false);
         }
     }, [categoryBodyRequest]);
+
+    const filtersSelected = () => {
+        if ((categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min) !== categoryPriceEnd.min || 
+            (categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max) !== categoryPriceEnd.max || 
+            Object.keys(categoryBodyRequest.filter?.attributes || {}).length || 
+            categoryBodyRequest.filter?.pictos?.length) {
+            return true;
+        }
+        return false;
+    };
 
     const handlePriceFilterChange = async (value) => {
         const bodyRequest = cloneObj(categoryBodyRequest);
         if (!bodyRequest.filter) {
             bodyRequest.filter = {};
         }
-        bodyRequest.filter.price = { min: value[0], max: value[1] };
+        if (value[0] === categoryPriceEnd.min && value[1] === categoryPriceEnd.max) {
+            delete bodyRequest.filter.price;
+        } else {  
+            bodyRequest.filter.price = { min: value[0], max: value[1] };
+        }
         setCategoryBodyRequest(bodyRequest);
     };
 
@@ -474,7 +496,7 @@ export default function Filters({ filtersData, getProductsList }) {
     };
 
     const openBlock = (force = undefined) => {
-        setOpen(force || !open);
+        setOpen(typeof force !== 'undefined' ? force : !open);
     };
 
     return (
@@ -499,12 +521,21 @@ export default function Filters({ filtersData, getProductsList }) {
                                         onAfterChange={handlePriceFilterAfterChange}
                                     />
                                 </div>
-                                <span style={{ float: 'left' }}>
-                                    {categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min} €
-                                </span>
-                                <span style={{ float: 'right' }}>
-                                    {categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max} €
-                                </span>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>
+                                        {categoryPriceEnd.min} €
+                                    </span>
+                                    {
+                                        categoryBodyRequest.filter?.price && (
+                                            <span style={{ backgroundColor: '#ff8946', color: 'white', padding: '2px', borderRadius: '6px', fontSize: '12px' }}>
+                                                {categoryBodyRequest.filter.price.min} € &bull; {categoryBodyRequest.filter.price.max} €
+                                            </span>
+                                        )
+                                    }
+                                    <span>
+                                        {categoryPriceEnd.max} €
+                                    </span>
+                                </div>
                             </div>
                         )
                     }

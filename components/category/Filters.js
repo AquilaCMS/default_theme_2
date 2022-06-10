@@ -65,7 +65,7 @@ export default function Filters({ filtersData, getProductsList }) {
         setCategoryBodyRequest(bodyRequest);
     };
 
-    const handlePriceFilterAfterChange = async (value) => {
+    const updateProductsList = async (type, value) => {
         // Getting body request from cookie
         const bodyRequestProducts = getBodyRequestProductsFromCookie();
 
@@ -74,375 +74,81 @@ export default function Filters({ filtersData, getProductsList }) {
             return router.reload();
         }
 
-        const [minValue, maxValue] = value;
+        if (type === 'filter.price') {
+            const [minValue, maxValue] = value;
 
-        // If values are the same, do nothing
-        if (minValue === (categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min) && maxValue === (categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max)) {
-            return;
-        }
-
-        // Body request : filter
-        if (minValue === categoryPriceEnd.min && maxValue === categoryPriceEnd.max) {
-            if (bodyRequestProducts.filter?.price) {
-                delete bodyRequestProducts.filter.price;
-                if (!Object.keys(bodyRequestProducts.filter).length) {
-                    delete bodyRequestProducts.filter;
-                }
-            }
-        } else {
-            if (!bodyRequestProducts.filter) {
-                bodyRequestProducts.filter = {};
-            }
-            bodyRequestProducts.filter.price = { min: minValue, max: maxValue };
-        }
-        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
-
-        // Body request : page
-        if (bodyRequestProducts.page) {
-            delete bodyRequestProducts.page;
-        }
-        const pageRequest = 1;
-
-        // Body request : limit
-        let limitRequest = defaultLimit;
-        if (bodyRequestProducts.limit) {
-            limitRequest = bodyRequestProducts.limit;
-        }
-
-        // Body request : sort
-        let sortRequest = { sortWeight: -1 };
-        if (bodyRequestProducts.sort) {
-            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
-            sortRequest                  = { [sortField]: parseInt(sortValue) };
-        }
-
-        // Updating the products list
-        try {
-            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
-            setCategoryProducts(products);
-
-            const priceEnd = {
-                min: Math.floor(products.unfilteredPriceSortMin.ati),
-                max: Math.ceil(products.unfilteredPriceSortMax.ati)
-            };
-    
-            // If price end has changed
-            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
-                // Detecting bad price end in price filter of body request cookie
-                filterPriceFix(bodyRequestProducts, priceEnd);
-    
-                // Setting the new price end
-                setCategoryPriceEnd(priceEnd);
+            // If values are the same, do nothing
+            if (minValue === (categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min) && maxValue === (categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max)) {
+                return;
             }
 
-            // Setting body request in redux
-            setCategoryBodyRequest({ ...bodyRequestProducts });
-    
-            // Setting body request cookie
-            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const handleAttributeFilterClick = async () => {
-        // Getting body request from cookie
-        const bodyRequestProducts = getBodyRequestProductsFromCookie();
-
-        // If the body request cookie does not have the validity key property, reload
-        if (!bodyRequestProducts.key) {
-            return router.reload();
-        }
-
-        // Getting checked attributes
-        const attributes = {};
-        const inputs     = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
-        for (const input of inputs) {
-            if (input.checked) {
-                const [filterType, attributeId, type, value] = input.value.split('|');
-                if (filterType === 'attribute') {
-                    if (!attributes[attributeId]) {
-                        attributes[attributeId] = [];
+            if (minValue === categoryPriceEnd.min && maxValue === categoryPriceEnd.max) {
+                if (bodyRequestProducts.filter?.price) {
+                    delete bodyRequestProducts.filter.price;
+                    if (!Object.keys(bodyRequestProducts.filter).length) {
+                        delete bodyRequestProducts.filter;
                     }
-                    attributes[attributeId] = [...attributes[attributeId], (type === 'bool' ? value === 'true' : (type === 'number' ? Number(value) : value.toString()))];
+                }
+            } else {
+                if (!bodyRequestProducts.filter) {
+                    bodyRequestProducts.filter = {};
+                }
+                bodyRequestProducts.filter.price = { min: minValue, max: maxValue };
+            }
+        } else if (type === 'filter.attributes') {
+            // Getting checked attributes
+            const attributes = {};
+            const inputs     = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
+            for (const input of inputs) {
+                if (input.checked) {
+                    const [filterType, attributeId, type, value] = input.value.split('|');
+                    if (filterType === 'attribute') {
+                        if (!attributes[attributeId]) {
+                            attributes[attributeId] = [];
+                        }
+                        attributes[attributeId] = [...attributes[attributeId], (type === 'bool' ? value === 'true' : (type === 'number' ? Number(value) : value.toString()))];
+                    }
                 }
             }
-        }
 
-        // Body request : filter
-        if (Object.keys(attributes).length) {
-            if (!bodyRequestProducts.filter) {
-                bodyRequestProducts.filter = {};
+            if (Object.keys(attributes).length) {
+                if (!bodyRequestProducts.filter) {
+                    bodyRequestProducts.filter = {};
+                }
+                bodyRequestProducts.filter.attributes = attributes;
+            } else if (bodyRequestProducts.filter?.attributes) {
+                delete bodyRequestProducts.filter.attributes;
             }
-            bodyRequestProducts.filter.attributes = attributes;
-        } else if (bodyRequestProducts.filter?.attributes) {
-            delete bodyRequestProducts.filter.attributes;
-            if (!Object.keys(bodyRequestProducts.filter).length) {
-                delete bodyRequestProducts.filter;
-            }
-        }
-        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
-
-        // Body request : page
-        if (bodyRequestProducts.page) {
-            delete bodyRequestProducts.page;
-        }
-        const pageRequest = 1;
-
-        // Body request : limit
-        let limitRequest = defaultLimit;
-        if (bodyRequestProducts.limit) {
-            limitRequest = bodyRequestProducts.limit;
-        }
-
-        // Body request : sort
-        let sortRequest = { sortWeight: -1 };
-        if (bodyRequestProducts.sort) {
-            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
-            sortRequest                  = { [sortField]: parseInt(sortValue) };
-        }
-
-        // Updating the products list
-        try {
-            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
-            setCategoryProducts(products);
-
-            const priceEnd = {
-                min: Math.floor(products.unfilteredPriceSortMin.ati),
-                max: Math.ceil(products.unfilteredPriceSortMax.ati)
-            };
-
-            // If price end has changed
-            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
-                // Detecting bad price end in price filter of body request cookie
-                filterPriceFix(bodyRequestProducts, priceEnd);
-
-                // Setting the new price end
-                setCategoryPriceEnd(priceEnd);
-            }
-            
-            // Setting body request in redux
-            setCategoryBodyRequest({ ...bodyRequestProducts });
-
-            // Setting body request cookie
-            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const handlePictoFilterClick = async () => {
-        // Getting body request from cookie
-        const bodyRequestProducts = getBodyRequestProductsFromCookie();
-
-        // If the body request cookie does not have the validity key property, reload
-        if (!bodyRequestProducts.key) {
-            return router.reload();
-        }
-
-        // Getting checked pictos
-        let pictos   = [];
-        const inputs = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
-        for (const input of inputs) {
-            if (input.checked) {
-                const [filterType, code] = input.value.split('|');
-                if (filterType === 'picto') {
-                    pictos = [...pictos, code];
+        } else if (type === 'filter.pictos') {
+            // Getting checked pictos
+            let pictos   = [];
+            const inputs = [...formRef.current.elements].filter(elem => elem.nodeName !== 'BUTTON');
+            for (const input of inputs) {
+                if (input.checked) {
+                    const [filterType, code] = input.value.split('|');
+                    if (filterType === 'picto') {
+                        pictos = [...pictos, code];
+                    }
                 }
             }
-        }
 
-        // Body request : filter
-        if (pictos.length) {
-            if (!bodyRequestProducts.filter) {
-                bodyRequestProducts.filter = {};
+            if (pictos.length) {
+                if (!bodyRequestProducts.filter) {
+                    bodyRequestProducts.filter = {};
+                }
+                bodyRequestProducts.filter.pictos = pictos;
+            } else if (bodyRequestProducts.filter?.pictos) {
+                delete bodyRequestProducts.filter.pictos;
             }
-            bodyRequestProducts.filter.pictos = pictos;
-        } else if (bodyRequestProducts.filter?.pictos) {
-            delete bodyRequestProducts.filter.pictos;
-            if (!Object.keys(bodyRequestProducts.filter).length) {
-                delete bodyRequestProducts.filter;
-            }
-        }
-        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
-
-        // Body request : page
-        if (bodyRequestProducts.page) {
-            delete bodyRequestProducts.page;
-        }
-        const pageRequest = 1;
-
-        // Body request : limit
-        let limitRequest = defaultLimit;
-        if (bodyRequestProducts.limit) {
-            limitRequest = bodyRequestProducts.limit;
-        }
-
-        // Body request : sort
-        let sortRequest = { sortWeight: -1 };
-        if (bodyRequestProducts.sort) {
-            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
-            sortRequest                  = { [sortField]: parseInt(sortValue) };
-        }
-
-        // Updating the products list
-        try {
-            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
-            setCategoryProducts(products);
-
-            const priceEnd = {
-                min: Math.floor(products.unfilteredPriceSortMin.ati),
-                max: Math.ceil(products.unfilteredPriceSortMax.ati)
-            };
-
-            // If price end has changed
-            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
-                // Detecting bad price end in price filter of body request cookie
-                filterPriceFix(bodyRequestProducts, priceEnd);
-
-                // Setting the new price end
-                setCategoryPriceEnd(priceEnd);
-            }
-
-            // Setting body request in redux
-            setCategoryBodyRequest({ ...bodyRequestProducts });
-
-            // Setting body request cookie
-            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const resetFilters = async () => {
-        // Getting body request from cookie
-        const bodyRequestProducts = getBodyRequestProductsFromCookie();
-
-        // If the body request cookie does not have the validity key property, reload
-        if (!bodyRequestProducts.key) {
-            return router.reload();
-        }
-
-        // Body request : filter
-        if (bodyRequestProducts.filter) {
-            delete bodyRequestProducts.filter.price;
-            delete bodyRequestProducts.filter.attributes;
-            delete bodyRequestProducts.filter.pictos;
-            if (!Object.keys(bodyRequestProducts.filter).length) {
-                delete bodyRequestProducts.filter;
+        } else if (type === 'filter.reset') {
+            if (bodyRequestProducts.filter) {
+                delete bodyRequestProducts.filter.price;
+                delete bodyRequestProducts.filter.attributes;
+                delete bodyRequestProducts.filter.pictos;
             }
         }
-        let filterRequest = convertFilter(bodyRequestProducts.filter, lang);
-
-        // Body request : page
-        if (bodyRequestProducts.page) {
-            delete bodyRequestProducts.page;
-        }
-        const pageRequest = 1;
-
-        // Body request : limit
-        let limitRequest = defaultLimit;
-        if (bodyRequestProducts.limit) {
-            limitRequest = bodyRequestProducts.limit;
-        }
-
-        // Body request : sort
-        let sortRequest = { sortWeight: -1 };
-        if (bodyRequestProducts.sort) {
-            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
-            sortRequest                  = { [sortField]: parseInt(sortValue) };
-        }
-
-        // Updating the products list
-        try {
-            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
-            setCategoryProducts(products);
-
-            const priceEnd = {
-                min: Math.floor(products.unfilteredPriceSortMin.ati),
-                max: Math.ceil(products.unfilteredPriceSortMax.ati)
-            };
-
-            // Setting the new price end if has changed
-            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
-                setCategoryPriceEnd(priceEnd);
-            }
-
-            // Setting body request in redux
-            setCategoryBodyRequest({ ...bodyRequestProducts });
-
-            // Setting body request cookie
-            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const handleLimitChange = async (e) => {
-        // Getting body request from cookie
-        const bodyRequestProducts = getBodyRequestProductsFromCookie();
-
-        // If the body request cookie does not have the validity key property, reload
-        if (!bodyRequestProducts.key) {
-            return router.reload();
-        }
-
-        // Body request : filter
-        const filterRequest = convertFilter(bodyRequestProducts.filter, lang);
-
-        // Body request : page
-        if (bodyRequestProducts.page) {
-            delete bodyRequestProducts.page;
-        }
-        const pageRequest = 1;
-
-        // Body request : limit
-        const limitRequest        = Number(e.target.value);
-        bodyRequestProducts.limit = limitRequest;
-
-        // Body request : sort
-        let sortRequest = { sortWeight: -1 };
-        if (bodyRequestProducts.sort) {
-            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
-            sortRequest                  = { [sortField]: parseInt(sortValue) };
-        }
-
-        // Updating the products list
-        try {
-            const products = await getProductsList({ PostBody: { filter: filterRequest, page: pageRequest, limit: limitRequest, sort: sortRequest } });
-            setCategoryProducts(products);
-
-            const priceEnd = {
-                min: Math.floor(products.unfilteredPriceSortMin.ati),
-                max: Math.ceil(products.unfilteredPriceSortMax.ati)
-            };
-
-            // If price end has changed
-            if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
-                // Detecting bad price end in price filter of body request cookie
-                filterPriceFix(bodyRequestProducts, priceEnd);
-
-                // Setting the new price end
-                setCategoryPriceEnd(priceEnd);
-            }
-
-            // Setting body request in redux
-            setCategoryBodyRequest({ ...bodyRequestProducts });
-
-            // Setting body request cookie
-            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const handleSortChange = async (e) => {
-        // Getting body request from cookie
-        const bodyRequestProducts = getBodyRequestProductsFromCookie();
-
-        // If the body request cookie does not have the validity key property, reload
-        if (!bodyRequestProducts.key) {
-            return router.reload();
+        if (!Object.keys(bodyRequestProducts.filter).length) {
+            delete bodyRequestProducts.filter;
         }
 
         // Body request : filter
@@ -456,15 +162,24 @@ export default function Filters({ filtersData, getProductsList }) {
 
         // Body request : limit
         let limitRequest = defaultLimit;
-        if (bodyRequestProducts.limit) {
+        if (type === 'limit') {
+            limitRequest              = Number(value);
+            bodyRequestProducts.limit = limitRequest;
+        } else if (bodyRequestProducts.limit) {
             limitRequest = bodyRequestProducts.limit;
         }
 
         // Body request : sort
-        const seletedSort        = e.target.value;
-        const [field, value]     = seletedSort.split('|');
-        const sortRequest        = { [field]: parseInt(value) };
-        bodyRequestProducts.sort = seletedSort;
+        let sortRequest = { sortWeight: -1 };
+        if (type === 'sort') {
+            const seletedSort            = value;
+            const [sortField, sortValue] = seletedSort.split('|');
+            sortRequest                  = { [sortField]: parseInt(sortValue) };
+            bodyRequestProducts.sort     = seletedSort;
+        } else if (bodyRequestProducts.sort) {
+            const [sortField, sortValue] = bodyRequestProducts.sort.split('|');
+            sortRequest                  = { [sortField]: parseInt(sortValue) };
+        }
 
         // Updating the products list
         try {
@@ -475,19 +190,21 @@ export default function Filters({ filtersData, getProductsList }) {
                 min: Math.floor(products.unfilteredPriceSortMin.ati),
                 max: Math.ceil(products.unfilteredPriceSortMax.ati)
             };
-
+    
             // If price end has changed
             if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
                 // Detecting bad price end in price filter of body request cookie
-                filterPriceFix(bodyRequestProducts, priceEnd);
-
+                if (type !== 'filter.reset') { 
+                    filterPriceFix(bodyRequestProducts, priceEnd);
+                }
+    
                 // Setting the new price end
                 setCategoryPriceEnd(priceEnd);
             }
 
             // Setting body request in redux
             setCategoryBodyRequest({ ...bodyRequestProducts });
-
+    
             // Setting body request cookie
             document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
@@ -518,7 +235,7 @@ export default function Filters({ filtersData, getProductsList }) {
                                         max={categoryPriceEnd.max}
                                         value={[categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min, categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max]}
                                         onChange={handlePriceFilterChange}
-                                        onAfterChange={handlePriceFilterAfterChange}
+                                        onAfterChange={(value) => updateProductsList('filter.price', value)}
                                     />
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -559,7 +276,7 @@ export default function Filters({ filtersData, getProductsList }) {
                                                             name="newsletter"
                                                             value={`attribute|${attribute.id_attribut}|${attribute.type}|${value}`}
                                                             checked={checked}
-                                                            onChange={handleAttributeFilterClick}
+                                                            onChange={() => updateProductsList('filter.attributes')}
                                                             style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
                                                         />
                                                         <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene"></div>
@@ -592,7 +309,7 @@ export default function Filters({ filtersData, getProductsList }) {
                                                         name="newsletter"
                                                         value={`picto|${picto.code}`}
                                                         checked={categoryBodyRequest.filter?.pictos?.includes(picto.code) ? true : false}
-                                                        onChange={handlePictoFilterClick}
+                                                        onChange={() => updateProductsList('filter.pictos')}
                                                         style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
                                                     />
                                                     <div className="w-checkbox-input w-checkbox-input--inputType-custom checkbox-allergene"></div>
@@ -609,7 +326,7 @@ export default function Filters({ filtersData, getProductsList }) {
                 {
                     hasFilters && (
                         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-                            <button type="button" className="log-button-03 w-button" onClick={resetFilters}>{t('components/filters:btnReset')}</button>
+                            <button type="button" className="log-button-03 w-button" onClick={() => updateProductsList('filter.reset')}>{t('components/filters:btnReset')}</button>
                         </div>
                     )
                 }
@@ -617,7 +334,7 @@ export default function Filters({ filtersData, getProductsList }) {
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <div>
-                    {t('components/filters:sortBy')} : <select value={categoryBodyRequest.sort || 'sortWeight|-1'} onChange={handleSortChange}>
+                    {t('components/filters:sortBy')} : <select value={categoryBodyRequest.sort || 'sortWeight|-1'} onChange={(e) => updateProductsList('sort', e.target.value)}>
                         <option value="sortWeight|-1">{t('components/filters:pertinence')}</option>
                         <option value={`translation.${lang}.name|1`}>A-Z</option>
                         <option value={`translation.${lang}.name|-1`}>Z-A</option>
@@ -629,7 +346,7 @@ export default function Filters({ filtersData, getProductsList }) {
                     </select>
                 </div>
                 <div style={{ marginLeft: '10px' }}>
-                    {t('components/filters:limit')} : <select value={categoryBodyRequest.limit || defaultLimit} onChange={handleLimitChange}>
+                    {t('components/filters:limit')} : <select value={categoryBodyRequest.limit || defaultLimit} onChange={(e) => updateProductsList('limit', e.target.value)}>
                         <option value="4">4</option>
                         <option value="8">8</option>
                         <option value="16">16</option>

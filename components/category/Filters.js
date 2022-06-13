@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState }                                                     from 'react';
 import { useRouter }                                                                       from 'next/router';
 import useTranslation                                                                      from 'next-translate/useTranslation';
-import Slider                                                                              from 'rc-slider';
+import { Range, getTrackBackground }                                                       from 'react-range';
 import { useCategoryPriceEnd, useCategoryBodyRequest, useCategoryProducts, useSiteConfig } from '@lib/hooks';
 import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix, cloneObj }       from '@lib/utils';
-
-import 'rc-slider/assets/index.css';
 
 export default function Filters({ filtersData, getProductsList }) {
     const formRef                                         = useRef();
@@ -59,8 +57,13 @@ export default function Filters({ filtersData, getProductsList }) {
         }
         if (value[0] === categoryPriceEnd.min && value[1] === categoryPriceEnd.max) {
             delete bodyRequest.filter.price;
-        } else {  
-            bodyRequest.filter.price = { min: value[0], max: value[1] };
+        } else {
+            let [minValue, maxValue] = value;
+            if (value[0] > value[1]) {
+                minValue = value[1];
+                maxValue = value[0];
+            }
+            bodyRequest.filter.price = { min: minValue, max: maxValue };
         }
         setCategoryBodyRequest(bodyRequest);
     };
@@ -78,7 +81,7 @@ export default function Filters({ filtersData, getProductsList }) {
             const [minValue, maxValue] = value;
 
             // If values are the same, do nothing
-            if (minValue === (categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min) && maxValue === (categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max)) {
+            if (minValue === (bodyRequestProducts.filter?.price?.min || categoryPriceEnd.min) && maxValue === (bodyRequestProducts.filter?.price?.max || categoryPriceEnd.max)) {
                 return;
             }
 
@@ -147,7 +150,7 @@ export default function Filters({ filtersData, getProductsList }) {
                 delete bodyRequestProducts.filter.pictos;
             }
         }
-        if (!Object.keys(bodyRequestProducts.filter).length) {
+        if (bodyRequestProducts.filter && !Object.keys(bodyRequestProducts.filter).length) {
             delete bodyRequestProducts.filter;
         }
 
@@ -193,8 +196,13 @@ export default function Filters({ filtersData, getProductsList }) {
     
             // If price end has changed
             if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
-                // Detecting bad price end in price filter of body request cookie
-                if (type !== 'filter.reset') { 
+                if (type !== 'filter.reset') {
+                    // If filter min or max price are outside of range, reload
+                    if (bodyRequestProducts.filter?.price && (bodyRequestProducts.filter.price.min > priceEnd.max || bodyRequestProducts.filter.price.max < priceEnd.min)) {
+                        return router.reload();
+                    }
+
+                    // Detecting bad price end in price filter of body request cookie
                     filterPriceFix(bodyRequestProducts, priceEnd);
                 }
     
@@ -216,6 +224,8 @@ export default function Filters({ filtersData, getProductsList }) {
         setOpen(typeof force !== 'undefined' ? force : !open);
     };
 
+    const values = [categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min, categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max];
+
     return (
         <form ref={formRef} className="filters">
             <div className="lien_alergenes w-inline-block" onClick={() => openBlock()}>
@@ -228,30 +238,73 @@ export default function Filters({ filtersData, getProductsList }) {
                         categoryPriceEnd.min !== categoryPriceEnd.max && (
                             <div className="filter">
                                 <h6>{t('components/filters:price')}</h6>
-                                <div style={{ minWidth: '200px' }}>
-                                    <Slider
-                                        range
+                                <div style={{ width: '250px', marginTop: '30px' }}>
+                                    <Range
                                         min={categoryPriceEnd.min}
                                         max={categoryPriceEnd.max}
-                                        value={[categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min, categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max]}
+                                        values={values}
+                                        allowOverlap={true}
                                         onChange={handlePriceFilterChange}
-                                        onAfterChange={(value) => updateProductsList('filter.price', value)}
+                                        onFinalChange={(values) => updateProductsList('filter.price', values)}
+                                        renderTrack={({ props, children }) => (
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div style={{ marginRight: '10px' }}>{categoryPriceEnd.min}&nbsp;€</div>
+                                                <div
+                                                    {...props}
+                                                    style={{
+                                                        height      : '5px',
+                                                        width       : '100%',
+                                                        borderRadius: '4px',
+                                                        background  : getTrackBackground({
+                                                            values,
+                                                            colors: ['#ccc', '#ff8946', '#ccc'],
+                                                            min   : categoryPriceEnd.min,
+                                                            max   : categoryPriceEnd.max
+                                                        }),
+                                                    }}
+                                                >
+                                                    {children}
+                                                </div>
+                                                <div style={{ marginLeft: '10px' }}>{categoryPriceEnd.max}&nbsp;€</div>
+                                            </div>
+                                            
+                                        )}
+                                        renderThumb={({ index, props }) => (
+                                            <div
+                                                {...props}
+                                                style={{
+                                                    ...props.style,
+                                                    height         : '12px',
+                                                    width          : '12px',
+                                                    borderRadius   : '6px',
+                                                    backgroundColor: '#fff',
+                                                    opacity        : '0.7',
+                                                    display        : 'flex',
+                                                    justifyContent : 'center',
+                                                    alignItems     : 'center',
+                                                    boxShadow      : '0px 2px 6px #aaa'
+                                                }}
+                                            >
+                                                {
+                                                    categoryBodyRequest.filter?.price && (
+                                                        <div
+                                                            style={{
+                                                                position       : 'absolute',
+                                                                top            : index === 0 ? '-30px' : '15px',
+                                                                color          : '#fff',
+                                                                opacity        : '1',
+                                                                padding        : '4px',
+                                                                borderRadius   : '4px',
+                                                                backgroundColor: '#ff8946'
+                                                            }}
+                                                        >
+                                                            {values[index]}&nbsp;€
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
+                                        )}
                                     />
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <span>
-                                        {categoryPriceEnd.min} €
-                                    </span>
-                                    {
-                                        categoryBodyRequest.filter?.price && (
-                                            <span style={{ backgroundColor: '#ff8946', color: 'white', padding: '2px', borderRadius: '6px', fontSize: '12px' }}>
-                                                {categoryBodyRequest.filter.price.min} € &bull; {categoryBodyRequest.filter.price.max} €
-                                            </span>
-                                        )
-                                    }
-                                    <span>
-                                        {categoryPriceEnd.max} €
-                                    </span>
                                 </div>
                             </div>
                         )

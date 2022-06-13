@@ -158,6 +158,11 @@ export default function AllergenFilter() {
     
             // If price end has changed
             if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                // If filter min or max price are outside of range, reload
+                if (bodyRequestProducts.filter?.price && (bodyRequestProducts.filter.price.min > priceEnd.max || bodyRequestProducts.filter.price.max < priceEnd.min)) {
+                    return router.reload();
+                }
+
                 // Detecting bad price end in price filter of body request cookie
                 filterPriceFix(bodyRequestProducts, priceEnd);
     
@@ -222,6 +227,11 @@ export default function AllergenFilter() {
 
                 // If price end has changed
                 if (priceEnd.min !== categoryPriceEnd.min || priceEnd.max !== categoryPriceEnd.max) {
+                    // If filter min or max price are outside of range, reload
+                    if (bodyRequestProducts.filter?.price && (bodyRequestProducts.filter.price.min > priceEnd.max || bodyRequestProducts.filter.price.max < priceEnd.min)) {
+                        return router.reload();
+                    }
+                
                     // Detecting bad price end in price filter of body request cookie
                     filterPriceFix(bodyRequestProducts, priceEnd);
         

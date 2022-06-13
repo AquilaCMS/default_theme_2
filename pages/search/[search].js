@@ -132,6 +132,20 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         max: Math.ceil(productsData.unfilteredPriceSortMax.ati)
     };
 
+    // If filter min or max price are outside of range, delete filter price
+    if (bodyRequestProducts.filter?.price && (bodyRequestProducts.filter.price.min > priceEnd.max || bodyRequestProducts.filter.price.max < priceEnd.min)) {
+        delete bodyRequestProducts.filter.price;
+        if (!Object.keys(bodyRequestProducts.filter).length) {
+            delete bodyRequestProducts.filter;
+        }
+
+        // Set body request cookie
+        cookiesServerInstance.set('bodyRequestProducts', encodeURIComponent(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
+
+        // Redirect to first page
+        return serverRedirect(resolvedUrl);
+    }
+
     // Detecting bad price end in price filter of body request cookie
     filterPriceFix(bodyRequestProducts, priceEnd);
 

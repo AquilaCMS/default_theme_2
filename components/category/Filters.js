@@ -286,7 +286,7 @@ export default function Filters({ filtersData, getProductsList }) {
                                                 }}
                                             >
                                                 {
-                                                    categoryBodyRequest.filter?.price && (
+                                                    ((index === 0 && values[0] !== categoryPriceEnd.min) || (index === 1 && values[1] !== categoryPriceEnd.max)) && (
                                                         <div
                                                             style={{
                                                                 position       : 'absolute',

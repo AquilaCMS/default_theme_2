@@ -112,7 +112,7 @@ export async function getServerSideProps({ defaultLocale, locale, params, query,
     // Breadcrumb
     let breadcrumb = [];
     try {
-        breadcrumb = await getBreadcrumb(`${defaultLocale !== locale ? `/${locale}` : ''}/${resolvedUrl}`);
+        breadcrumb = await getBreadcrumb(`${defaultLocale !== locale ? `/${locale}` : ''}${resolvedUrl}`);
     } catch (err) {
         const t = await getT(locale, 'common');
         console.error(err.message || t('common:message.unknownError'));

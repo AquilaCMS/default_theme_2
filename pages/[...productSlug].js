@@ -29,7 +29,7 @@ import { initAxios, formatPrice, formatStock, getAvailability, moduleHook } from
 import 'lightbox-react/style.css';
 import 'react-responsive-modal/styles.css';
 
-export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
+export async function getServerSideProps({ defaultLocale, locale, params, query, req, res, resolvedUrl }) {
     initAxios(locale, req, res);
     
     const productSlug   = params.productSlug.pop();
@@ -112,7 +112,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Breadcrumb
     let breadcrumb = [];
     try {
-        breadcrumb = await getBreadcrumb(`${locale}/${resolvedUrl}`);
+        breadcrumb = await getBreadcrumb(`${defaultLocale !== locale ? `/${locale}` : ''}/${resolvedUrl}`);
     } catch (err) {
         const t = await getT(locale, 'common');
         console.error(err.message || t('common:message.unknownError'));

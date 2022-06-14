@@ -412,6 +412,43 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
 .filter {
   padding: 5px 20px;
 }
+.filter-price {
+  width: 250px;
+  margin-top: 30px;
+}
+.filter-price .container-track {
+  display: flex;
+  align-items: center;
+}
+.filter-price .container-track .track {
+  height: 5px;
+  width: 100%;
+  border-radius: 4px;
+}
+.filter-price .container-track .track-min {
+  margin-right: 10px;
+}
+.filter-price .container-track .track-max {
+  margin-left: 10px;
+}
+.filter-price .thumb {
+  height: 12px;
+  width: 12px;
+  border-radius: 6px;
+  background-color: #fff;
+  opacity: 0.7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 2px 6px #aaa;
+}
+.filter-price .thumb-tooltip {
+  position: absolute;
+  color: #fff;
+  padding: 4px;
+  border-radius: 4px;
+  background-color: #ff8946;
+}
 
 /*
   ADD mon-restaurant.webflow.css

@@ -238,7 +238,7 @@ export default function Filters({ filtersData, getProductsList }) {
                         categoryPriceEnd.min !== categoryPriceEnd.max && (
                             <div className="filter">
                                 <h6>{t('components/filters:price')}</h6>
-                                <div style={{ width: '250px', marginTop: '30px' }}>
+                                <div className="filter-price">
                                     <Range
                                         min={categoryPriceEnd.min}
                                         max={categoryPriceEnd.max}
@@ -247,57 +247,29 @@ export default function Filters({ filtersData, getProductsList }) {
                                         onChange={handlePriceFilterChange}
                                         onFinalChange={(values) => updateProductsList('filter.price', values)}
                                         renderTrack={({ props, children }) => (
-                                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                <div style={{ marginRight: '10px' }}>{categoryPriceEnd.min}&nbsp;€</div>
-                                                <div
-                                                    {...props}
+                                            <div className="container-track">
+                                                <div className="track-min">{categoryPriceEnd.min}&nbsp;€</div>
+                                                <div {...props} className="track"
                                                     style={{
-                                                        height      : '5px',
-                                                        width       : '100%',
-                                                        borderRadius: '4px',
-                                                        background  : getTrackBackground({
+                                                        background: getTrackBackground({
                                                             values,
                                                             colors: ['#ccc', '#ff8946', '#ccc'],
                                                             min   : categoryPriceEnd.min,
                                                             max   : categoryPriceEnd.max
-                                                        }),
+                                                        })
                                                     }}
                                                 >
                                                     {children}
                                                 </div>
-                                                <div style={{ marginLeft: '10px' }}>{categoryPriceEnd.max}&nbsp;€</div>
+                                                <div className="track-max">{categoryPriceEnd.max}&nbsp;€</div>
                                             </div>
                                             
                                         )}
                                         renderThumb={({ index, props }) => (
-                                            <div
-                                                {...props}
-                                                style={{
-                                                    ...props.style,
-                                                    height         : '12px',
-                                                    width          : '12px',
-                                                    borderRadius   : '6px',
-                                                    backgroundColor: '#fff',
-                                                    opacity        : '0.7',
-                                                    display        : 'flex',
-                                                    justifyContent : 'center',
-                                                    alignItems     : 'center',
-                                                    boxShadow      : '0px 2px 6px #aaa'
-                                                }}
-                                            >
+                                            <div {...props} className="thumb" style={{ ...props.style }}>
                                                 {
                                                     ((index === 0 && values[0] !== categoryPriceEnd.min) || (index === 1 && values[1] !== categoryPriceEnd.max)) && (
-                                                        <div
-                                                            style={{
-                                                                position       : 'absolute',
-                                                                top            : index === 0 ? '-30px' : '15px',
-                                                                color          : '#fff',
-                                                                opacity        : '1',
-                                                                padding        : '4px',
-                                                                borderRadius   : '4px',
-                                                                backgroundColor: '#ff8946'
-                                                            }}
-                                                        >
+                                                        <div className="thumb-tooltip" style={{ top: index === 0 ? '-30px' : '15px' }}>
                                                             {values[index]}&nbsp;€
                                                         </div>
                                                     )

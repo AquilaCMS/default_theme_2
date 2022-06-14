@@ -22,7 +22,7 @@ import { getSiteInfo }                                                          
 import { useCategoryProducts, useSiteConfig }                                                                     from '@lib/hooks';
 import { initAxios, serverRedirect, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix, moduleHook } from '@lib/utils';
 
-export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
+export async function getServerSideProps({ defaultLocale, locale, params, query, req, res, resolvedUrl }) {
     initAxios(locale, req, res);
 
     const categorySlugs = Array.isArray(params.categorySlugs) ? params.categorySlugs : [params.categorySlugs];
@@ -223,7 +223,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Get breadcrumb
     let breadcrumb = [];
     try {
-        breadcrumb = await getBreadcrumb(`${locale}/${resolvedUrl}`);
+        breadcrumb = await getBreadcrumb(`${defaultLocale !== locale ? `/${locale}` : ''}${resolvedUrl}`);
     } catch (err) {
         console.error(err.message || t('common:message.unknownError'));
     }

@@ -5,7 +5,7 @@ import { useRouter }                                                            
 import useTranslation                                                                      from 'next-translate/useTranslation';
 import Button                                                                              from '@components/ui/Button';
 import { useCategoryPriceEnd, useCategoryBodyRequest, useCategoryProducts, useSiteConfig } from '@lib/hooks';
-import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix }                 from '@lib/utils';
+import { stringToBase64, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix } from '@lib/utils';
 
 export default function Pagination({ children, getProductsList }) {
     const [pageCount, setPageCount]                       = useState(0);
@@ -96,7 +96,7 @@ export default function Pagination({ children, getProductsList }) {
                 }
 
                 // Setting body request cookie
-                document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+                document.cookie = 'bodyRequestProducts=' + stringToBase64(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
 
                 return router.reload();
             }
@@ -125,7 +125,7 @@ export default function Pagination({ children, getProductsList }) {
             setCategoryBodyRequest({ ...bodyRequestProducts });
     
             // Setting body request cookie
-            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+            document.cookie = 'bodyRequestProducts=' + stringToBase64(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
             console.error(err);
         }
@@ -176,7 +176,7 @@ export default function Pagination({ children, getProductsList }) {
                 }
 
                 // Setting body request cookie
-                document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+                document.cookie = 'bodyRequestProducts=' + stringToBase64(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
 
                 return router.reload();
             }
@@ -206,7 +206,7 @@ export default function Pagination({ children, getProductsList }) {
             setCategoryBodyRequest({ ...bodyRequestProducts });
 
             // Setting body request cookie
-            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+            document.cookie = 'bodyRequestProducts=' + stringToBase64(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
             console.error(err);
         } finally {

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState }                                                     from 'react';
-import { useRouter }                                                                       from 'next/router';
-import useTranslation                                                                      from 'next-translate/useTranslation';
-import { Range, getTrackBackground }                                                       from 'react-range';
-import { useCategoryPriceEnd, useCategoryBodyRequest, useCategoryProducts, useSiteConfig } from '@lib/hooks';
-import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix, cloneObj }       from '@lib/utils';
+import { useEffect, useRef, useState }                                                               from 'react';
+import { useRouter }                                                                                 from 'next/router';
+import useTranslation                                                                                from 'next-translate/useTranslation';
+import { Range, getTrackBackground }                                                                 from 'react-range';
+import { useCategoryPriceEnd, useCategoryBodyRequest, useCategoryProducts, useSiteConfig }           from '@lib/hooks';
+import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix, cloneObj, stringToBase64 } from '@lib/utils';
 
 export default function Filters({ filtersData, getProductsList }) {
     const formRef                                         = useRef();
@@ -214,7 +214,7 @@ export default function Filters({ filtersData, getProductsList }) {
             setCategoryBodyRequest({ ...bodyRequestProducts });
     
             // Setting body request cookie
-            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+            document.cookie = 'bodyRequestProducts=' + stringToBase64(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
             console.error(err);
         }

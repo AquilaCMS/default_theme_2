@@ -5,7 +5,7 @@ import { getBlockCMS }                                                          
 import { getCategoryProducts }                                                             from '@aquilacms/aquila-connector/api/category';
 import axios                                                                               from '@aquilacms/aquila-connector/lib/AxiosInstance';
 import { useCategoryBodyRequest, useCategoryProducts, useCategoryPriceEnd, useSiteConfig } from '@lib/hooks';
-import { getBodyRequestProductsFromCookie, convertFilter, filterPriceFix }                 from '@lib/utils';
+import { stringToBase64, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix } from '@lib/utils';
 
 // GET allergens
 async function getAllergens() {
@@ -174,7 +174,7 @@ export default function AllergenFilter() {
             setCategoryBodyRequest({ ...bodyRequestProducts });
 
             // Setting body request cookie
-            document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+            document.cookie = 'bodyRequestProducts=' + stringToBase64(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         }
@@ -243,7 +243,7 @@ export default function AllergenFilter() {
                 setCategoryBodyRequest({ ...bodyRequestProducts });
 
                 // Setting body request cookie
-                document.cookie = 'bodyRequestProducts=' + encodeURIComponent(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
+                document.cookie = 'bodyRequestProducts=' + stringToBase64(JSON.stringify(bodyRequestProducts)) + '; path=/; max-age=43200;';
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
             }

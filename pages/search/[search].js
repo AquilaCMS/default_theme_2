@@ -1,17 +1,17 @@
-import { useState }                                                                                   from 'react';
-import useTranslation                                                                                 from 'next-translate/useTranslation';
-import Cookies                                                                                        from 'cookies';
-import PageError                                                                                      from '@pages/_error';
-import Filters                                                                                        from '@components/category/Filters';
-import Pagination                                                                                     from '@components/category/Pagination';
-import Layout                                                                                         from '@components/layouts/Layout';
-import NextSeoCustom                                                                                  from '@components/tools/NextSeoCustom';
-import ProductList                                                                                    from '@components/product/ProductList';
-import { dispatcher }                                                                                 from '@lib/redux/dispatcher';
-import { getProducts }                                                                                from '@aquilacms/aquila-connector/api/product';
-import { getSiteInfo }                                                                                from '@aquilacms/aquila-connector/api/site';
-import { useCategoryProducts, useSiteConfig }                                                         from '@lib/hooks';
-import { initAxios, serverRedirect, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix } from '@lib/utils';
+import { useState }                                                                                                   from 'react';
+import useTranslation                                                                                                 from 'next-translate/useTranslation';
+import Cookies                                                                                                        from 'cookies';
+import PageError                                                                                                      from '@pages/_error';
+import Filters                                                                                                        from '@components/category/Filters';
+import Pagination                                                                                                     from '@components/category/Pagination';
+import Layout                                                                                                         from '@components/layouts/Layout';
+import NextSeoCustom                                                                                                  from '@components/tools/NextSeoCustom';
+import ProductList                                                                                                    from '@components/product/ProductList';
+import { dispatcher }                                                                                                 from '@lib/redux/dispatcher';
+import { getProducts }                                                                                                from '@aquilacms/aquila-connector/api/product';
+import { getSiteInfo }                                                                                                from '@aquilacms/aquila-connector/api/site';
+import { useCategoryProducts, useSiteConfig }                                                                         from '@lib/hooks';
+import { initAxios, serverRedirect, stringToBase64, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix } from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     initAxios(locale, req, res);
@@ -120,7 +120,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         delete bodyRequestProducts.page;
 
         // Set body request cookie
-        cookiesServerInstance.set('bodyRequestProducts', encodeURIComponent(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
+        cookiesServerInstance.set('bodyRequestProducts', stringToBase64(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
         // Redirect to first page
         return serverRedirect(resolvedUrl);
@@ -140,7 +140,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
         }
 
         // Set body request cookie
-        cookiesServerInstance.set('bodyRequestProducts', encodeURIComponent(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
+        cookiesServerInstance.set('bodyRequestProducts', stringToBase64(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
         // Redirect to first page
         return serverRedirect(resolvedUrl);
@@ -150,7 +150,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     filterPriceFix(bodyRequestProducts, priceEnd);
 
     // Set body request cookie
-    cookiesServerInstance.set('bodyRequestProducts', encodeURIComponent(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
+    cookiesServerInstance.set('bodyRequestProducts', stringToBase64(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [
         {

@@ -224,7 +224,8 @@ export default function Filters({ filtersData, getProductsList }) {
         setOpen(typeof force !== 'undefined' ? force : !open);
     };
 
-    const values = [categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min, categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max];
+    const priceFilterStep   = 1;
+    const priceFilterValues = [categoryBodyRequest.filter?.price?.min || categoryPriceEnd.min, categoryBodyRequest.filter?.price?.max || categoryPriceEnd.max];
 
     return (
         <form ref={formRef} className="filters">
@@ -240,9 +241,10 @@ export default function Filters({ filtersData, getProductsList }) {
                                 <h6>{t('components/filters:price')}</h6>
                                 <div className="filter-price">
                                     <Range
+                                        step={priceFilterStep}
                                         min={categoryPriceEnd.min}
                                         max={categoryPriceEnd.max}
-                                        values={values}
+                                        values={priceFilterValues}
                                         allowOverlap={true}
                                         onChange={handlePriceFilterChange}
                                         onFinalChange={(values) => updateProductsList('filter.price', values)}
@@ -252,7 +254,7 @@ export default function Filters({ filtersData, getProductsList }) {
                                                 <div {...props} className="track"
                                                     style={{
                                                         background: getTrackBackground({
-                                                            values,
+                                                            values: priceFilterValues,
                                                             colors: ['#ccc', '#ff8946', '#ccc'],
                                                             min   : categoryPriceEnd.min,
                                                             max   : categoryPriceEnd.max
@@ -268,9 +270,9 @@ export default function Filters({ filtersData, getProductsList }) {
                                         renderThumb={({ index, props }) => (
                                             <div {...props} className="thumb" style={{ ...props.style }}>
                                                 {
-                                                    ((index === 0 && values[0] !== categoryPriceEnd.min) || (index === 1 && values[1] !== categoryPriceEnd.max)) && (
+                                                    ((index === 0 && priceFilterValues[0] !== categoryPriceEnd.min) || (index === 1 && priceFilterValues[1] !== categoryPriceEnd.max)) && (
                                                         <div className="thumb-tooltip" style={{ top: index === 0 ? '-30px' : '15px' }}>
-                                                            {values[index]}&nbsp;€
+                                                            {priceFilterValues[index]}&nbsp;€
                                                         </div>
                                                     )
                                                 }

@@ -236,7 +236,7 @@ export default function Filters({ filtersData, getProductsList }) {
             <div className={`faq-content${open ? ' filters-open' : ''}`}>
                 <div className="filters-list">
                     {
-                        categoryPriceEnd.min !== categoryPriceEnd.max && (
+                        categoryPriceEnd.min !== categoryPriceEnd.max && (categoryPriceEnd.max - categoryPriceEnd.min) > priceFilterStep && (
                             <div className="filter">
                                 <h6>{t('components/filters:price')}</h6>
                                 <div className="filter-price">

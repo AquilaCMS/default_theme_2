@@ -2,6 +2,7 @@ import { useEffect, useRef, useState }          from 'react';
 import Link                                     from 'next/link';
 import useTranslation                           from 'next-translate/useTranslation';
 import BlockCMS                                 from '@components/common/BlockCMS';
+import CartDiscount                             from '@components/cart/CartDiscount';
 import CartItem                                 from '@components/cart/CartItem';
 import Button                                   from '@components/ui/Button';
 import { getBlockCMS }                          from '@aquilacms/aquila-connector/api/blockcms';
@@ -194,13 +195,27 @@ export default function CartListItemsFoodOptions() {
                                     <CartItem item={item} key={item._id} />
                                 ))}
                             </div>
+                            
+                            <CartDiscount />
 
                             <div className="w-commerce-commercecartfooter">
+                                <div className="w-commerce-commercecartlineitem cart-line-item">
+                                    <div>{t('components/cart:cartListItem.subTotal')}</div>
+                                    <div>{formatPrice(cart.priceSubTotal.ati)}</div>
+                                </div>
                                 {
                                     cart.delivery?.method && cart.delivery?.value && (
                                         <div className="w-commerce-commercecartlineitem cart-line-item">
                                             <div>{t('components/cart:cartListItem.delivery')}</div>
                                             <div>{formatPrice(cart.delivery.value.ati)}</div>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    cart.promos[0] && (
+                                        <div className="w-commerce-commercecartlineitem cart-line-item">
+                                            <div>{t('components/cart:cartListItem.discount')}</div>
+                                            <div>- {formatPrice(cart.promos[0].discountATI)}</div>
                                         </div>
                                     )
                                 }
@@ -283,11 +298,23 @@ export default function CartListItemsFoodOptions() {
                             </div>
 
                             <div className="w-commerce-commercecartfooter">
+                                <div className="w-commerce-commercecartlineitem cart-line-item">
+                                    <div>{t('components/cart:cartListItem.subTotal')}</div>
+                                    <div>{formatPrice(cart.priceSubTotal.ati)}</div>
+                                </div>
                                 {
                                     cart.delivery?.method && cart.delivery?.value && (
                                         <div className="w-commerce-commercecartlineitem cart-line-item">
                                             <div>{t('components/cart:cartListItem.delivery')}</div>
                                             <div>{formatPrice(cart.delivery.value.ati)}</div>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    cart.promos[0] && (
+                                        <div className="w-commerce-commercecartlineitem cart-line-item">
+                                            <div>{t('components/cart:cartListItem.discount')}</div>
+                                            <div>- {formatPrice(cart.promos[0].discountATI)}</div>
                                         </div>
                                     )
                                 }

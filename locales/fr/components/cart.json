@@ -2,7 +2,9 @@
     "cartListItem": {
         "ordering": "COMMANDER !",
         "orderingLoading": "COMMANDE...",
+        "subTotal": "Sous-total",
         "delivery": "Livraison",
+        "discount": "Réduction",
         "total": "Total",
         "empty": "Votre Panier est vide",
         "goToHome": "Découvrir notre Carte"

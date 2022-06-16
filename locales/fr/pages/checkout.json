@@ -3,7 +3,14 @@
     "title": "Ma commande - Panier",
     "description": "Ma commande - Panier",
     "titleH1" : "Mon panier",
-    "ordering" : "COMMANDER"
+    "subTotal": "Sous-total",
+    "discount": "Réduction",
+    "delivery": "Livraison",
+    "total": "Total",
+    "empty": "Votre Panier est vide",
+    "goToHome": "Découvrir notre Carte",
+    "ordering" : "COMMANDER",
+    "orderingLoading": "COMMANDE..."
   },
   "login": {
     "title": "Ma commande - Connexion",

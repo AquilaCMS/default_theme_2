@@ -1,5 +1,6 @@
 import Link                                   from 'next/link';
 import useTranslation                         from 'next-translate/useTranslation';
+import CartDiscount                           from '@components/cart/CartDiscount';
 import CartItem                               from '@components/cart/CartItem';
 import Layout                                 from '@components/layouts/Layout';
 import NextSeoCustom                          from '@components/tools/NextSeoCustom';
@@ -44,17 +45,32 @@ export default function CheckoutCart() {
                                         <CartItem item={item} key={item._id} />
                                     ))}
                                 </div>
+
+                                <CartDiscount />
+
                                 <div className="w-commerce-commercecartfooter">
+                                    <div className="w-commerce-commercecartlineitem cart-line-item">
+                                        <div>{t('pages/checkout:cart.subTotal')}</div>
+                                        <div>{formatPrice(cart.priceSubTotal.ati)}</div>
+                                    </div>
                                     {
                                         cart.delivery?.method && cart.delivery?.value && (
                                             <div className="w-commerce-commercecartlineitem cart-line-item">
-                                                <div>{t('components/cart:cartListItem.delivery')}</div>
+                                                <div>{t('pages/checkout:cart.delivery')}</div>
                                                 <div>{formatPrice(cart.delivery.value.ati)}</div>
                                             </div>
                                         )
                                     }
+                                    {
+                                        cart.promos[0] && (
+                                            <div className="w-commerce-commercecartlineitem cart-line-item">
+                                                <div>{t('pages/checkout:cart.discount')}</div>
+                                                <div>- {formatPrice(cart.promos[0].discountATI)}</div>
+                                            </div>
+                                        )
+                                    }
                                     <div className="w-commerce-commercecartlineitem cart-line-item">
-                                        <div>{t('components/cart:cartListItem.total')}</div>
+                                        <div>{t('pages/checkout:cart.total')}</div>
                                         <div className="w-commerce-commercecartordervalue text-block">
                                             {formatPrice(cart.priceTotal.ati)}
                                         </div>
@@ -69,10 +85,10 @@ export default function CheckoutCart() {
                             </form>
                         ) : (
                             <div className="w-commerce-commercecartemptystate empty-state">
-                                <div>{t('components/cart:cartListItem.empty')}</div>
+                                <div>{t('pages/checkout:cart.empty')}</div>
                                 <div className="button-arrow-wrap">
                                     <Link href="/">
-                                        <a className="button w-button">{t('components/cart:cartListItem.goToHome')}</a>
+                                        <a className="button w-button">{t('pages/checkout:cart.goToHome')}</a>
                                     </Link>
                                 </div>
                             </div>

@@ -4,7 +4,6 @@ import useTranslation                    from 'next-translate/useTranslation';
 import Link                              from 'next/link';
 import { useNavMenu }                    from '@lib/hooks';
 import { isMobile }                      from '@lib/utils';
-import React                             from 'react';
 
 export default function NavMenu() {
     const [burger, setBurger]                   = useState(false);

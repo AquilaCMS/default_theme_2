@@ -66,18 +66,14 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     if (queryPage) {
         page = queryPage;
         if (page > 1) {
-            // Ascertainment : "httpOnly: false" is important otherwise we cannot correctly delete the cookie afterwards
             bodyRequestProducts.page = page;
         } else if (bodyRequestProducts.page) {
             delete bodyRequestProducts.page;
         }
         forcePage = true;
-    } else {
-        // We take the value only if validity key of body request cookie matches
-        // Otherwise, we delete "page" cookie
-        if (bodyRequestProducts.key === key) {
-            page = bodyRequestProducts.page;
-        }
+    } else if (bodyRequestProducts.page) {
+        // We take the value in body request cookie
+        page = bodyRequestProducts.page;
     }
 
     // Body request : limit (from cookie or theme config)

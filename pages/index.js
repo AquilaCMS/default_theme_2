@@ -5,6 +5,7 @@ import NextSeoCustom     from '@components/tools/NextSeoCustom';
 import BlockCMS          from '@components/common/BlockCMS';
 import { dispatcher }    from '@lib/redux/dispatcher';
 import { getPageStatic } from '@aquilacms/aquila-connector/api/static';
+import { useStaticPage } from '@lib/hooks';
 import { initAxios }     from '@lib/utils';
 
 export async function getServerSideProps({ locale, query, req, res }) {
@@ -27,15 +28,15 @@ export async function getServerSideProps({ locale, query, req, res }) {
     const pageProps = await dispatcher(locale, req, res, actions);
 
     // URL origin
-    const { origin }           = absoluteUrl(req);
-    pageProps.props.origin     = origin;
-    pageProps.props.staticPage = staticPage;
+    const { origin }       = absoluteUrl(req);
+    pageProps.props.origin = origin;
 
     return pageProps;
 }
 
-export default function Home({ origin, staticPage }) {
-    const { lang } = useTranslation();
+export default function Home({ origin }) {
+    const { staticPage } = useStaticPage();
+    const { lang }       = useTranslation();
 
     return (
         <Layout>

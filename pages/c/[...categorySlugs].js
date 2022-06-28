@@ -1,4 +1,4 @@
-import { useState }                                                                                                               from 'react';
+import { useEffect, useState }                                                                                                    from 'react';
 import absoluteUrl                                                                                                                from 'next-absolute-url';
 import Head                                                                                                                       from 'next/head';
 import { useRouter }                                                                                                              from 'next/router';
@@ -240,6 +240,27 @@ export default function Category({ breadcrumb, category, limit, origin, error })
     const { themeConfig }       = useSiteConfig();
     const router                = useRouter();
     const { lang, t }           = useTranslation();
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY) {
+                localStorage.setItem('scroll', window.scrollY);
+            }
+        };
+        handleScroll();
+        if (category.children.length) {
+            localStorage.removeItem('scroll');
+        } else {
+            window.addEventListener('scroll', handleScroll);
+        }
+
+        const positionTop = localStorage.getItem('scroll');
+        if (positionTop) {
+            window.scrollTo(0, positionTop);
+        }
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [router.asPath]);
 
     const getProductsList = async (postBody) => {
         setMessage();

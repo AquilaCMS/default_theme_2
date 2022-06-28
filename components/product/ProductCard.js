@@ -2,14 +2,13 @@ import { useEffect, useRef, useState }                                  from 're
 import Link                                                             from 'next/link';
 import { useRouter }                                                    from 'next/router';
 import useTranslation                                                   from 'next-translate/useTranslation';
-import cookie                                                           from 'cookie';
 import { Modal }                                                        from 'react-responsive-modal';
 import BundleProduct                                                    from '@components/product/BundleProduct';
 import Button                                                           from '@components/ui/Button';
 import { generateSlug, getMainImage }                                   from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { addToCart, setCartShipment }                                   from '@aquilacms/aquila-connector/api/cart';
 import { useCart, useComponentData, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
-import { formatPrice, formatStock, unsetCookie }                        from '@lib/utils';
+import { formatPrice, formatStock }                                     from '@lib/utils';
 
 import 'react-responsive-modal/styles.css';
 
@@ -36,14 +35,6 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
     const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCard')?.value !== undefined ? themeConfig?.values?.find(t => t.key === 'displayStockCard')?.value : false;
 
     useEffect(() => {
-        // Get product ID from cookie
-        const cookieProduct = cookie.parse(document.cookie).product;
-
-        // If product ID matching, scrolling to this product
-        if (cookieProduct === product._id) {
-            productRef.current.scrollIntoView({ behavior: 'smooth' });
-            unsetCookie('product');
-        }
         return () => clearTimeout(timer.current);
     }, []);
 

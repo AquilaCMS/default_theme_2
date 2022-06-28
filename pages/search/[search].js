@@ -1,4 +1,4 @@
-import { useState }                                                                                                   from 'react';
+import { useEffect, useState }                                                                                        from 'react';
 import useTranslation                                                                                                 from 'next-translate/useTranslation';
 import Cookies                                                                                                        from 'cookies';
 import PageError                                                                                                      from '@pages/_error';
@@ -171,6 +171,23 @@ export default function Search({ search, error }) {
     const { categoryProducts }  = useCategoryProducts();
     const { themeConfig }       = useSiteConfig();
     const { lang, t }           = useTranslation();
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY) {
+                localStorage.setItem('scroll', window.scrollY);
+            }
+        };
+        handleScroll();
+        window.addEventListener('scroll', handleScroll);
+
+        const positionTop = localStorage.getItem('scroll');
+        if (positionTop) {
+            window.scrollTo(0, positionTop);
+        }
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const getProductsList = async (postBody) => {
         setMessage();

@@ -1,29 +1,54 @@
-import parse                from 'html-react-parser';
-import Link                 from 'next/link';
-import useTranslation       from 'next-translate/useTranslation';
-import { useComponentData } from '@lib/hooks';
-import { formatDate }       from '@lib/utils';
+import parse                   from 'html-react-parser';
+import Link                    from 'next/link';
+import useTranslation          from 'next-translate/useTranslation';
+import { useComponentData }    from '@lib/hooks';
+import { formatDate }          from '@lib/utils';
+import { useState, useEffect } from 'react';
 
 
 
 export default function BlogList({ list = [] }) {
-    const componentData = useComponentData();
-    const { lang, t }   = useTranslation();
+    const [limitOfArticle, setLimitOfArticle] = useState(6);
+    const componentData                       = useComponentData();
+    const { lang, t }                         = useTranslation();
+
+    useEffect(() => {
+        const limit = localStorage.getItem('limit');
+        if (limit) {
+            setLimitOfArticle(limit);
+        }
+    }, []);
+
 
     // Get data in redux store or prop list 
     let blogList = componentData['nsBlogList'] || list;
-    console.log(blogList);
     if (!blogList?.length) {
         return <div className="w-dyn-empty">
             <div>{t('components/blogList:noArticle')}</div>
         </div>;
+        
     }
+
+    if (blogList.length > 3) {
+        blogList.slice(0, 3);
+    }
+    
+    // Ask if the application needs to display a 'see more" button
+
+    function displayMoreArticles() {
+        const limit = limitOfArticle + 6;
+        setLimitOfArticle(limit); // Set the new limit
+        localStorage.setItem('limit', limit);
+        console.log(limit);
+    }
+
+    let blogListSliced = blogList.slice(0, limitOfArticle);
 
     return (
         <div className="content-section">
             <div className="blog-container">
-                {blogList.map((article) => (
-                    <div key={article._id} className="blog-card" style={{ width: '26%', display: 'flex', flexDirection: 'column' }}>
+                {blogListSliced.map((article) => (
+                    <div key={article._id} id={article._id} className="blog-card" style={{ width: '26%', display: 'flex', flexDirection: 'column' }}>
                         <img src={`/images/blog/578x266-80-crop-center/${article._id}/${article.slug[lang]}${article.extension}`} alt={article.title} className="blog-thumbnail" loading="lazy" />
                         <div style={{ height: '100%' }}>
                             <div className="blog-card-content">
@@ -41,11 +66,7 @@ export default function BlogList({ list = [] }) {
                     </div>
                 ))}
             </div>
-            {blogList.length > 2 &&
-            parse(`<div className="blog-see-more">
-                <button className="tab-link-round w-inline-block w-tab-link">Voir plus</button>
-            </div>`)
-            }
+            {limitOfArticle < blogList.length ? <button className="w-commerce-commerceaddtocartbutton order-button" onClick={displayMoreArticles}>show More</button> : null}
 
             
         </div>

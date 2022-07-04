@@ -273,7 +273,7 @@ export default function CartListItemsFoodOptions() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <input type="number" className="w-commerce-commercecartquantity" value={item.quantity} onChange={(e) => onChangeQtyItem(e, item)} />
+                                                            <input type="number" className="w-commerce-commercecartquantity" value={item.quantity} onChange={(e) => onChangeQtyItem(e, item)} onWheel={(e) => e.target.blur()} />
                                                         </div>
                                                     );
                                                 })

@@ -162,7 +162,7 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                                 </div>
                             ) : (
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
-                                    <input type="number" disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
+                                    <input type="number" disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
                                     <Button 
                                         text={product.type === 'simple' ? t('components/product:productCard.addToBasket') : t('components/product:productCard.compose')}
                                         loadingText={t('components/product:productCard.addToCartLoading')}

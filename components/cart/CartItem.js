@@ -96,7 +96,7 @@ export default function CartItem({ item }) {
                         <div className="text-block-2">X</div>
                     </button>
                 </div>
-                <input type="number" className="w-commerce-commercecartquantity" value={qty} onChange={onChangeQtyItem} />
+                <input type="number" className="w-commerce-commercecartquantity" value={qty} onChange={onChangeQtyItem} onWheel={(e) => e.target.blur()} />
             </div>
             {
                 message && (

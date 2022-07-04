@@ -8,67 +8,82 @@ import { useState, useEffect } from 'react';
 
 
 export default function BlogList({ list = [] }) {
-    const [limitOfArticle, setLimitOfArticle] = useState(6);
-    const componentData                       = useComponentData();
-    const { lang, t }                         = useTranslation();
+    const [limitOfArticles, setLimitOfArticles] = useState(6);
+    const componentData                         = useComponentData();
+    const { lang, t }                           = useTranslation();
 
     useEffect(() => {
-        const limit = localStorage.getItem('limit');
-        if (limit) {
-            setLimitOfArticle(limit);
-        }
+        setLimitOfArticles(sessionStorage.getItem('max_articles') != null ? sessionStorage.getItem('max_articles') : 6);
     }, []);
 
+    useEffect(() => {
+        if (blogList.length > 0) {
+            const articleID = sessionStorage.getItem('articleID');
+            if (articleID) {
+                const articleOnPage = document.getElementById(articleID);
+                if (articleOnPage){
+                    const articlePosition = articleOnPage.getBoundingClientRect().top - 120;
+                    window.scrollTo(0, articlePosition);
+                    articleOnPage.classList.add('blog-card-return-animation');
+                    sessionStorage.removeItem('articleID');
+                    sessionStorage.removeItem('max_articles');
+                } else {
+                    console.log(articleOnPage, blogListDisplayed);
+                }
+                
+            }   
+        }
+    }, [limitOfArticles]);
 
     // Get data in redux store or prop list 
     let blogList = componentData['nsBlogList'] || list;
     if (!blogList?.length) {
         return <div className="w-dyn-empty">
             <div>{t('components/blogList:noArticle')}</div>
-        </div>;
-        
-    }
-
-    if (blogList.length > 3) {
-        blogList.slice(0, 3);
+        </div>;  
     }
     
-    // Ask if the application needs to display a 'see more" button
-
     function displayMoreArticles() {
-        const limit = limitOfArticle + 6;
-        setLimitOfArticle(limit); // Set the new limit
-        localStorage.setItem('limit', limit);
-        console.log(limit);
-    }
+        const newLimitOfArticles = parseInt(limitOfArticles) + 6; // 6 articles per click
+        setLimitOfArticles(newLimitOfArticles); // Set the new limit
+        sessionStorage.setItem('max_articles', newLimitOfArticles ); // Save the new limit in sessionStorage
+    } 
 
-    let blogListSliced = blogList.slice(0, limitOfArticle);
+    let blogListDisplayed = blogList.slice(0, limitOfArticles);
 
     return (
         <div className="content-section">
-            <div className="blog-container">
-                {blogListSliced.map((article) => (
-                    <div key={article._id} id={article._id} className="blog-card" style={{ width: '26%', display: 'flex', flexDirection: 'column' }}>
-                        <img src={`/images/blog/578x266-80-crop-center/${article._id}/${article.slug[lang]}${article.extension}`} alt={article.title} className="blog-thumbnail" loading="lazy" />
+            <div className="container-flex-2" style={{ flexWrap: 'wrap' }}>
+                {blogListDisplayed.map((article) => (
+                    <div key={article._id} id={article._id} className="food-card blog-card">
+                        <img src={`/images/blog/578x266-80-crop-center/${article._id}/${article.slug[lang]}${article.extension}`} alt={article.title} className="food-image blog-thumbnail" loading="lazy" />
                         <div style={{ height: '100%' }}>
-                            <div className="blog-card-content">
-                                <div className="blog-title-wrap">
-                                    <h2 className="blog-title" style={{ marginBottom: '0px' }}>{article.title}</h2>
+                            <div className="food-card-content blog-card-content">
+                                <div className="food-title-wrap blog-title-wrap">
+                                    <h6 className="heading-9">{article.title}</h6>
                                 </div>
-                                <p className="blog-date" style={{ fontStyle: 'italic' }}>{formatDate(article.createdAt, lang, { hour: '2-digit', minute: '2-digit', weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                                <p className="blog-date">{formatDate(article.createdAt, lang, { hour: '2-digit', minute: '2-digit', weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>
                                 <p className="paragraph">{parse(article.content.resume.slice(0, 80))}[...]</p>
                             
                                 <form className="w-commerce-commerceaddtocartform default-state">
-                                    <Link href={`/blog/${article.slug[lang]}`}><a><button type="submit" className="w-commerce-commerceaddtocartbutton order-button" style={{ alignItems: 'center' }}>Lire plus</button></a></Link>
+                                    <Link href={`/blog/${article.slug[lang]}`}>
+                                        <a>
+                                            <button onClick={() =>
+                                                sessionStorage.setItem('articleID', article._id)} 
+                                            type="submit" 
+                                            className="w-commerce-commerceaddtocartbutton order-button" 
+                                            style={{ justifyContent: 'center' }}>
+                                                    Lire plus
+                                            </button>
+                                        </a>
+                                    </Link>
                                 </form>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
-            {limitOfArticle < blogList.length ? <button className="w-commerce-commerceaddtocartbutton order-button" onClick={displayMoreArticles}>show More</button> : null}
-
-            
+            {limitOfArticles < blogList.length ? <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}><button className="tab-link-round w-inline-block w-tab-link" onClick={displayMoreArticles}>Afficher plus d&apos;articles...</button></div> : null}
         </div>
     );
 }

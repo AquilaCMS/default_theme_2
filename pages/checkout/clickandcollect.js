@@ -3,7 +3,7 @@ import { useRouter }                                                 from 'next/
 import useTranslation                                                from 'next-translate/useTranslation';
 import LightLayout                                                   from '@components/layouts/LightLayout';
 import NextSeoCustom                                                 from '@components/tools/NextSeoCustom';
-import ClickAndCollect                                               from 'modules/ClickAndCollect';
+import ClickAndCollect                                               from 'modules/pointofsale-aquila/ClickAndCollect';
 import { setUser }                                                   from '@aquilacms/aquila-connector/api/user';
 import { useCart }                                                   from '@lib/hooks';
 import { initAxios, authProtectedPage, formatPrice, serverRedirect } from '@lib/utils';

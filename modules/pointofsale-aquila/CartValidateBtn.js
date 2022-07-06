@@ -1,8 +1,7 @@
 import Link           from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 
-export default function POSValidateCartBtn() {
-
+export default function CartValidateBtn() {
     const { t } = useTranslation();
 
     return (

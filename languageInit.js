@@ -13,7 +13,7 @@ const setLanguage = (langs, defaultLanguage) => {
     json.locales       = tabLangs; // Replace or create "locales" property
     json.defaultLocale = defaultLanguage; // Replace or create "defaultLocale" property
     let data           = JSON.stringify(json, null, 2);
-    fs.writeFileSync(i18nFilePath, data);
+    //fs.writeFileSync(i18nFilePath, data);
     console.log('Language initialization completed');
     return;
 };

@@ -76,12 +76,9 @@ export default function CheckoutCart() {
                                         </div>
                                     </div>
                                 </div>
-                                {
-                                    moduleHook('cart-validate-btn') || 
-                                        <Link href="/checkout/address">
-                                            <a className="checkout-button-2 w-button">{t('pages/checkout:cart.ordering')}</a>
-                                        </Link>
-                                }
+                                <Link href="/checkout/address">
+                                    <a className="checkout-button-2 w-button">{t('pages/checkout:cart.ordering')}</a>
+                                </Link>
                             </form>
                         ) : (
                             <div className="w-commerce-commercecartemptystate empty-state">

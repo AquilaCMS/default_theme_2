@@ -238,11 +238,9 @@ export default function CartListItemsFoodOptions() {
                                                 style={{ width: '100%' }}
                                             />
                                         ) : (
-                                            moduleHook('cart-validate-btn') || (
-                                                <Link href="/checkout/address">
-                                                    <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
-                                                </Link>
-                                            )
+                                            <Link href="/checkout/address">
+                                                <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                                            </Link>
                                         )
                                     }
                                 </div>
@@ -325,13 +323,9 @@ export default function CartListItemsFoodOptions() {
                                     </div>
                                 </div>
                                 <div>
-                                    {
-                                        moduleHook('cart-validate-btn') || (
-                                            <Link href="/checkout/address">
-                                                <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
-                                            </Link>
-                                        )
-                                    }
+                                    <Link href="/checkout/address">
+                                        <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                                    </Link>
                                     <button type="button" className="checkout-button-2 w-button" onClick={() => onChangePart(1)} style={{ width: '100%' }}>{t('modules/food-options-aquila:back')}</button>
                                 </div>
                             </div>

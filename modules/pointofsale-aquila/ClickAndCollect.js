@@ -281,7 +281,7 @@ export default function ClickAndCollect() {
         }
         if (!deliveryAddress.zipcode || !deliveryAddress.line1 || !deliveryAddress.city) {
             setIsValidAddress(false);
-            return setMessage({ type: 'error', message: t('modules/pointofsale-aquila:submitAddressError') });
+            return setMessage({ type: 'error', message: t('modules/pointofsale-aquila:clickAndCollect.submitAddressError') });
         }
         try {
             const response = await getPointOfSaleForDelivery(deliveryAddress);
@@ -344,11 +344,11 @@ export default function ClickAndCollect() {
         setIsLoading(true);
         if (!localDeliveryHome && !localCurrentPOS._id) {
             setIsLoading(false);
-            return setMessage({ type: 'error', message: t('modules/pointofsale-aquila:submitError') });
+            return setMessage({ type: 'error', message: t('modules/pointofsale-aquila:clickAndCollect.submitError') });
         }
         if (localDeliveryHome && !localIsValidAddress) {
             setIsLoading(false);
-            return setMessage({ type: 'error', message: t('modules/pointofsale-aquila:submitError2') });
+            return setMessage({ type: 'error', message: t('modules/pointofsale-aquila:clickAndCollect.submitError2') });
         }
         const dateToSend = localDeliveryTime.replace('h', ':');
         const body       = {
@@ -375,7 +375,7 @@ export default function ClickAndCollect() {
                 // Address entered by user for cart billing & delivery address
                 if (address.gmaps === undefined) {
                     setIsLoading(false);
-                    return setMessage({ type: 'info', message: t('modules/pointofsale-aquila:submitSuccess') });
+                    return setMessage({ type: 'info', message: t('modules/pointofsale-aquila:clickAndCollect.submitSuccess') });
                 }
                 const aquilaAddress = toAquilaAddress(address);
                 if (user) {
@@ -411,7 +411,7 @@ export default function ClickAndCollect() {
                 const newCart      = await setCartAddresses(response.data._id, addresses);
                 setCart(newCart);
             }
-            setMessage({ type: 'info', message: t('modules/pointofsale-aquila:submitSuccess') });
+            setMessage({ type: 'info', message: t('modules/pointofsale-aquila:clickAndCollect.submitSuccess') });
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         } finally {
@@ -445,7 +445,7 @@ export default function ClickAndCollect() {
                                     )
                                 }
                                 {
-                                    ((hasWithdrawal === 1 && hasDelivery === 1) || (hasWithdrawal === 1 && hasDelivery !== 1)) && <span className="checkbox-label w-form-label">{t('modules/pointofsale-aquila:withDrawal')}</span>
+                                    ((hasWithdrawal === 1 && hasDelivery === 1) || (hasWithdrawal === 1 && hasDelivery !== 1)) && <span className="checkbox-label w-form-label">{t('modules/pointofsale-aquila:clickAndCollect.withDrawal')}</span>
                                 }
                             </label>
                             <label className="checkbox-click-collect w-radio">
@@ -466,7 +466,7 @@ export default function ClickAndCollect() {
                                     )
                                 }
                                 {
-                                    ((hasWithdrawal === 1 && hasDelivery === 1 ) || (hasWithdrawal !== 1 && hasDelivery === 1)) && <span className="checkbox-label w-form-label">{t('modules/pointofsale-aquila:delivery')}</span>
+                                    ((hasWithdrawal === 1 && hasDelivery === 1 ) || (hasWithdrawal !== 1 && hasDelivery === 1)) && <span className="checkbox-label w-form-label">{t('modules/pointofsale-aquila:clickAndCollect.delivery')}</span>
                                 }
                             </label>
                             {
@@ -486,7 +486,7 @@ export default function ClickAndCollect() {
                                     />
                                 ) : (
                                     <select required className="text-ville w-select" value={currentPOS._id} onChange={onChangePos}>
-                                        { pointsOfSale.filter(pos => pos.isWithdrawal).length > 1 && <option value="">{t('modules/pointofsale-aquila:selectPOS')}</option> }
+                                        { pointsOfSale.filter(pos => pos.isWithdrawal).length > 1 && <option value="">{t('modules/pointofsale-aquila:clickAndCollect.selectPOS')}</option> }
                                         {
                                             pointsOfSale?.filter(pos => pos.isWithdrawal)?.map(pos => {
                                                 return (
@@ -517,8 +517,8 @@ export default function ClickAndCollect() {
                                 }
                             </select>
                             <Button 
-                                text={t('modules/pointofsale-aquila:submit')}
-                                loadingText={t('modules/pointofsale-aquila:submitLoading')}
+                                text={t('modules/pointofsale-aquila:clickAndCollect.submit')}
+                                loadingText={t('modules/pointofsale-aquila:clickAndCollect.submitLoading')}
                                 isLoading={isLoading}
                                 className="adresse-button w-button"
                             />

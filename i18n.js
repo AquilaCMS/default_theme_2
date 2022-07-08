@@ -26,46 +26,46 @@ module.exports = {
             'modules/pointofsale-aquila'
         ],
         '/account': [
+            'pages/account/index',
             'components/account/accountLayout',
-            'components/orderDetails',
-            'pages/account/index'
+            'components/orderDetails'
         ],
         '/account/informations': [
-            'components/account/accountLayout',
-            'pages/account/informations'
+            'pages/account/informations',
+            'components/account/accountLayout'
         ],
         '/account/rgpd': [
-            'components/account/accountLayout',
-            'pages/account/rgpd'
+            'pages/account/rgpd',
+            'components/account/accountLayout'
         ],
         '/account/login': [
+            'pages/account/login',
             'components/login/loginBlock',
-            'components/login/registerBlock',
-            'pages/account/login'
+            'components/login/registerBlock'
         ],
         '/checkout/cart': [
             'pages/checkout'
         ],
-        '/checkout/clickandcollect': [
-            'pages/checkout'
+        '/checkout/login': [
+            'pages/checkout',
+            'components/login/loginBlock',
+            'components/login/registerBlock'
         ],
         '/checkout/address': [
-            'pages/checkout'
+            'pages/checkout',
+            'components/checkout/addressStep'
         ],
         '/checkout/delivery': [
-            'pages/checkout'
-        ],
-        '/checkout/confirmation': [
-            'components/orderDetails',
-            'pages/checkout'
-        ],
-        '/checkout/login': [
-            'components/login/loginBlock',
-            'components/login/registerBlock',
-            'pages/checkout'
+            'pages/checkout',
+            'components/checkout/deliveryStep'
         ],
         '/checkout/payment': [
-            'pages/checkout'
+            'pages/checkout',
+            'components/checkout/paymentStep'
+        ],
+        '/checkout/confirmation': [
+            'pages/checkout',
+            'components/orderDetails',
         ],
         '/search/[search]': [
             'pages/search'

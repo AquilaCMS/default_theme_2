@@ -48,12 +48,9 @@ export default function CartListItems() {
                         </div>
                     </div>
                     <div>
-                        {
-                            moduleHook('cart-validate-btn') || 
-                                <Link href="/checkout/address">
-                                    <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
-                                </Link>
-                        }
+                        <Link href="/checkout/address">
+                            <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                        </Link>
                     </div>
                 </div>
             </form>

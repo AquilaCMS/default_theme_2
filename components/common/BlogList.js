@@ -63,7 +63,7 @@ export default function BlogList({ list = [] }) {
                                     <h6 className="heading-9">{article.title}</h6>
                                 </div>
                                 <p className="blog-date">{formatDate(article.createdAt, lang, { hour: '2-digit', minute: '2-digit', weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>
-                                <p className="paragraph">{parse(article.content.resume.slice(0, 80))}[...]</p>
+                                <p className="paragraph">{article.title.length > 25 ? parse(article.content.resume.slice(0, 45)) : parse(article.content.resume.slice(0, 80))}[...]</p>
                             
                                 <form className="w-commerce-commerceaddtocartform default-state">
                                     <Link href={`/blog/${article.slug[lang]}`}>

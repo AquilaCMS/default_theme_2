@@ -481,3 +481,59 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
       text-align: left;
   }
 }
+
+/* BLOG RELATED CSS */
+
+.blog-card {
+  margin: 10px;
+  padding: 0px;
+  min-width: 300px;
+  flex-direction: column;
+  width:25%;
+}
+
+.blog-thumbnail {
+border-radius: 5px 5px 0 0;
+overflow: hidden;
+}
+
+.blog-card-content {
+padding: 25px;
+min-width: 300px;
+}
+
+.blog-title-wrap {
+margin-bottom: 0;
+}
+
+.blog-date {
+font-style: italic;
+margin-top: 0px;
+font-size: 0.8rem;
+}
+
+.blog-card-return-animation {
+-webkit-animation: blog-card-return-animation 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) 2 alternate both;
+    animation: blog-card-return-animation 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) 2 alternate both;
+}
+
+@-webkit-keyframes blog-card-return-animation {
+0% {
+-webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+}
+100% {
+-webkit-box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+      box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+}
+}
+@keyframes blog-card-return-animation {
+0% {
+-webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+}
+100% {
+-webkit-box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+      box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+}
+}

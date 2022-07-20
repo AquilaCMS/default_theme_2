@@ -91,23 +91,22 @@ export default function CheckoutDeliveryStep({ user }) {
                         </div>
                     </div>
                 </div>
-                {
-                    cart.orderReceipt?.date && (
-                        <div className="form-mode-paiement-tunnel">
-                            <Link href="/checkout/address">
-                                <a className="log-button-03 w-button">{t('modules/pointofsale-aquila:checkoutDeliveryStep.previous')}</a>
-                            </Link>
-                            &nbsp;
+                <div className="form-mode-paiement-tunnel">
+                    <Link href="/checkout/address">
+                        <a className="log-button-03 w-button">{t('modules/pointofsale-aquila:checkoutDeliveryStep.previous')}</a>
+                    </Link>
+                    &nbsp;
+                    {
+                        cart.orderReceipt?.date && (
                             <Button
                                 text={t('modules/pointofsale-aquila:checkoutDeliveryStep.next')}
                                 loadingText={t('modules/pointofsale-aquila:checkoutDeliveryStep.nextLoading')}
                                 isLoading={isLoading}
                                 className="log-button-03 w-button"
                             />
-                        </div>
-                    )
-                }
-                        
+                        )
+                    }
+                </div>  
             </form>
             {
                 message && (

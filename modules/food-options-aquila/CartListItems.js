@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState }          from 'react';
-import Link                                     from 'next/link';
-import useTranslation                           from 'next-translate/useTranslation';
-import BlockCMS                                 from '@components/common/BlockCMS';
-import CartDiscount                             from '@components/cart/CartDiscount';
-import CartItem                                 from '@components/cart/CartItem';
-import Button                                   from '@components/ui/Button';
-import { getBlockCMS }                          from '@aquilacms/aquila-connector/api/blockcms';
-import { setCartShipment }                      from '@aquilacms/aquila-connector/api/cart';
-import { getImage }                             from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import axios                                    from '@aquilacms/aquila-connector/lib/AxiosInstance';
-import { useCart }                              from '@lib/hooks';
-import { formatPrice, moduleHook, unsetCookie } from '@lib/utils';
+import { useEffect, useRef, useState } from 'react';
+import Link                            from 'next/link';
+import useTranslation                  from 'next-translate/useTranslation';
+import BlockCMS                        from '@components/common/BlockCMS';
+import CartDiscount                    from '@components/cart/CartDiscount';
+import CartItem                        from '@components/cart/CartItem';
+import Button                          from '@components/ui/Button';
+import { getBlockCMS }                 from '@aquilacms/aquila-connector/api/blockcms';
+import { setCartShipment }             from '@aquilacms/aquila-connector/api/cart';
+import { getImage }                    from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import axios                           from '@aquilacms/aquila-connector/lib/AxiosInstance';
+import { useCart }                     from '@lib/hooks';
+import { formatPrice, unsetCookie }    from '@lib/utils';
 
 function getFoodOptionsProducts(products) {
     let items = [];

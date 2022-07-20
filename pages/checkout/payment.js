@@ -41,7 +41,7 @@ export default function CheckoutPayment() {
                         <h2 className="heading-2-steps">{t('pages/checkout:payment.step')}</h2>
                     </div>
                     
-                    { moduleHook('checkout-payment-step') || <PaymentStep key="payment-step" /> }
+                    { moduleHook('checkout-payment-step') || <PaymentStep /> }
                 </div>
             </div>
         </LightLayout>

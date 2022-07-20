@@ -1,4 +1,4 @@
-export default [{jsx:require('./food-options-aquila/CartListItemsFoodOptions.js'),code:'aq-foodoptions',type:'cart-list-items'},
+export default [{jsx:require('./food-options-aquila/CartListItems.js'),code:'aq-foodoptions',type:'cart-list-items'},
 {jsx:require('./allergen-aquila/AllergenFilter.js'),code:'aq-allergen-filter',type:'category-top-list'},
 {jsx:require('./allergen-aquila/AllergenList.js'),code:'aq-allergen-list',type:'product-tab'},
 {jsx:require('./pointofsale-aquila/ClickAndCollect.js'),code:'aq-clickandcollect',type:'category-top'},

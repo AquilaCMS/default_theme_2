@@ -18,7 +18,7 @@ export async function getServerSideProps({ defaultLocale, locale, params, req, r
 
     let blogArticle = {};
     try {
-        const blogList = await getBlogList(locale);
+        const blogList = await getBlogList({}, locale);
         
         blogArticle = blogList.find(item => item.slug[locale] === params.article);
     } catch (err) {

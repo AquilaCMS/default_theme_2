@@ -201,7 +201,7 @@ export default function CheckoutAddress({ user }) {
                                 ) : null
                             }
                             {
-                                sameAddress === false && (
+                                (moduleHook('cart-validate-btn') || sameAddress === false) && (
                                     <>
                                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
                                             <h5>{t('pages/checkout:address.titleBilling')}</h5>

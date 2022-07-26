@@ -3,9 +3,10 @@ import { Modal }                                        from 'react-responsive-m
 import useTranslation                                   from 'next-translate/useTranslation';
 import Button                                           from '@components/ui/Button';
 import { askCancelOrder, downloadbillOrder, getOrders } from '@aquilacms/aquila-connector/api/order';
+import { downloadVirtualProduct }                       from '@aquilacms/aquila-connector/api/product';
 import { getImage }                                     from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { useSelectPage }                                from '@lib/hooks';
-import { formatDate, formatPrice }                      from '@lib/utils';
+import { formatDate, formatTime, formatPrice }          from '@lib/utils';
 
 export default function OrderDetails({ order, setOrders = undefined }) {
     const [message, setMessage]     = useState();
@@ -59,6 +60,25 @@ export default function OrderDetails({ order, setOrders = undefined }) {
         setOpenModal(false);
     };
 
+    const onDownloadVirtualProduct = async (item) => {
+        setIsLoading(true);
+
+        try {
+            const res  = await downloadVirtualProduct(item._id);
+            const url  = URL.createObjectURL(res.data);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = item.code + '.zip';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="container-order">
             <div className="columns-tunnel w-row">
@@ -105,6 +125,13 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                                                 )
                                                             }
                                                             <p className="paragraph">{t('components/orderDetails:quantity')} : {item.quantity}</p>
+                                                            <div>
+                                                                {
+                                                                    item.type === 'virtual' && ['PAID', 'BILLED'].includes(order.status) && (
+                                                                        <button type="button" className="button-link-tunnel w-button" onClick={() => onDownloadVirtualProduct(item)}>{t('components/orderDetails:download')}</button>
+                                                                    )
+                                                                }
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 );
@@ -126,7 +153,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                 </label>
                                 <p className="label-tunnel">
                                     {order.orderReceipt.method === 'withdrawal' ? (
-                                        formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+                                        formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric' }) + ' ' + formatTime(order.orderReceipt.date, lang, { hour: 'numeric', minute: 'numeric' })
                                     ) : (
                                         <>{order.delivery?.name}<br />{t('components/orderDetails:estimatedDelivery')} :<br/>{formatDate(order.delivery.date, lang)}</>
                                     )

@@ -1,30 +1,30 @@
-import { useState }                                                         from 'react';
-import { ProductJsonLd }                                                    from 'next-seo';
-import absoluteUrl                                                          from 'next-absolute-url';
-import { useRouter }                                                        from 'next/router';
-import getT                                                                 from 'next-translate/getT';
-import useTranslation                                                       from 'next-translate/useTranslation';
-import parse                                                                from 'html-react-parser';
-import Cookies                                                              from 'cookies';
-import { Modal }                                                            from 'react-responsive-modal';
-import Lightbox                                                             from 'lightbox-react';
-import ErrorPage                                                            from '@pages/_error';
-import BundleProduct                                                        from '@components/product/BundleProduct';
-import Layout                                                               from '@components/layouts/Layout';
-import NextSeoCustom                                                        from '@components/tools/NextSeoCustom';
-import Breadcrumb                                                           from '@components/navigation/Breadcrumb';
-import ProductList                                                          from '@components/product/ProductList';
-import BlockCMS                                                             from '@components/common/BlockCMS';
-import Button                                                               from '@components/ui/Button';
-import { dispatcher }                                                       from '@lib/redux/dispatcher';
-import { getBlocksCMS }                                                     from '@aquilacms/aquila-connector/api/blockcms';
-import { getBreadcrumb }                                                    from '@aquilacms/aquila-connector/api/breadcrumb';
-import { addToCart, setCartShipment }                                       from '@aquilacms/aquila-connector/api/cart';
-import { getCategories }                                                    from '@aquilacms/aquila-connector/api/category';
-import { getProduct }                                                       from '@aquilacms/aquila-connector/api/product';
-import { getImage, getMainImage, getTabImageURL }                           from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import { useCart, useProduct, useShowCartSidebar, useSiteConfig }           from '@lib/hooks';
-import { initAxios, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
+import { useState }                                                                            from 'react';
+import { ProductJsonLd }                                                                       from 'next-seo';
+import absoluteUrl                                                                             from 'next-absolute-url';
+import { useRouter }                                                                           from 'next/router';
+import getT                                                                                    from 'next-translate/getT';
+import useTranslation                                                                          from 'next-translate/useTranslation';
+import parse                                                                                   from 'html-react-parser';
+import Cookies                                                                                 from 'cookies';
+import { Modal }                                                                               from 'react-responsive-modal';
+import Lightbox                                                                                from 'lightbox-react';
+import ErrorPage                                                                               from '@pages/_error';
+import BundleProduct                                                                           from '@components/product/BundleProduct';
+import Layout                                                                                  from '@components/layouts/Layout';
+import NextSeoCustom                                                                           from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                                              from '@components/navigation/Breadcrumb';
+import ProductList                                                                             from '@components/product/ProductList';
+import BlockCMS                                                                                from '@components/common/BlockCMS';
+import Button                                                                                  from '@components/ui/Button';
+import { dispatcher }                                                                          from '@lib/redux/dispatcher';
+import { getBlocksCMS }                                                                        from '@aquilacms/aquila-connector/api/blockcms';
+import { getBreadcrumb }                                                                       from '@aquilacms/aquila-connector/api/breadcrumb';
+import { addToCart, setCartShipment }                                                          from '@aquilacms/aquila-connector/api/cart';
+import { getCategories }                                                                       from '@aquilacms/aquila-connector/api/category';
+import { getProduct, downloadFreeVirtualProduct }                                              from '@aquilacms/aquila-connector/api/product';
+import { getImage, getMainImage, getTabImageURL }                                              from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import { useCart, useProduct, useShowCartSidebar, useSiteConfig }                              from '@lib/hooks';
+import { initAxios, authProtectedPage, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 
 import 'lightbox-react/style.css';
 import 'react-responsive-modal/styles.css';
@@ -222,6 +222,33 @@ export default function Product({ breadcrumb, origin }) {
 
     const onCloseModal = () => setOpenModal(false);
 
+    const onDownloadVirtualProduct = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        const user = await authProtectedPage(document.cookie);
+        if (!user) {
+            setMessage({ type: 'error', message: t('common:message.loginRequired') });
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const res  = await downloadFreeVirtualProduct(product._id);
+            const url  = URL.createObjectURL(res.data);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = product.code + '.zip';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     // Pictos
     const pictos = [];
     if (product.pictos) {
@@ -373,13 +400,12 @@ export default function Product({ breadcrumb, origin }) {
                             <div className="plain-line" />
                             <div className="full-details w-richtext"><p>{parse(product.description2?.text || '')}</p></div>
                             <div>
-                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
-                                    <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
+                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'virtual' && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type === 'bundle' ? onOpenModal : onAddToCart)}>
+                                    <input type="number" min={1} disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
                                     <Button 
-                                        text={product.type === 'bundle' ? t('pages/product:compose') : t('pages/product:addToBasket')}
-                                        loadingText={t('pages/product:addToCartLoading')}
+                                        text={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:download') : (product.type === 'bundle' ? t('pages/product:compose') : t('pages/product:addToBasket'))}
+                                        loadingText={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:downloading') : t('pages/product:addToCartLoading')}
                                         isLoading={isLoading}
-                                        disabled={product.type === 'virtual' || (product.type !== 'virtual' && product.type !== 'simple' && product.type !== 'bundle')} 
                                         className="w-commerce-commerceaddtocartbutton order-button"
                                     />
                                 </form>

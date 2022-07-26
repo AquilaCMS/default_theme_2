@@ -19,6 +19,7 @@
     "downloadBill": "Download the invoice",
     "downloadAsset": "Download the credit",
     "cancelOrder": "Cancel order",
+    "download": "Download",
     "modalTitle": "Confirmation",
     "modalWarning": "Are you sure you want to cancel this order?",
     "yes": "Yes",

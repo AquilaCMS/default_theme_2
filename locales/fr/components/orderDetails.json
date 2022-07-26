@@ -19,6 +19,7 @@
     "downloadBill": "Télécharger la facture",
     "downloadAsset": "Télécharger l'avoir",
     "cancelOrder": "Annuler la commande",
+    "download": "Télécharger",
     "modalTitle": "Confirmation",
     "modalWarning": "Êtes-vous certain de vouloir annuler cette commande ?",
     "yes": "Oui",

@@ -2,6 +2,8 @@
     "productCard": {
         "addToBasket": "Add to cart",
         "compose": "Compose",
+        "download": "Download",
+        "downloading": "Downloading...",
         "addToCartLoading": "Add...",
         "noProduct": "Unable to display the product [{{product}}]"
     },

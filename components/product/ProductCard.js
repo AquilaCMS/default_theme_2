@@ -5,10 +5,11 @@ import useTranslation                                                   from 'ne
 import { Modal }                                                        from 'react-responsive-modal';
 import BundleProduct                                                    from '@components/product/BundleProduct';
 import Button                                                           from '@components/ui/Button';
+import { downloadFreeVirtualProduct }                                   from '@aquilacms/aquila-connector/api/product';
 import { generateSlug, getMainImage }                                   from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { addToCart, setCartShipment }                                   from '@aquilacms/aquila-connector/api/cart';
 import { useCart, useComponentData, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
-import { formatPrice, formatStock }                                     from '@lib/utils';
+import { authProtectedPage, formatPrice, formatStock }                  from '@lib/utils';
 
 import 'react-responsive-modal/styles.css';
 
@@ -92,6 +93,37 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
 
     const onCloseModal = () => setOpenModal(false);
 
+    const onDownloadVirtualProduct = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        const user = await authProtectedPage(document.cookie);
+        if (!user) {
+            setMessage({ type: 'error', message: t('common:message.loginRequired') });
+            const st      = setTimeout(() => { setMessage(); }, 3000);
+            timer.current = st;
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const res  = await downloadFreeVirtualProduct(product._id);
+            const url  = URL.createObjectURL(res.data);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = product.code + '.zip';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            const st      = setTimeout(() => { setMessage(); }, 3000);
+            timer.current = st;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     // Pictos
     const pictos = [];
     if (product.pictos) {
@@ -161,13 +193,12 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                                     </div>
                                 </div>
                             ) : (
-                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
-                                    <input type="number" disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
+                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'virtual' && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type === 'bundle' ? onOpenModal : onAddToCart)}>
+                                    <input type="number" min={1} disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
                                     <Button 
-                                        text={product.type === 'simple' ? t('components/product:productCard.addToBasket') : t('components/product:productCard.compose')}
-                                        loadingText={t('components/product:productCard.addToCartLoading')}
+                                        text={product.type === 'virtual' && product.price.ati.normal === 0 ? t('components/product:productCard.download') : (product.type === 'bundle' ? t('components/product:productCard.compose') : t('components/product:productCard.addToBasket'))}
+                                        loadingText={product.type === 'virtual' && product.price.ati.normal === 0 ? t('components/product:productCard.downloading') : t('components/product:productCard.addToCartLoading')}
                                         isLoading={isLoading}
-                                        disabled={product.type === 'virtual'}
                                         className="w-commerce-commerceaddtocartbutton order-button"
                                     />
                                 </form>

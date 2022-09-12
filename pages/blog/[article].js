@@ -1,16 +1,17 @@
-import parse             from 'html-react-parser';
-import absoluteUrl       from 'next-absolute-url';
-import useTranslation    from 'next-translate/useTranslation';
-import Breadcrumb        from '@components/navigation/Breadcrumb';
-import Layout            from '@components/layouts/Layout';
-import BlockCMS          from '@components/common/BlockCMS';
-import { getBlogList }   from '@aquilacms/aquila-connector/api/blog';
-import { getBreadcrumb } from '@aquilacms/aquila-connector/api/breadcrumb';
-import { dispatcher }    from '@lib/redux/dispatcher';
-import { initAxios }     from '@lib/utils';
-import { formatDate }    from '@lib/utils';
-import getT              from 'next-translate/getT';
-import Link              from 'next/link';
+import parse                     from 'html-react-parser';
+import absoluteUrl               from 'next-absolute-url';
+import useTranslation            from 'next-translate/useTranslation';
+import Breadcrumb                from '@components/navigation/Breadcrumb';
+import Layout                    from '@components/layouts/Layout';
+import BlockCMS                  from '@components/common/BlockCMS';
+import { getBlogList }           from '@aquilacms/aquila-connector/api/blog';
+import { getBreadcrumb }         from '@aquilacms/aquila-connector/api/breadcrumb';
+import { generateURLImageCache } from '@aquilacms/aquila-connector/lib/utils';
+import { dispatcher }            from '@lib/redux/dispatcher';
+import { initAxios }             from '@lib/utils';
+import { formatDate }            from '@lib/utils';
+import getT                      from 'next-translate/getT';
+import Link                      from 'next/link';
 
 
 export async function getServerSideProps({ defaultLocale, locale, params, req, res, resolvedUrl }) {
@@ -69,7 +70,7 @@ export default function BlogArticle({ blogArticle, breadcrumb, origin }) {
 
     return (
         <Layout>
-            <div className="header-section-carte" style={{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.59), rgba(250, 140, 78, 0.72)), url('+`/images/blog/1920x266-100-crop-center/${blogArticle._id}/${blogArticle.slug[lang]}${blogArticle.extension}`+')' }}>
+            <div className="header-section-carte" style={{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.59), rgba(250, 140, 78, 0.72)), url(' + generateURLImageCache('blog', '1920x266-100-crop-center', blogArticle._id, blogArticle.slug[lang], blogArticle.img) + ')' }}>
                 <div className="container-flex-2">
                     <div className="title-wrap-centre">
                         <h1 className="header-h1"><span className="brand-span">{blogArticle.title}</span></h1>

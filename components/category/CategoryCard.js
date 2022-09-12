@@ -1,6 +1,7 @@
-import Link           from 'next/link';
-import { useRouter }  from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
+import Link                      from 'next/link';
+import { useRouter }             from 'next/router';
+import useTranslation            from 'next-translate/useTranslation';
+import { generateURLImageCache } from '@aquilacms/aquila-connector/lib/utils';
 
 export default function CategoryCard({ item }) {
     const { asPath }  = useRouter();
@@ -15,7 +16,7 @@ export default function CategoryCard({ item }) {
             <div>
                 <Link href={`${asPath}/${item.slug[lang]}`}>
                     <a className="food-image-square w-inline-block">
-                        <img src={`/images/category/145x145/${item._id}/${item.code}.png`} alt={item.name} className="food-image" loading="lazy" />
+                        <img src={generateURLImageCache('category', '145x145', item._id, item.code, item.img)} alt={item.name} className="food-image" loading="lazy" />
                     </a>
                 </Link>
                 <div className="food-card-content">

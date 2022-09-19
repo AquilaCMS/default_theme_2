@@ -8,6 +8,7 @@ import Button                                                           from '@c
 import { downloadFreeVirtualProduct }                                   from '@aquilacms/aquila-connector/api/product';
 import { generateSlug, getMainImage }                                   from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { addToCart, setCartShipment }                                   from '@aquilacms/aquila-connector/api/cart';
+import { generateURLImageCache }                                        from '@aquilacms/aquila-connector/lib/utils';
 import { useCart, useComponentData, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
 import { authProtectedPage, formatPrice, formatStock }                  from '@lib/utils';
 
@@ -162,7 +163,7 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                 pictos ? pictos.map((picto) => (
                     <div style={picto.style} key={picto.location + Math.random()}>
                         {
-                            picto.pictos && picto.pictos.map((p) => <img src={`/images/picto/32x32-70-0,0,0,0/${p.pictoId}/${p.image}`} alt={p.title} title={p.title} key={p._id} />)
+                            picto.pictos && picto.pictos.map((p) => <img src={generateURLImageCache('picto', '32x32-70-0,0,0,0', p.pictoId, p.code, p.image)} alt={p.title} title={p.title} key={p._id} />)
                         }
                     </div>
                 )) : ''

@@ -24,6 +24,7 @@ import { addToCart, setCartShipment }                                           
 import { getCategories }                                                                       from '@aquilacms/aquila-connector/api/category';
 import { getProduct, downloadFreeVirtualProduct }                                              from '@aquilacms/aquila-connector/api/product';
 import { getImage, getMainImage, getTabImageURL }                                              from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import { generateURLImageCache }                                                               from '@aquilacms/aquila-connector/lib/utils';
 import { useCart, useProduct, useShowCartSidebar, useSiteConfig }                              from '@lib/hooks';
 import { initAxios, authProtectedPage, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 
@@ -379,7 +380,7 @@ export default function Product({ breadcrumb, origin }) {
                                     pictos ? pictos.map((picto) => (
                                         <div style={picto.style} key={picto.location + Math.random()}>
                                             {
-                                                picto.pictos && picto.pictos.map((p) => <img src={`/images/picto/64x64-70-0,0,0,0/${p.pictoId}/${p.image}`} alt={p.title} title={p.title} key={p._id} />)
+                                                picto.pictos && picto.pictos.map((p) => <img src={generateURLImageCache('picto', '64x64-70-0,0,0,0', p.pictoId, p.code, p.image)} alt={p.title} title={p.title} key={p._id} />)
                                             }
                                         </div>
                                     )) : ''

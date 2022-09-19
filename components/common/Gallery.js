@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import useTranslation                  from 'next-translate/useTranslation';
 import Lightbox                        from 'lightbox-react';
 import { getItemsGallery }             from '@aquilacms/aquila-connector/api/gallery';
+import { generateURLImageCache }       from '@aquilacms/aquila-connector/lib/utils';
 import { useComponentData }            from '@lib/hooks';
 
 import 'lightbox-react/style.css';
@@ -62,7 +63,7 @@ export default function Gallery({ 'ns-code': nsCode, galleryContent }) {
     
     const array = gallery.datas.map((item, index) => {
         if (item.content) return { content: <Video content={item.content} />, alt: item.alt };
-        return { content: `/images/gallery/max/${item._id}/${item.alt || index}${item.extension}`, alt: item.alt };
+        return { content: generateURLImageCache('gallery', 'max', item._id, item.alt || index, item.src), alt: item.alt };
     });
 
     return (
@@ -82,18 +83,20 @@ export default function Gallery({ 'ns-code': nsCode, galleryContent }) {
             }
             <div className="gallery-grid">
                 {
-                    gallery.datas.map((item, index) => (
-                        <div key={item._id} className="grid-item" onClick={() => openLightBox(index)}>
-                            <div className="overlay">
-                                <div className="text">{item.alt}</div>
+                    gallery.datas.map((item, index) => {
+                        return (
+                            <div key={item._id} className="grid-item" onClick={() => openLightBox(index)}>
+                                <div className="overlay">
+                                    <div className="text">{item.alt}</div>
+                                </div>
+                                {
+                                    item.content ? 
+                                        <img src={`https://img.youtube.com/vi/${item.content}/0.jpg`} height="200" alt={item.alt} />
+                                        : <img src={generateURLImageCache('gallery', '200x200', item._id, item.alt || index, item.src)} alt={item.alt} />
+                                }
                             </div>
-                            {
-                                item.content ? 
-                                    <img src={`https://img.youtube.com/vi/${item.content}/0.jpg`} height="200" alt={item.alt} />
-                                    : <img src={`/images/gallery/200x200/${item._id}/${item.alt || index}${item.extension}`} alt={item.alt} />
-                            }
-                        </div>
-                    ))
+                        );
+                    })
                 }
             </div>
             {

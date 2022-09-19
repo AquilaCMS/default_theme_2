@@ -1,7 +1,8 @@
-import Link                 from 'next/link';
-import useTranslation       from 'next-translate/useTranslation';
-import { Carousel }         from 'react-responsive-carousel';
-import { useComponentData } from '@lib/hooks';
+import Link                      from 'next/link';
+import useTranslation            from 'next-translate/useTranslation';
+import { Carousel }              from 'react-responsive-carousel';
+import { generateURLImageCache } from '@aquilacms/aquila-connector/lib/utils';
+import { useComponentData }      from '@lib/hooks';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
@@ -43,7 +44,7 @@ export default function Slider({ 'ns-code': nsCode, sliderContent }) {
         >
             {slider.items.map((item, index) => {
                 const img = <img
-                    src={`/images/slider/max/${item._id}/${item.text || index}${item.extension}`}
+                    src={generateURLImageCache('slider', 'max', item._id, index, item.src)}
                     alt={item.text}
                     title={item.text}
                     loading="lazy"

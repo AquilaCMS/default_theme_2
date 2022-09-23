@@ -97,7 +97,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                                     <div className="item-tunnel w-row" key={item._id}>
                                                         <div className="w-col w-col-3">
                                                             <div className="food-image-square-tunnel w-inline-block">
-                                                                <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60').url} alt={item.code} className="food-image" />
+                                                                <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60', item.selected_variant).url} alt={item.code} className="food-image" />
                                                             </div>
                                                         </div>
                                                         <div className="w-col w-col-9">

@@ -63,15 +63,10 @@ export default function CartItem({ item }) {
         }
     };
 
-    let imageURL = getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60').url;
-    if (item.selected_variant) {
-        imageURL = getMainImage(item.selected_variant.images, '60x60', true).url; // Variant product
-    }
-
     return (
         <>
             <div className="w-commerce-commercecartitem cart-item">
-                <img src={imageURL} alt={item.code} className="w-commerce-commercecartitemimage" />
+                <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60', item.selected_variant).url} alt={item.code} className="w-commerce-commercecartitemimage" />
                 <div className="w-commerce-commercecartiteminfo div-block-4">
                     <div>
                         <div className="w-commerce-commercecartproductname">{item.name}</div>

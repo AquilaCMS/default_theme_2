@@ -97,12 +97,14 @@ export async function getServerSideProps({ defaultLocale, locale, params, query,
     cookiesServerInstance.set('product', product._id, { path: '/', httpOnly: false, maxAge: 43200000 });
 
     // Product variants
-    if (product.variants_values?.find(vv => vv.active && vv.default)) {
-        const variant  = product.variants_values?.find(vv => vv.active && vv.default);
-        product.images = variant.images;
-        product.name   = variant.name;
-        product.stock  = variant.stock;
-        product.price  = variant.price;
+    if (product.variants_values?.length) {
+        const variant            = product.variants_values?.find(vv => vv.default);
+        product.active           = variant.active;
+        product.images           = variant.images;
+        product.name             = variant.name;
+        product.stock            = variant.stock;
+        product.price            = variant.price;
+        product.selected_variant = variant;
     }
 
     const actions = [
@@ -175,7 +177,7 @@ export default function Product({ breadcrumb, origin }) {
     // Getting boolean stock display
     const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value !== undefined ? themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value : false;
     
-    const mainImage   = getMainImage(product.images.filter((i) => !i.content), '578x578', product.variants_values?.find(vv => vv.active));
+    const mainImage   = getMainImage(product.images.filter((i) => !i.content), '578x578', product.selected_variant);
     const images      = getTabImageURL(product.images);
     const tabImageURL = [];
     for (let url of images) {
@@ -410,16 +412,24 @@ export default function Product({ breadcrumb, origin }) {
                             </div>
                             <div className="plain-line" />
                             <div className="full-details w-richtext"><p>{parse(product.description2?.text || '')}</p></div>
-                            { product.variants_values?.find(vv => vv.active) && <ProductVariants /> }
+                            { product.selected_variant && <ProductVariants /> }
                             <div>
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'virtual' && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type === 'bundle' ? onOpenModal : onAddToCart)}>
-                                    <input type="number" min={1} disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
-                                    <Button 
-                                        text={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:download') : (product.type === 'bundle' ? t('pages/product:compose') : t('pages/product:addToBasket'))}
-                                        loadingText={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:downloading') : t('pages/product:addToCartLoading')}
-                                        isLoading={isLoading}
-                                        className="w-commerce-commerceaddtocartbutton order-button"
-                                    />
+                                    {
+                                        product.active === false || product.stock.status === 'epu' || !product.stock.orderable ? (
+                                            <button type="button" className="w-commerce-commerceaddtocartbutton order-button" disabled={true}>Indisponible</button>
+                                        ) : (
+                                            <>
+                                                <input type="number" min={1} disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
+                                                <Button 
+                                                    text={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:download') : (product.type === 'bundle' ? t('pages/product:compose') : t('pages/product:addToBasket'))}
+                                                    loadingText={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:downloading') : t('pages/product:addToCartLoading')}
+                                                    isLoading={isLoading}
+                                                    className="w-commerce-commerceaddtocartbutton order-button"
+                                                />
+                                            </>
+                                        )
+                                    }
                                 </form>
                                 { stockDisplay && <div style={{ textAlign: 'right' }}>{formatStock(product.stock)}</div> }
                                 {

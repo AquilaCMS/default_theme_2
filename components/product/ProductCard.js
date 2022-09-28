@@ -157,6 +157,17 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
         });
     }
 
+    let bestPrice = 0;
+    if (product.variants_values?.length) {
+        for (const variant of product.variants_values) {
+            if (variant.price.ati.special && (!bestPrice || variant.price.ati.special < bestPrice)) {
+                bestPrice = variant.price.ati.special;
+            } else if (!bestPrice || variant.price.ati.normal < bestPrice) {
+                bestPrice = variant.price.ati.normal;
+            }
+        }
+    }
+
     return (
         <div role="listitem" ref={productRef} className={`menu-item w-dyn-item w-col w-col-${col}`} style={{ display: hidden ? 'none' : 'block' }}>
             {
@@ -179,8 +190,16 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                         <a className="food-title-wrap w-inline-block">
                             <h6 className="heading-9">{product.name}</h6>
                             <div className="div-block-prix">
-                                <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
-                                { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
+                                {
+                                    product.variants_values?.length ? (
+                                        <div className="price">{t('components/product:productCard.from')} {formatPrice(bestPrice)}</div>
+                                    ) : (
+                                        <>
+                                            <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
+                                            { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
+                                        </>
+                                    )
+                                }
                             </div>
                         </a>
                     </Link>
@@ -215,7 +234,7 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                         }
                     </div>
                     {
-                        stockDisplay && (
+                        !product.variants_values?.length && stockDisplay && (
                             <div style={{ textAlign: 'right' }}>
                                 { formatStock(product.stock) }
                             </div>

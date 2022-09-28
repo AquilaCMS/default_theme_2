@@ -1,5 +1,6 @@
 {
     "productCard": {
+        "from": "From",
         "addToBasket": "Add to cart",
         "compose": "Compose",
         "choose": "Choose",

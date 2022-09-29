@@ -157,6 +157,17 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
         });
     }
 
+    let bestPrice = 0;
+    if (product.variants_values?.length) {
+        for (const variant of product.variants_values) {
+            if (variant.price.ati.special && (!bestPrice || variant.price.ati.special < bestPrice)) {
+                bestPrice = variant.price.ati.special;
+            } else if (!bestPrice || variant.price.ati.normal < bestPrice) {
+                bestPrice = variant.price.ati.normal;
+            }
+        }
+    }
+
     return (
         <div role="listitem" ref={productRef} className={`menu-item w-dyn-item w-col w-col-${col}`} style={{ display: hidden ? 'none' : 'block' }}>
             {
@@ -179,8 +190,16 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                         <a className="food-title-wrap w-inline-block">
                             <h6 className="heading-9">{product.name}</h6>
                             <div className="div-block-prix">
-                                <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
-                                { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
+                                {
+                                    product.variants_values?.length ? (
+                                        <div className="price">{t('components/product:productCard.from')} {formatPrice(bestPrice)}</div>
+                                    ) : (
+                                        <>
+                                            <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
+                                            { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
+                                        </>
+                                    )
+                                }
                             </div>
                         </a>
                     </Link>
@@ -194,20 +213,28 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                                     </div>
                                 </div>
                             ) : (
-                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'virtual' && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type === 'bundle' ? onOpenModal : onAddToCart)}>
-                                    <input type="number" min={1} disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
-                                    <Button 
-                                        text={product.type === 'virtual' && product.price.ati.normal === 0 ? t('components/product:productCard.download') : (product.type === 'bundle' ? t('components/product:productCard.compose') : t('components/product:productCard.addToBasket'))}
-                                        loadingText={product.type === 'virtual' && product.price.ati.normal === 0 ? t('components/product:productCard.downloading') : t('components/product:productCard.addToCartLoading')}
-                                        isLoading={isLoading}
-                                        className="w-commerce-commerceaddtocartbutton order-button"
-                                    />
-                                </form>
+                                product.variants_values?.length ? (
+                                    <div className="w-commerce-commerceaddtocartform default-state">
+                                        <Link href={currentSlug}>
+                                            <a className="w-commerce-commerceaddtocartbutton order-button">{t('components/product:productCard.choose')}</a>
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'virtual' && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type === 'bundle' ? onOpenModal : onAddToCart)}>
+                                        <input type="number" min={1} disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
+                                        <Button 
+                                            text={product.type === 'virtual' && product.price.ati.normal === 0 ? t('components/product:productCard.download') : (product.type === 'bundle' ? t('components/product:productCard.compose') : t('components/product:productCard.addToBasket'))}
+                                            loadingText={product.type === 'virtual' && product.price.ati.normal === 0 ? t('components/product:productCard.downloading') : t('components/product:productCard.addToCartLoading')}
+                                            isLoading={isLoading}
+                                            className="w-commerce-commerceaddtocartbutton order-button"
+                                        />
+                                    </form>
+                                )
                             )
                         }
                     </div>
                     {
-                        stockDisplay && (
+                        !product.variants_values?.length && stockDisplay && (
                             <div style={{ textAlign: 'right' }}>
                                 { formatStock(product.stock) }
                             </div>

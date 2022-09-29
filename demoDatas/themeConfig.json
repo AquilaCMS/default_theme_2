@@ -56,6 +56,13 @@
                 "name": "Afficher la barre de recherche",
                 "description": "Affiche ou non la barre de recherche",
                 "group": "Général"
+              },
+              {
+                "key" : "unclickableVariants",
+                "value" : false,
+                "name" : "Déclinaisons indisponibles non cliquables",
+                "description" : "Les déclinaisons indisponibles ne sont pas cliquables ou renvoient au plus proche si possible",
+                "group" : "Général"
               }
             ]
           },
@@ -109,6 +116,13 @@
                 "name": "Display search bar",
                 "description": "Display or not the search bar",
                 "group": "General"
+              },
+              {
+                "key" : "unclickableVariants",
+                "value" : false,
+                "name" : "Unavailable non-clickable variants",
+                "description" : "The unavailable variants are not clickable or refer to the nearest one if possible",
+                "group" : "General"
               }
             ]
           }

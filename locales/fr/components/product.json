@@ -1,7 +1,9 @@
 {
     "productCard": {
+        "from": "A partir de",
         "addToBasket": "Ajouter au panier",
         "compose": "Composer",
+        "choose": "Choisir",
         "download": "Télécharger",
         "downloading": "Téléchargement...",
         "addToCartLoading": "Ajout...",

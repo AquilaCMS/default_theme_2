@@ -518,22 +518,87 @@ font-size: 0.8rem;
 }
 
 @-webkit-keyframes blog-card-return-animation {
-0% {
--webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  0% {
+  -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  100% {
+  -webkit-box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+        box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+  }
+  }
+  @keyframes blog-card-return-animation {
+  0% {
+  -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  100% {
+  -webkit-box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+        box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+  }
 }
-100% {
--webkit-box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
-      box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+
+/* Product variants */
+.product-variants {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
+
+.variant-radio {
+  display: none;
 }
-@keyframes blog-card-return-animation {
-0% {
--webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+
+.variant-label, .variant-label-color, .variant-label-image, .variant-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  margin: 5px;
+  padding: 10px;
+  cursor: pointer;
 }
-100% {
--webkit-box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
-      box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+
+.variant-label-color span {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #fff;
 }
+
+.variant-radio:checked + .variant-label,
+.variant-radio:checked + .variant-label-color,
+.variant-radio:checked + .variant-label-image {
+  border: 2px solid #ff8946;
+  background-color: #ff8946;
+  color: #fff;
+}
+
+.variant-label.disabled,
+.variant-label-color.disabled,
+.variant-label-image.disabled {
+  border: 2px dashed #ddd;
+}
+
+.variant-label.disabled-all,
+.variant-label-color.disabled-all {
+  background-color: #ddd;
+  color: grey;
+  cursor: not-allowed;
+}
+
+.variant-label-image.disabled-all {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.variant-label-image.disabled-all img {
+  opacity: 0.2;
+}
+
+.disabled-all.clickable {
+  cursor: pointer;
 }

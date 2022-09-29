@@ -10,6 +10,7 @@ import { Modal }                                                                
 import Lightbox                                                                                from 'lightbox-react';
 import ErrorPage                                                                               from '@pages/_error';
 import BundleProduct                                                                           from '@components/product/BundleProduct';
+import ProductVariants                                                                         from '@components/product/ProductVariants';
 import Layout                                                                                  from '@components/layouts/Layout';
 import NextSeoCustom                                                                           from '@components/tools/NextSeoCustom';
 import Breadcrumb                                                                              from '@components/navigation/Breadcrumb';
@@ -95,6 +96,17 @@ export async function getServerSideProps({ defaultLocale, locale, params, query,
     // Set cookie product ID
     cookiesServerInstance.set('product', product._id, { path: '/', httpOnly: false, maxAge: 43200000 });
 
+    // Product variants
+    if (product.variants_values?.length) {
+        const variant            = product.variants_values?.find(vv => vv.default);
+        product.active           = variant.active;
+        product.images           = variant.images;
+        product.name             = variant.name;
+        product.stock            = variant.stock;
+        product.price            = variant.price;
+        product.selected_variant = variant;
+    }
+
     const actions = [
         {
             type : 'SET_PRODUCT',
@@ -154,7 +166,7 @@ export default function Product({ breadcrumb, origin }) {
     const [openModal, setOpenModal]   = useState(false);
     const [tabs, setTabs]             = useState(0);
     const { cart, setCart }           = useCart();
-    const product                     = useProduct();
+    const { product }                 = useProduct();
     const { themeConfig }             = useSiteConfig();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
@@ -164,8 +176,8 @@ export default function Product({ breadcrumb, origin }) {
 
     // Getting boolean stock display
     const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value !== undefined ? themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value : false;
-
-    const mainImage   = getMainImage(product.images.filter((i) => !i.content), '578x578');
+    
+    const mainImage   = getMainImage(product.images.filter((i) => !i.content), '578x578', product.selected_variant);
     const images      = getTabImageURL(product.images);
     const tabImageURL = [];
     for (let url of images) {
@@ -393,22 +405,31 @@ export default function Product({ breadcrumb, origin }) {
                             </div>
                         </div>
                         <div className="product-content">
-                            <h3>{product.description2?.title}</h3>
+                            <h3>{product.name}</h3>
                             <div className="div-block-prix">
                                 <div className="price-text">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
                                 { product.price.ati.special ? <div className="price-text sale">{formatPrice(product.price.ati.normal)}</div> : null }
                             </div>
                             <div className="plain-line" />
                             <div className="full-details w-richtext"><p>{parse(product.description2?.text || '')}</p></div>
+                            { product.selected_variant && <ProductVariants /> }
                             <div>
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'virtual' && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type === 'bundle' ? onOpenModal : onAddToCart)}>
-                                    <input type="number" min={1} disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
-                                    <Button 
-                                        text={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:download') : (product.type === 'bundle' ? t('pages/product:compose') : t('pages/product:addToBasket'))}
-                                        loadingText={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:downloading') : t('pages/product:addToCartLoading')}
-                                        isLoading={isLoading}
-                                        className="w-commerce-commerceaddtocartbutton order-button"
-                                    />
+                                    {
+                                        product.active === false || product.stock.status === 'epu' || !product.stock.orderable ? (
+                                            <button type="button" className="w-commerce-commerceaddtocartbutton order-button" disabled={true}>Indisponible</button>
+                                        ) : (
+                                            <>
+                                                <input type="number" min={1} disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
+                                                <Button 
+                                                    text={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:download') : (product.type === 'bundle' ? t('pages/product:compose') : t('pages/product:addToBasket'))}
+                                                    loadingText={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:downloading') : t('pages/product:addToCartLoading')}
+                                                    isLoading={isLoading}
+                                                    className="w-commerce-commerceaddtocartbutton order-button"
+                                                />
+                                            </>
+                                        )
+                                    }
                                 </form>
                                 { stockDisplay && <div style={{ textAlign: 'right' }}>{formatStock(product.stock)}</div> }
                                 {

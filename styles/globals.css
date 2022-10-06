@@ -542,8 +542,19 @@ font-size: 0.8rem;
 .product-variants {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   margin-bottom: 20px;
+}
+
+@media screen and (max-width: 479px) {
+  .product-variants {
+    flex-direction: column;
+  }
+}
+
+.product-variants-listing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .variant-radio {

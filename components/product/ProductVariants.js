@@ -174,7 +174,7 @@ export default function ProductVariants() {
         <>
             {   
                 product.variants[0].type === 'list2' ? (
-                    <div className="product-variants">
+                    <div className="product-variants-listing">
                         {
                             product.variants_values.map((variant) => {
                                 const disabled = !variant.active || variant.stock.status === 'epu' || !variant.stock.orderable;
@@ -193,66 +193,68 @@ export default function ProductVariants() {
                             product.variants.map((variants, index) => (
                                 <div key={variants._id} className="product-variants">
                                     <span style={{ minWidth: '80px' }}>{variants.name}</span>
-                                    {
-                                        variants.type === 'radio' && (
-                                            variants.values.map((value) => {
-                                                const disabled = isDisabledVariant(variants.code, value);
-                                                return (
-                                                    <Fragment key={`${variants._id}_${value}`}>
-                                                        <input type="radio" id={`${variants._id}_${value}`} name={variants._id} className="variant-radio" onChange={() => {selectVariant(variants.code, value);}} checked={isSelectedVariant(variants.code, value)} disabled={unclickableVariants && disabled === 1} />
-                                                        {
-                                                            product.attributes.find(a => a.code === variants.code).type !== 'listcolor' ? (
-                                                                <label className={`variant-label${disabled ? (disabled === 2 ? ' disabled' : ` disabled-all${!unclickableVariants ? ' clickable' : ''}`) : ''}`} htmlFor={`${variants._id}_${value}`}>{value}</label>
-                                                            ) : (
-                                                                <label className={`variant-label-color${disabled ? (disabled === 2 ? ' disabled' : ` disabled-all${!unclickableVariants ? ' clickable' : ''}`) : ''}`} htmlFor={`${variants._id}_${value}`}><span style={{ backgroundColor: value }}>&nbsp;</span></label>
-                                                            )
-                                                        }
-                                                    </Fragment>
-                                                );
-                                            })
-                                        )
-                                    }
-                                    {                                                                    
-                                        variants.type === 'list' && (
-                                            <select value={selected.find(item => item.code === variants.code).value} className="variant-select" onChange={(e) => selectVariant(variants.code, e.target.value)}>
-                                                {
-                                                    variants.values.map((value) => {
-                                                        const disabled = isDisabledVariant(variants.code, value);
-                                                        return (
-                                                            <option key={`${variants._id}_${value}`} value={value.toLowerCase()} disabled={disabled === 1}>{value}</option>
-                                                        );
-                                                    })
-                                                }
-                                            </select>
-                                        )
-                                    }
-                                    {
-                                        variants.type === 'image' && (
-                                            variants.values.map((value) => {
-                                                const disabled      = isDisabledVariant(variants.code, value);
-                                                const variant_codes = [];
-                                                for (let i = 0; i < selected.length; i++) {
-                                                    if (index === i) {
-                                                        variant_codes.push(value.toLowerCase());
-                                                    } else {
-                                                        variant_codes.push(selected[i].value);
+                                    <div className="product-variants-listing">
+                                        {
+                                            variants.type === 'radio' && (
+                                                variants.values.map((value) => {
+                                                    const disabled = isDisabledVariant(variants.code, value);
+                                                    return (
+                                                        <Fragment key={`${variants._id}_${value}`}>
+                                                            <input type="radio" id={`${variants._id}_${value}`} name={variants._id} className="variant-radio" onChange={() => {selectVariant(variants.code, value);}} checked={isSelectedVariant(variants.code, value)} disabled={unclickableVariants && disabled === 1} />
+                                                            {
+                                                                product.attributes.find(a => a.code === variants.code).type !== 'listcolor' ? (
+                                                                    <label className={`variant-label${disabled ? (disabled === 2 ? ' disabled' : ` disabled-all${!unclickableVariants ? ' clickable' : ''}`) : ''}`} htmlFor={`${variants._id}_${value}`}>{value}</label>
+                                                                ) : (
+                                                                    <label className={`variant-label-color${disabled ? (disabled === 2 ? ' disabled' : ` disabled-all${!unclickableVariants ? ' clickable' : ''}`) : ''}`} htmlFor={`${variants._id}_${value}`}><span style={{ backgroundColor: value }}>&nbsp;</span></label>
+                                                                )
+                                                            }
+                                                        </Fragment>
+                                                    );
+                                                })
+                                            )
+                                        }
+                                        {                                                                    
+                                            variants.type === 'list' && (
+                                                <select value={selected.find(item => item.code === variants.code).value} className="variant-select" onChange={(e) => selectVariant(variants.code, e.target.value)}>
+                                                    {
+                                                        variants.values.map((value) => {
+                                                            const disabled = isDisabledVariant(variants.code, value);
+                                                            return (
+                                                                <option key={`${variants._id}_${value}`} value={value.toLowerCase()} disabled={disabled === 1}>{value}</option>
+                                                            );
+                                                        })
                                                     }
-                                                }
-                                                const pv        = product.variants_values.find(item => item.variant_codes === variant_codes.join('--'));
-                                                const mainImage = getMainImage(pv.images.filter((i) => !i.content), '50x50', true);
-                                                return (
-                                                    <Fragment key={`${variants._id}_${value}`}>
-                                                        <input type="radio" id={`${variants._id}_${value}`} name={variants._id} className="variant-radio" onChange={() => {selectVariant(variants.code, value);}} checked={isSelectedVariant(variants.code, value)} disabled={unclickableVariants && disabled === 1} />
-                                                        {
-                                                            <label className={`variant-label-image${disabled ? (disabled === 2 ? ' disabled' : ` disabled-all${!unclickableVariants ? ' clickable' : ''}`) : ''}`} htmlFor={`${variants._id}_${value}`}>
-                                                                <img src={mainImage.url} alt={mainImage.alt} />
-                                                            </label>
+                                                </select>
+                                            )
+                                        }
+                                        {
+                                            variants.type === 'image' && (
+                                                variants.values.map((value) => {
+                                                    const disabled      = isDisabledVariant(variants.code, value);
+                                                    const variant_codes = [];
+                                                    for (let i = 0; i < selected.length; i++) {
+                                                        if (index === i) {
+                                                            variant_codes.push(value.toLowerCase());
+                                                        } else {
+                                                            variant_codes.push(selected[i].value);
                                                         }
-                                                    </Fragment>
-                                                );
-                                            })
-                                        )
-                                    }
+                                                    }
+                                                    const pv        = product.variants_values.find(item => item.variant_codes === variant_codes.join('--'));
+                                                    const mainImage = getMainImage(pv.images.filter((i) => !i.content), '50x50', true);
+                                                    return (
+                                                        <Fragment key={`${variants._id}_${value}`}>
+                                                            <input type="radio" id={`${variants._id}_${value}`} name={variants._id} className="variant-radio" onChange={() => {selectVariant(variants.code, value);}} checked={isSelectedVariant(variants.code, value)} disabled={unclickableVariants && disabled === 1} />
+                                                            {
+                                                                <label className={`variant-label-image${disabled ? (disabled === 2 ? ' disabled' : ` disabled-all${!unclickableVariants ? ' clickable' : ''}`) : ''}`} htmlFor={`${variants._id}_${value}`}>
+                                                                    <img src={mainImage.url} alt={mainImage.alt} />
+                                                                </label>
+                                                            }
+                                                        </Fragment>
+                                                    );
+                                                })
+                                            )
+                                        }
+                                    </div>
                                 </div>
                             ))
                         }

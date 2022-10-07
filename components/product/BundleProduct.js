@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import useTranslation                            from 'next-translate/useTranslation';
 import Button                                    from '@components/ui/Button';
-import { addToCart, setCartShipment }            from '@aquilacms/aquila-connector/api/cart';
+import { addToCart, deleteCartShipment }         from '@aquilacms/aquila-connector/api/cart';
 import { getImage }                              from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import { useCart, useShowCartSidebar }           from '@lib/hooks';
 import { formatPrice }                           from '@lib/utils';
@@ -86,7 +86,7 @@ export default function BundleProduct({ product, qty, onCloseModal }) {
         try {
             // Deletion of the cart delivery
             if (cart.delivery?.method) {
-                await setCartShipment(cart._id, {}, '', true);
+                await deleteCartShipment(cart._id);
             }
 
             // Adding bundle product to cart

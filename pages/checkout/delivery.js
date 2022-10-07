@@ -79,7 +79,7 @@ export default function CheckoutDelivery() {
 
         try {
             // Set cart addresses
-            const newCart = await setCartShipment(cart._id, ship, cart.addresses.delivery.isoCountryCode, false, lang);
+            const newCart = await setCartShipment(cart._id, ship, cart.addresses.delivery.isoCountryCode, lang);
             setCart(newCart);
 
             router.push('/checkout/payment');

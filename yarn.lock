@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@aquilacms/aquila-connector@1.1.10":
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/@aquilacms/aquila-connector/-/aquila-connector-1.1.10.tgz#5ada7abb053d35fbc737af8e7c2052b7ab3338f4"
-  integrity sha512-Warkf0daEsDU9zeKiapxWrAdxOgzMRtUfVTowE9vvj0v1dpqjQ4AmVX+gETgS/lTmp0yPO9pETdG4fR5fO0Bgg==
+"@aquilacms/aquila-connector@1.1.11":
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/@aquilacms/aquila-connector/-/aquila-connector-1.1.11.tgz#eac749689cc3b0f1d28133cf4a5fe9573b481064"
+  integrity sha512-CsZ1UBwzAjnNnT/Ft51Km+NMJ6D0D2ha5mUj0VM/Z2lCbkeDU3Ep84VQ7RbS/IilHDfPXYxyf3ywHM+sYRzpTg==
   dependencies:
     axios "^0.21.4"
     cookie "^0.4.1"

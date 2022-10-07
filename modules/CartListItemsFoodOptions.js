@@ -6,7 +6,7 @@ import CartDiscount                             from '@components/cart/CartDisco
 import CartItem                                 from '@components/cart/CartItem';
 import Button                                   from '@components/ui/Button';
 import { getBlockCMS }                          from '@aquilacms/aquila-connector/api/blockcms';
-import { setCartShipment }                      from '@aquilacms/aquila-connector/api/cart';
+import { deleteCartShipment }                   from '@aquilacms/aquila-connector/api/cart';
 import { getImage }                             from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import axios                                    from '@aquilacms/aquila-connector/lib/AxiosInstance';
 import { useCart }                              from '@lib/hooks';
@@ -110,7 +110,7 @@ export default function CartListItemsFoodOptions() {
         try {
             // Deletion of the cart delivery
             if (cart.delivery?.method) {
-                await setCartShipment(cart._id, {}, '', true);
+                await deleteCartShipment(cart._id);
             }
 
             // Update quantity

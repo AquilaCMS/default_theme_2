@@ -73,7 +73,7 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                 await deleteCartShipment(cart._id);
             }
 
-            // Adding bundle product to cart
+            // Adding product to cart
             const newCart   = await addToCart(cart._id, product, qty);
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
             setCart(newCart);

@@ -172,11 +172,10 @@ export default function CheckoutPayment() {
                                 isLoading={isLoading}
                                 className="log-button-03 w-button"
                             />
-
-                            <div className="content" style={{ display: 'none' }}>
-                                {parse(paymentForm)}
-                            </div>
                         </form>
+                        <div className="content" style={{ display: 'none' }}>
+                            {parse(paymentForm)}
+                        </div>
                     </div>
                     {
                         message && (

@@ -7,8 +7,8 @@ export default function POSValidateCartBtn() {
 
     return (
         <div>
-            <Link href="/checkout/clickandcollect">
-                <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+            <Link href="/checkout/clickandcollect" className="checkout-button-2 w-button">
+                {t('components/cart:cartListItem.ordering')}
             </Link>
         </div>
     );

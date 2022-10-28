@@ -14,14 +14,12 @@ export default function CategoryCard({ item }) {
     return (
         <div role="listitem" className="menu-item w-dyn-item w-col w-col-2">
             <div>
-                <Link href={`${asPath}/${item.slug[lang]}`}>
-                    <a className="food-image-square w-inline-block">
-                        <img src={generateURLImageCache('category', '145x145', item._id, item.code, item.img)} alt={item.name} className="food-image" loading="lazy" />
-                    </a>
+                <Link href={`${asPath}/${item.slug[lang]}`} className="food-image-square w-inline-block">
+                    <img src={generateURLImageCache('category', '145x145', item._id, item.code, item.img)} alt={item.name} className="food-image" loading="lazy" />
                 </Link>
                 <div className="food-card-content">
                     <Link href={`${asPath}/${item.slug[lang]}`}>
-                        <a>{item.name}</a>
+                        {item.name}
                     </Link>
                 </div>
             </div>

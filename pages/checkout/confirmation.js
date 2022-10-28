@@ -72,8 +72,8 @@ export default function CheckoutConfirmation() {
                 <OrderDetails order={order} />
 
                 <div className="container-order" style={{ justifyContent: 'center' }}>
-                    <Link href='/account'>
-                        <a className="log-button-03 w-button">{t('pages/checkout:confirmation.viewOrders')}</a>
+                    <Link href='/account' className="log-button-03 w-button">
+                        <a>{t('pages/checkout:confirmation.viewOrders')}</a>
                     </Link>
                 </div>
             </div>

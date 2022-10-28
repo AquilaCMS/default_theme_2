@@ -70,8 +70,8 @@ export default function NavMenu() {
                                     <div>
                                         {
                                             item.action !== 'container' && item.slug ? (
-                                                <Link href={item.action === 'catalog' || item.action === 'categorylist' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : (item.url ? item.url : '/'))} key={item._id}>
-                                                    <a className="w-nav-link" style={{ padding: '0px' }} target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item.name}</a>
+                                                <Link href={item.action === 'catalog' || item.action === 'categorylist' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : (item.url ? item.url : '/'))} className="w-nav-link" style={{ padding: '0px' }} target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'} key={item._id}>
+                                                    {item.name}
                                                 </Link>
                                             ) : (
                                                 <span>{item.name}</span>
@@ -91,8 +91,8 @@ export default function NavMenu() {
                                                                 <div className="text-block-nav">
                                                                     {
                                                                         item2.action !== 'container' && item.slug && item2.slug ? (
-                                                                            <Link href={item2.action === 'catalog' || item2.action === 'categorylist' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : (item2.url ? item2.url : '/'))}>
-                                                                                <a className="w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item2.name}</a>
+                                                                            <Link href={item2.action === 'catalog' || item2.action === 'categorylist' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : (item2.url ? item2.url : '/'))} className="w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>
+                                                                                {item2.name}
                                                                             </Link>
                                                                         ) : (
                                                                             <span key={item2._id}>{item2.name}</span>
@@ -109,8 +109,8 @@ export default function NavMenu() {
                                                                                 <div className="icon-3 w-icon-dropdown-toggle" />
                                                                                 {
                                                                                     item3.action !== 'container' && item.slug && item2.slug && item3.slug ? (
-                                                                                        <Link href={item3.action === 'catalog' || item3.action === 'categorylist' ? `/c/${item.slug[lang]}/${item2.slug[lang]}/${item3.slug[lang]}` : (item3.action === 'page' ? `/${item3.pageSlug}` : (item3.url ? item3.url : '/'))}>
-                                                                                            <a className="dropdown-link-3 w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item3.name}</a>
+                                                                                        <Link href={item3.action === 'catalog' || item3.action === 'categorylist' ? `/c/${item.slug[lang]}/${item2.slug[lang]}/${item3.slug[lang]}` : (item3.action === 'page' ? `/${item3.pageSlug}` : (item3.url ? item3.url : '/'))} className="dropdown-link-3 w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>
+                                                                                            {item3.name}
                                                                                         </Link>
                                                                                     ) : (
                                                                                         <span>{item3.name}</span>
@@ -126,8 +126,8 @@ export default function NavMenu() {
                                                         <Fragment key={item2._id}>
                                                             {
                                                                 item2.action !== 'container' && item2.slug ? (
-                                                                    <Link href={item2.action === 'catalog' || item.action2 === 'categorylist' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : (item2.url ? item2.url : '/'))}>
-                                                                        <a className="dropdown-nav-link w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item2.name}</a>
+                                                                    <Link href={item2.action === 'catalog' || item.action2 === 'categorylist' ? `/c/${item.slug[lang]}/${item2.slug[lang]}` : (item2.action === 'page' ? `/${item2.pageSlug}` : (item2.url ? item2.url : '/'))} className="dropdown-nav-link w-dropdown-link" target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>
+                                                                        {item2.name}
                                                                     </Link>
                                                                 ) : (
                                                                     <span key={item2._id}>{item2.name}</span>
@@ -145,8 +145,8 @@ export default function NavMenu() {
                             <Fragment key={item._id}>
                                 {
                                     item.action !== 'container' && item.slug ? (
-                                        <Link href={item.action === 'catalog' || item.action === 'categorylist' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : (item.url ? item.url : '/'))}>
-                                            <a className="nav-link-2 w-nav-link" style={current ? { backgroundColor: '#ff8946' } : {}} target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>{item.name}</a>
+                                        <Link href={item.action === 'catalog' || item.action === 'categorylist' ? `/c/${item.slug[lang]}` : (item.action === 'page' ? `/${item.pageSlug}` : (item.url ? item.url : '/'))} className="nav-link-2 w-nav-link" style={current ? { backgroundColor: '#ff8946' } : {}} target={item.url?.indexOf('http') === 0 ? '_blank' : '_self'}>
+                                            {item.name}
                                         </Link>
                                     ) : (
                                         <span>{item.name}</span>
@@ -157,8 +157,8 @@ export default function NavMenu() {
                     );
                 }) : null}
 
-                <Link href="/account/login">
-                    <a className={`nav-link-2 w-nav-link${asPath.indexOf('/account') > -1 ? ' w--current' : ''}`}>{t('components/navigation:myAccount')}</a>
+                <Link href="/account/login" className={`nav-link-2 w-nav-link${asPath.indexOf('/account') > -1 ? ' w--current' : ''}`}>
+                    {t('components/navigation:myAccount')}
                 </Link>
             </nav>
         </>

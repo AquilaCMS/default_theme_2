@@ -68,15 +68,14 @@ export default function BlogList({ list = [] }) {
                             
                                         <form className="w-commerce-commerceaddtocartform default-state">
                                             <Link href={`/blog/${article.slug[lang]}`}>
-                                                <a>
-                                                    <button onClick={() =>
-                                                        sessionStorage.setItem('articleID', article._id)} 
+                                                <button 
+                                                    onClick={() => sessionStorage.setItem('articleID', article._id)} 
                                                     type="submit" 
                                                     className="w-commerce-commerceaddtocartbutton order-button" 
-                                                    style={{ justifyContent: 'center' }}>
+                                                    style={{ justifyContent: 'center' }}
+                                                >
                                                     Lire plus
-                                                    </button>
-                                                </a>
+                                                </button>
                                             </Link>
                                         </form>
                                     </div>

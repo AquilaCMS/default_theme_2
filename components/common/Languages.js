@@ -27,8 +27,8 @@ export default function Languages() {
                         );
                     }
                     return (
-                        <Link href={urls.find(u => u.lang === code)?.url || '/'} locale={code} key={code}>
-                            <a className={`link-lang${lang === code ? ' selected' : ''}`}>{code.toUpperCase()}</a>
+                        <Link href={urls.find(u => u.lang === code)?.url || '/'} locale={code} key={code} className={`link-lang${lang === code ? ' selected' : ''}`}>
+                            {code.toUpperCase()}
                         </Link>
                     );
                 })

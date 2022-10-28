@@ -180,28 +180,24 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                 )) : ''
             }
             <div className="food-card">
-                <Link href={currentSlug}>
-                    <a className="food-image-square w-inline-block">
-                        <img src={mainImage.url || '/images/no-image.svg'} alt={mainImage.alt || 'Image produit'} style={{ 'width': '100%' }} className="food-image" loading="lazy" />
-                    </a>
+                <Link href={currentSlug} className="food-image-square w-inline-block">
+                    <img src={mainImage.url || '/images/no-image.svg'} alt={mainImage.alt || 'Image produit'} style={{ 'width': '100%' }} className="food-image" loading="lazy" />
                 </Link>
                 <div className="food-card-content">
-                    <Link href={currentSlug}>
-                        <a className="food-title-wrap w-inline-block">
-                            <h6 className="heading-9">{product.name}</h6>
-                            <div className="div-block-prix">
-                                {
-                                    product.variants_values?.length ? (
-                                        <div className="price">{t('components/product:productCard.from')} {formatPrice(bestPrice)}</div>
-                                    ) : (
-                                        <>
-                                            <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
-                                            { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
-                                        </>
-                                    )
-                                }
-                            </div>
-                        </a>
+                    <Link href={currentSlug} className="food-title-wrap w-inline-block">
+                        <h6 className="heading-9">{product.name}</h6>
+                        <div className="div-block-prix">
+                            {
+                                product.variants_values?.length ? (
+                                    <div className="price">{t('components/product:productCard.from')} {formatPrice(bestPrice)}</div>
+                                ) : (
+                                    <>
+                                        <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
+                                        { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
+                                    </>
+                                )
+                            }
+                        </div>
                     </Link>
                     <p className="paragraph">{product.description2?.title}</p>
                     <div className="add-to-cart">
@@ -215,8 +211,8 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                             ) : (
                                 product.variants_values?.length ? (
                                     <div className="w-commerce-commerceaddtocartform default-state">
-                                        <Link href={currentSlug}>
-                                            <a className="w-commerce-commerceaddtocartbutton order-button">{t('components/product:productCard.choose')}</a>
+                                        <Link href={currentSlug} className="w-commerce-commerceaddtocartbutton order-button">
+                                            {t('components/product:productCard.choose')}
                                         </Link>
                                     </div>
                                 ) : (

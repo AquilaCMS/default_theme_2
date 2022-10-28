@@ -53,10 +53,8 @@ export default function Slider({ 'ns-code': nsCode, sliderContent }) {
                     <div key={item._id}>
                         {item.href ? (
                             item.href.startsWith('/') ? (
-                                <Link href={item.href}>
-                                    <a style={{ display: 'block' }}>
-                                        {img}
-                                    </a>
+                                <Link href={item.href} style={{ display: 'block' }}>
+                                    {img}
                                 </Link>
                             ) : (
                                 <a href={item.href} target="_blank" rel="noreferrer" style={{ display: 'block' }}>

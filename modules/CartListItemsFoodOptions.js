@@ -239,8 +239,8 @@ export default function CartListItemsFoodOptions() {
                                             />
                                         ) : (
                                             moduleHook('cart-validate-btn') || (
-                                                <Link href="/checkout/address">
-                                                    <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                                                <Link href="/checkout/address" className="checkout-button-2 w-button">
+                                                    {t('components/cart:cartListItem.ordering')}
                                                 </Link>
                                             )
                                         )
@@ -327,8 +327,8 @@ export default function CartListItemsFoodOptions() {
                                 <div>
                                     {
                                         moduleHook('cart-validate-btn') || (
-                                            <Link href="/checkout/address">
-                                                <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
+                                            <Link href="/checkout/address" className="checkout-button-2 w-button">
+                                                {t('components/cart:cartListItem.ordering')}
                                             </Link>
                                         )
                                     }
@@ -346,8 +346,8 @@ export default function CartListItemsFoodOptions() {
         <div className="w-commerce-commercecartemptystate empty-state">
             <div>{t('components/cart:cartListItem.empty')}</div>
             <div className="button-arrow-wrap">
-                <Link href="/">
-                    <a className="button w-button">{t('components/cart:cartListItem.goToHome')}</a>
+                <Link href="/" className="button w-button">
+                    {t('components/cart:cartListItem.goToHome')}
                 </Link>
             </div>
         </div>

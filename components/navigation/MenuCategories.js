@@ -32,10 +32,8 @@ export default function MenuCategories() {
                             current = true;
                         }
                         return (
-                            <Link key={item._id} href={`/c/${item.slug[lang]}`}>
-                                <a className={`tab-link-round w-inline-block w-tab-link${current ? ' w--current' : ''}`}>
-                                    <div>{item.name}</div>
-                                </a>
+                            <Link key={item._id} href={`/c/${item.slug[lang]}`} className={`tab-link-round w-inline-block w-tab-link${current ? ' w--current' : ''}`}>
+                                <div>{item.name}</div>
                             </Link>
                             
                         );

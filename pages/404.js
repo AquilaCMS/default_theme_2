@@ -23,8 +23,8 @@ export default function Custom404() {
                     <div>
                         <p className="utility-paragraph">
                             {t('pages/error:text404')}<br />
-                            <Link href="/">
-                                <a className="link-2">{t('pages/error:back')}</a>
+                            <Link href="/" className="link-2">
+                                {t('pages/error:back')}
                             </Link>
                         </p>
                     </div>

@@ -1,7 +1,7 @@
 import { useProduct } from '@lib/hooks';
 
 export default function AllergenList() {
-    const product = useProduct();
+    const { product } = useProduct();
 
     if (!product.allergens || !product.allergens.length) {
         return null;

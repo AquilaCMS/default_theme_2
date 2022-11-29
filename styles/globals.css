@@ -35,6 +35,15 @@ body {
   max-height: 0px;
   transition: all 0.5s
 }
+@media screen and (max-width: 991px) {
+  .tab-menu-round {
+    display: flex;
+    flex-wrap: nowrap;
+    -ms-grid-columns: none;
+    grid-template-columns: none;
+    overflow-x: auto;
+  }
+}
 
 /* ADD */
 .tab-menu-round-open {

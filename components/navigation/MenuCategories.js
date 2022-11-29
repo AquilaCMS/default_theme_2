@@ -25,7 +25,6 @@ export default function MenuCategories() {
                 </div>
 
                 <div className={`tab-menu-round w-tab-menu${open ? ' tab-menu-round-open' : ''}`}>
-
                     {menuCat?.map((item) => {
                         let current = false;
                         if (asPath.indexOf(`/c/${item.slug[lang]}`) > -1) {
@@ -38,7 +37,6 @@ export default function MenuCategories() {
                             
                         );
                     })}
-                
                 </div>
             </>
         );

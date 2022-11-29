@@ -48,6 +48,8 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
+      "allergens": [],
+      "foodOption": false,
       "variants": [],
       "variants_values": [],
       "attributes": [
@@ -55,6 +57,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d06ea4e197fd1fc0d9b6ed",
           "id": "60d06ea4e197fd1fc0d9b6ec",
           "code": "sauce-ketchup",
@@ -73,6 +77,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
@@ -90,6 +96,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
@@ -118,8 +126,6 @@
       ],
       "pictos": [],
       "_id": "605368a04b9ac91f54fcabe5",
-      "foodOption": false,
-      "allergens": [],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "biere",
       "translation": {
@@ -148,7 +154,7 @@
         }
       },
       "createdAt": "2021-06-22T00:00:00.000Z",
-      "updatedAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2022-11-29T12:59:05.601Z",
       "universe": "boissons-boissons",
       "component_template": "<food-options-config></food-options-config>"
     },
@@ -199,6 +205,15 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
+      "allergens": [
+        "607ecb35d23bc05a98874b4b",
+        "607ecb35d23bc05a98874b51",
+        "60a38dc81f60701cac587c8e",
+        "60a38dc81f60701cac587c8f",
+        "60a38dc81f60701cac587c91",
+        "60a38dc81f60701cac587c92"
+      ],
+      "foodOption": false,
       "variants": [],
       "variants_values": [],
       "attributes": [
@@ -206,16 +221,19 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d06ea4e197fd1fc0d9b6ed",
           "id": "60d06ea4e197fd1fc0d9b6ec",
           "code": "sauce-ketchup",
           "param": "Non",
           "translation": {
             "fr": {
-              "name": "Ketchup"
+              "name": "Ketchup",
+              "value": 1
             },
             "en": {
-              "name": "Ketchup"
+              "name": "Ketchup",
+              "value": 1
             }
           }
         },
@@ -223,16 +241,19 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
           "param": "Non",
           "translation": {
             "fr": {
-              "name": "Mayonnaise"
+              "name": "Mayonnaise",
+              "value": 0
             },
             "en": {
-              "name": "Mayonnaise"
+              "name": "Mayonnaise",
+              "value": 0
             }
           }
         },
@@ -240,47 +261,51 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
           "param": "Non",
           "translation": {
             "fr": {
-              "name": "Couverts"
+              "name": "Couverts",
+              "value": 1
             },
             "en": {
-              "name": "Cutlery"
+              "name": "Covered",
+              "value": 1
             }
           }
         },
         {
-          "type" : "multiselect",
-          "position" : 1,
-          "visible" : true,
-          "_id" : "627e659aa9987c4488835273",
-          "id" : "ff06a08a6350becbd5d0adea",
-          "code" : "viande",
-          "param" : "Non",
-          "translation" : {
-            "fr" : {
-              "name" : "Viande",
-              "values" : [
+          "type": "multiselect",
+          "position": 1,
+          "visible": true,
+          "usedInSearch": false,
+          "_id": "627e659aa9987c4488835273",
+          "id": "ff06a08a6350becbd5d0adea",
+          "code": "viande",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Viande",
+              "values": [
                 "Poulet",
                 "Boeuf",
                 "Bacon"
               ],
-              "value" : [
+              "value": [
                 "Poulet"
               ]
             },
-            "en" : {
-              "name" : "Meat",
-              "values" : [
+            "en": {
+              "name": "Meat",
+              "values": [
                 "Chicken",
                 "Beef",
                 "Bacon"
               ],
-              "value" : [
+              "value": [
                 "Chicken"
               ]
             }
@@ -320,15 +345,6 @@
         }
       ],
       "_id": "605366a34b9ac91f54fcabc7",
-      "foodOption": false,
-      "allergens": [
-        "607ecb35d23bc05a98874b4b",
-        "607ecb35d23bc05a98874b51",
-        "60a38dc81f60701cac587c8e",
-        "60a38dc81f60701cac587c8f",
-        "60a38dc81f60701cac587c91",
-        "60a38dc81f60701cac587c92"
-      ],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "chickenburger",
       "translation": {
@@ -358,7 +374,7 @@
       },
       "universe": "burger-burger",
       "createdAt": "2021-06-22T00:00:00.000Z",
-      "updatedAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2022-11-29T15:12:48.959Z",
       "component_template": "<food-options-config></food-options-config>"
     },
     {
@@ -394,11 +410,15 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
+      "allergens": [],
+      "foodOption": true,
       "attributes": [
         {
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d096737fc52b22e0c3d836",
           "param": "Non",
           "code": "sauce-ketchup",
@@ -416,6 +436,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
@@ -433,6 +455,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
@@ -461,8 +485,6 @@
       ],
       "pictos": [],
       "_id": "60d096737fc52b22e0c3d835",
-      "foodOption": true,
-      "allergens": [],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "sauce-mayonnaise",
       "translation": {
@@ -512,11 +534,15 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
+      "allergens": [],
+      "foodOption": true,
       "attributes": [
         {
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d06ea4e197fd1fc0d9b6ed",
           "id": "60d06ea4e197fd1fc0d9b6ec",
           "code": "sauce-ketchup",
@@ -535,6 +561,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
@@ -552,6 +580,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
@@ -580,8 +610,6 @@
       ],
       "pictos": [],
       "_id": "60d06e1ae197fd1fc0d9b6e3",
-      "foodOption": true,
-      "allergens": [],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "sauce-ketchup",
       "translation": {
@@ -648,6 +676,16 @@
         "605366a34b9ac91f54fcabc7"
       ],
       "is_new": false,
+      "allergens": [
+        "607ecb35d23bc05a98874b4b",
+        "607ecb35d23bc05a98874b51",
+        "60a38dc81f60701cac587c8e",
+        "60a38dc81f60701cac587c8f",
+        "60a38dc81f60701cac587c91",
+        "60a38dc81f60701cac587c92",
+        "60a38dc81f60701cac587c94"
+      ],
+      "foodOption": false,
       "variants": [],
       "variants_values": [],
       "attributes": [
@@ -655,16 +693,19 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d06ea4e197fd1fc0d9b6ed",
           "id": "60d06ea4e197fd1fc0d9b6ec",
           "code": "sauce-ketchup",
           "param": "Non",
           "translation": {
             "fr": {
-              "name": "Ketchup"
+              "name": "Ketchup",
+              "value": 1
             },
             "en": {
-              "name": "Ketchup"
+              "name": "Ketchup",
+              "value": 1
             }
           }
         },
@@ -672,16 +713,19 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
           "param": "Non",
           "translation": {
             "fr": {
-              "name": "Mayonnaise"
+              "name": "Mayonnaise",
+              "value": 0
             },
             "en": {
-              "name": "Mayonnaise"
+              "name": "Mayonnaise",
+              "value": 0
             }
           }
         },
@@ -689,48 +733,52 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
           "param": "Non",
           "translation": {
             "fr": {
-              "name": "Couverts"
+              "name": "Couverts",
+              "value": 1
             },
             "en": {
-              "name": "Cutlery"
+              "name": "Covered",
+              "value": 1
             }
           }
         },
         {
-          "type" : "multiselect",
-          "position" : 1,
-          "visible" : true,
-          "_id" : "627e659aa9987c4488835273",
-          "id" : "ff06a08a6350becbd5d0adea",
-          "code" : "viande",
-          "param" : "Non",
-          "translation" : {
-            "fr" : {
-              "name" : "Viande",
-              "values" : [
+          "type": "multiselect",
+          "position": 1,
+          "visible": true,
+          "usedInSearch": false,
+          "_id": "627e659aa9987c4488835273",
+          "id": "ff06a08a6350becbd5d0adea",
+          "code": "viande",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Viande",
+              "values": [
                 "Poulet",
                 "Boeuf",
                 "Bacon"
               ],
-              "value" : [
+              "value": [
                 "Boeuf",
                 "Bacon"
               ]
             },
-            "en" : {
-              "name" : "Meat",
-              "values" : [
+            "en": {
+              "name": "Meat",
+              "values": [
                 "Chicken",
                 "Beef",
                 "Bacon"
               ],
-              "value" : [
+              "value": [
                 "Beef",
                 "Bacon"
               ]
@@ -762,16 +810,6 @@
       ],
       "pictos": [],
       "_id": "605365894b9ac91f54fcabb8",
-      "foodOption": false,
-      "allergens": [
-        "607ecb35d23bc05a98874b4b",
-        "607ecb35d23bc05a98874b51",
-        "60a38dc81f60701cac587c8e",
-        "60a38dc81f60701cac587c8f",
-        "60a38dc81f60701cac587c91",
-        "60a38dc81f60701cac587c92",
-        "60a38dc81f60701cac587c94"
-      ],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "lebacon",
       "translation": {
@@ -800,7 +838,7 @@
         }
       },
       "createdAt": "2021-06-22T00:00:00.000Z",
-      "updatedAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2022-11-29T15:13:02.181Z",
       "universe": "burger-burger",
       "component_template": "<food-options-config></food-options-config>"
     },
@@ -860,6 +898,12 @@
         "605366a34b9ac91f54fcabc7"
       ],
       "is_new": false,
+      "allergens": [
+        "607ecb35d23bc05a98874b4b",
+        "607ecb35d23bc05a98874b51",
+        "607ecb35d23bc05a98874b4e"
+      ],
+      "foodOption": false,
       "variants": [],
       "variants_values": [],
       "attributes": [
@@ -867,16 +911,19 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d06ea4e197fd1fc0d9b6ed",
           "id": "60d06ea4e197fd1fc0d9b6ec",
           "code": "sauce-ketchup",
           "param": "Non",
           "translation": {
             "fr": {
-              "name": "Ketchup"
+              "name": "Ketchup",
+              "value": 1
             },
             "en": {
-              "name": "Ketchup"
+              "name": "Ketchup",
+              "value": 1
             }
           }
         },
@@ -884,16 +931,19 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
           "param": "Non",
           "translation": {
             "fr": {
-              "name": "Mayonnaise"
+              "name": "Mayonnaise",
+              "value": 0
             },
             "en": {
-              "name": "Mayonnaise"
+              "name": "Mayonnaise",
+              "value": 0
             }
           }
         },
@@ -901,47 +951,51 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
           "param": "Non",
           "translation": {
             "fr": {
-              "name": "Couverts"
+              "name": "Couverts",
+              "value": 1
             },
             "en": {
-              "name": "Cutlery"
+              "name": "Covered",
+              "value": 1
             }
           }
         },
         {
-          "type" : "multiselect",
-          "position" : 1,
-          "visible" : true,
-          "_id" : "627e659aa9987c4488835273",
-          "id" : "ff06a08a6350becbd5d0adea",
-          "code" : "viande",
-          "param" : "Non",
-          "translation" : {
-            "fr" : {
-              "name" : "Viande",
-              "values" : [
+          "type": "multiselect",
+          "position": 1,
+          "visible": true,
+          "usedInSearch": false,
+          "_id": "627e659aa9987c4488835273",
+          "id": "ff06a08a6350becbd5d0adea",
+          "code": "viande",
+          "param": "Non",
+          "translation": {
+            "fr": {
+              "name": "Viande",
+              "values": [
                 "Poulet",
                 "Boeuf",
                 "Bacon"
               ],
-              "value" : [
+              "value": [
                 "Boeuf"
               ]
             },
-            "en" : {
-              "name" : "Meat",
-              "values" : [
+            "en": {
+              "name": "Meat",
+              "values": [
                 "Chicken",
                 "Beef",
                 "Bacon"
               ],
-              "value" : [
+              "value": [
                 "Beef"
               ]
             }
@@ -982,12 +1036,6 @@
       ],
       "pictos": [],
       "_id": "605364234b9ac91f54fcabad",
-      "foodOption": false,
-      "allergens": [
-        "607ecb35d23bc05a98874b4b",
-        "607ecb35d23bc05a98874b51",
-        "607ecb35d23bc05a98874b4e"
-      ],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "loriginal",
       "translation": {
@@ -1017,7 +1065,7 @@
         }
       },
       "createdAt": "2021-06-22T00:00:00.000Z",
-      "updatedAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2022-11-29T15:13:20.674Z",
       "universe": "burger-burger",
       "code_ean": "1234567896541",
       "component_template": "<food-options-config></food-options-config>"
@@ -1069,6 +1117,15 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
+      "allergens": [
+        "607ecb35d23bc05a98874b52",
+        "607ecb35d23bc05a98874b51",
+        "607ecb35d23bc05a98874b4b",
+        "60a38dc81f60701cac587c95",
+        "60a38dc81f60701cac587c8f",
+        "60a38dc81f60701cac587c94"
+      ],
+      "foodOption": false,
       "variants": [],
       "variants_values": [],
       "attributes": [
@@ -1076,6 +1133,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d06ea4e197fd1fc0d9b6ed",
           "id": "60d06ea4e197fd1fc0d9b6ec",
           "code": "sauce-ketchup",
@@ -1094,6 +1153,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
@@ -1111,6 +1172,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
@@ -1139,15 +1202,6 @@
       ],
       "pictos": [],
       "_id": "605369344b9ac91f54fcabe9",
-      "foodOption": false,
-      "allergens": [
-        "607ecb35d23bc05a98874b52",
-        "607ecb35d23bc05a98874b51",
-        "607ecb35d23bc05a98874b4b",
-        "60a38dc81f60701cac587c95",
-        "60a38dc81f60701cac587c8f",
-        "60a38dc81f60701cac587c94"
-      ],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "cakechoco",
       "translation": {
@@ -1224,6 +1278,15 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
+      "allergens": [
+        "607ecb35d23bc05a98874b4e",
+        "607ecb35d23bc05a98874b4f",
+        "607ecb35d23bc05a98874b51",
+        "607ecb35d23bc05a98874b52",
+        "60a38dc81f60701cac587c8e",
+        "60a38dc81f60701cac587c94"
+      ],
+      "foodOption": false,
       "bundle_sections": [
         {
           "_id": "6054ca9d1a189d261888c548",
@@ -1231,17 +1294,17 @@
           "type": "SINGLE",
           "products": [
             {
-              "_id": "60d09dc97fc52b22e0c3da3b",
+              "_id": "638621a36947884f68336a01",
               "id": "605364234b9ac91f54fcabad",
               "isDefault": false
             },
             {
-              "_id": "60d09dc97fc52b22e0c3da3c",
+              "_id": "638621a36947884f68336a02",
               "id": "605365894b9ac91f54fcabb8",
               "isDefault": false
             },
             {
-              "_id": "60d09dc97fc52b22e0c3da3d",
+              "_id": "638621a36947884f68336a03",
               "id": "605366a34b9ac91f54fcabc7",
               "isDefault": false
             }
@@ -1256,7 +1319,7 @@
           "type": "SINGLE",
           "products": [
             {
-              "_id": "60d09dc97fc52b22e0c3da3f",
+              "_id": "638621a36947884f68336a05",
               "id": "6054a7776153ac1a34d4334a",
               "isDefault": false
             }
@@ -1271,7 +1334,7 @@
           "type": "SINGLE",
           "products": [
             {
-              "_id": "60d09dc97fc52b22e0c3da41",
+              "_id": "638621a36947884f68336a07",
               "id": "605367d64b9ac91f54fcabd9",
               "isDefault": false
             },
@@ -1280,7 +1343,7 @@
                 "ati": 1,
                 "et": 0.83
               },
-              "_id": "60d09dc97fc52b22e0c3da42",
+              "_id": "638621a36947884f68336a08",
               "id": "605368a04b9ac91f54fcabe5",
               "isDefault": false
             }
@@ -1295,6 +1358,7 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d06ea4e197fd1fc0d9b6ed",
           "id": "60d06ea4e197fd1fc0d9b6ec",
           "code": "sauce-ketchup",
@@ -1302,11 +1366,11 @@
           "translation": {
             "fr": {
               "name": "Ketchup",
-              "value": 0.5
+              "value": 1
             },
             "en": {
               "name": "Ketchup",
-              "value": 0.5
+              "value": 1
             }
           }
         },
@@ -1314,6 +1378,7 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
@@ -1333,6 +1398,7 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
@@ -1343,7 +1409,7 @@
               "value": 1
             },
             "en": {
-              "name": "Cutlery",
+              "name": "Covered",
               "value": 1
             }
           }
@@ -1373,15 +1439,6 @@
       ],
       "pictos": [],
       "_id": "60536cf34b9ac91f54fcac05",
-      "foodOption": false,
-      "allergens": [
-        "607ecb35d23bc05a98874b4e",
-        "607ecb35d23bc05a98874b4f",
-        "607ecb35d23bc05a98874b51",
-        "607ecb35d23bc05a98874b52",
-        "60a38dc81f60701cac587c8e",
-        "60a38dc81f60701cac587c94"
-      ],
       "qty": 0,
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "menu",
@@ -1412,7 +1469,7 @@
       },
       "universe": "burger-burger",
       "createdAt": "2021-06-22T00:00:00.000Z",
-      "updatedAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2022-11-29T15:13:39.914Z",
       "component_template": "<food-options-config></food-options-config>"
     },
     {
@@ -1462,6 +1519,8 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
+      "allergens": [],
+      "foodOption": false,
       "variants": [],
       "variants_values": [],
       "attributes": [
@@ -1469,6 +1528,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d06ea4e197fd1fc0d9b6ed",
           "id": "60d06ea4e197fd1fc0d9b6ec",
           "code": "sauce-ketchup",
@@ -1486,6 +1547,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
@@ -1503,6 +1566,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
@@ -1531,8 +1596,6 @@
       ],
       "pictos": [],
       "_id": "6054a7776153ac1a34d4334a",
-      "foodOption": false,
-      "allergens": [],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "frite",
       "translation": {
@@ -1615,6 +1678,8 @@
         "605368a04b9ac91f54fcabe5"
       ],
       "is_new": false,
+      "allergens": [],
+      "foodOption": false,
       "variants": [],
       "variants_values": [],
       "attributes": [
@@ -1622,6 +1687,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d06ea4e197fd1fc0d9b6ed",
           "id": "60d06ea4e197fd1fc0d9b6ec",
           "code": "sauce-ketchup",
@@ -1640,6 +1707,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
@@ -1657,6 +1726,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
@@ -1685,8 +1756,6 @@
       ],
       "pictos": [],
       "_id": "605367d64b9ac91f54fcabd9",
-      "foodOption": false,
-      "allergens": [],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "coca",
       "translation": {
@@ -1715,7 +1784,7 @@
         }
       },
       "createdAt": "2021-06-22T00:00:00.000Z",
-      "updatedAt": "2021-06-22T00:00:00.000Z",
+      "updatedAt": "2022-11-29T12:59:05.593Z",
       "universe": "boissons-boissons",
       "component_template": "<food-options-config></food-options-config>"
     },
@@ -1757,6 +1826,8 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
+      "allergens": [],
+      "foodOption": false,
       "variants": [],
       "variants_values": [],
       "attributes": [
@@ -1764,6 +1835,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d06ea4e197fd1fc0d9b6ed",
           "id": "60d06ea4e197fd1fc0d9b6ec",
           "code": "sauce-ketchup",
@@ -1781,6 +1854,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d097677fc52b22e0c3d83c",
           "id": "60d097677fc52b22e0c3d83b",
           "code": "sauce-mayonnaise",
@@ -1798,6 +1873,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
@@ -1815,8 +1892,6 @@
       "images": [],
       "pictos": [],
       "_id": "605682531a189d261888c586",
-      "foodOption": false,
-      "allergens": [],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "glace",
       "translation": {
@@ -1878,11 +1953,15 @@
       "weight": 0,
       "associated_prds": [],
       "is_new": false,
+      "allergens": [],
+      "foodOption": true,
       "attributes": [
         {
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d09a1f7fc52b22e0c3d943",
           "param": "Non",
           "code": "sauce-ketchup",
@@ -1900,6 +1979,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d09a1f7fc52b22e0c3d944",
           "param": "Non",
           "code": "sauce-mayonnaise",
@@ -1917,6 +1998,8 @@
           "type": "number",
           "position": 1,
           "visible": true,
+          "usedInSearch": false,
+          "parents": [],
           "_id": "60d09b837fc52b22e0c3d94e",
           "id": "60d09b837fc52b22e0c3d94d",
           "code": "couverts",
@@ -1945,8 +2028,6 @@
       ],
       "pictos": [],
       "_id": "60d09a1f7fc52b22e0c3d942",
-      "foodOption": true,
-      "allergens": [],
       "set_attributes": "5c5abe92c1f87b5f46c451fa",
       "code": "couverts",
       "translation": {

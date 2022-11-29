@@ -61,6 +61,8 @@ export default function CheckoutPayment() {
         } else if (moduleHook('cart-validate-btn')) {
             if (!cart.orderReceipt?.date) {
                 router.push('/checkout/clickandcollect');
+            } else {
+                setShow(true);
             }
         } else if (!cart.delivery?.method) { 
             router.push('/checkout/delivery');
@@ -68,6 +70,8 @@ export default function CheckoutPayment() {
             router.push('/checkout/address');
         } else if (cart.orderReceipt?.method !== 'withdrawal' && cart.delivery?.code) {
             fetchData();
+        } else {
+            setShow(true);
         }
     }, []);
 

@@ -5,7 +5,7 @@ import parse                                                                    
 import LightLayout                                                                            from '@components/layouts/LightLayout';
 import NextSeoCustom                                                                          from '@components/tools/NextSeoCustom';
 import Button                                                                                 from '@components/ui/Button';
-import { cartToOrder }                                                                        from '@aquilacms/aquila-connector/api/cart';
+import { getShipmentCart, cartToOrder }                                                       from '@aquilacms/aquila-connector/api/cart';
 import { makePayment }                                                                        from '@aquilacms/aquila-connector/api/payment';
 import { useState }                                                                           from 'react';
 import { useCart, usePaymentMethods, useSiteConfig }                                          from '@lib/hooks';
@@ -24,6 +24,7 @@ export async function getServerSideProps({ locale, req, res }) {
 }
 
 export default function CheckoutPayment() {
+    const [show, setShow]               = useState(false);
     const [paymentForm, setPaymentForm] = useState('');
     const [isLoading, setIsLoading]     = useState(false);
     const [message, setMessage]         = useState();
@@ -36,23 +37,37 @@ export default function CheckoutPayment() {
     const defaultLanguage = i18n.defaultLocale;
     
     useEffect(() => {
+        const fetchData = async () => {
+            let redirect = true;
+            try {
+                const res = await getShipmentCart({ _id: cart._id }, null, {}, lang);
+                if (res.datas?.length) {
+                    if (res.datas.find((item) => item.code === cart.delivery.code && item.price === cart.delivery.price.ati)) {
+                        redirect = false;
+                        setShow(true);
+                    }
+                }
+            } catch (err) {
+                setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            }
+            if (redirect) {
+                router.push('/checkout/delivery');
+            }
+        };
+
         // Check if the cart is empty
         if (!cart?.items?.length) {
-            return router.push('/');
-        }
-
-        // Check if a date is validated
-        if (moduleHook('cart-validate-btn')) {
+            router.push('/');
+        } else if (moduleHook('cart-validate-btn')) {
             if (!cart.orderReceipt?.date) {
-                return router.push('/checkout/clickandcollect');
+                router.push('/checkout/clickandcollect');
             }
         } else if (!cart.delivery?.method) { 
-            return router.push('/checkout/delivery');
-        }
-
-        // Check if the billing address exists
-        if (!cart.addresses || !cart.addresses.billing) {
-            return router.push('/checkout/address');
+            router.push('/checkout/delivery');
+        } else if (!cart.addresses || !cart.addresses.billing) {
+            router.push('/checkout/address');
+        } else if (cart.orderReceipt?.method !== 'withdrawal' && cart.delivery?.code) {
+            fetchData();
         }
     }, []);
 
@@ -101,7 +116,7 @@ export default function CheckoutPayment() {
         router.back();
     };
 
-    if (!cart?.items?.length || (moduleHook('cart-validate-btn') && !cart.orderReceipt?.date) || (!moduleHook('cart-validate-btn') && !cart.delivery?.method) || !cart.addresses || !cart.addresses.billing) {
+    if (!show) {
         return null;
     }
 

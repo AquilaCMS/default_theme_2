@@ -44,9 +44,6 @@ export default function CheckoutDelivery() {
                 const res = await getShipmentCart({ _id: cart._id }, null, {}, lang);
                 setShipments(res.datas);
                 if (res.datas.length > 0) {
-                    if (cart.delivery?.method && cart.delivery?.value?.ati) {
-                        return setDeliveryValue(cart.delivery.value.ati);
-                    }
                     const defaultPrice = res.datas[0].price;
                     setDeliveryValue(defaultPrice);
                     setTotal(cart.priceTotal.ati + res.datas[0].price);

@@ -20,7 +20,7 @@ import Button                                                                   
 import { dispatcher }                                                                          from '@lib/redux/dispatcher';
 import { getBlocksCMS }                                                                        from '@aquilacms/aquila-connector/api/blockcms';
 import { getBreadcrumb }                                                                       from '@aquilacms/aquila-connector/api/breadcrumb';
-import { addToCart, deleteCartShipment }                                                       from '@aquilacms/aquila-connector/api/cart';
+import { addToCart }                                                                           from '@aquilacms/aquila-connector/api/cart';
 import { getCategories }                                                                       from '@aquilacms/aquila-connector/api/category';
 import { getProduct, downloadFreeVirtualProduct }                                              from '@aquilacms/aquila-connector/api/product';
 import { getImage, getMainImage, getTabImageURL }                                              from '@aquilacms/aquila-connector/api/product/helpersProduct';
@@ -201,11 +201,6 @@ export default function Product({ breadcrumb, origin }) {
         setIsLoading(true);
         try {
             setMessage();
-
-            // Deletion of the cart delivery
-            if (cart.delivery?.method) {
-                await deleteCartShipment(cart._id);
-            }
 
             // Adding product to cart
             const newCart   = await addToCart(cart._id, product, qty);

@@ -108,7 +108,7 @@ export default function CartListItemsFoodOptions() {
         
         try {
             // Update quantity
-            const newCart = await updateQtyItem(cart._id, item._id, item.id._id, quantity);
+            const newCart = await updateQtyItem(cart._id, item._id, item.id._id ? item.id._id : item.id, quantity);
             setCart(newCart);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });

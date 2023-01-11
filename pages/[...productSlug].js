@@ -409,16 +409,16 @@ export default function Product({ breadcrumb, origin }) {
                             <div className="full-details w-richtext"><p>{parse(product.description2?.text || '')}</p></div>
                             { product.selected_variant && <ProductVariants /> }
                             <div>
-                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'virtual' && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type === 'bundle' ? onOpenModal : onAddToCart)}>
+                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type.startsWith('bundle') ? onOpenModal : onAddToCart)}>
                                     {
-                                        product.active === false || product.stock.status === 'epu' || !product.stock.orderable ? (
+                                        product.active === false || (!product.type.startsWith('virtual') && (product.stock?.status === 'epu' || product.stock?.orderable === false)) ? (
                                             <button type="button" className="w-commerce-commerceaddtocartbutton order-button" disabled={true}>Indisponible</button>
                                         ) : (
                                             <>
-                                                <input type="number" min={1} disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
+                                                <input type="number" min={1} disabled={product.type.startsWith('virtual')} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
                                                 <Button 
-                                                    text={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:download') : (product.type === 'bundle' ? t('pages/product:compose') : t('pages/product:addToBasket'))}
-                                                    loadingText={product.type === 'virtual' && product.price.ati.normal === 0 ? t('pages/product:downloading') : t('pages/product:addToCartLoading')}
+                                                    text={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? t('pages/product:download') : (product.type.startsWith('bundle') ? t('pages/product:compose') : t('pages/product:addToBasket'))}
+                                                    loadingText={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? t('pages/product:downloading') : t('pages/product:addToCartLoading')}
                                                     isLoading={isLoading}
                                                     className="w-commerce-commerceaddtocartbutton order-button"
                                                 />
@@ -543,7 +543,7 @@ export default function Product({ breadcrumb, origin }) {
             <BlockCMS nsCode="info-bottom-1" /> {/* TODO : il faudrait afficher le contenu d'une description de la catégorie rattachée ! */}
 
             {
-                product.type === 'bundle' && (
+                product.type.startsWith('bundle') && (
                     <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
                         <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
                     </Modal>

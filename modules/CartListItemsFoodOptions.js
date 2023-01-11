@@ -258,7 +258,7 @@ export default function CartListItemsFoodOptions() {
                                                     }
                                                     return (
                                                         <div key={item._id} className="w-commerce-commercecartitem cart-item">
-                                                            <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60').url} alt={item.code} className="w-commerce-commercecartitemimage" />
+                                                            <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60').url || '/images/no-image.svg'} alt={item.code} className="w-commerce-commercecartitemimage" />
                                                             <div className="w-commerce-commercecartiteminfo div-block-4">
                                                                 <div>
                                                                     <div className="w-commerce-commercecartproductname">{item.name}</div>

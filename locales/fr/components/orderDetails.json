@@ -14,6 +14,7 @@
     "orderDetail": "Détail de la commande",
     "quantity": "Quantité",
     "priceDetail": "Montant de la commande",
+    "discount": "Réduction",
     "subTotal": "Sous Total TTC",
     "total": "Total TTC",
     "downloadBill": "Télécharger la facture",

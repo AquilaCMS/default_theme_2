@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState }          from 'react';
-import Link                                     from 'next/link';
-import useTranslation                           from 'next-translate/useTranslation';
-import BlockCMS                                 from '@components/common/BlockCMS';
-import CartDiscount                             from '@components/cart/CartDiscount';
-import CartItem                                 from '@components/cart/CartItem';
-import Button                                   from '@components/ui/Button';
-import { getBlockCMS }                          from '@aquilacms/aquila-connector/api/blockcms';
-import { getImage }                             from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import axios                                    from '@aquilacms/aquila-connector/lib/AxiosInstance';
-import { useCart }                              from '@lib/hooks';
-import { formatPrice, moduleHook, unsetCookie } from '@lib/utils';
+import { useEffect, useRef, useState } from 'react';
+import Link                            from 'next/link';
+import useTranslation                  from 'next-translate/useTranslation';
+import BlockCMS                        from '@components/common/BlockCMS';
+import CartDiscount                    from '@components/cart/CartDiscount';
+import CartItem                        from '@components/cart/CartItem';
+import Button                          from '@components/ui/Button';
+import { getBlockCMS }                 from '@aquilacms/aquila-connector/api/blockcms';
+import { getImage }                    from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import axios                           from '@aquilacms/aquila-connector/lib/AxiosInstance';
+import { useCart }                     from '@lib/hooks';
+import { formatPrice, unsetCookie }    from '@lib/utils';
 
 function getFoodOptionsProducts(products) {
     let items = [];
@@ -232,11 +232,9 @@ export default function CartListItemsFoodOptions() {
                                                 style={{ width: '100%' }}
                                             />
                                         ) : (
-                                            moduleHook('cart-validate-btn') || (
-                                                <Link href="/checkout/address" className="checkout-button-2 w-button">
-                                                    {t('components/cart:cartListItem.ordering')}
-                                                </Link>
-                                            )
+                                            <Link href="/checkout/address" className="checkout-button-2 w-button">
+                                                {t('components/cart:cartListItem.ordering')}
+                                            </Link>
                                         )
                                     }
                                 </div>
@@ -319,13 +317,9 @@ export default function CartListItemsFoodOptions() {
                                     </div>
                                 </div>
                                 <div>
-                                    {
-                                        moduleHook('cart-validate-btn') || (
-                                            <Link href="/checkout/address" className="checkout-button-2 w-button">
-                                                {t('components/cart:cartListItem.ordering')}
-                                            </Link>
-                                        )
-                                    }
+                                    <Link href="/checkout/address" className="checkout-button-2 w-button">
+                                        {t('components/cart:cartListItem.ordering')}
+                                    </Link>
                                     <button type="button" className="checkout-button-2 w-button" onClick={() => onChangePart(1)} style={{ width: '100%' }}>{t('modules/food-options-aquila:back')}</button>
                                 </div>
                             </div>

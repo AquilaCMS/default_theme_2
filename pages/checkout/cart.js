@@ -1,12 +1,12 @@
-import Link                                   from 'next/link';
-import useTranslation                         from 'next-translate/useTranslation';
-import CartDiscount                           from '@components/cart/CartDiscount';
-import CartItem                               from '@components/cart/CartItem';
-import Layout                                 from '@components/layouts/Layout';
-import NextSeoCustom                          from '@components/tools/NextSeoCustom';
-import { useCart }                            from '@lib/hooks';
-import { initAxios, formatPrice, moduleHook } from '@lib/utils';
-import { dispatcher }                         from '@lib/redux/dispatcher';
+import Link                       from 'next/link';
+import useTranslation             from 'next-translate/useTranslation';
+import CartDiscount               from '@components/cart/CartDiscount';
+import CartItem                   from '@components/cart/CartItem';
+import Layout                     from '@components/layouts/Layout';
+import NextSeoCustom              from '@components/tools/NextSeoCustom';
+import { useCart }                from '@lib/hooks';
+import { initAxios, formatPrice } from '@lib/utils';
+import { dispatcher }             from '@lib/redux/dispatcher';
 
 export async function getServerSideProps({ locale, req, res }) {
     initAxios(locale, req, res);
@@ -76,12 +76,9 @@ export default function CheckoutCart() {
                                         </div>
                                     </div>
                                 </div>
-                                {
-                                    moduleHook('cart-validate-btn') || 
-                                        <Link href="/checkout/address" className="checkout-button-2 w-button">
-                                            {t('pages/checkout:cart.ordering')}
-                                        </Link>
-                                }
+                                <Link href="/checkout/address" className="checkout-button-2 w-button">
+                                    {t('pages/checkout:cart.ordering')}
+                                </Link>
                             </form>
                         ) : (
                             <div className="w-commerce-commercecartemptystate empty-state">

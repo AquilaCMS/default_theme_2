@@ -36,7 +36,7 @@ yarn-error.log*
 
 # aquila
 /_original_html
-i18n.json
+i18n.js
 
 # module
 /modules/list_modules.js

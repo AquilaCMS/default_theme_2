@@ -2,7 +2,7 @@ import Link                 from 'next/link';
 import useTranslation       from 'next-translate/useTranslation';
 import setLanguage          from 'next-translate/setLanguage';
 import { useUrlsLanguages } from '@lib/hooks';
-import i18n                 from '/i18n.json';
+import i18n                 from '/i18n';
 
 export default function Languages() {
     const urls     = useUrlsLanguages();

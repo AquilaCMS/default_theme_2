@@ -246,7 +246,7 @@ export default function Product({ breadcrumb, origin }) {
             const url  = URL.createObjectURL(res.data);
             const a    = document.createElement('a');
             a.href     = url;
-            a.download = product.code + '.zip';
+            a.download = product.filename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

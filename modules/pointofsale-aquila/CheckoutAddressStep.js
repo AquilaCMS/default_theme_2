@@ -47,7 +47,7 @@ export default function CheckoutAddressStep({ user }) {
             await setAddressesUser(user._id, 0, 1, addresses);
 
             // Set cart addresses
-            const newCart = await setCartAddresses(cart._id, { billing: addresses[0], delivery: cart.addresses.delivery ? cart.addresses.delivery : {} });
+            const newCart = await setCartAddresses(cart._id, { billing: addresses[0], delivery: cart.addresses?.delivery ? cart.addresses.delivery : {} });
             setCart(newCart);
 
             router.push('/checkout/delivery');

@@ -68,7 +68,7 @@ export default function OrderDetails({ order, setOrders = undefined }) {
             const url  = URL.createObjectURL(res.data);
             const a    = document.createElement('a');
             a.href     = url;
-            a.download = item.code + '.zip';
+            a.download = item.filename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

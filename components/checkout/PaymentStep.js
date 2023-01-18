@@ -47,10 +47,10 @@ export default function PaymentStep() {
         } else if (!cart.addresses || !cart.addresses.billing || !cart.addresses.delivery) {
             // Check if the billing & delivery addresses exists
             router.push('/checkout/address');
-        } else if (!isAllVirtualProducts(cart) && !cart.delivery?.method) {
+        } else if (!isAllVirtualProducts(cart.items) && !cart.delivery?.method) {
             // Check if the delivery method exists
             router.push('/checkout/delivery');
-        } else if (!isAllVirtualProducts(cart) && cart.orderReceipt?.method !== 'withdrawal' && cart.delivery?.code) {
+        } else if (!isAllVirtualProducts(cart.items) && cart.orderReceipt?.method !== 'withdrawal' && cart.delivery?.code) {
             fetchData();
         } else {
             setShow(true);
@@ -141,7 +141,7 @@ export default function PaymentStep() {
                     </div>
                 </div>
 
-                <Link href={isAllVirtualProducts(cart) ? '/checkout/address' : '/checkout/delivery'} className="log-button-03 w-button">
+                <Link href={isAllVirtualProducts(cart.items) ? '/checkout/address' : '/checkout/delivery'} className="log-button-03 w-button">
                     {t('components/checkout/paymentStep:previous')}
                 </Link>
                 &nbsp;

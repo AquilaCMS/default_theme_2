@@ -75,7 +75,7 @@ export default function AddressStep({ user }) {
             const newCart = await setCartAddresses(cart._id, { billing: addresses[0], delivery: addresses[1] });
             setCart(newCart);
 
-            router.push(isAllVirtualProducts(cart) ? '/checkout/payment' : '/checkout/delivery');
+            router.push(isAllVirtualProducts(cart.items) ? '/checkout/payment' : '/checkout/delivery');
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         } finally {

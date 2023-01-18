@@ -25,7 +25,7 @@ export default function DeliveryStep() {
         } else if (!cart.addresses || !cart.addresses.billing || !cart.addresses.delivery) {
             // Check if the billing & delivery addresses exists
             router.push('/checkout/address');
-        } else if (isAllVirtualProducts(cart)) {
+        } else if (isAllVirtualProducts(cart.items)) {
             // If have only virtual products, go to payment step
             router.push('/checkout/payment');
         } else {

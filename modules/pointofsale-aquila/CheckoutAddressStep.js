@@ -51,7 +51,7 @@ export default function CheckoutAddressStep({ user }) {
             const newCart = await setCartAddresses(cart._id, { billing: addresses[0], delivery: cart.addresses?.delivery ? cart.addresses.delivery : {} });
             setCart(newCart);
 
-            router.push(isAllVirtualProducts(cart) ? '/checkout/payment' : '/checkout/delivery');
+            router.push(isAllVirtualProducts(cart.items) ? '/checkout/payment' : '/checkout/delivery');
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         } finally {

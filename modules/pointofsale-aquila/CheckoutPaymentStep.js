@@ -121,7 +121,7 @@ export default function CheckoutPaymentStep() {
                     </div>
                 </div>
 
-                <Link href={isAllVirtualProducts(cart) ? '/checkout/address' : '/checkout/delivery'} className="log-button-03 w-button">
+                <Link href={isAllVirtualProducts(cart.items) ? '/checkout/address' : '/checkout/delivery'} className="log-button-03 w-button">
                     {t('modules/pointofsale-aquila:checkoutPaymentStep.previous')}
                 </Link>
                 &nbsp;

@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState }                  from 'react';
-import { Modal }                                        from 'react-responsive-modal';
-import useTranslation                                   from 'next-translate/useTranslation';
-import Button                                           from '@components/ui/Button';
-import { askCancelOrder, downloadbillOrder, getOrders } from '@aquilacms/aquila-connector/api/order';
-import { downloadVirtualProduct }                       from '@aquilacms/aquila-connector/api/product';
-import { getImage }                                     from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import { useSelectPage }                                from '@lib/hooks';
-import { formatDate, formatTime, formatPrice }          from '@lib/utils';
+import { useEffect, useRef, useState }                               from 'react';
+import { Modal }                                                     from 'react-responsive-modal';
+import useTranslation                                                from 'next-translate/useTranslation';
+import Button                                                        from '@components/ui/Button';
+import { askCancelOrder, downloadbillOrder, getOrders }              from '@aquilacms/aquila-connector/api/order';
+import { downloadVirtualProduct }                                    from '@aquilacms/aquila-connector/api/product';
+import { getImage }                                                  from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import { useSelectPage }                                             from '@lib/hooks';
+import { formatDate, formatTime, formatPrice, isAllVirtualProducts } from '@lib/utils';
 
 export default function OrderDetails({ order, setOrders = undefined }) {
     const [message, setMessage]     = useState();
@@ -143,24 +143,30 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                         </div>
                     </div>
                     <div className="div-block-tunnel w-form">
-                        <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
-                            <h5>{t('components/orderDetails:deliveryMethod')}</h5>
-                        </div>
-                        <div className="block-content-tunnel-space-flex">
-                            <div className="w-col w-col-6">
-                                <label htmlFor="email-2">
-                                    {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
-                                </label>
-                                <p className="label-tunnel">
-                                    {order.orderReceipt.method === 'withdrawal' ? (
-                                        formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric' }) + ' ' + formatTime(order.orderReceipt.date, lang, { hour: 'numeric', minute: 'numeric' })
-                                    ) : (
-                                        <>{order.delivery?.name}<br />{t('components/orderDetails:estimatedDelivery')} :<br/>{formatDate(order.delivery.date, lang)}</>
-                                    )
-                                    }
-                                </p>
-                            </div>
-                        </div>
+                        {
+                            !isAllVirtualProducts(order.items) && (
+                                <>
+                                    <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
+                                        <h5>{t('components/orderDetails:deliveryMethod')}</h5>
+                                    </div>
+                                    <div className="block-content-tunnel-space-flex">
+                                        <div className="w-col w-col-6">
+                                            <label htmlFor="email-2">
+                                                {order.orderReceipt.method === 'withdrawal' ? t('components/orderDetails:withdrawal') : t('components/orderDetails:delivery')}
+                                            </label>
+                                            <p className="label-tunnel">
+                                                {order.orderReceipt.method === 'withdrawal' ? (
+                                                    formatDate(order.orderReceipt.date, lang, { year: 'numeric', month: 'numeric', day: 'numeric' }) + ' ' + formatTime(order.orderReceipt.date, lang, { hour: 'numeric', minute: 'numeric' })
+                                                ) : (
+                                                    <>{order.delivery?.name}<br />{t('components/orderDetails:estimatedDelivery')} :<br/>{formatDate(order.delivery.date, lang)}</>
+                                                )
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </>
+                            )
+                        }
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
                             <h5>{t('components/orderDetails:yourInformations')}</h5>
                         </div>

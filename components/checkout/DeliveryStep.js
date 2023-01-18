@@ -1,11 +1,11 @@
-import { useEffect, useState }              from 'react';
-import Link                                 from 'next/link';
-import { useRouter }                        from 'next/router';
-import useTranslation                       from 'next-translate/useTranslation';
-import Button                               from '@components/ui/Button';
-import { getShipmentCart, setCartShipment } from '@aquilacms/aquila-connector/api/cart';
-import { useCart }                          from '@lib/hooks';
-import { formatDate, formatPrice }          from '@lib/utils';
+import { useEffect, useState }                           from 'react';
+import Link                                              from 'next/link';
+import { useRouter }                                     from 'next/router';
+import useTranslation                                    from 'next-translate/useTranslation';
+import Button                                            from '@components/ui/Button';
+import { getShipmentCart, setCartShipment }              from '@aquilacms/aquila-connector/api/cart';
+import { useCart }                                       from '@lib/hooks';
+import { formatDate, formatPrice, isAllVirtualProducts } from '@lib/utils';
 
 export default function DeliveryStep() {
     const [show, setShow]                   = useState(false);
@@ -19,18 +19,24 @@ export default function DeliveryStep() {
     const { lang, t }                       = useTranslation();
     
     useEffect(() => {
-        // Check if the cart is empty
         if (!cart.items || !cart.items.length) {
+            // Check if the cart is empty
             router.push('/');
         } else if (!cart.addresses || !cart.addresses.billing || !cart.addresses.delivery) {
             // Check if the billing & delivery addresses exists
             router.push('/checkout/address');
+        } else if (isAllVirtualProducts(cart)) {
+            // If have only virtual products, go to payment step
+            router.push('/checkout/payment');
         } else {
             const fetchData = async () => {
                 try {
                     const res = await getShipmentCart({ _id: cart._id }, null, {}, lang);
                     setShipments(res.datas);
                     if (res.datas.length > 0) {
+                        if (cart.delivery?.method && cart.delivery?.value?.ati) {
+                            return setDeliveryValue(cart.delivery.value.ati);
+                        }
                         const defaultPrice = res.datas[0].price;
                         setDeliveryValue(defaultPrice);
                         setTotal(cart.priceTotal.ati + res.datas[0].price);

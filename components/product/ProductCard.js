@@ -7,7 +7,7 @@ import BundleProduct                                                    from '@c
 import Button                                                           from '@components/ui/Button';
 import { downloadFreeVirtualProduct }                                   from '@aquilacms/aquila-connector/api/product';
 import { generateSlug, getMainImage }                                   from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import { addToCart }                                                    from '@aquilacms/aquila-connector/api/cart';
+import { addToCart, deleteCartShipment }                                from '@aquilacms/aquila-connector/api/cart';
 import { generateURLImageCache }                                        from '@aquilacms/aquila-connector/lib/utils';
 import { useCart, useComponentData, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
 import { authProtectedPage, formatPrice, formatStock }                  from '@lib/utils';
@@ -69,8 +69,14 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
         setIsLoading(true);
         try {
             // Adding product to cart
-            const newCart   = await addToCart(cart._id, product, qty);
+            let newCart     = await addToCart(cart._id, product, qty);
             document.cookie = 'cart_id=' + newCart._id + '; path=/;';
+
+            // Deletion of the cart delivery
+            if (newCart.delivery?.method) {
+                newCart = await deleteCartShipment(newCart._id);
+            }
+
             setCart(newCart);
             setShowCartSidebar(true);
         } catch (err) {

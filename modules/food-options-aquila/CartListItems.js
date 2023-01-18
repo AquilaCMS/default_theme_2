@@ -6,6 +6,7 @@ import CartDiscount                    from '@components/cart/CartDiscount';
 import CartItem                        from '@components/cart/CartItem';
 import Button                          from '@components/ui/Button';
 import { getBlockCMS }                 from '@aquilacms/aquila-connector/api/blockcms';
+import { deleteCartShipment }          from '@aquilacms/aquila-connector/api/cart';
 import { getImage }                    from '@aquilacms/aquila-connector/api/product/helpersProduct';
 import axios                           from '@aquilacms/aquila-connector/lib/AxiosInstance';
 import { useCart }                     from '@lib/hooks';
@@ -108,7 +109,13 @@ export default function CartListItemsFoodOptions() {
         
         try {
             // Update quantity
-            const newCart = await updateQtyItem(cart._id, item._id, item.id._id ? item.id._id : item.id, quantity);
+            let newCart = await updateQtyItem(cart._id, item._id, item.id._id ? item.id._id : item.id, quantity);
+
+            // Deletion of the cart delivery
+            if (newCart.delivery?.method) {
+                newCart = await deleteCartShipment(newCart._id);
+            }
+
             setCart(newCart);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });

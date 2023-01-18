@@ -1,14 +1,14 @@
-import { useEffect, useState }          from 'react';
-import Link                             from 'next/link';
-import { useRouter }                    from 'next/router';
-import useTranslation                   from 'next-translate/useTranslation';
-import parse                            from 'html-react-parser';
-import Button                           from '@components/ui/Button';
-import { getShipmentCart, cartToOrder } from '@aquilacms/aquila-connector/api/cart';
-import { makePayment }                  from '@aquilacms/aquila-connector/api/payment';
-import { useCart, usePaymentMethods }   from '@lib/hooks';
-import { formatPrice, unsetCookie }     from '@lib/utils';
-import i18n                             from '/i18n';
+import { useEffect, useState }                            from 'react';
+import Link                                               from 'next/link';
+import { useRouter }                                      from 'next/router';
+import useTranslation                                     from 'next-translate/useTranslation';
+import parse                                              from 'html-react-parser';
+import Button                                             from '@components/ui/Button';
+import { getShipmentCart, cartToOrder }                   from '@aquilacms/aquila-connector/api/cart';
+import { makePayment }                                    from '@aquilacms/aquila-connector/api/payment';
+import { useCart, usePaymentMethods }                     from '@lib/hooks';
+import { formatPrice, isAllVirtualProducts, unsetCookie } from '@lib/utils';
+import i18n                                               from '/i18n';
 
 export default function PaymentStep() {
     const [show, setShow]               = useState(false);
@@ -47,10 +47,10 @@ export default function PaymentStep() {
         } else if (!cart.addresses || !cart.addresses.billing || !cart.addresses.delivery) {
             // Check if the billing & delivery addresses exists
             router.push('/checkout/address');
-        } else if (!cart.delivery?.method) {
+        } else if (!isAllVirtualProducts(cart) && !cart.delivery?.method) {
             // Check if the delivery method exists
             router.push('/checkout/delivery');
-        } else if (cart.orderReceipt?.method !== 'withdrawal' && cart.delivery?.code) {
+        } else if (!isAllVirtualProducts(cart) && cart.orderReceipt?.method !== 'withdrawal' && cart.delivery?.code) {
             fetchData();
         } else {
             setShow(true);
@@ -141,7 +141,7 @@ export default function PaymentStep() {
                     </div>
                 </div>
 
-                <Link href="/checkout/delivery" className="log-button-03 w-button">
+                <Link href={isAllVirtualProducts(cart) ? '/checkout/address' : '/checkout/delivery'} className="log-button-03 w-button">
                     {t('components/checkout/paymentStep:previous')}
                 </Link>
                 &nbsp;

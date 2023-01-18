@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import useTranslation                  from 'next-translate/useTranslation';
-import { deleteItem, updateQtyItem }   from '@aquilacms/aquila-connector/api/cart';
-import { getImage }                    from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import { useCart, useSiteConfig }      from '@lib/hooks';
-import { formatPrice, formatStock }    from '@lib/utils';
+import { useEffect, useRef, useState }                   from 'react';
+import useTranslation                                    from 'next-translate/useTranslation';
+import { deleteCartShipment, deleteItem, updateQtyItem } from '@aquilacms/aquila-connector/api/cart';
+import { getImage }                                      from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import { useCart, useSiteConfig }                        from '@lib/hooks';
+import { formatPrice, formatStock }                      from '@lib/utils';
 
 export default function CartItem({ item }) {
     const [qty, setQty]         = useState(item.quantity);
@@ -30,8 +30,13 @@ export default function CartItem({ item }) {
         } else {
             try {
                 // Update quantity
-                const newCart = await updateQtyItem(cart._id, item._id, quantity);
+                let newCart = await updateQtyItem(cart._id, item._id, quantity);
                 setQty(quantity);
+
+                // Deletion of the cart delivery
+                if (newCart.delivery?.method) {
+                    newCart = await deleteCartShipment(newCart._id);
+                }
                 setCart(newCart);
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
@@ -44,7 +49,13 @@ export default function CartItem({ item }) {
     const onDeleteItem = async () => {
         try {
             // Product deletion
-            const newCart = await deleteItem(cart._id, item._id);
+            let newCart = await deleteItem(cart._id, item._id);
+
+            // Deletion of the cart delivery
+            if (newCart.delivery?.method) {
+                newCart = await deleteCartShipment(newCart._id);
+            }
+
             setCart(newCart);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });

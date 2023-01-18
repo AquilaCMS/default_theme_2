@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import Link                    from 'next/link';
-import { useRouter }           from 'next/router';
-import useTranslation          from 'next-translate/useTranslation';
-import Button                  from '@components/ui/Button';
-import { setCartAddresses }    from '@aquilacms/aquila-connector/api/cart';
-import { setAddressesUser }    from '@aquilacms/aquila-connector/api/user';
-import { useCart }             from '@lib/hooks';
+import { useEffect, useState }  from 'react';
+import Link                     from 'next/link';
+import { useRouter }            from 'next/router';
+import useTranslation           from 'next-translate/useTranslation';
+import Button                   from '@components/ui/Button';
+import { setCartAddresses }     from '@aquilacms/aquila-connector/api/cart';
+import { setAddressesUser }     from '@aquilacms/aquila-connector/api/user';
+import { useCart }              from '@lib/hooks';
+import { isAllVirtualProducts } from '@lib/utils';
 
 export default function AddressStep({ user }) {
     const [sameAddress, setSameAddress] = useState(false);
@@ -74,7 +75,7 @@ export default function AddressStep({ user }) {
             const newCart = await setCartAddresses(cart._id, { billing: addresses[0], delivery: addresses[1] });
             setCart(newCart);
 
-            router.push('/checkout/delivery');
+            router.push(isAllVirtualProducts(cart) ? '/checkout/payment' : '/checkout/delivery');
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
         } finally {

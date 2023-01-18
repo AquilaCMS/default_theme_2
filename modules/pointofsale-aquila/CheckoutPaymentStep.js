@@ -1,14 +1,14 @@
-import { useEffect, useState }        from 'react';
-import Link                           from 'next/link';
-import { useRouter }                  from 'next/router';
-import useTranslation                 from 'next-translate/useTranslation';
-import parse                          from 'html-react-parser';
-import Button                         from '@components/ui/Button';
-import { cartToOrder }                from '@aquilacms/aquila-connector/api/cart';
-import { makePayment }                from '@aquilacms/aquila-connector/api/payment';
-import { useCart, usePaymentMethods } from '@lib/hooks';
-import { formatPrice, unsetCookie }   from '@lib/utils';
-import i18n                           from '/i18n';
+import { useEffect, useState }                            from 'react';
+import Link                                               from 'next/link';
+import { useRouter }                                      from 'next/router';
+import useTranslation                                     from 'next-translate/useTranslation';
+import parse                                              from 'html-react-parser';
+import Button                                             from '@components/ui/Button';
+import { cartToOrder }                                    from '@aquilacms/aquila-connector/api/cart';
+import { makePayment }                                    from '@aquilacms/aquila-connector/api/payment';
+import { useCart, usePaymentMethods }                     from '@lib/hooks';
+import { formatPrice, isAllVirtualProducts, unsetCookie } from '@lib/utils';
+import i18n                                               from '/i18n';
 
 export default function CheckoutPaymentStep() {
     const [show, setShow]               = useState(false);
@@ -121,7 +121,7 @@ export default function CheckoutPaymentStep() {
                     </div>
                 </div>
 
-                <Link href="/checkout/delivery" className="log-button-03 w-button">
+                <Link href={isAllVirtualProducts(cart) ? '/checkout/address' : '/checkout/delivery'} className="log-button-03 w-button">
                     {t('modules/pointofsale-aquila:checkoutPaymentStep.previous')}
                 </Link>
                 &nbsp;

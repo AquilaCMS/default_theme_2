@@ -39,8 +39,7 @@ yarn-error.log*
 i18n.js
 
 # module
-/modules/list_modules.js
-dynamic_langs.js
+/modules
 
 # style
 /styles/custom.css

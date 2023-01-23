@@ -6,7 +6,7 @@ const { execCmd } = require('aql-utils');
 const dev         = serverUtils.dev;
 
 const themeName   = path.basename(__dirname);
-const pathToTheme = path.join(global.appRoot, 'themes', themeName, '/');
+const pathToTheme = path.join(global.aquila.appRoot, 'themes', themeName, '/');
 
 const start = async () => {
     const app   = next({ dev, dir: pathToTheme });
@@ -41,10 +41,10 @@ const createCustomCSSIfNotExists = () => {
 const createDotEnvIfNotExists = () => {
     console.log('createDotEnvIfNotExists');
     let appUrl = 'http://localhost:3010';
-    if (global?.envConfig) {
-        const globalEnvConfig = global.envConfig.replace(/#/g, '"');
-        global.envConfig      = JSON.parse(globalEnvConfig);
-        appUrl                = global.envConfig.environment.appUrl.slice(0, -1);
+    if (global?.aquila?.envConfig) {
+        const globalEnvConfig   = global.aquila.envConfig.replace(/#/g, '"');
+        global.aquila.envConfig = JSON.parse(globalEnvConfig);
+        appUrl                  = global.aquila.envConfig.environment.appUrl.slice(0, -1);
     }
     const nextApiValue              = `${appUrl}/api`;
     process.env.NEXT_PUBLIC_API_URL = nextApiValue;

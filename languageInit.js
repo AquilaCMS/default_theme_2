@@ -4,7 +4,7 @@ const path = require('path');
 const setLanguage = (langs, defaultLanguage) => {
     const tabLangs       = langs.split(',');
     const themeName      = path.basename(__dirname);
-    const pathToTheme    = path.join(global.appRoot, 'themes', themeName, '/');
+    const pathToTheme    = path.join(global.aquila.appRoot, 'themes', themeName, '/');
     const i18nSamplePath = path.join(pathToTheme, 'i18n.js.sample');
     const i18nFilePath   = path.join(pathToTheme, 'i18n.js');
 

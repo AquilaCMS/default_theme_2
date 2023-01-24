@@ -1,13 +1,13 @@
-const path        = require('path');
-const fs          = require('fs');
-const next        = require('next').default;
-const serverUtils = require('../../utils/server');
-const { execCmd } = require('aql-utils');
-const dev         = serverUtils.dev;
+const path                              = require('path');
+const fs                                = require('fs');
+const next                              = require('next').default;
+const { execCmd, decodeBase64ToObject } = require('aql-utils');
+const serverUtils                       = require('../../utils/server');
+const dev                               = serverUtils.dev;
 
 const themeName = path.basename(__dirname);
 
-if (global.aquila && typeof global.aquila !== 'object') global.aquila = JSON.parse(Buffer.from(global.aquila, 'base64').toString('utf8'));
+global.aquila = decodeBase64ToObject(global.aquila);
 
 const pathToTheme = path.join(global.aquila.appRoot, 'themes', themeName, '/');
 

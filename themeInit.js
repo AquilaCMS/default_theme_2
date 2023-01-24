@@ -58,6 +58,11 @@ const createDotEnvIfNotExists = () => {
 
 const createListModulesIfNotExists = async () => { // 
     console.log('createListModulesIfNotExists');
+    // Create folder "modules" if not exists
+    const modulesPath = path.join(pathToTheme, 'modules');
+    if (!fs.existsSync(modulesPath)) {
+        fs.mkdirSync(modulesPath);
+    }
     // Create file if not exists
     const listModulePath = path.join(pathToTheme, 'modules', 'list_modules.js');
     if (!fs.existsSync(listModulePath)) {

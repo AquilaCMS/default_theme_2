@@ -2,8 +2,11 @@ const fs   = require('fs');
 const path = require('path');
 
 const setLanguage = (langs, defaultLanguage) => {
-    const tabLangs       = langs.split(',');
-    const themeName      = path.basename(__dirname);
+    const tabLangs  = langs.split(',');
+    const themeName = path.basename(__dirname);
+
+    if (global.aquila && typeof global.aquila !== 'object') global.aquila = JSON.parse(Buffer.from(global.aquila, 'base64').toString('utf8'));
+
     const pathToTheme    = path.join(global.aquila.appRoot, 'themes', themeName, '/');
     const i18nSamplePath = path.join(pathToTheme, 'i18n.js.sample');
     const i18nFilePath   = path.join(pathToTheme, 'i18n.js');
@@ -29,7 +32,6 @@ const setLanguage = (langs, defaultLanguage) => {
     res        = res.replace(/pages[\s\t]*: {[^}]*/s, `pages: ${JSON.stringify(json.pages, null, 4).replace('}', '')}`);
     fs.writeFileSync(i18nFilePath, res);
     console.log('Language initialization completed');
-    return;
 };
 
 module.exports = {

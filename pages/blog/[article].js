@@ -1,27 +1,27 @@
 import parse                     from 'html-react-parser';
 import absoluteUrl               from 'next-absolute-url';
+import getT                      from 'next-translate/getT';
 import useTranslation            from 'next-translate/useTranslation';
+import Link                      from 'next/link';
 import Breadcrumb                from '@components/navigation/Breadcrumb';
 import Layout                    from '@components/layouts/Layout';
 import BlockCMS                  from '@components/common/BlockCMS';
-import { getBlogList }           from '@aquilacms/aquila-connector/api/blog';
+import { getBlogArticle }        from '@aquilacms/aquila-connector/api/blog';
 import { getBreadcrumb }         from '@aquilacms/aquila-connector/api/breadcrumb';
 import { generateURLImageCache } from '@aquilacms/aquila-connector/lib/utils';
 import { dispatcher }            from '@lib/redux/dispatcher';
-import { initAxios }             from '@lib/utils';
-import { formatDate }            from '@lib/utils';
-import getT                      from 'next-translate/getT';
-import Link                      from 'next/link';
+import { initAxios, formatDate } from '@lib/utils';
 
 
-export async function getServerSideProps({ defaultLocale, locale, params, req, res, resolvedUrl }) {
+export async function getServerSideProps({ defaultLocale, locale, params, query, req, res, resolvedUrl }) {
     initAxios(locale, req, res);
 
     let blogArticle = {};
     try {
-        const blogList = await getBlogList({ PostBody: { limit: 9999 } }, locale);
-        
-        blogArticle = blogList.find(item => item.slug[locale] === params.article);
+        blogArticle = await getBlogArticle({ PostBody: { filter: { [`translation.${locale}.slug`]: params.article } } }, query.preview, locale);
+        if (!blogArticle) {
+            return { notFound: true };
+        }
     } catch (err) {
         return { notFound: true };
     }
@@ -35,24 +35,16 @@ export async function getServerSideProps({ defaultLocale, locale, params, req, r
     }
 
     // Get URLs for language change
-    // const urlsLanguages = [];
-    // if (staticPage) {
-    //     for (const [lang, sl] of Object.entries(staticPage.slug)) {
-    //         urlsLanguages.push({ lang, url: `/${sl}` });
-    //     }
-    // }
+    const urlsLanguages = [];
+    for (const [lang, sl] of Object.entries(blogArticle.slug)) {
+        urlsLanguages.push({ lang, url: `/blog/${sl}` });
+    }
 
     const actions = [
-        // {
-        //     type: 'PUSH_CMSBLOCKS',
-        //     func: getBlocksCMS.bind(this, ['bottom-parallax'], locale)
-        // }, {
-        //     type : 'SET_STATICPAGE',
-        //     value: staticPage
-        // }, {
-        //     type : 'SET_URLS_LANGUAGES',
-        //     value: urlsLanguages
-        // }
+        {
+            type : 'SET_URLS_LANGUAGES',
+            value: urlsLanguages
+        }
     ];
 
     const pageProps = await dispatcher(locale, req, res, actions);

@@ -15,6 +15,7 @@ const start = async () => {
     const app   = next({ dev, dir: pathToTheme });
     let handler = app.getRequestHandler();
 
+    createDotEnvIfNotExists();
     createCustomCSSIfNotExists();
     createListModulesIfNotExists();
     
@@ -42,16 +43,19 @@ const createCustomCSSIfNotExists = () => {
 };
 
 const createDotEnvIfNotExists = () => {
-    console.log('createDotEnvIfNotExists');
-    let appUrl = 'http://localhost:3010';
-    if (global?.aquila?.envConfig) {
-        appUrl = global.aquila.envConfig.environment.appUrl.slice(0, -1);
-    }
-    const nextApiValue              = `${appUrl}/api`;
-    process.env.NEXT_PUBLIC_API_URL = nextApiValue;
-    const data                      = `NEXT_PUBLIC_API_URL=${nextApiValue}`;
-    const dotEnvPath                = path.join(pathToTheme, '.env');
+    console.log('createDotEnvIfNotExists()...');
+    const dotEnvPath = path.join(pathToTheme, '.env');
     if (!fs.existsSync(dotEnvPath)) {
+        let appUrl = '';
+        if (!global?.aquila?.envConfig?.environment?.appUrl) {
+            throw new Error('"appUrl" is not defined in your configuration.');
+        }
+    
+        appUrl                          = global.aquila.envConfig.environment.appUrl.slice(0, -1);
+        const nextApiValue              = `${appUrl}/api`;
+        process.env.NEXT_PUBLIC_API_URL = nextApiValue;
+        const data                      = `NEXT_PUBLIC_API_URL=${nextApiValue}`;
+    
         fs.writeFileSync(dotEnvPath, data);
     }
 };
@@ -64,7 +68,7 @@ const createListModulesIfNotExists = async () => { //
         fs.mkdirSync(modulesPath);
     }
     // Create file if not exists
-    const listModulePath = path.join(pathToTheme, 'modules', 'list_modules.js');
+    const listModulePath = path.join(modulesPath, 'list_modules.js');
     if (!fs.existsSync(listModulePath)) {
         fs.writeFileSync(listModulePath, 'export default [];');
     }

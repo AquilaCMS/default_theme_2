@@ -296,10 +296,10 @@ ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-aql-utils@latest:
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/aql-utils/-/aql-utils-1.4.5.tgz#9b65c14e1d65c6cb5d14ddb520613e0b2e74ee5a"
-  integrity sha512-8UeyuRIUZ3+jUCliIFXm2HdJRnQvHgHyLj7ydspmivd0KXwVydZlFEWqCABKQ31Z7/C/KaRDceJ+EumzaGOMyA==
+aql-utils@1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/aql-utils/-/aql-utils-1.5.0.tgz#dec0c5f5db3813a47fa6e70592100e404e04a936"
+  integrity sha512-vf9BYPYOmQYuYlTTH2Vr7gQp1x3aGj5GsbldFXkAxfmxCRDdFQtdujc0MPVWkZVM4Fu4ON3VS/TtOZ6EoENqaQ==
   dependencies:
     slug "^5.1.0"
 

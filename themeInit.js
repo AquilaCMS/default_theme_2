@@ -5,7 +5,10 @@ const serverUtils = require('../../utils/server');
 const { execCmd } = require('aql-utils');
 const dev         = serverUtils.dev;
 
-const themeName   = path.basename(__dirname);
+const themeName = path.basename(__dirname);
+
+if (global.aquila && typeof global.aquila !== 'object') global.aquila = JSON.parse(Buffer.from(global.aquila, 'base64').toString('utf8'));
+
 const pathToTheme = path.join(global.aquila.appRoot, 'themes', themeName, '/');
 
 const start = async () => {
@@ -42,9 +45,7 @@ const createDotEnvIfNotExists = () => {
     console.log('createDotEnvIfNotExists');
     let appUrl = 'http://localhost:3010';
     if (global?.aquila?.envConfig) {
-        const globalEnvConfig   = global.aquila.envConfig.replace(/#/g, '"');
-        global.aquila.envConfig = JSON.parse(globalEnvConfig);
-        appUrl                  = global.aquila.envConfig.environment.appUrl.slice(0, -1);
+        appUrl = global.aquila.envConfig.environment.appUrl.slice(0, -1);
     }
     const nextApiValue              = `${appUrl}/api`;
     process.env.NEXT_PUBLIC_API_URL = nextApiValue;

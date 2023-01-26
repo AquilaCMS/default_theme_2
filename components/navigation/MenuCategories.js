@@ -25,22 +25,18 @@ export default function MenuCategories() {
                 </div>
 
                 <div className={`tab-menu-round w-tab-menu${open ? ' tab-menu-round-open' : ''}`}>
-
                     {menuCat?.map((item) => {
                         let current = false;
                         if (asPath.indexOf(`/c/${item.slug[lang]}`) > -1) {
                             current = true;
                         }
                         return (
-                            <Link key={item._id} href={`/c/${item.slug[lang]}`}>
-                                <a className={`tab-link-round w-inline-block w-tab-link${current ? ' w--current' : ''}`}>
-                                    <div>{item.name}</div>
-                                </a>
+                            <Link key={item._id} href={`/c/${item.slug[lang]}`} className={`tab-link-round w-inline-block w-tab-link${current ? ' w--current' : ''}`}>
+                                <div>{item.name}</div>
                             </Link>
                             
                         );
                     })}
-                
                 </div>
             </>
         );

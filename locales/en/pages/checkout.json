@@ -3,7 +3,14 @@
     "title": "My order - Cart",
     "description": "My order - Cart",
     "titleH1" : "My Cart",
-    "ordering" : "ORDER"
+    "subTotal": "Sub-total",
+    "discount": "Discount",
+    "delivery": "Delivery",
+    "total": "Total",
+    "empty": "Your cart is empty",
+    "goToHome": "Discover our menu",
+    "ordering" : "ORDER",
+    "orderingLoading": "ORDER..."
   },
   "login": {
     "title": "My order - Log In",
@@ -11,52 +18,23 @@
     "titleH1" : "My order",
     "step1" : "Log In / Sign In"
   },
-  "clickandcollect": {
-    "title" : "My order - Click & Collect",
-    "description" : "My order - Click & Collect",
-    "titleH1" : "My order",
-    "step2" : "Click & Collect",
-    "labelPhone" : "Phone (required)",
-    "next" : "NEXT",
-    "submitError": "Please validate a pickup or a delivery !",
-    "submitError2": "Withdrawal/delivery date has passed !"
-  },
   "address": {
     "title" : "My order - Address",
     "description" : "My order - Address",
     "titleH1" : "My order",
-    "step3" : "Adress",
-    "mandatory" : "Mandatory",
-    "titleBilling":"Billing address",
-    "titleDelivery":"Delivery address",
-    "firstname":"First Name",
-    "lastname":"Last Name",
-    "line1":"Address",
-    "line2":"Address 2",
-    "city":"City",
-    "postal":"Zip Code",
-    "country":"Country",
-    "sameAddress": "Same billing address",
-    "next": "NEXT",
-    "nextLoading": "LOADING..."
+    "step" : "Adress"
   },
   "delivery" : {
-    "title" : "My order - Delivery method",
-    "description" : "My order - Delivery method",
+    "title" : "My order - Delivery",
+    "description" : "My order - Delivery",
     "titleH1" : "My order",
-    "step3" : "Delivery method",
-    "previous" : "BACK",
-    "next" : "NEXT",
-    "nextLoading" : "LOADING..."
+    "step" : "Delivery"
   },
   "payment" : {
     "title" : "My order - Payment method",
     "description" : "My order - Payment method",
     "titleH1" : "My order",
-    "step4" : "Payment method",
-    "previous" : "BACK",
-    "pay" : "PAY",
-    "submitLoading" : "PAYMENT..."
+    "step" : "Payment method"
   },
   "confirmation" : {
     "title" : "My order - Confirmation",

@@ -3,7 +3,14 @@
     "title": "Ma commande - Panier",
     "description": "Ma commande - Panier",
     "titleH1" : "Mon panier",
-    "ordering" : "COMMANDER"
+    "subTotal": "Sous-total",
+    "discount": "Réduction",
+    "delivery": "Livraison",
+    "total": "Total",
+    "empty": "Votre Panier est vide",
+    "goToHome": "Découvrir notre Carte",
+    "ordering" : "COMMANDER",
+    "orderingLoading": "COMMANDE..."
   },
   "login": {
     "title": "Ma commande - Connexion",
@@ -11,52 +18,23 @@
     "titleH1" : "Ma commande",
     "step1" : "Connexion / Inscription"
   },
-  "clickandcollect": {
-    "title" : "Ma commande - Click & Collect",
-    "description" : "Ma commande - Click & Collect",
-    "titleH1" : "Ma commande",
-    "step2" : "Click & Collect",
-    "labelPhone" : "Téléphone (requis)",
-    "next" : "SUIVANT",
-    "submitError": "Veuillez valider un retrait ou une livraison !",
-    "submitError2": "La date de retrait/livraison est dépassée !"
-  },
   "address": {
     "title" : "Ma commande - Adresse",
     "description" : "Ma commande - Adresse",
     "titleH1" : "Ma commande",
-    "step3" : "Adresse",
-    "mandatory" : "Obligatoire",
-    "titleBilling":"Adresse de facturation",
-    "titleDelivery":"Adresse de livraison",
-    "firstname":"Prénom",
-    "lastname":"Nom",
-    "line1":"Adresse",
-    "line2":"Adresse 2",
-    "city":"Ville",
-    "postal":"Code postal",
-    "country":"Pays",
-    "sameAddress": "Même adresse de facturation",
-    "next": "SUIVANT",
-    "nextLoading": "ENREGISTREMENT..."
+    "step" : "Adresse"
   },
   "delivery" : {
-    "title" : "Ma commande - Mode de livraison",
-    "description" : "Ma commande - Mode de livraison",
+    "title" : "Ma commande - Livraison",
+    "description" : "Ma commande - Livraison",
     "titleH1" : "Ma commande",
-    "step3" : "Mode de livraison",
-    "previous" : "RETOUR",
-    "next" : "SUIVANT",
-    "nextLoading" : "ENREGISTREMENT..."
+    "step" : "Livraison"
   },
   "payment" : {
     "title" : "Ma commande - Moyen de paiement",
     "description" : "Ma commande - Moyen de paiement",
     "titleH1" : "Ma commande",
-    "step4" : "Moyen de paiement",
-    "previous" : "RETOUR",
-    "pay" : "PAYER",
-    "submitLoading" : "PAIEMENT..."
+    "step" : "Moyen de paiement"
   },
   "confirmation" : {
     "title" : "Ma commande - Confirmation",

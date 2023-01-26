@@ -25,20 +25,14 @@ export default function AccountLayout({ children, active }) {
             <div className="section-account">
                 <div className="tab-pane-wrap-account w-tabs">
                     <div className="tab-menu-round-account w-tab-menu">
-                        <Link href="/account/informations">
-                            <a className={(active === '1' ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
-                                <div>{t('components/account/accountLayout:navigation.myInformations')}</div>
-                            </a>
+                        <Link href="/account/informations" className={(active === '1' ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
+                            <div>{t('components/account/accountLayout:navigation.myInformations')}</div>
                         </Link>
-                        <Link href="/account">
-                            <a className={(active === '2' ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
-                                <div>{t('components/account/accountLayout:navigation.myOrders')}</div>
-                            </a>
+                        <Link href="/account" className={(active === '2' ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
+                            <div>{t('components/account/accountLayout:navigation.myOrders')}</div>
                         </Link>
-                        <Link href="/account/rgpd">
-                            <a className={(active === '3' ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
-                                <div>{t('components/account/accountLayout:navigation.rgpd')}</div>
-                            </a>
+                        <Link href="/account/rgpd" className={(active === '3' ? 'w--current' : '') + ' tab-link-round w-inline-block w-tab-link'}>
+                            <div>{t('components/account/accountLayout:navigation.rgpd')}</div>
                         </Link>
                         <button type="button" className="tab-link-round w-inline-block w-tab-link" onClick={onLogout}>{t('components/account/accountLayout:navigation.logout')}</button>
                     </div>

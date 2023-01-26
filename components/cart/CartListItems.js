@@ -1,5 +1,6 @@
 import Link                        from 'next/link';
 import useTranslation              from 'next-translate/useTranslation';
+import CartDiscount                from '@components/cart/CartDiscount';
 import CartItem                    from '@components/cart/CartItem';
 import { useCart }                 from '@lib/hooks';
 import { formatPrice, moduleHook } from '@lib/utils';
@@ -16,12 +17,27 @@ export default function CartListItems() {
                         <CartItem item={item} key={item._id} />
                     ))}
                 </div>
+
+                <CartDiscount />
+
                 <div className="w-commerce-commercecartfooter">
+                    <div className="w-commerce-commercecartlineitem cart-line-item">
+                        <div>{t('components/cart:cartListItem.subTotal')}</div>
+                        <div>{formatPrice(cart.priceSubTotal.ati)}</div>
+                    </div>
                     {
                         cart.delivery?.method && cart.delivery?.value && (
                             <div className="w-commerce-commercecartlineitem cart-line-item">
                                 <div>{t('components/cart:cartListItem.delivery')}</div>
                                 <div>{formatPrice(cart.delivery.value.ati)}</div>
+                            </div>
+                        )
+                    }
+                    {
+                        cart.promos[0] && (
+                            <div className="w-commerce-commercecartlineitem cart-line-item">
+                                <div>{t('components/cart:cartListItem.discount')}</div>
+                                <div>- {formatPrice(cart.promos[0].discountATI)}</div>
                             </div>
                         )
                     }
@@ -32,12 +48,9 @@ export default function CartListItems() {
                         </div>
                     </div>
                     <div>
-                        {
-                            moduleHook('cart-validate-btn') || 
-                                <Link href="/checkout/address">
-                                    <a className="checkout-button-2 w-button">{t('components/cart:cartListItem.ordering')}</a>
-                                </Link>
-                        }
+                        <Link href="/checkout/address" className="checkout-button-2 w-button">
+                            {t('components/cart:cartListItem.ordering')}
+                        </Link>
                     </div>
                 </div>
             </form>
@@ -48,8 +61,8 @@ export default function CartListItems() {
         <div className="w-commerce-commercecartemptystate empty-state">
             <div>{t('components/cart:cartListItem.empty')}</div>
             <div className="button-arrow-wrap">
-                <Link href="/">
-                    <a className="button w-button">{t('components/cart:cartListItem.goToHome')}</a>
+                <Link href="/" className="button w-button">
+                    {t('components/cart:cartListItem.goToHome')}
                 </Link>
             </div>
         </div>

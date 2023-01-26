@@ -22,39 +22,4 @@ module.exports      = nextTranslate({
         ignoreDuringBuilds: true,
     },
     optimizeFonts: false,
-    /*async rewrites () {
-        return [
-            {
-                // Page static
-                source     : '/:staticSlug',
-                destination: '/static'
-            },
-            {
-                // Page category
-                source     : '/c/:categorySlugs*',
-                destination: '/category'
-            },
-            {
-                // Page produit
-                source     : '/:categorySlugs/:productSlug',
-                destination: '/product'
-            }
-        ];
-    }*/
 });
-
-// module.exports = {
-//     async headers() {
-//         return [
-//             {
-//                 source: '/(.*)',
-//                 headers: [
-//                     {
-//                         key: 'Powered-by',
-//                         value: 'AquilaCMS',
-//                     }
-//                 ],
-//             },
-//         ]
-//     },
-// }

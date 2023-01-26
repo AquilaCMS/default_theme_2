@@ -3453,11 +3453,6 @@ li {
   background-color: #f8f8f8;
 }
 
-.faq-question-wrap {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
 .faq-question-bar {
   display: -webkit-box;
   display: -webkit-flex;
@@ -4772,45 +4767,6 @@ li {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.form-grid-retrait {
-  display: -ms-grid;
-  display: grid;
-  width: 100%;
-  margin-top: 10px;
-  -webkit-justify-content: space-around;
-  -ms-flex-pack: distribute;
-  justify-content: space-around;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
-  grid-auto-columns: 1fr;
-  grid-column-gap: 16px;
-  grid-row-gap: 16px;
-  -ms-grid-columns: 0.5fr 0.5fr 0.25fr 1.5fr 0.75fr 0.75fr 1fr;
-  grid-template-columns: 0.5fr 0.5fr 0.25fr 1.5fr 0.75fr 0.75fr 1fr;
-  -ms-grid-rows: auto;
-  grid-template-rows: auto;
-}
-
-.section-picker {
-  position: relative;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
-  border-bottom: 1px solid #ffbb94;
-  background-color: #fcf8f5;
 }
 
 .radio-retrait {
@@ -6821,17 +6777,6 @@ li {
     min-width: 30%;
   }
 
-  .form-grid-retrait {
-    padding-right: 20px;
-    padding-left: 20px;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    grid-row-gap: 16px;
-    -ms-grid-columns: 1fr 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
   .radio-retrait {
     min-height: 17px;
     min-width: 17px;
@@ -7786,13 +7731,6 @@ li {
     max-height: 240px;
   }
 
-  .form.alergies {
-    -webkit-box-pack: start;
-    -webkit-justify-content: flex-start;
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-  }
-
   .select-heure {
     max-width: 80%;
     min-width: 140px;
@@ -7864,19 +7802,6 @@ li {
 
   .checkbox-click-collect {
     padding-left: 5px;
-  }
-
-  .form-grid-retrait {
-    margin-top: 0px;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    grid-column-gap: 10px;
-    grid-row-gap: 10px;
-    -ms-grid-columns: 1fr 1fr;
-    grid-template-columns: 1fr 1fr;
   }
 
   .radio-retrait {

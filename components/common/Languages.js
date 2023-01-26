@@ -2,7 +2,7 @@ import Link                 from 'next/link';
 import useTranslation       from 'next-translate/useTranslation';
 import setLanguage          from 'next-translate/setLanguage';
 import { useUrlsLanguages } from '@lib/hooks';
-import i18n                 from '/i18n.json';
+import i18n                 from '/i18n';
 
 export default function Languages() {
     const urls     = useUrlsLanguages();
@@ -27,8 +27,8 @@ export default function Languages() {
                         );
                     }
                     return (
-                        <Link href={urls.find(u => u.lang === code)?.url || '/'} locale={code} key={code}>
-                            <a className={`link-lang${lang === code ? ' selected' : ''}`}>{code.toUpperCase()}</a>
+                        <Link href={urls.find(u => u.lang === code)?.url || '/'} locale={code} key={code} className={`link-lang${lang === code ? ' selected' : ''}`}>
+                            {code.toUpperCase()}
                         </Link>
                     );
                 })

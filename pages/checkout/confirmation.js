@@ -15,7 +15,7 @@ export async function getServerSideProps({ locale, req, res }) {
 
     const user = await authProtectedPage(req.headers.cookie);
     if (!user) {
-        return serverRedirect('/checkout/login?redirect=' + encodeURI('/checkout/clickandcollect'));
+        return serverRedirect('/checkout/login?redirect=' + encodeURI('/'));
     }
     return dispatcher(locale, req, res);
 }
@@ -72,8 +72,8 @@ export default function CheckoutConfirmation() {
                 <OrderDetails order={order} />
 
                 <div className="container-order" style={{ justifyContent: 'center' }}>
-                    <Link href='/account'>
-                        <a className="log-button-03 w-button">{t('pages/checkout:confirmation.viewOrders')}</a>
+                    <Link href='/account' className="log-button-03 w-button">
+                        {t('pages/checkout:confirmation.viewOrders')}
                     </Link>
                 </div>
             </div>

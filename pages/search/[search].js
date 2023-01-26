@@ -1,19 +1,19 @@
-import { useState }                                                                                   from 'react';
-import useTranslation                                                                                 from 'next-translate/useTranslation';
-import Cookies                                                                                        from 'cookies';
-import Error                                                                                          from '@pages/_error';
-import Filters                                                                                        from '@components/category/Filters';
-import Pagination                                                                                     from '@components/category/Pagination';
-import Layout                                                                                         from '@components/layouts/Layout';
-import NextSeoCustom                                                                                  from '@components/tools/NextSeoCustom';
-import ProductList                                                                                    from '@components/product/ProductList';
-import { dispatcher }                                                                                 from '@lib/redux/dispatcher';
-import { getProducts }                                                                                from '@aquilacms/aquila-connector/api/product';
-import { getSiteInfo }                                                                                from '@aquilacms/aquila-connector/api/site';
-import { useCategoryProducts, useSiteConfig }                                                         from '@lib/hooks';
-import { initAxios, serverRedirect, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix } from '@lib/utils';
+import { useEffect, useState }                                                                                        from 'react';
+import useTranslation                                                                                                 from 'next-translate/useTranslation';
+import Cookies                                                                                                        from 'cookies';
+import PageError                                                                                                      from '@pages/_error';
+import Filters                                                                                                        from '@components/category/Filters';
+import Pagination                                                                                                     from '@components/category/Pagination';
+import Layout                                                                                                         from '@components/layouts/Layout';
+import NextSeoCustom                                                                                                  from '@components/tools/NextSeoCustom';
+import ProductList                                                                                                    from '@components/product/ProductList';
+import { dispatcher }                                                                                                 from '@lib/redux/dispatcher';
+import { getProducts }                                                                                                from '@aquilacms/aquila-connector/api/product';
+import { getSiteInfo }                                                                                                from '@aquilacms/aquila-connector/api/site';
+import { useCategoryProducts, useSiteConfig }                                                                         from '@lib/hooks';
+import { initAxios, serverRedirect, stringToBase64, getBodyRequestProductsFromCookie, convertFilter, filterPriceFix } from '@lib/utils';
 
-export async function getServerSideProps({ locale, params, query, req, res }) {
+export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
     initAxios(locale, req, res);
 
     const search = params.search.trim() || '';
@@ -66,18 +66,14 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
     if (queryPage) {
         page = queryPage;
         if (page > 1) {
-            // Ascertainment : "httpOnly: false" is important otherwise we cannot correctly delete the cookie afterwards
             bodyRequestProducts.page = page;
         } else if (bodyRequestProducts.page) {
             delete bodyRequestProducts.page;
         }
         forcePage = true;
-    } else {
-        // We take the value only if validity key of body request cookie matches
-        // Otherwise, we delete "page" cookie
-        if (bodyRequestProducts.key === key) {
-            page = bodyRequestProducts.page;
-        }
+    } else if (bodyRequestProducts.page) {
+        // We take the value in body request cookie
+        page = bodyRequestProducts.page;
     }
 
     // Body request : limit (from cookie or theme config)
@@ -85,7 +81,7 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
     if (bodyRequestProducts.limit) {
         defaultLimit = bodyRequestProducts.limit;
     } else {
-        defaultLimit = siteInfo.themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 15;
+        defaultLimit = siteInfo.themeConfig?.values?.find(t => t.key === 'productsPerPage')?.value || 16;
     }
     let limitRequest = defaultLimit;
 
@@ -116,22 +112,46 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
         return { notFound: true };
     }
 
+    if (!productsData.datas.length && pageRequest > 1) {
+        delete bodyRequestProducts.page;
+
+        // Set body request cookie
+        cookiesServerInstance.set('bodyRequestProducts', stringToBase64(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
+
+        // Redirect to first page
+        return serverRedirect(resolvedUrl);
+    }
+
     // Price end (min & max)
     priceEnd = {
         min: Math.floor(productsData.unfilteredPriceSortMin.ati),
         max: Math.ceil(productsData.unfilteredPriceSortMax.ati)
     };
 
+    // If filter min or max price are outside of range, delete filter price
+    if (bodyRequestProducts.filter?.price && (bodyRequestProducts.filter.price.min > priceEnd.max || bodyRequestProducts.filter.price.max < priceEnd.min)) {
+        delete bodyRequestProducts.filter.price;
+        if (!Object.keys(bodyRequestProducts.filter).length) {
+            delete bodyRequestProducts.filter;
+        }
+
+        // Set body request cookie
+        cookiesServerInstance.set('bodyRequestProducts', stringToBase64(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
+
+        // Redirect to first page
+        return serverRedirect(resolvedUrl);
+    }
+
     // Detecting bad price end in price filter of body request cookie
     filterPriceFix(bodyRequestProducts, priceEnd);
 
     // Set body request cookie
-    cookiesServerInstance.set('bodyRequestProducts', encodeURIComponent(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
+    cookiesServerInstance.set('bodyRequestProducts', stringToBase64(JSON.stringify(bodyRequestProducts)), { path: '/', httpOnly: false, maxAge: 43200000 });
 
     const actions = [
         {
-            type : 'SET_SELECT_PAGE',
-            value: page
+            type : 'SET_CATEGORY_BODY_REQUEST',
+            value: bodyRequestProducts
         }, {
             type : 'SET_CATEGORY_PRICE_END',
             value: priceEnd
@@ -152,17 +172,36 @@ export default function Search({ search, error }) {
     const { themeConfig }       = useSiteConfig();
     const { lang, t }           = useTranslation();
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY) {
+                localStorage.setItem('scroll', window.scrollY);
+            }
+        };
+        handleScroll();
+        window.addEventListener('scroll', handleScroll);
+
+        const positionTop = localStorage.getItem('scroll');
+        if (positionTop) {
+            window.scrollTo(0, positionTop);
+        }
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     const getProductsList = async (postBody) => {
+        setMessage();
         try {
             const products = await getProducts(true, postBody, lang);
             return products;
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            throw new Error('Error getProductsList');
         }
     };
 
     if (error) {
-        return <Error statusCode={error.code} />;
+        return <PageError statusCode={error.code} />;
     }
     
     return (

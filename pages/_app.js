@@ -7,7 +7,7 @@ import { useStore }     from '@lib/redux/store';
 
 import '@styles/normalize.css';
 import '@styles/webflow.css';
-import '@styles/mon-restaurant.webflow.css';
+import '@styles/styles.webflow.css';
 import '@styles/globals.css';
 import '@styles/animations.css';
 import '@styles/custom.css';

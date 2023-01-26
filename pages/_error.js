@@ -22,8 +22,8 @@ function Error({ statusCode }) {
                     <h2>{title}</h2>
                     <div>
                         <p className="utility-paragraph">{text}<br />
-                            <Link href="/">
-                                <a className="link-2">{t('pages/error:back')}</a>
+                            <Link href="/" className="link-2">
+                                {t('pages/error:back')}
                             </Link>
                         </p>
                     </div>

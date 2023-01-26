@@ -7,5 +7,7 @@
     "return": "Back",
     "addToBasket": "Add to cart",
     "compose": "Compose",
+    "download": "Download",
+    "downloading": "Downloading...",
     "addToCartLoading": "Add..."
 }

@@ -35,6 +35,15 @@ body {
   max-height: 0px;
   transition: all 0.5s
 }
+@media screen and (max-width: 991px) {
+  .tab-menu-round {
+    display: flex;
+    flex-wrap: nowrap;
+    -ms-grid-columns: none;
+    grid-template-columns: none;
+    overflow-x: auto;
+  }
+}
 
 /* ADD */
 .tab-menu-round-open {
@@ -412,6 +421,43 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
 .filter {
   padding: 5px 20px;
 }
+.filter-price {
+  width: 250px;
+  margin-top: 30px;
+}
+.filter-price .container-track {
+  display: flex;
+  align-items: center;
+}
+.filter-price .container-track .track {
+  height: 5px;
+  width: 100%;
+  border-radius: 4px;
+}
+.filter-price .container-track .track-min {
+  margin-right: 10px;
+}
+.filter-price .container-track .track-max {
+  margin-left: 10px;
+}
+.filter-price .thumb {
+  height: 12px;
+  width: 12px;
+  border-radius: 6px;
+  background-color: #fff;
+  opacity: 0.7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 2px 6px #aaa;
+}
+.filter-price .thumb-tooltip {
+  position: absolute;
+  color: #fff;
+  padding: 4px;
+  border-radius: 4px;
+  background-color: #ff8946;
+}
 
 /*
   ADD mon-restaurant.webflow.css
@@ -443,4 +489,136 @@ input[type='radio']:focus + .w-form-formradioinput--inputType-custom {
       width: initial;
       text-align: left;
   }
+}
+
+/* BLOG RELATED CSS */
+
+.blog-card {
+  margin: 10px;
+  padding: 0px;
+  min-width: 300px;
+  flex-direction: column;
+  width:25%;
+}
+
+.blog-thumbnail {
+border-radius: 5px 5px 0 0;
+overflow: hidden;
+}
+
+.blog-card-content {
+padding: 25px;
+min-width: 300px;
+}
+
+.blog-title-wrap {
+margin-bottom: 0;
+}
+
+.blog-date {
+font-style: italic;
+margin-top: 0px;
+font-size: 0.8rem;
+}
+
+.blog-card-return-animation {
+-webkit-animation: blog-card-return-animation 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) 2 alternate both;
+    animation: blog-card-return-animation 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) 2 alternate both;
+}
+
+@-webkit-keyframes blog-card-return-animation {
+  0% {
+  -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  100% {
+  -webkit-box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+        box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+  }
+  }
+  @keyframes blog-card-return-animation {
+  0% {
+  -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  100% {
+  -webkit-box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+        box-shadow: 0 0 20px 0px rgba(53, 184, 190, 0.5);
+  }
+}
+
+/* Product variants */
+.product-variants {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 479px) {
+  .product-variants {
+    flex-direction: column;
+  }
+}
+
+.product-variants-listing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.variant-radio {
+  display: none;
+}
+
+.variant-label, .variant-label-color, .variant-label-image, .variant-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  margin: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.variant-label-color span {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+}
+
+.variant-radio:checked + .variant-label,
+.variant-radio:checked + .variant-label-color,
+.variant-radio:checked + .variant-label-image {
+  border: 2px solid #ff8946;
+  background-color: #ff8946;
+  color: #fff;
+}
+
+.variant-label.disabled,
+.variant-label-color.disabled,
+.variant-label-image.disabled {
+  border: 2px dashed #ddd;
+}
+
+.variant-label.disabled-all,
+.variant-label-color.disabled-all {
+  background-color: #ddd;
+  color: grey;
+  cursor: not-allowed;
+}
+
+.variant-label-image.disabled-all {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.variant-label-image.disabled-all img {
+  opacity: 0.2;
+}
+
+.disabled-all.clickable {
+  cursor: pointer;
 }

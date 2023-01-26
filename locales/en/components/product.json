@@ -1,7 +1,11 @@
 {
     "productCard": {
+        "from": "From",
         "addToBasket": "Add to cart",
         "compose": "Compose",
+        "choose": "Choose",
+        "download": "Download",
+        "downloading": "Downloading...",
         "addToCartLoading": "Add...",
         "noProduct": "Unable to display the product [{{product}}]"
     },

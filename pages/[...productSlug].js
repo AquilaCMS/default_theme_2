@@ -1,35 +1,37 @@
-import { useState }                                                         from 'react';
-import { ProductJsonLd }                                                    from 'next-seo';
-import absoluteUrl                                                          from 'next-absolute-url';
-import { useRouter }                                                        from 'next/router';
-import getT                                                                 from 'next-translate/getT';
-import useTranslation                                                       from 'next-translate/useTranslation';
-import parse                                                                from 'html-react-parser';
-import Cookies                                                              from 'cookies';
-import { Modal }                                                            from 'react-responsive-modal';
-import Lightbox                                                             from 'lightbox-react';
-import ErrorPage                                                            from '@pages/_error';
-import BundleProduct                                                        from '@components/product/BundleProduct';
-import Layout                                                               from '@components/layouts/Layout';
-import NextSeoCustom                                                        from '@components/tools/NextSeoCustom';
-import Breadcrumb                                                           from '@components/navigation/Breadcrumb';
-import ProductList                                                          from '@components/product/ProductList';
-import BlockCMS                                                             from '@components/common/BlockCMS';
-import Button                                                               from '@components/ui/Button';
-import { dispatcher }                                                       from '@lib/redux/dispatcher';
-import { getBlocksCMS }                                                     from '@aquilacms/aquila-connector/api/blockcms';
-import { getBreadcrumb }                                                    from '@aquilacms/aquila-connector/api/breadcrumb';
-import { addToCart, setCartShipment }                                       from '@aquilacms/aquila-connector/api/cart';
-import { getCategories }                                                    from '@aquilacms/aquila-connector/api/category';
-import { getProduct }                                                       from '@aquilacms/aquila-connector/api/product';
-import { getImage, getMainImage, getTabImageURL }                           from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import { useCart, useProduct, useShowCartSidebar, useSiteConfig }           from '@lib/hooks';
-import { initAxios, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
+import { useState }                                                                            from 'react';
+import { ProductJsonLd }                                                                       from 'next-seo';
+import absoluteUrl                                                                             from 'next-absolute-url';
+import { useRouter }                                                                           from 'next/router';
+import getT                                                                                    from 'next-translate/getT';
+import useTranslation                                                                          from 'next-translate/useTranslation';
+import parse                                                                                   from 'html-react-parser';
+import Cookies                                                                                 from 'cookies';
+import { Modal }                                                                               from 'react-responsive-modal';
+import Lightbox                                                                                from 'lightbox-react';
+import ErrorPage                                                                               from '@pages/_error';
+import BundleProduct                                                                           from '@components/product/BundleProduct';
+import ProductVariants                                                                         from '@components/product/ProductVariants';
+import Layout                                                                                  from '@components/layouts/Layout';
+import NextSeoCustom                                                                           from '@components/tools/NextSeoCustom';
+import Breadcrumb                                                                              from '@components/navigation/Breadcrumb';
+import ProductList                                                                             from '@components/product/ProductList';
+import BlockCMS                                                                                from '@components/common/BlockCMS';
+import Button                                                                                  from '@components/ui/Button';
+import { dispatcher }                                                                          from '@lib/redux/dispatcher';
+import { getBlocksCMS }                                                                        from '@aquilacms/aquila-connector/api/blockcms';
+import { getBreadcrumb }                                                                       from '@aquilacms/aquila-connector/api/breadcrumb';
+import { addToCart, deleteCartShipment }                                                       from '@aquilacms/aquila-connector/api/cart';
+import { getCategories }                                                                       from '@aquilacms/aquila-connector/api/category';
+import { getProduct, downloadFreeVirtualProduct }                                              from '@aquilacms/aquila-connector/api/product';
+import { getImage, getMainImage, getTabImageURL }                                              from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import { generateURLImageCache }                                                               from '@aquilacms/aquila-connector/lib/utils';
+import { useCart, useProduct, useShowCartSidebar, useSiteConfig }                              from '@lib/hooks';
+import { initAxios, authProtectedPage, formatPrice, formatStock, getAvailability, moduleHook } from '@lib/utils';
 
 import 'lightbox-react/style.css';
 import 'react-responsive-modal/styles.css';
 
-export async function getServerSideProps({ locale, params, query, req, res, resolvedUrl }) {
+export async function getServerSideProps({ defaultLocale, locale, params, query, req, res, resolvedUrl }) {
     initAxios(locale, req, res);
     
     const productSlug   = params.productSlug.pop();
@@ -94,6 +96,17 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Set cookie product ID
     cookiesServerInstance.set('product', product._id, { path: '/', httpOnly: false, maxAge: 43200000 });
 
+    // Product variants
+    if (product.variants_values?.length) {
+        const variant            = product.variants_values?.find(vv => vv.default);
+        product.active           = variant.active;
+        product.images           = variant.images;
+        product.name             = variant.name;
+        product.stock            = variant.stock;
+        product.price            = variant.price;
+        product.selected_variant = variant;
+    }
+
     const actions = [
         {
             type : 'SET_PRODUCT',
@@ -112,7 +125,7 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
     // Breadcrumb
     let breadcrumb = [];
     try {
-        breadcrumb = await getBreadcrumb(resolvedUrl);
+        breadcrumb = await getBreadcrumb(`${defaultLocale !== locale ? `/${locale}` : ''}${resolvedUrl}`);
     } catch (err) {
         const t = await getT(locale, 'common');
         console.error(err.message || t('common:message.unknownError'));
@@ -153,7 +166,7 @@ export default function Product({ breadcrumb, origin }) {
     const [openModal, setOpenModal]   = useState(false);
     const [tabs, setTabs]             = useState(0);
     const { cart, setCart }           = useCart();
-    const product                     = useProduct();
+    const { product }                 = useProduct();
     const { themeConfig }             = useSiteConfig();
     const { lang, t }                 = useTranslation();
     const { setShowCartSidebar }      = useShowCartSidebar();
@@ -163,8 +176,8 @@ export default function Product({ breadcrumb, origin }) {
 
     // Getting boolean stock display
     const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value !== undefined ? themeConfig?.values?.find(t => t.key === 'displayStockProduct')?.value : false;
-
-    const mainImage   = getMainImage(product.images.filter((i) => !i.content), '578x578');
+    
+    const mainImage   = getMainImage(product.images.filter((i) => !i.content), '578x578', product.selected_variant);
     const images      = getTabImageURL(product.images);
     const tabImageURL = [];
     for (let url of images) {
@@ -189,14 +202,15 @@ export default function Product({ breadcrumb, origin }) {
         try {
             setMessage();
 
+            // Adding product to cart
+            let newCart     = await addToCart(cart._id, product, qty);
+            document.cookie = 'cart_id=' + newCart._id + '; path=/;';
+
             // Deletion of the cart delivery
-            if (cart.delivery?.method) {
-                await setCartShipment(cart._id, {}, '', true);
+            if (newCart.delivery?.method) {
+                newCart = await deleteCartShipment(newCart._id);
             }
 
-            // Adding product to cart
-            const newCart   = await addToCart(cart._id, product, qty);
-            document.cookie = 'cart_id=' + newCart._id + '; path=/;';
             setCart(newCart);
             setShowCartSidebar(true);
         } catch (err) {
@@ -221,6 +235,33 @@ export default function Product({ breadcrumb, origin }) {
     };
 
     const onCloseModal = () => setOpenModal(false);
+
+    const onDownloadVirtualProduct = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        const user = await authProtectedPage(document.cookie);
+        if (!user) {
+            setMessage({ type: 'error', message: t('common:message.loginRequired') });
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const res  = await downloadFreeVirtualProduct(product._id);
+            const url  = URL.createObjectURL(res.data);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = product.filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     // Pictos
     const pictos = [];
@@ -342,7 +383,7 @@ export default function Product({ breadcrumb, origin }) {
                                     pictos ? pictos.map((picto) => (
                                         <div style={picto.style} key={picto.location + Math.random()}>
                                             {
-                                                picto.pictos && picto.pictos.map((p) => <img src={`/images/picto/64x64-70-0,0,0,0/${p.pictoId}/${p.image}`} alt={p.title} title={p.title} key={p._id} />)
+                                                picto.pictos && picto.pictos.map((p) => <img src={generateURLImageCache('picto', '64x64-70-0,0,0,0', p.pictoId, p.code, p.image)} alt={p.title} title={p.title} key={p._id} />)
                                             }
                                         </div>
                                     )) : ''
@@ -365,23 +406,31 @@ export default function Product({ breadcrumb, origin }) {
                             </div>
                         </div>
                         <div className="product-content">
-                            <h3>{product.description2?.title}</h3>
+                            <h3>{product.name}</h3>
                             <div className="div-block-prix">
                                 <div className="price-text">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
                                 { product.price.ati.special ? <div className="price-text sale">{formatPrice(product.price.ati.normal)}</div> : null }
                             </div>
                             <div className="plain-line" />
-                            <div className="full-details w-richtext"><p>{parse(product.description2?.text)}</p></div>
+                            <div className="full-details w-richtext"><p>{parse(product.description2?.text || '')}</p></div>
+                            { product.selected_variant && <ProductVariants /> }
                             <div>
-                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
-                                    <input type="number" min={1} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
-                                    <Button 
-                                        text={product.type === 'bundle' ? t('pages/product:compose') : t('pages/product:addToBasket')}
-                                        loadingText={t('pages/product:addToCartLoading')}
-                                        isLoading={isLoading}
-                                        disabled={product.type === 'virtual' || (product.type !== 'virtual' && product.type !== 'simple' && product.type !== 'bundle')} 
-                                        className="w-commerce-commerceaddtocartbutton order-button"
-                                    />
+                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type.startsWith('bundle') ? onOpenModal : onAddToCart)}>
+                                    {
+                                        product.active === false || (!product.type.startsWith('virtual') && (product.stock?.status === 'epu' || product.stock?.orderable === false)) ? (
+                                            <button type="button" className="w-commerce-commerceaddtocartbutton order-button" disabled={true}>Indisponible</button>
+                                        ) : (
+                                            <>
+                                                <input type="number" min={1} disabled={product.type.startsWith('virtual')} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
+                                                <Button 
+                                                    text={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? t('pages/product:download') : (product.type.startsWith('bundle') ? t('pages/product:compose') : t('pages/product:addToBasket'))}
+                                                    loadingText={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? t('pages/product:downloading') : t('pages/product:addToCartLoading')}
+                                                    isLoading={isLoading}
+                                                    className="w-commerce-commerceaddtocartbutton order-button"
+                                                />
+                                            </>
+                                        )
+                                    }
                                 </form>
                                 { stockDisplay && <div style={{ textAlign: 'right' }}>{formatStock(product.stock)}</div> }
                                 {
@@ -415,7 +464,7 @@ export default function Product({ breadcrumb, origin }) {
                             </a> */}
                         </div>
                         <div className="w-tab-content">
-                            <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`}>{parse(product.description1?.text)}</div>
+                            <div className={`w-tab-pane${tabs === 0 ? ' w--tab-active' : ''}`}>{parse(product.description1?.text || '')}</div>
                             <div className={`w-tab-pane${tabs === 1 ? ' w--tab-active' : ''}`}>
                                 <table>
                                     <tbody>
@@ -500,7 +549,7 @@ export default function Product({ breadcrumb, origin }) {
             <BlockCMS nsCode="info-bottom-1" /> {/* TODO : il faudrait afficher le contenu d'une description de la catégorie rattachée ! */}
 
             {
-                product.type === 'bundle' && (
+                product.type.startsWith('bundle') && (
                     <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
                         <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
                     </Modal>

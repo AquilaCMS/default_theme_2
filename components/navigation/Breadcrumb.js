@@ -29,8 +29,8 @@ export default function Breadcrumb({ items, origin }) {
             <div className="container-ariane w-container">
                 {items.map((item, index) => {
                     return (
-                        <Link href={item.link} key={index}>
-                            <a className="link-ariane-2">&gt; {item.text}</a>
+                        <Link href={item.link} className="link-ariane-2" key={index}>
+                            &gt; {item.text}
                         </Link>
                     );
                 })}

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState }                from 'react';
-import useTranslation                                 from 'next-translate/useTranslation';
-import { deleteItem, updateQtyItem, setCartShipment } from '@aquilacms/aquila-connector/api/cart';
-import { getImage }                                   from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import { useCart, useSiteConfig }                     from '@lib/hooks';
-import { formatPrice, formatStock }                   from '@lib/utils';
+import { useEffect, useRef, useState }                   from 'react';
+import useTranslation                                    from 'next-translate/useTranslation';
+import { deleteCartShipment, deleteItem, updateQtyItem } from '@aquilacms/aquila-connector/api/cart';
+import { getImage }                                      from '@aquilacms/aquila-connector/api/product/helpersProduct';
+import { useCart, useSiteConfig }                        from '@lib/hooks';
+import { formatPrice, formatStock }                      from '@lib/utils';
 
 export default function CartItem({ item }) {
     const [qty, setQty]         = useState(item.quantity);
@@ -29,14 +29,14 @@ export default function CartItem({ item }) {
             onDeleteItem();
         } else {
             try {
-                // Deletion of the cart delivery
-                if (cart.delivery?.method) {
-                    await setCartShipment(cart._id, {}, '', true);
-                }
-
                 // Update quantity
-                const newCart = await updateQtyItem(cart._id, item._id, quantity);
+                let newCart = await updateQtyItem(cart._id, item._id, quantity);
                 setQty(quantity);
+
+                // Deletion of the cart delivery
+                if (newCart.delivery?.method) {
+                    newCart = await deleteCartShipment(newCart._id);
+                }
                 setCart(newCart);
             } catch (err) {
                 setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
@@ -48,13 +48,14 @@ export default function CartItem({ item }) {
     
     const onDeleteItem = async () => {
         try {
+            // Product deletion
+            let newCart = await deleteItem(cart._id, item._id);
+
             // Deletion of the cart delivery
-            if (cart.delivery?.method) {
-                await setCartShipment(cart._id, {}, '', true);
+            if (newCart.delivery?.method) {
+                newCart = await deleteCartShipment(newCart._id);
             }
 
-            // Product deletion
-            const newCart = await deleteItem(cart._id, item._id);
             setCart(newCart);
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
@@ -66,7 +67,7 @@ export default function CartItem({ item }) {
     return (
         <>
             <div className="w-commerce-commercecartitem cart-item">
-                <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60').url} alt={item.code} className="w-commerce-commercecartitemimage" />
+                <img src={getImage({ _id: item.image, title: item.code, extension: '.png', alt: item.code }, '60x60', item.selected_variant).url || '/images/no-image.svg'} alt={item.code} className="w-commerce-commercecartitemimage" />
                 <div className="w-commerce-commercecartiteminfo div-block-4">
                     <div>
                         <div className="w-commerce-commercecartproductname">{item.name}</div>
@@ -96,7 +97,7 @@ export default function CartItem({ item }) {
                         <div className="text-block-2">X</div>
                     </button>
                 </div>
-                <input type="number" className="w-commerce-commercecartquantity" value={qty} onChange={onChangeQtyItem} />
+                <input type="number" className="w-commerce-commercecartquantity" value={qty} onChange={onChangeQtyItem} onWheel={(e) => e.target.blur()} />
             </div>
             {
                 message && (

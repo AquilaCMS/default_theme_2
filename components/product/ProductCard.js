@@ -2,14 +2,15 @@ import { useEffect, useRef, useState }                                  from 're
 import Link                                                             from 'next/link';
 import { useRouter }                                                    from 'next/router';
 import useTranslation                                                   from 'next-translate/useTranslation';
-import cookie                                                           from 'cookie';
 import { Modal }                                                        from 'react-responsive-modal';
 import BundleProduct                                                    from '@components/product/BundleProduct';
 import Button                                                           from '@components/ui/Button';
+import { downloadFreeVirtualProduct }                                   from '@aquilacms/aquila-connector/api/product';
 import { generateSlug, getMainImage }                                   from '@aquilacms/aquila-connector/api/product/helpersProduct';
-import { addToCart, setCartShipment }                                   from '@aquilacms/aquila-connector/api/cart';
+import { addToCart, deleteCartShipment }                                from '@aquilacms/aquila-connector/api/cart';
+import { generateURLImageCache }                                        from '@aquilacms/aquila-connector/lib/utils';
 import { useCart, useComponentData, useShowCartSidebar, useSiteConfig } from '@lib/hooks';
-import { formatPrice, formatStock, unsetCookie }                        from '@lib/utils';
+import { authProtectedPage, formatPrice, formatStock }                  from '@lib/utils';
 
 import 'react-responsive-modal/styles.css';
 
@@ -36,14 +37,6 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
     const stockDisplay = themeConfig?.values?.find(t => t.key === 'displayStockCard')?.value !== undefined ? themeConfig?.values?.find(t => t.key === 'displayStockCard')?.value : false;
 
     useEffect(() => {
-        // Get product ID from cookie
-        const cookieProduct = cookie.parse(document.cookie).product;
-
-        // If product ID matching, scrolling to this product
-        if (cookieProduct === product._id) {
-            productRef.current.scrollIntoView({ behavior: 'smooth' });
-            unsetCookie('product');
-        }
         return () => clearTimeout(timer.current);
     }, []);
 
@@ -75,14 +68,15 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
         e.preventDefault();
         setIsLoading(true);
         try {
+            // Adding product to cart
+            let newCart     = await addToCart(cart._id, product, qty);
+            document.cookie = 'cart_id=' + newCart._id + '; path=/;';
+
             // Deletion of the cart delivery
-            if (cart.delivery?.method) {
-                await setCartShipment(cart._id, {}, '', true);
+            if (newCart.delivery?.method) {
+                newCart = await deleteCartShipment(newCart._id);
             }
 
-            // Adding bundle product to cart
-            const newCart   = await addToCart(cart._id, product, qty);
-            document.cookie = 'cart_id=' + newCart._id + '; path=/;';
             setCart(newCart);
             setShowCartSidebar(true);
         } catch (err) {
@@ -100,6 +94,37 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
     };
 
     const onCloseModal = () => setOpenModal(false);
+
+    const onDownloadVirtualProduct = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        const user = await authProtectedPage(document.cookie);
+        if (!user) {
+            setMessage({ type: 'error', message: t('common:message.loginRequired') });
+            const st      = setTimeout(() => { setMessage(); }, 3000);
+            timer.current = st;
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const res  = await downloadFreeVirtualProduct(product._id);
+            const url  = URL.createObjectURL(res.data);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = product.filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (err) {
+            setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });
+            const st      = setTimeout(() => { setMessage(); }, 3000);
+            timer.current = st;
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     // Pictos
     const pictos = [];
@@ -133,32 +158,47 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
         });
     }
 
+    let bestPrice = 0;
+    if (product.variants_values?.length) {
+        for (const variant of product.variants_values) {
+            if (variant.price.ati.special && (!bestPrice || variant.price.ati.special < bestPrice)) {
+                bestPrice = variant.price.ati.special;
+            } else if (!bestPrice || variant.price.ati.normal < bestPrice) {
+                bestPrice = variant.price.ati.normal;
+            }
+        }
+    }
+
     return (
         <div role="listitem" ref={productRef} className={`menu-item w-dyn-item w-col w-col-${col}`} style={{ display: hidden ? 'none' : 'block' }}>
             {
                 pictos ? pictos.map((picto) => (
                     <div style={picto.style} key={picto.location + Math.random()}>
                         {
-                            picto.pictos && picto.pictos.map((p) => <img src={`/images/picto/32x32-70-0,0,0,0/${p.pictoId}/${p.image}`} alt={p.title} title={p.title} key={p._id} />)
+                            picto.pictos && picto.pictos.map((p) => <img src={generateURLImageCache('picto', '32x32-70-0,0,0,0', p.pictoId, p.code, p.image)} alt={p.title} title={p.title} key={p._id} />)
                         }
                     </div>
                 )) : ''
             }
             <div className="food-card">
-                <Link href={currentSlug}>
-                    <a className="food-image-square w-inline-block">
-                        <img src={mainImage.url || '/images/no-image.svg'} alt={mainImage.alt || 'Image produit'} style={{ 'width': '100%' }} className="food-image" loading="lazy" />
-                    </a>
+                <Link href={currentSlug} className="food-image-square w-inline-block">
+                    <img src={mainImage.url || '/images/no-image.svg'} alt={mainImage.alt || 'Image produit'} style={{ 'width': '100%' }} className="food-image" loading="lazy" />
                 </Link>
                 <div className="food-card-content">
-                    <Link href={currentSlug}>
-                        <a className="food-title-wrap w-inline-block">
-                            <h6 className="heading-9">{product.name}</h6>
-                            <div className="div-block-prix">
-                                <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
-                                { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
-                            </div>
-                        </a>
+                    <Link href={currentSlug} className="food-title-wrap w-inline-block">
+                        <h6 className="heading-9">{product.name}</h6>
+                        <div className="div-block-prix">
+                            {
+                                product.variants_values?.length ? (
+                                    <div className="price">{t('components/product:productCard.from')} {formatPrice(bestPrice)}</div>
+                                ) : (
+                                    <>
+                                        <div className="price">{ product.price.ati.special ? formatPrice(product.price.ati.special) : formatPrice(product.price.ati.normal) }</div>
+                                        { product.price.ati.special ? <div className="price sale">{formatPrice(product.price.ati.normal)}</div> : null }
+                                    </>
+                                )
+                            }
+                        </div>
                     </Link>
                     <p className="paragraph">{product.description2?.title}</p>
                     <div className="add-to-cart">
@@ -170,21 +210,28 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                                     </div>
                                 </div>
                             ) : (
-                                <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type === 'bundle' ? onOpenModal : onAddToCart}>
-                                    <input type="number" disabled={product.type === 'virtual'} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} />
-                                    <Button 
-                                        text={product.type === 'simple' ? t('components/product:productCard.addToBasket') : t('components/product:productCard.compose')}
-                                        loadingText={t('components/product:productCard.addToCartLoading')}
-                                        isLoading={isLoading}
-                                        disabled={product.type === 'virtual'}
-                                        className="w-commerce-commerceaddtocartbutton order-button"
-                                    />
-                                </form>
+                                product.variants_values?.length ? (
+                                    <div className="w-commerce-commerceaddtocartform default-state">
+                                        <Link href={currentSlug} className="w-commerce-commerceaddtocartbutton order-button">
+                                            {t('components/product:productCard.choose')}
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type.startsWith('bundle') ? onOpenModal : onAddToCart)}>
+                                        <input type="number" min={1} disabled={product.type.startsWith('virtual')} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
+                                        <Button 
+                                            text={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? t('components/product:productCard.download') : (product.type.startsWith('bundle') ? t('components/product:productCard.compose') : t('components/product:productCard.addToBasket'))}
+                                            loadingText={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? t('components/product:productCard.downloading') : t('components/product:productCard.addToCartLoading')}
+                                            isLoading={isLoading}
+                                            className="w-commerce-commerceaddtocartbutton order-button"
+                                        />
+                                    </form>
+                                )
                             )
                         }
                     </div>
                     {
-                        stockDisplay && (
+                        !product.variants_values?.length && stockDisplay && (
                             <div style={{ textAlign: 'right' }}>
                                 { formatStock(product.stock) }
                             </div>
@@ -193,7 +240,7 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                 </div>
             </div>
             {
-                product.type === 'bundle' && (
+                product.type.startsWith('bundle') && (
                     <Modal open={openModal} onClose={onCloseModal} center classNames={{ modal: 'bundle-content' }}>
                         <BundleProduct product={product} qty={qty} onCloseModal={onCloseModal} />
                     </Modal>

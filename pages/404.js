@@ -1,19 +1,13 @@
 import Head           from 'next/head';
 import Link           from 'next/link';
-import Layout         from '@components/layouts/Layout';
+import LightLayout    from '@components/layouts/LightLayout';
 import useTranslation from 'next-translate/useTranslation';
-import { dispatcher } from '@lib/redux/dispatcher';
-
-export async function getStaticProps({ locale }) {
-    const pageProps = await dispatcher(locale);
-    return pageProps;
-}
 
 export default function Custom404() {
     const { t } = useTranslation();
 
     return (
-        <Layout>
+        <LightLayout>
             <Head>
                 <title>{t('pages/error:title404')}</title>
             </Head>
@@ -30,6 +24,6 @@ export default function Custom404() {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </LightLayout>
     );
 }

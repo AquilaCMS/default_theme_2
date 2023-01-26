@@ -60,7 +60,7 @@ const createDotEnvIfNotExists = () => {
     }
 };
 
-const createListModulesIfNotExists = async () => { // 
+const createListModulesIfNotExists = async () => {
     console.log('createListModulesIfNotExists');
     // Create folder "modules" if not exists
     const modulesPath = path.join(pathToTheme, 'modules');

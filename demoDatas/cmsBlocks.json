@@ -895,7 +895,8 @@
           "content": "<div class=\"content-section alterned\">\n<div class=\"container\">\n<div class=\"title-wrap-centre\">\n<h2 class=\"heading-2-steps\">How it works</h2>\n</div>\n<div class=\"w-layout-grid works-grid\">\n<div class=\"content-card\"><img src=\"/images/medias/max-90/6081a50949391e1ff816537e/home-promote-product2-step01.png\" alt=\"Step 1\" class=\"step-image\" loading=\"lazy\" />\n<div class=\"content-wrapper\">\n<h5>Add a Menu to the cart</h5>\n<p>Easily adapt your menu using AquilaCMS and allow customers to browse your items.</p>\n</div>\n</div>\n<div class=\"line-column\">\n<div class=\"line\"></div>\n</div>\n<div class=\"content-card\"><img src=\"/images/medias/max-90/6081a51949391e1ff816537f/home-promote-product2-step02.png\" alt=\"Step 2\" class=\"step-image\" loading=\"lazy\" />\n<div class=\"content-wrapper\">\n<h5>Pay and Collect</h5>\n<p>Let your customers order and pay via the powerful ecommerce system, or simple let them call your store.</p>\n</div>\n</div>\n<div class=\"line-column\">\n<div class=\"line\"></div>\n</div>\n<div class=\"content-card\"><img src=\"/images/medias/max-90/6081a52149391e1ff8165380/home-promote-product2-step03.png\" alt=\"Step 3\" class=\"step-image\" loading=\"lazy\" />\n<div class=\"content-wrapper\">\n<h5>Picked up or Delivered?</h5>\n<p>Manage your own logistics and take orders simply through the ecommerce system.</p>\n</div>\n</div>\n</div>\n</div>\n</div>"
         }
       },
-      "code": "home-promote-product-2"
+      "code": "home-promote-product-2",
+      "active" : "true"
     },
     {
       "group": null,
@@ -1083,7 +1084,8 @@
           "description": "Bandeau - home - 2"
         }
       },
-      "code": "Slide-Home-2"
+      "code": "Slide-Home-2",
+      "active" : "true"
     },
     {
       "group": null,
@@ -1307,7 +1309,8 @@
           "description": "Cookie banner"
         }
       },
-      "code": "CookiesBan"
+      "code": "CookiesBan",
+      "active" : "true"
     },
     {
       "group": "Legal",

@@ -7,6 +7,7 @@
         "download": "Télécharger",
         "downloading": "Téléchargement...",
         "addToCartLoading": "Ajout...",
+        "unavailable": "Indisponible",
         "noProduct": "Impossible d'afficher le produit [{{product}}]"
     },
     "productList": {

@@ -56,7 +56,7 @@ export default function CheckoutLogin() {
                 <div className="container-tunnel">
                     <div className="container-step w-container">
                         <h2 className="heading-steps">1</h2>
-                        <h2 className="heading-2-steps">{t('pages/checkout:login.step1')}</h2>
+                        <h2 className="heading-2-steps">{t('pages/checkout:login.step')}</h2>
                     </div>
                     <div className="col-log w-row">
                         <LoginBlock />

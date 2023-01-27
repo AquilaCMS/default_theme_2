@@ -173,10 +173,12 @@ export async function getServerSideProps({ defaultLocale, locale, params, query,
     }
 
     // Price end (min & max)
-    priceEnd = {
-        min: Math.floor(productsData.unfilteredPriceSortMin.ati),
-        max: Math.ceil(productsData.unfilteredPriceSortMax.ati)
-    };
+    if (productsData.unfilteredPriceSortMin) {
+        priceEnd = {
+            min: Math.floor(productsData.unfilteredPriceSortMin.ati),
+            max: Math.ceil(productsData.unfilteredPriceSortMax.ati)
+        };
+    }
 
     // If filter min or max price are outside of range, delete filter price
     if (bodyRequestProducts.filter?.price && (bodyRequestProducts.filter.price.min > priceEnd.max || bodyRequestProducts.filter.price.max < priceEnd.min)) {

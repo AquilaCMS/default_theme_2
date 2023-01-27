@@ -16,7 +16,7 @@
     "title": "Ma commande - Connexion",
     "description": "Ma commande - Connexion",
     "titleH1" : "Ma commande",
-    "step1" : "Connexion / Inscription"
+    "step" : "Connexion / Inscription"
   },
   "address": {
     "title" : "Ma commande - Adresse",

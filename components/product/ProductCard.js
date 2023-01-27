@@ -217,15 +217,19 @@ export default function ProductCard({ type, value, col = 6, hidden = false }) {
                                         </Link>
                                     </div>
                                 ) : (
-                                    <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type.startsWith('bundle') ? onOpenModal : onAddToCart)}>
-                                        <input type="number" min={1} disabled={product.type.startsWith('virtual')} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
-                                        <Button 
-                                            text={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? t('components/product:productCard.download') : (product.type.startsWith('bundle') ? t('components/product:productCard.compose') : t('components/product:productCard.addToBasket'))}
-                                            loadingText={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? t('components/product:productCard.downloading') : t('components/product:productCard.addToCartLoading')}
-                                            isLoading={isLoading}
-                                            className="w-commerce-commerceaddtocartbutton order-button"
-                                        />
-                                    </form>
+                                    product.active === false || (!product.type.startsWith('virtual') && (product.stock?.status === 'epu' || product.stock?.orderable === false)) ? (
+                                        <button type="button" className="w-commerce-commerceaddtocartbutton order-button" disabled={true}>{t('components/product:productCard.unavailable')}</button>
+                                    ) : (
+                                        <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type.startsWith('bundle') ? onOpenModal : onAddToCart)}>
+                                            <input type="number" min={1} disabled={product.type.startsWith('virtual')} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />
+                                            <Button 
+                                                text={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? t('components/product:productCard.download') : (product.type.startsWith('bundle') ? t('components/product:productCard.compose') : t('components/product:productCard.addToBasket'))}
+                                                loadingText={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? t('components/product:productCard.downloading') : t('components/product:productCard.addToCartLoading')}
+                                                isLoading={isLoading}
+                                                className="w-commerce-commerceaddtocartbutton order-button"
+                                            />
+                                        </form>
+                                    )
                                 )
                             )
                         }

@@ -418,7 +418,7 @@ export default function Product({ breadcrumb, origin }) {
                                 <form className="w-commerce-commerceaddtocartform default-state" onSubmit={product.type.startsWith('virtual') && product.price.ati.normal === 0 ? onDownloadVirtualProduct : (product.type.startsWith('bundle') ? onOpenModal : onAddToCart)}>
                                     {
                                         product.active === false || (!product.type.startsWith('virtual') && (product.stock?.status === 'epu' || product.stock?.orderable === false)) ? (
-                                            <button type="button" className="w-commerce-commerceaddtocartbutton order-button" disabled={true}>Indisponible</button>
+                                            <button type="button" className="w-commerce-commerceaddtocartbutton order-button" disabled={true}>{t('pages/product:unavailable')}</button>
                                         ) : (
                                             <>
                                                 <input type="number" min={1} disabled={product.type.startsWith('virtual')} className="w-commerce-commerceaddtocartquantityinput quantity" value={qty} onChange={onChangeQty} onWheel={(e) => e.target.blur()} />

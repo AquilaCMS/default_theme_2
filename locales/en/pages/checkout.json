@@ -16,7 +16,7 @@
     "title": "My order - Log In",
     "description": "My order - Log In",
     "titleH1" : "My order",
-    "step1" : "Log In / Sign In"
+    "step" : "Log In / Sign In"
   },
   "address": {
     "title" : "My order - Address",

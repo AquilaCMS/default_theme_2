@@ -162,7 +162,7 @@
       "stock": {
         "qty": 0,
         "qty_booked": 0,
-        "orderable": false,
+        "orderable": true,
         "status": "liv",
         "label": "available",
         "translation": {
@@ -1793,7 +1793,8 @@
         "qty": 0,
         "qty_booked": 0,
         "orderable": false,
-        "status": "liv",
+        "status": "epu",
+        "label" : "exhausted",
         "qty_real": 0
       },
       "price": {

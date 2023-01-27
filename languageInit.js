@@ -17,13 +17,16 @@ const setLanguage = (langs, defaultLanguage) => {
     json.defaultLocale = defaultLanguage; // Replace or create "defaultLocale" property
     
     // Process to retrieve each module folder
-    const anyPages   = json.pages['*'];
-    const moduleList = fs.readdirSync(path.join(pathToTheme, 'modules'), { withFileTypes: true })
-        .filter((item) => item.isDirectory())
-        .map((item) => item.name);
-    for (let i = 0; i < moduleList.length; i++) {
-        const modulePath = `modules/${moduleList[i]}`;
-        anyPages.push(modulePath);
+    const anyPages        = json.pages['*'];
+    const moduleThemePath = path.join(pathToTheme, 'modules');
+    if(fs.existsSync(moduleThemePath)) {
+        const moduleList = fs.readdirSync(path.join(pathToTheme, 'modules'), { withFileTypes: true })
+            .filter((item) => item.isDirectory())
+            .map((item) => item.name);
+        for (let i = 0; i < moduleList.length; i++) {
+            const modulePath = `modules/${moduleList[i]}`;
+            anyPages.push(modulePath);
+        }
     }
     json.pages['*'] = anyPages;
 

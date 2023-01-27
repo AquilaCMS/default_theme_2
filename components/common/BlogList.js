@@ -74,7 +74,7 @@ export default function BlogList({ list = [] }) {
                                                     className="w-commerce-commerceaddtocartbutton order-button" 
                                                     style={{ justifyContent: 'center' }}
                                                 >
-                                                    Lire plus
+                                                    {t('components/blogList:readMore')}
                                                 </button>
                                             </Link>
                                         </form>

@@ -19,7 +19,7 @@ export default function SearchBar() {
     const search = router.query.search;
 
     return (
-        <div className="container-newsletter" style={{ paddingBottom: '0px' }}>
+        <div className="container-newsletter" style={{ paddingBottom: '0px', marginTop: '10px' }}>
             <div>
                 <form className="form-3" onSubmit={handleSearch}>
                     <input type="text" className="text-field-2 w-input" name="search" maxLength="256" defaultValue={search} />

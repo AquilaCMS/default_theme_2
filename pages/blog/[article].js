@@ -58,7 +58,7 @@ export async function getServerSideProps({ defaultLocale, locale, params, query,
 }
 
 export default function BlogArticle({ blogArticle, breadcrumb, origin }) {
-    const { lang } = useTranslation();
+    const { lang, t } = useTranslation();
 
     return (
         <Layout>
@@ -75,15 +75,13 @@ export default function BlogArticle({ blogArticle, breadcrumb, origin }) {
                 <div className="container-flex-2">
                     <div className="container w-container">
                         <h3>{blogArticle.title}</h3>
-                        <p className="blog-date" style={{ fontStyle: 'italic' }}>Le {formatDate(blogArticle.createdAt, lang, { hour: '2-digit', minute: '2-digit', weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                        <p className="blog-date" style={{ fontStyle: 'italic' }}>{formatDate(blogArticle.createdAt, lang, { hour: '2-digit', minute: '2-digit', weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>
                         <div style={{ borderTop: '2px solid #ff8946', paddingTop: '15px', borderBottom: '2px solid #ff8946' }}>{parse(blogArticle.content.text)}</div>
                         <Link href='/blog'>
-                            <button type="button" className="button bottomspace w-button" style={{ marginTop: '60px' }}>Retour</button>
+                            <button type="button" className="button bottomspace w-button" style={{ marginTop: '60px' }}>{t('common:previous')}</button>
                         </Link>
                     </div> 
-                    
                 </div>
-               
             </div>
 
             <BlockCMS nsCode="info-bottom-1" /> {/* TODO : il faudrait afficher le contenu d'une description de la catégorie rattachée ! */}

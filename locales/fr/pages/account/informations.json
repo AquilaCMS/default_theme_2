@@ -10,6 +10,11 @@
   "firstname":"Prénom",
   "lastname":"Nom",
   "newsletter":"Je m'abonne à la newsletter",
+  "password" : {
+    "title" : "Changer votre mot de passe",
+    "email" : "Si vous souhaitez changer votre mot de passe, cliquez sur le bouton ci-dessous, nous vous enverrons un lien par email afin de modifier votre mot de passe.",
+    "msgInfo" : "Vous allez recevoir un mail pour réinitialiser votre mot de passe !"
+  },
   "line1":"Adresse",
   "line2":"Adresse 2",
   "city":"Ville",

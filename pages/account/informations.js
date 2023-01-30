@@ -3,6 +3,7 @@ import useTranslation                                   from 'next-translate/use
 import AccountLayout                                    from '@components/account/AccountLayout';
 import Button                                           from '@components/ui/Button';
 import NextSeoCustom                                    from '@components/tools/NextSeoCustom';
+import { sendMailResetPassword }                        from '@aquilacms/aquila-connector/api/login';
 import { getNewsletter, setNewsletter }                 from '@aquilacms/aquila-connector/api/newsletter';
 import { getTerritories }                               from '@aquilacms/aquila-connector/api/territory';
 import { setUser, setAddressesUser }                    from '@aquilacms/aquila-connector/api/user';
@@ -33,10 +34,11 @@ export async function getServerSideProps({ locale, req, res }) {
 export default function Account({ territories, user }) {
     const [sameAddress, setSameAddress]         = useState(false);
     const [optinNewsletter, setOptinNewsletter] = useState(false);
+    const [messageReset, setMessageReset]       = useState();
     const [message, setMessage]                 = useState();
     const [isLoading, setIsLoading]             = useState(false);
     const billingCountryRef                     = useRef(null);
-    const { t }                                 = useTranslation();
+    const { lang, t }                           = useTranslation();
 
     useEffect(() => {
         const billingAddress  = user.addresses[user.billing_address];
@@ -128,6 +130,18 @@ export default function Account({ territories, user }) {
         }
     };
 
+    const resetPassword = async () => {
+        setIsLoading(true);
+        try {
+            await sendMailResetPassword(user.email, lang);
+            setMessageReset({ type: 'info', message: t('pages/account/informations:password.msgInfo') });
+        } catch (err) {
+            setMessageReset({ type: 'error', message: err.message || t('common:message.unknownError') });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <AccountLayout active="1">
             <NextSeoCustom
@@ -182,10 +196,26 @@ export default function Account({ territories, user }) {
                                     </label>
                                 </div>
                             </div>
-                            {/* <div className="w-commerce-commercecheckoutrow">
-                                <div className="w-commerce-commercecheckoutcolumn"><label>Mot de passe actuel</label><input type="text" name="address_city" required className="w-commerce-commercecheckoutshippingcity input-field" /></div>
-                                <div className="w-commerce-commercecheckoutcolumn"><label>Nouveau mot de passe</label><input type="text" name="address_state" className="w-commerce-commercecheckoutshippingstateprovince input-field" /></div>
-                            </div> */}
+                            <div className="w-commerce-commercecheckoutrow" style={{ marginTop: '10px' }}>
+                                <p className="checkbox-label-allergene w-form-label">{t('pages/account/informations:password.email')}</p>
+                            </div>
+                            <div className="w-commerce-commercecheckoutrow" style={{ justifyContent: 'center' }}>
+                                <Button
+                                    type="button"
+                                    className="w-button"
+                                    text={t('pages/account/informations:password.title')}
+                                    hookOnClick={resetPassword}
+                                />
+                            </div>
+                            {
+                                messageReset && (
+                                    <div className={`w-commerce-commerce${messageReset.type}`}>
+                                        <div>
+                                            {messageReset.message}
+                                        </div>
+                                    </div>
+                                )
+                            } 
                         </div>
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
                             <h5>{t('pages/account/informations:titleDelivery')}</h5>

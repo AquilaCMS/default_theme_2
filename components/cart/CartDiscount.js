@@ -1,4 +1,4 @@
-import { useRef, useState }            from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useTranslation                  from 'next-translate/useTranslation';
 import Button                          from '@components/ui/Button';
 import { addDiscount, deleteDiscount } from '@aquilacms/aquila-connector/api/cart';
@@ -11,6 +11,11 @@ export default function CartDiscount() {
     const [message, setMessage]     = useState();
     const [isLoading, setIsLoading] = useState(false);
     const { t }                     = useTranslation();
+
+    useEffect(() => {
+        setDiscount(cart.promos[0]?.code || '');
+        return () => clearTimeout(timer.current);
+    }, [cart]);
 
     const onSubmitDiscount = async () => {
         if (!discount) {

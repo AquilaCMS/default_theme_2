@@ -312,7 +312,7 @@ export default function Product({ breadcrumb, origin }) {
             <ProductJsonLd
                 productName={product.name}
                 images={tabImageURL}
-                description={product.description2?.text}
+                description={product.description2?.text || ''}
                 brand={product.trademark?.name}
                 //     reviews={[
                 //         {

@@ -31,10 +31,10 @@
     "step" : "Delivery"
   },
   "payment" : {
-    "title" : "My order - Payment method",
-    "description" : "My order - Payment method",
+    "title" : "My order - Payment",
+    "description" : "My order - Payment",
     "titleH1" : "My order",
-    "step" : "Payment method"
+    "step" : "Payment"
   },
   "confirmation" : {
     "title" : "My order - Confirmation",

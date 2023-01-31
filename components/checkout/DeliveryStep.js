@@ -119,9 +119,21 @@ export default function DeliveryStep() {
 
                 <div className="w-commerce-commercecartfooter" style={{ width: '100%' }}>
                     <div className="w-commerce-commercecartlineitem cart-line-item">
+                        <div>{t('pages/checkout:cart.subTotal')}</div>
+                        <div>{formatPrice(cart.priceSubTotal.ati)}</div>
+                    </div>
+                    <div className="w-commerce-commercecartlineitem cart-line-item">
                         <div>{t('components/cart:cartListItem.delivery')}</div>
                         <div>{formatPrice(deliveryValue)}</div>
                     </div>
+                    {
+                        cart.promos[0] && (
+                            <div className="w-commerce-commercecartlineitem cart-line-item">
+                                <div>{t('pages/checkout:cart.discount')}</div>
+                                <div>- {formatPrice(cart.promos[0].discountATI)}</div>
+                            </div>
+                        )
+                    }
                     <div className="w-commerce-commercecartlineitem cart-line-item">
                         <div>{t('components/cart:cartListItem.total')}</div>
                         <div className="w-commerce-commercecartordervalue text-block">

@@ -215,7 +215,7 @@ export default function Account({ territories, user }) {
                                         </div>
                                     </div>
                                 )
-                            } 
+                            }
                         </div>
                         <div className="w-commerce-commercecheckoutsummaryblockheader block-header">
                             <h5>{t('pages/account/informations:titleDelivery')}</h5>

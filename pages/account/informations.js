@@ -3,10 +3,12 @@ import useTranslation                                   from 'next-translate/use
 import AccountLayout                                    from '@components/account/AccountLayout';
 import Button                                           from '@components/ui/Button';
 import NextSeoCustom                                    from '@components/tools/NextSeoCustom';
+import { deleteCartShipment, setCartAddresses }         from '@aquilacms/aquila-connector/api/cart';
 import { sendMailResetPassword }                        from '@aquilacms/aquila-connector/api/login';
 import { getNewsletter, setNewsletter }                 from '@aquilacms/aquila-connector/api/newsletter';
 import { getTerritories }                               from '@aquilacms/aquila-connector/api/territory';
 import { setUser, setAddressesUser }                    from '@aquilacms/aquila-connector/api/user';
+import { useCart }                                      from '@lib/hooks';
 import { initAxios, authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                                   from '@lib/redux/dispatcher';
 
@@ -38,6 +40,7 @@ export default function Account({ territories, user }) {
     const [message, setMessage]                 = useState();
     const [isLoading, setIsLoading]             = useState(false);
     const billingCountryRef                     = useRef(null);
+    const { cart, setCart }                     = useCart();
     const { lang, t }                           = useTranslation();
 
     useEffect(() => {
@@ -122,6 +125,18 @@ export default function Account({ territories, user }) {
 
             // Set user addresses
             await setAddressesUser(updateUser._id, updateUser.billing_address, updateUser.delivery_address, addresses);
+
+            if (cart._id) {
+                // Set cart addresses
+                let newCart = await setCartAddresses(cart._id, { billing: addresses[0], delivery: addresses[1] });
+
+                // Deletion of the cart delivery
+                if (newCart.delivery?.method) {
+                    newCart = await deleteCartShipment(newCart._id);
+                }
+                setCart(newCart);
+            }
+            
             setMessage({ type: 'info', message: t('common:message.saveData') });
         } catch (err) {
             setMessage({ type: 'error', message: err.message || t('common:message.unknownError') });

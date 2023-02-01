@@ -17,7 +17,7 @@ export default function LightLayout({ children }) {
             <div id="Navigation" data-collapse="medium" role="banner" className="navbar w-nav">
                 <div className="navigation-container">
                     <div className="navigation-left">
-                        <Link href='/' aria-current="page" className="brand w-nav-brand w--current">
+                        <Link href="/" aria-current="page" className="brand w-nav-brand w--current">
                             <img src="/images/medias/max-100/605363104b9ac91f54fcabac/Logo.jpg" alt={environment?.siteName} />
                         </Link>
                     </div>

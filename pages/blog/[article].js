@@ -77,7 +77,7 @@ export default function BlogArticle({ blogArticle, breadcrumb, origin }) {
                         <h3>{blogArticle.title}</h3>
                         <p className="blog-date" style={{ fontStyle: 'italic' }}>{formatDate(blogArticle.createdAt, lang, { hour: '2-digit', minute: '2-digit', weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>
                         <div style={{ borderTop: '2px solid #ff8946', paddingTop: '15px', borderBottom: '2px solid #ff8946' }}>{parse(blogArticle.content.text)}</div>
-                        <Link href='/blog'>
+                        <Link href="/blog">
                             <button type="button" className="button bottomspace w-button" style={{ marginTop: '60px' }}>{t('common:previous')}</button>
                         </Link>
                     </div> 

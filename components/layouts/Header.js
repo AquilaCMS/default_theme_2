@@ -20,10 +20,9 @@ export default function Header() {
         <div id="Navigation" data-collapse="medium" role="banner" className="navbar w-nav">
             <div className="navigation-container">
                 <div className="navigation-left">
-                    <Link href='/' aria-current="page" className="brand w-nav-brand w--current">
-                        <img src="/images/medias/max-100/605363104b9ac91f54fcabac/Logo.jpg" alt={environment?.siteName} style={{ maxHeight: '124px' }} />
+                    <Link href="/" aria-current="page" className="brand w-nav-brand w--current">
+                        <img src="/images/medias/max-100/605363104b9ac91f54fcabac/Logo.jpg" alt={environment?.siteName} />
                     </Link>
-                    
                 </div>
                 <div className="navigation-right">
                     
@@ -42,7 +41,6 @@ export default function Header() {
                         {showCartSidebar && <CartSidebarView hideCartSidebar={hideCartSidebar} />}
 
                     </div>
-
                 </div>
             </div>
         </div>

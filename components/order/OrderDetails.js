@@ -228,14 +228,6 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                     <p className="prix-tunnel">{formatPrice(order.priceSubTotal.ati)}</p>
                                 </div>
                             </div>
-                            <div className="w-row">
-                                <div className="w-col w-col-7 w-col-small-7 w-col-tiny-7">
-                                    <p className="label-tunnel">{t('components/orderDetails:delivery')}</p>
-                                </div>
-                                <div className="w-col w-col-5 w-col-small-5 w-col-tiny-5">
-                                    <p className="prix-tunnel">{formatPrice(order.delivery.price.ati)}</p>
-                                </div>
-                            </div>
                             {
                                 order.promos[0] && (
                                     <div className="w-row">
@@ -248,6 +240,14 @@ export default function OrderDetails({ order, setOrders = undefined }) {
                                     </div>
                                 )
                             }
+                            <div className="w-row">
+                                <div className="w-col w-col-7 w-col-small-7 w-col-tiny-7">
+                                    <p className="label-tunnel">{t('components/orderDetails:delivery')}</p>
+                                </div>
+                                <div className="w-col w-col-5 w-col-small-5 w-col-tiny-5">
+                                    <p className="prix-tunnel">{formatPrice(order.delivery.price.ati)}</p>
+                                </div>
+                            </div>
                             <div className="w-row">
                                 <div className="w-col w-col-7 w-col-small-7 w-col-tiny-7">
                                     <p className="label-tunnel">{t('components/orderDetails:total')}</p>

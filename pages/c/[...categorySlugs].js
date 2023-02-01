@@ -322,7 +322,7 @@ export default function Category({ breadcrumb, category, limit, origin, error })
                     category.action !== 'catalog' ? (
                         <>
                             <div className="container w-container">
-                                <p className="paragraph-seo">{parse(category.extraText2 || '')}</p>
+                                <div className="paragraph-seo">{parse(category.extraText2 || '')}</div>
                             </div>
                             <div className="container-col">
                                 <div className="tabs w-tabs">
@@ -339,7 +339,7 @@ export default function Category({ breadcrumb, category, limit, origin, error })
                     ) : (
                         <>
                             <div className="container w-container">
-                                <p className="paragraph-seo">{parse(category.extraText2 || '')}</p>
+                                <div className="paragraph-seo">{parse(category.extraText2 || '')}</div>
                                 {
                                     moduleHook('category-top-list')
                                 }

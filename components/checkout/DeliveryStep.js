@@ -122,10 +122,6 @@ export default function DeliveryStep() {
                         <div>{t('pages/checkout:cart.subTotal')}</div>
                         <div>{formatPrice(cart.priceSubTotal.ati)}</div>
                     </div>
-                    <div className="w-commerce-commercecartlineitem cart-line-item">
-                        <div>{t('components/cart:cartListItem.delivery')}</div>
-                        <div>{formatPrice(deliveryValue)}</div>
-                    </div>
                     {
                         cart.promos[0] && (
                             <div className="w-commerce-commercecartlineitem cart-line-item">
@@ -134,6 +130,10 @@ export default function DeliveryStep() {
                             </div>
                         )
                     }
+                    <div className="w-commerce-commercecartlineitem cart-line-item">
+                        <div>{t('components/cart:cartListItem.delivery')}</div>
+                        <div>{formatPrice(deliveryValue)}</div>
+                    </div>
                     <div className="w-commerce-commercecartlineitem cart-line-item">
                         <div>{t('components/cart:cartListItem.total')}</div>
                         <div className="w-commerce-commercecartordervalue text-block">

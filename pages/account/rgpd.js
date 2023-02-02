@@ -7,6 +7,7 @@ import BlockCMS                                                      from '@comp
 import NextSeoCustom                                                 from '@components/tools/NextSeoCustom';
 import { getBlocksCMS }                                              from '@aquilacms/aquila-connector/api/blockcms';
 import { dataUserExport, deleteUser }                                from '@aquilacms/aquila-connector/api/user';
+import { useSiteConfig }                                             from '@lib/hooks';
 import { initAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                                from '@lib/redux/dispatcher';
 
@@ -36,6 +37,7 @@ export default function Rgpd({ user }) {
     const [openModal, setOpenModal] = useState();
     const [message, setMessage]     = useState();
     const router                    = useRouter();
+    const { environment }           = useSiteConfig();
     const { t }                     = useTranslation();
 
     const exportData = async () => {
@@ -79,7 +81,7 @@ export default function Rgpd({ user }) {
         <AccountLayout active="3">
             <NextSeoCustom
                 noindex={true}
-                title={t('pages/account/rgpd:title')}
+                title={`${environment?.siteName} - ${t('pages/account/rgpd:title')}`}
                 description=""
             />
             

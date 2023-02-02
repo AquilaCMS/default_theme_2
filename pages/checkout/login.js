@@ -5,7 +5,7 @@ import Layout                                           from '@components/layout
 import LoginBlock                                       from '@components/login/LoginBlock';
 import RegisterBlock                                    from '@components/login/RegisterBlock';
 import NextSeoCustom                                    from '@components/tools/NextSeoCustom';
-import { useCart }                                      from '@lib/hooks';
+import { useCart, useSiteConfig }                       from '@lib/hooks';
 import { initAxios, authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                                   from '@lib/redux/dispatcher';
 
@@ -21,9 +21,10 @@ export async function getServerSideProps({ locale, req, res }) {
 }
 
 export default function CheckoutLogin() {
-    const router   = useRouter();
-    const { cart } = useCart();
-    const { t }    = useTranslation();
+    const router          = useRouter();
+    const { cart }        = useCart();
+    const { environment } = useSiteConfig();
+    const { t }           = useTranslation();
 
     useEffect(() => {
         // Check if the cart is empty
@@ -40,7 +41,7 @@ export default function CheckoutLogin() {
         <Layout>
             <NextSeoCustom
                 noindex={true}
-                title={t('pages/checkout:login.title')}
+                title={`${environment?.siteName} - ${t('pages/checkout:login.title')}`}
                 description={t('pages/checkout:login.description')}
             />
             

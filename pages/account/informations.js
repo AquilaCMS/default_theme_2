@@ -8,7 +8,7 @@ import { sendMailResetPassword }                        from '@aquilacms/aquila-
 import { getNewsletter, setNewsletter }                 from '@aquilacms/aquila-connector/api/newsletter';
 import { getTerritories }                               from '@aquilacms/aquila-connector/api/territory';
 import { setUser, setAddressesUser }                    from '@aquilacms/aquila-connector/api/user';
-import { useCart }                                      from '@lib/hooks';
+import { useCart, useSiteConfig }                       from '@lib/hooks';
 import { initAxios, authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                                   from '@lib/redux/dispatcher';
 
@@ -41,6 +41,7 @@ export default function Account({ territories, user }) {
     const [isLoading, setIsLoading]             = useState(false);
     const billingCountryRef                     = useRef(null);
     const { cart, setCart }                     = useCart();
+    const { environment }                       = useSiteConfig();
     const { lang, t }                           = useTranslation();
 
     useEffect(() => {
@@ -161,7 +162,7 @@ export default function Account({ territories, user }) {
         <AccountLayout active="1">
             <NextSeoCustom
                 noindex={true}
-                title={t('pages/account/informations:title')}
+                title={`${environment?.siteName} - ${t('pages/account/informations:title')}`}
                 description=""
             />
             

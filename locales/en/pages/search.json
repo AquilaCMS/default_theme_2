@@ -1,3 +1,4 @@
 {
+    "title" : "Search",
     "results" : "{{count}} search result(s) \"{{search}}\""
 }

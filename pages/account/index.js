@@ -7,7 +7,7 @@ import AccountLayout                                                            
 import OrderDetails                                                                                  from '@components/order/OrderDetails';
 import NextSeoCustom                                                                                 from '@components/tools/NextSeoCustom';
 import { getOrders }                                                                                 from '@aquilacms/aquila-connector/api/order';
-import { useSelectPage, useOrders }                                                                  from '@lib/hooks';
+import { useSelectPage, useOrders, useSiteConfig }                                                   from '@lib/hooks';
 import { initAxios, authProtectedPage, serverRedirect, formatPrice, formatOrderStatus, unsetCookie } from '@lib/utils';
 import { dispatcher }                                                                                from '@lib/redux/dispatcher';
 
@@ -65,6 +65,7 @@ export default function Account({ limit }) {
     const { selectPage, setSelectPage } = useSelectPage();
     const { orders, setOrders }         = useOrders();
     const router                        = useRouter();
+    const { environment }               = useSiteConfig();
     const { lang, t }                   = useTranslation();
 
     // Getting URL page
@@ -106,7 +107,7 @@ export default function Account({ limit }) {
         <AccountLayout active="2">
             <NextSeoCustom
                 noindex={true}
-                title={t('pages/account/index:title')}
+                title={`${environment?.siteName} - ${t('pages/account/index:title')}`}
                 description=""
             />
             

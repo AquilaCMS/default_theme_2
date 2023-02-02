@@ -1,12 +1,12 @@
-import absoluteUrl       from 'next-absolute-url';
-import useTranslation    from 'next-translate/useTranslation';
-import Layout            from '@components/layouts/Layout';
-import NextSeoCustom     from '@components/tools/NextSeoCustom';
-import BlockCMS          from '@components/common/BlockCMS';
-import { dispatcher }    from '@lib/redux/dispatcher';
-import { getPageStatic } from '@aquilacms/aquila-connector/api/static';
-import { useStaticPage } from '@lib/hooks';
-import { initAxios }     from '@lib/utils';
+import absoluteUrl                      from 'next-absolute-url';
+import useTranslation                   from 'next-translate/useTranslation';
+import Layout                           from '@components/layouts/Layout';
+import NextSeoCustom                    from '@components/tools/NextSeoCustom';
+import BlockCMS                         from '@components/common/BlockCMS';
+import { dispatcher }                   from '@lib/redux/dispatcher';
+import { getPageStatic }                from '@aquilacms/aquila-connector/api/static';
+import { useStaticPage, useSiteConfig } from '@lib/hooks';
+import { initAxios }                    from '@lib/utils';
 
 export async function getServerSideProps({ locale, query, req, res }) {
     initAxios(locale, req, res);
@@ -35,13 +35,14 @@ export async function getServerSideProps({ locale, query, req, res }) {
 }
 
 export default function Home({ origin }) {
-    const { staticPage } = useStaticPage();
-    const { lang }       = useTranslation();
+    const { staticPage }  = useStaticPage();
+    const { environment } = useSiteConfig();
+    const { lang }        = useTranslation();
 
     return (
         <Layout>
             <NextSeoCustom
-                title={staticPage.title}
+                title={`${environment?.siteName} - ${staticPage.title}`}
                 description={staticPage.metaDesc}
                 canonical={origin}
                 lang={lang}

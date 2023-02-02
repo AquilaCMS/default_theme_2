@@ -237,11 +237,11 @@ export async function getServerSideProps({ defaultLocale, locale, params, query,
 }
 
 export default function Category({ breadcrumb, category, limit, origin, error }) {
-    const [message, setMessage] = useState();
-    const { categoryProducts }  = useCategoryProducts();
-    const { themeConfig }       = useSiteConfig();
-    const router                = useRouter();
-    const { lang, t }           = useTranslation();
+    const [message, setMessage]        = useState();
+    const { categoryProducts }         = useCategoryProducts();
+    const { environment, themeConfig } = useSiteConfig();
+    const router                       = useRouter();
+    const { lang, t }                  = useTranslation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -293,7 +293,7 @@ export default function Category({ breadcrumb, category, limit, origin, error })
     return (
         <Layout>
             <NextSeoCustom
-                title={category.name}
+                title={`${environment?.siteName} - ${category.name}`}
                 description={category.metaDescription}
                 canonical={`${origin}${url}${queryPage > 1 ? `?page=${queryPage}` : ''}`}
                 lang={lang}

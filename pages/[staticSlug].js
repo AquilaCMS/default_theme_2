@@ -1,14 +1,14 @@
-import absoluteUrl       from 'next-absolute-url';
-import useTranslation    from 'next-translate/useTranslation';
-import ErrorPage         from '@pages/_error';
-import Layout            from '@components/layouts/Layout';
-import NextSeoCustom     from '@components/tools/NextSeoCustom';
-import BlockCMS          from '@components/common/BlockCMS';
-import { dispatcher }    from '@lib/redux/dispatcher';
-import { getPageStatic } from '@aquilacms/aquila-connector/api/static';
-import { getBlocksCMS }  from '@aquilacms/aquila-connector/api/blockcms';
-import { useStaticPage } from '@lib/hooks';
-import { initAxios }     from '@lib/utils';
+import absoluteUrl                      from 'next-absolute-url';
+import useTranslation                   from 'next-translate/useTranslation';
+import ErrorPage                        from '@pages/_error';
+import Layout                           from '@components/layouts/Layout';
+import NextSeoCustom                    from '@components/tools/NextSeoCustom';
+import BlockCMS                         from '@components/common/BlockCMS';
+import { dispatcher }                   from '@lib/redux/dispatcher';
+import { getPageStatic }                from '@aquilacms/aquila-connector/api/static';
+import { getBlocksCMS }                 from '@aquilacms/aquila-connector/api/blockcms';
+import { useStaticPage, useSiteConfig } from '@lib/hooks';
+import { initAxios }                    from '@lib/utils';
 
 export async function getServerSideProps({ locale, params, query, req, res }) {
     initAxios(locale, req, res);
@@ -50,8 +50,9 @@ export async function getServerSideProps({ locale, params, query, req, res }) {
 }
 
 export default function StaticPage({ error, origin }) {
-    const { staticPage } = useStaticPage();
-    const { lang }       = useTranslation();
+    const { staticPage }  = useStaticPage();
+    const { environment } = useSiteConfig();
+    const { lang }        = useTranslation();
 
     if (error || !staticPage._id) {
         return (<ErrorPage statusCode={404} />);
@@ -61,7 +62,7 @@ export default function StaticPage({ error, origin }) {
     return (
         <Layout>
             <NextSeoCustom
-                title={staticPage.title}
+                title={`${environment?.siteName} - ${staticPage.title}`}
                 description={staticPage.metaDesc}
                 canonical={`${origin}/${staticPage.slug[lang]}`}
                 lang={lang}

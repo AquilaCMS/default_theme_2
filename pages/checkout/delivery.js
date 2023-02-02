@@ -2,6 +2,7 @@ import useTranslation                                               from 'next-t
 import DeliveryStep                                                 from '@components/checkout/DeliveryStep';
 import LightLayout                                                  from '@components/layouts/LightLayout';
 import NextSeoCustom                                                from '@components/tools/NextSeoCustom';
+import { useSiteConfig }                                            from '@lib/hooks';
 import { initAxios, authProtectedPage, serverRedirect, moduleHook } from '@lib/utils';
 import { dispatcher }                                               from '@lib/redux/dispatcher';
 
@@ -18,20 +19,21 @@ export async function getServerSideProps({ locale, req, res }) {
 }
 
 export default function CheckoutDelivery({ user }) {
-    const { t } = useTranslation();
+    const { environment } = useSiteConfig();
+    const { t }           = useTranslation();
     
     return (
         <LightLayout>
             <NextSeoCustom
                 noindex={true}
-                title={t('pages/checkout:address.title')}
-                description={t('pages/checkout:address.description')}
+                title={`${environment?.siteName} - ${t('pages/checkout:delivery.title')}`}
+                description={t('pages/checkout:delivery.description')}
             />
             
             <div className="header-section-panier">
                 <div className="container-flex-2">
                     <div className="title-wrap-centre">
-                        <h1 className="header-h1">{t('pages/checkout:address.titleH1')}</h1>
+                        <h1 className="header-h1">{t('pages/checkout:delivery.titleH1')}</h1>
                     </div>
                 </div>
             </div>

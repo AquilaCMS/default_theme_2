@@ -3,6 +3,7 @@ import Layout                                           from '@components/layout
 import LoginBlock                                       from '@components/login/LoginBlock';
 import RegisterBlock                                    from '@components/login/RegisterBlock';
 import NextSeoCustom                                    from '@components/tools/NextSeoCustom';
+import { useSiteConfig }                                from '@lib/hooks';
 import { initAxios, authProtectedPage, serverRedirect } from '@lib/utils';
 import { dispatcher }                                   from '@lib/redux/dispatcher';
 
@@ -18,12 +19,13 @@ export async function getServerSideProps({ locale, req, res }) {
 }
 
 export default function Login() {
-    const { t } = useTranslation();
+    const { environment } = useSiteConfig();
+    const { t }           = useTranslation();
     
     return (
         <Layout>
             <NextSeoCustom
-                title={t('pages/account/login:title')}
+                title={`${environment?.siteName} - ${t('pages/account/login:title')}`}
                 description={t('pages/account/login:description')}
             />
             

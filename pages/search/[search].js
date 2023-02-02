@@ -167,10 +167,10 @@ export async function getServerSideProps({ locale, params, query, req, res, reso
 }
 
 export default function Search({ search, error }) {
-    const [message, setMessage] = useState();
-    const { categoryProducts }  = useCategoryProducts();
-    const { themeConfig }       = useSiteConfig();
-    const { lang, t }           = useTranslation();
+    const [message, setMessage]        = useState();
+    const { categoryProducts }         = useCategoryProducts();
+    const { environment, themeConfig } = useSiteConfig();
+    const { lang, t }                  = useTranslation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -208,8 +208,7 @@ export default function Search({ search, error }) {
         <Layout>
             <NextSeoCustom
                 noindex={true}
-                title="Recherche"
-                description="Recherche"
+                title={`${environment?.siteName} - ${t('pages/search:title')}`}
             />
 
             <div className="content-section-carte">

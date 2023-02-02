@@ -4,7 +4,7 @@ import CartDiscount               from '@components/cart/CartDiscount';
 import CartItem                   from '@components/cart/CartItem';
 import Layout                     from '@components/layouts/Layout';
 import NextSeoCustom              from '@components/tools/NextSeoCustom';
-import { useCart }                from '@lib/hooks';
+import { useCart, useSiteConfig } from '@lib/hooks';
 import { initAxios, formatPrice } from '@lib/utils';
 import { dispatcher }             from '@lib/redux/dispatcher';
 
@@ -16,14 +16,15 @@ export async function getServerSideProps({ locale, req, res }) {
 }
 
 export default function CheckoutCart() {
-    const { cart } = useCart();
-    const { t }    = useTranslation();
+    const { cart }        = useCart();
+    const { environment } = useSiteConfig();
+    const { t }           = useTranslation();
 
     return (
         <Layout>
             <NextSeoCustom
                 noindex={true}
-                title={t('pages/checkout:cart.title')}
+                title={`${environment?.siteName} - ${t('pages/checkout:cart.title')}`}
                 description={t('pages/checkout:cart.description')}
             />
             

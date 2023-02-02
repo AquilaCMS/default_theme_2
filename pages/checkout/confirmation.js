@@ -7,6 +7,7 @@ import Layout                                                        from '@comp
 import OrderDetails                                                  from '@components/order/OrderDetails';
 import NextSeoCustom                                                 from '@components/tools/NextSeoCustom';
 import { getOrderById }                                              from '@aquilacms/aquila-connector/api/order';
+import { useSiteConfig }                                             from '@lib/hooks';
 import { initAxios, authProtectedPage, serverRedirect, unsetCookie } from '@lib/utils';
 import { dispatcher }                                                from '@lib/redux/dispatcher';
 
@@ -23,6 +24,7 @@ export async function getServerSideProps({ locale, req, res }) {
 export default function CheckoutConfirmation() {
     const [order, setOrder] = useState();
     const router            = useRouter();
+    const { environment }   = useSiteConfig();
     const { lang, t }       = useTranslation();
 
     useEffect(() => {
@@ -52,7 +54,7 @@ export default function CheckoutConfirmation() {
         <Layout>
             <NextSeoCustom
                 noindex={true}
-                title={t('pages/checkout:confirmation.title')}
+                title={`${environment?.siteName} - ${t('pages/checkout:confirmation.title')}`}
                 description={t('pages/checkout:confirmation.description')}
             />
 

@@ -158,19 +158,19 @@ const Video = ({ content }) => (
 );
 
 export default function Product({ breadcrumb, origin }) {
-    const [qty, setQty]               = useState(1);
-    const [photoIndex, setPhotoIndex] = useState(0);
-    const [isOpen, setIsOpen]         = useState(false);
-    const [message, setMessage]       = useState();
-    const [isLoading, setIsLoading]   = useState(false);
-    const [openModal, setOpenModal]   = useState(false);
-    const [tabs, setTabs]             = useState(0);
-    const { cart, setCart }           = useCart();
-    const { product }                 = useProduct();
-    const { themeConfig }             = useSiteConfig();
-    const { lang, t }                 = useTranslation();
-    const { setShowCartSidebar }      = useShowCartSidebar();
-    const router                      = useRouter();
+    const [qty, setQty]                = useState(1);
+    const [photoIndex, setPhotoIndex]  = useState(0);
+    const [isOpen, setIsOpen]          = useState(false);
+    const [message, setMessage]        = useState();
+    const [isLoading, setIsLoading]    = useState(false);
+    const [openModal, setOpenModal]    = useState(false);
+    const [tabs, setTabs]              = useState(0);
+    const { cart, setCart }            = useCart();
+    const { product }                  = useProduct();
+    const { environment, themeConfig } = useSiteConfig();
+    const { lang, t }                  = useTranslation();
+    const { setShowCartSidebar }       = useShowCartSidebar();
+    const router                       = useRouter();
 
     if (!product) return <ErrorPage statusCode={404} />;
 
@@ -302,7 +302,7 @@ export default function Product({ breadcrumb, origin }) {
 
         <Layout>
             <NextSeoCustom
-                title={product.name}
+                title={`${environment?.siteName} - ${product.name}`}
                 description={product?.description2?.text}
                 canonical={origin + product.canonical}
                 lang={lang}

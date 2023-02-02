@@ -5,6 +5,7 @@ import Layout                        from '@components/layouts/Layout';
 import Button                        from '@components/ui/Button';
 import NextSeoCustom                 from '@components/tools/NextSeoCustom';
 import { resetPassword }             from '@aquilacms/aquila-connector/api/user';
+import { useSiteConfig }             from '@lib/hooks';
 import { initAxios, serverRedirect } from '@lib/utils';
 import { dispatcher }                from '@lib/redux/dispatcher';
 
@@ -32,6 +33,7 @@ export default function ResetPassword({ token }) {
     const [isLoading, setIsLoading]       = useState(false);
     const [messageReset, setMessageReset] = useState();
     const router                          = useRouter();
+    const { environment }                 = useSiteConfig();
     const { t }                           = useTranslation();
 
     const handlePasswordSubmit = async (e) => {
@@ -64,7 +66,7 @@ export default function ResetPassword({ token }) {
         <Layout>
             <NextSeoCustom
                 noindex={true}
-                title={t('pages/resetpass:title')}
+                title={`${environment?.siteName} - ${t('pages/resetpass:title')}`}
                 description={t('pages/resetpass:description')}
             />
 

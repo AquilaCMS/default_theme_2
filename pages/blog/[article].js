@@ -3,13 +3,16 @@ import absoluteUrl               from 'next-absolute-url';
 import getT                      from 'next-translate/getT';
 import useTranslation            from 'next-translate/useTranslation';
 import Link                      from 'next/link';
+import { useRouter }             from 'next/router';
 import Breadcrumb                from '@components/navigation/Breadcrumb';
 import Layout                    from '@components/layouts/Layout';
+import NextSeoCustom             from '@components/tools/NextSeoCustom';
 import BlockCMS                  from '@components/common/BlockCMS';
 import { getBlogArticle }        from '@aquilacms/aquila-connector/api/blog';
 import { getBreadcrumb }         from '@aquilacms/aquila-connector/api/breadcrumb';
 import { generateURLImageCache } from '@aquilacms/aquila-connector/lib/utils';
 import { dispatcher }            from '@lib/redux/dispatcher';
+import { useSiteConfig }         from '@lib/hooks';
 import { initAxios, formatDate } from '@lib/utils';
 
 
@@ -58,10 +61,24 @@ export async function getServerSideProps({ defaultLocale, locale, params, query,
 }
 
 export default function BlogArticle({ blogArticle, breadcrumb, origin }) {
-    const { lang, t } = useTranslation();
+    const router          = useRouter();
+    const { environment } = useSiteConfig();
+    const { lang, t }     = useTranslation();
+
+    let [url] = router.asPath.split('?');
+    if (router.defaultLocale !== lang) {
+        url = `/${lang}${url}`;
+    }
 
     return (
         <Layout>
+            <NextSeoCustom
+                title={`${environment?.siteName} - ${blogArticle.title}`}
+                canonical={`${origin}${url}`}
+                lang={lang}
+                image={`${origin}/${blogArticle.img}`}
+            />
+
             <div className="header-section-carte" style={{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.59), rgba(250, 140, 78, 0.72)), url(' + generateURLImageCache('blog', '1920x266-100-crop-center', blogArticle._id, blogArticle.slug[lang], blogArticle.img) + ')' }}>
                 <div className="container-flex-2">
                     <div className="title-wrap-centre">

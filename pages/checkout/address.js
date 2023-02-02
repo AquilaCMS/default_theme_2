@@ -2,6 +2,7 @@ import useTranslation                                               from 'next-t
 import AddressStep                                                  from '@components/checkout/AddressStep';
 import LightLayout                                                  from '@components/layouts/LightLayout';
 import NextSeoCustom                                                from '@components/tools/NextSeoCustom';
+import { useSiteConfig }                                            from '@lib/hooks';
 import { initAxios, authProtectedPage, serverRedirect, moduleHook } from '@lib/utils';
 import { dispatcher }                                               from '@lib/redux/dispatcher';
 
@@ -18,13 +19,14 @@ export async function getServerSideProps({ locale, req, res }) {
 }
 
 export default function CheckoutAddress({ user }) {
-    const { t } = useTranslation();
+    const { environment } = useSiteConfig();
+    const { t }           = useTranslation();
     
     return (
         <LightLayout>
             <NextSeoCustom
                 noindex={true}
-                title={t('pages/checkout:address.title')}
+                title={`${environment?.siteName} - ${t('pages/checkout:address.title')}`}
                 description={t('pages/checkout:address.description')}
             />
             

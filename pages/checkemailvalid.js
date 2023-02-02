@@ -3,6 +3,7 @@ import useTranslation                from 'next-translate/useTranslation';
 import Layout                        from '@components/layouts/Layout';
 import NextSeoCustom                 from '@components/tools/NextSeoCustom';
 import { validateAccount }           from '@aquilacms/aquila-connector/api/user';
+import { useSiteConfig }             from '@lib/hooks';
 import { initAxios, serverRedirect } from '@lib/utils';
 import { dispatcher }                from '@lib/redux/dispatcher';
 
@@ -23,6 +24,7 @@ export async function getServerSideProps({ locale, query, req, res }) {
 export default function CheckEmailValid({ token }) {
     const [user, setUser]       = useState({});
     const [message, setMessage] = useState();
+    const { environment }       = useSiteConfig();
     const { t }                 = useTranslation();
 
     useEffect(() => {
@@ -41,7 +43,7 @@ export default function CheckEmailValid({ token }) {
         <Layout>
             <NextSeoCustom
                 noindex={true}
-                title={t('pages/checkemailvalid:title')}
+                title={`${environment?.siteName} - ${t('pages/checkemailvalid:title')}`}
                 description={t('pages/checkemailvalid:description')}
             />
 

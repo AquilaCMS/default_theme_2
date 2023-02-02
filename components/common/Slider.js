@@ -42,11 +42,11 @@ export default function Slider({ 'ns-code': nsCode, sliderContent }) {
                 )
             }
         >
-            {slider.items.map((item, index) => {
+            {slider.items.map((item) => {
                 const img = <img
-                    src={generateURLImageCache('slider', 'max', item._id, index, item.src)}
-                    alt={item.text}
-                    title={item.text}
+                    src={generateURLImageCache('slider', 'max', item._id, item.name, item.extension)}
+                    alt={item.name || ''}
+                    title={item.name || ''}
                     loading="lazy"
                 />;
                 return (

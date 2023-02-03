@@ -103,7 +103,7 @@ export default function PaymentStep() {
     }
     
     return (
-        <div className="col-log w-row">
+        <>
             <form className="form-mode-paiement-tunnel" onSubmit={onSubmitPayment}>
                 <div className="columns-picker-paiement-tunnel w-row">
                     {
@@ -181,6 +181,6 @@ export default function PaymentStep() {
                     </div>
                 )
             }
-        </div>
+        </>
     );
 }

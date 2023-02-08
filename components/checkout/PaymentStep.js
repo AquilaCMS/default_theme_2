@@ -105,10 +105,10 @@ export default function PaymentStep() {
     return (
         <>
             <form className="form-mode-paiement-tunnel" onSubmit={onSubmitPayment}>
-                <div className="columns-picker-paiement-tunnel w-row">
+                <div className="columns-picker-paiement-tunnel delivery">
                     {
                         paymentMethods ? paymentMethods.map((payment, index) => (
-                            <div key={payment._id} className="column-center w-col w-col-6">
+                            <div key={payment._id} className="column-center w-col w-col-12">
                                 <label className="checkbox-click-collect w-radio">
                                     <input type="radio" name="payment" value={payment.code} defaultChecked={index === 0} required style={{ opacity: 0, position: 'absolute', zIndex: -1 }} />
                                     <div className="w-form-formradioinput w-form-formradioinput--inputType-custom radio-retrait w-radio-input"></div>
